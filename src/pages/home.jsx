@@ -1,11 +1,10 @@
 import { Link as ReactRouterLink } from 'react-router-dom';
 
-import { Box, Button, Card, CardBody, CardFooter, Container, Heading, SimpleGrid, Stack, Text } from "@chakra-ui/react";
+import { Box, Button, Card, CardBody, CardFooter, Heading, SimpleGrid, Stack, Text } from "@chakra-ui/react";
 
 export default function Home() {
     return (
-        <Container maxWidth="5xl">
-            <Heading my="30px" >Ethical Transparency Tool</Heading>
+        <>
             <Box my={"2em"}>
                 <Text>
                 ETT is designed to support AAU’s harassment prevention principles and the recommendations of NASEM’s June 2018 report on sexual harassment of women in academic science, engineering, and medicine by helping to create a norm of transparency about findings of misconduct against a person, across the higher-education and research ecosystem of societies, institutions of higher education, and other research organizations. This tool covers sexual, gender, and racial misconduct — as well as professional licensure, financial, and research misconduct to maximize its utility.    
@@ -64,6 +63,6 @@ export default function Home() {
                     </Stack>
                 </Card>
             </SimpleGrid>
-        </Container>
+        </>
     );
 }
