@@ -4,8 +4,6 @@ import { Box, Button, Card, CardBody, CardFooter, Heading, SimpleGrid, Stack, Te
 
 import { signIn } from '../lib/signIn';
 
-
-
 export default function Home() {
 
     const navigate = useNavigate();
@@ -14,7 +12,6 @@ export default function Home() {
 
     function handleConsentingSignIn(event) {
         event.preventDefault();
-    
         idToken ? navigate('/consenting') : signIn();
     }
 
