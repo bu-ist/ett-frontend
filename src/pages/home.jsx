@@ -38,7 +38,7 @@ export default function Home() {
                                 The Registered Entity Administrator is responsible for managing the entity’s profile, including adding and removing Authorized Individuals and Consenting Persons.
                             </Text>
                         </CardBody>
-                        <CardFooter paddingTop={"-2"}>
+                        <CardFooter>
                             <Button as={ReactRouterLink} to='/entity' colorScheme="gray" variant="solid">Sign In</Button>
                         </CardFooter>
                     </Stack>
