@@ -47,7 +47,7 @@ export default function ConsentingPage() {
                 <>
                     <p>Signed in as {consenterInfo.email}</p>
                     {JSON.stringify(consentData) != '{}' &&
-                        <ConsentDetails consentData={consentData} />
+                        <ConsentDetails consentData={consentData} consenterInfo={consenterInfo} />
                     }
                     {JSON.stringify(consentData) == '{}' && <p>Loading</p>}
                 </>
