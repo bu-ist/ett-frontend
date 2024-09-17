@@ -1,14 +1,23 @@
-import { Link as ReactRouterLink } from 'react-router-dom';
+import { Link as ReactRouterLink, useNavigate } from 'react-router-dom';
+import Cookies from 'js-cookie';
 import { Box, Button, Card, CardBody, CardFooter, Heading, SimpleGrid, Stack, Text } from "@chakra-ui/react";
 
 import { signIn } from '../lib/signIn';
 
-function handleConsentingSignIn(event) {
-    event.preventDefault();
-    signIn();
-}
+
 
 export default function Home() {
+
+    const navigate = useNavigate();
+
+    const idToken = Cookies.get('EttIdJwt');
+
+    function handleConsentingSignIn(event) {
+        event.preventDefault();
+    
+        idToken ? navigate('/consenting') : signIn();
+    }
+
     return (
         <>
             <Box my={"2em"}>
@@ -64,7 +73,7 @@ export default function Home() {
                             </Text>
                         </CardBody>
                         <CardFooter paddingTop={"-2"}>
-                            <Button mr="1em" onClick={handleConsentingSignIn} colorScheme="gray" variant="solid">Sign In</Button>
+                            <Button mr="1em" onClick={handleConsentingSignIn} colorScheme="gray" variant="solid">{ idToken ? 'Enter' : 'Sign In'}</Button>
                             <Button as={ReactRouterLink} to='/consenting' colorScheme="gray" variant="solid">Register</Button>
                         </CardFooter>
                     </Stack>
