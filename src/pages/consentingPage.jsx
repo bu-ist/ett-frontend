@@ -6,6 +6,8 @@ import { Button, Heading } from '@chakra-ui/react';
 import { exchangeAuthorizationCode } from '../lib/exchangeAuthorizationCode';
 import { getConsentData } from '../lib/getConsentData';
 
+import ConsentDetails from "./consentingPage/consentDetails";
+
 export default function ConsentingPage() {
     let [searchParams] = useSearchParams();
 
@@ -13,6 +15,7 @@ export default function ConsentingPage() {
     const [consentData, setConsentData] = useState({});
 
     useEffect(() => {
+        // This isn't really fully baked maybe, probably needs more consideration on how to enter the page both with and without a cognito code.
         const fetchData = async () => {
             if (searchParams.has('code') && Cookies.get('EttAccessJwt') === undefined) {
                 // If this exists, then there is a sign in request, so use the code to get the tokens and store them as cookies.
@@ -28,33 +31,25 @@ export default function ConsentingPage() {
 
                 setConsenterInfo(decodedIdToken);
 
-                //await handleGetConsentData();
+                // At this point one way or another there should be a consenterInfo object with the email.
+                const consentResponse = await getConsentData(accessToken, decodedIdToken.email);
+                setConsentData(consentResponse);
             }
         };
 
         fetchData();
     }, []);
 
-    const handleGetConsentData = async () => {
-        const accessToken = Cookies.get('EttAccessJwt');
-        const email = consenterInfo.email;
-
-        if (accessToken && email) {
-            const data = await getConsentData(accessToken, email);
-            setConsentData(data);
-            console.log(data);
-        }
-    };
-
     return (
         <div>
             <Heading as="h2" size={"xl"} >Consenting Person</Heading>
             {consenterInfo && consenterInfo.email &&
                 <>
-                    <p>Welcome, {consenterInfo.email}!</p>
-                    <p>Here is your consent data:</p>
-                    <p>{JSON.stringify(consentData)}</p>
-                    <Button onClick={handleGetConsentData}>Get Consent Data</Button>
+                    <p>Signed in as {consenterInfo.email}</p>
+                    {JSON.stringify(consentData) != '{}' &&
+                        <ConsentDetails consentData={consentData} />
+                    }
+                    {JSON.stringify(consentData) == '{}' && <p>Loading</p>}
                 </>
             }
         </div>

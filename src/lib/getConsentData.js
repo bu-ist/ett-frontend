@@ -13,7 +13,7 @@ async function getConsentData(accessToken, email) {
     });
 
     const data = await response.json();
-    return data;
+    return data.payload;
 }
 
 export { getConsentData };
