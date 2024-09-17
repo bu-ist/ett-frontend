@@ -9,7 +9,7 @@ import { getConsentData } from '../lib/getConsentData';
 import ConsentDetails from "./consentingPage/consentDetails";
 
 export default function ConsentingPage() {
-    let [searchParams] = useSearchParams();
+    let [searchParams, setSearchParams] = useSearchParams();
 
     const [consenterInfo, setConsenterInfo] = useState({});
     const [consentData, setConsentData] = useState({});
@@ -21,6 +21,9 @@ export default function ConsentingPage() {
                 // If this exists, then there is a sign in request, so use the code to get the tokens and store them as cookies.
                 await exchangeAuthorizationCode('consenter', setConsenterInfo);
                 //Once the tokens are stored, should remove the code from the URL.
+
+                // Use setSearchParams to empty the search params once exchangeAuthorizationCode is done with them.
+                setSearchParams({});
             }
 
             const accessToken = Cookies.get('EttAccessJwt');
