@@ -7,6 +7,8 @@ import RootLayout from './layouts/RootLayout';
 
 // Pages
 import Home from './pages/home';
+import LogoutPage from './pages/logoutPage';
+
 import ConsentingPage from './pages/consentingPage';
 import AuthorizedPage from './pages/authorizedPage';
 import EntityPage from './pages/entityPage';
@@ -18,6 +20,7 @@ const router = createBrowserRouter(
       <Route path="consenting" element={<ConsentingPage />} />
       <Route path="authorized" element={<AuthorizedPage />} />
       <Route path="entity" element={<EntityPage />} />
+      <Route path="logout" element={<LogoutPage />} />
     </Route>
   )
 )
