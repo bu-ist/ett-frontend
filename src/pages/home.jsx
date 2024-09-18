@@ -24,6 +24,9 @@ export default function Home() {
 
         const authClientId = import.meta.env.VITE_AUTHORIZED_COGNITO_CLIENTID;
 
+        idToken ? navigate('/auth-ind') : signIn( authClientId, 'auth-ind' );
+    }
+
     return (
         <>
             <Box my={"2em"}>
@@ -62,7 +65,7 @@ export default function Home() {
                             </Text>
                         </CardBody>
                         <CardFooter paddingTop={"-2"}>
-                            <Button as={ReactRouterLink} to='/authorized' colorScheme="gray" variant="solid">Sign In</Button>
+                            <Button onClick={handleAuthorizedSignIn} colorScheme="gray" variant="solid">Sign In</Button>
                         </CardFooter>
                     </Stack>
                 </Card>
