@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import Cookies from 'js-cookie';
-import { Button, Heading } from '@chakra-ui/react';
+import { Button, Heading, Spinner } from '@chakra-ui/react';
 
 import { exchangeAuthorizationCode } from '../lib/exchangeAuthorizationCode';
 import { getConsentData } from '../lib/getConsentData';
@@ -53,7 +53,15 @@ export default function ConsentingPage() {
                     {JSON.stringify(consentData) != '{}' &&
                         <ConsentDetails consentData={consentData} consenterInfo={consenterInfo} />
                     }
-                    {JSON.stringify(consentData) == '{}' && <p>Loading</p>}
+                    {JSON.stringify(consentData) == '{}' &&
+                        <Spinner
+                            thickness='4px'
+                            speed='0.65s'
+                            emptyColor='gray.200'
+                            color='blue.500'
+                            size='xl'
+                        />
+                    }
                 </>
             }
         </div>
