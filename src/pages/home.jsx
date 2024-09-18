@@ -27,6 +27,14 @@ export default function Home() {
         idToken ? navigate('/auth-ind') : signIn( authClientId, 'auth-ind' );
     }
 
+    function handleEntitySignIn(event) {
+        event.preventDefault();
+
+        const entityClientId = import.meta.env.VITE_ENTITY_COGNITO_CLIENTID;
+
+        idToken ? navigate('/entity') : signIn( entityClientId, 'entity' );
+    }
+
     return (
         <>
             <Box my={"2em"}>
@@ -48,7 +56,7 @@ export default function Home() {
                             </Text>
                         </CardBody>
                         <CardFooter>
-                            <Button as={ReactRouterLink} to='/entity' colorScheme="gray" variant="solid">Sign In</Button>
+                            <Button onClick={handleEntitySignIn} colorScheme="gray" variant="solid">Sign In</Button>
                         </CardFooter>
                     </Stack>
                 </Card>
