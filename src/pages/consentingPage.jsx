@@ -19,7 +19,8 @@ export default function ConsentingPage() {
         const fetchData = async () => {
             if (searchParams.has('code') && Cookies.get('EttAccessJwt') === undefined) {
                 // If this exists, then there is a sign in request, so use the code to get the tokens and store them as cookies.
-                await exchangeAuthorizationCode('consenter', setConsenterInfo);
+                const clientId = import.meta.env.VITE_CONSENTING_COGNITO_CLIENTID;
+                await exchangeAuthorizationCode( clientId, 'consenting');
                 //Once the tokens are stored, should remove the code from the URL.
 
                 // Use setSearchParams to empty the search params once exchangeAuthorizationCode is done with them.
