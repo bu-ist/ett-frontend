@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import Cookies from 'js-cookie';
-import { Button, Heading } from '@chakra-ui/react';
+import { Box, Button, FormControl, FormLabel, Heading, Input } from '@chakra-ui/react';
 
 import { exchangeAuthorizationCode } from '../lib/exchangeAuthorizationCode';
 
@@ -55,6 +55,19 @@ export default function AuthorizedPage() {
             {authorizedInfo && authorizedInfo.email &&
                 <>
                     <p>Signed in as {authorizedInfo.email}</p>
+
+                    <Heading as="h3" my="1em" size={"lg"}>Make a disclosure request</Heading>
+                    <Box my={"2em"}>
+                        <FormControl>
+                            <FormLabel>Consenting individual email</FormLabel>
+                            <Input placeholder="email@example.com" />
+                            <FormLabel>Affiliate of the consenting individual email</FormLabel>
+                            <Input placeholder="email@example.com" />
+
+                        </FormControl>
+                        <Button my="2em">Send</Button>
+                    </Box>
+
                     <Button my="2em" onClick={handleSignOut}>Sign Out</Button>
                 </>
             }
