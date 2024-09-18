@@ -6,9 +6,9 @@ import react from '@vitejs/plugin-react'
 
 // https://vitejs.dev/config/
 export default defineConfig(({ mode }) => {
+  // Load environment variables from .env files
   const env = loadEnv(mode, process.cwd());
-
-  const { VITE_CONSENTING_API_HOST } = env;
+  const { VITE_CONSENTING_API_HOST, VITE_AUTHORIZED_API_HOST } = env;
 
   return {
     plugins: [react()],
@@ -18,7 +18,12 @@ export default defineConfig(({ mode }) => {
           target: VITE_CONSENTING_API_HOST,
           changeOrigin: true,
           rewrite: (path) => path.replace(/^\/consentingApi/, '')
-        }
+        },
+        '/authorizedApi': {
+          target: VITE_AUTHORIZED_API_HOST,
+          changeOrigin: true,
+          rewrite: (path) => path.replace(/^\/authorizedApi/, '')
+        },
       }
     }
   }
