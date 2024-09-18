@@ -12,7 +12,11 @@ export default function Home() {
 
     function handleConsentingSignIn(event) {
         event.preventDefault();
-        idToken ? navigate('/consenting') : signIn();
+
+        const clientId = import.meta.env.VITE_CONSENTING_COGNITO_CLIENTID;
+
+        // If there is an idToken, navigate to the consenting page, otherwise sign in with the consenting role.
+        idToken ? navigate('/consenting') : signIn( clientId, 'consenting' );
     }
 
     return (

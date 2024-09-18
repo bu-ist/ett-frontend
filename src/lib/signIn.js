@@ -2,7 +2,7 @@
  * Authenticate with the cognito user pool in such a way as to reflect that it implements the
  * oauth PKCE standard. The final redirect should come with a JWT for all api access.
  */
-function signIn() {
+function signIn(clientId, redirectUri) {
     const codeVerifier = generateCodeVerifier();
     const state = getRandomString(12);
 
@@ -13,7 +13,7 @@ function signIn() {
     storage.setItem("code_verifier", codeVerifier);
 
     generateCodeChallenge(codeVerifier).then(codeChallenge => {
-        initiateAuthorizationRequest(codeChallenge, state);
+        initiateAuthorizationRequest(codeChallenge, state, clientId, redirectUri);
     });
 }
 
@@ -72,11 +72,11 @@ async function base64UrlEncode(sha256HashBuffer) {
  * Issue a code challenge to the cognito authorization endpoint as the first step in 
  * acquiring an authorization code to exchange for a JWT.
  */
-function initiateAuthorizationRequest(codeChallenge, state) {
+function initiateAuthorizationRequest(codeChallenge, state, clientId, redirectUri) {
     const params = {
         response_type: 'code',
-        client_id: import.meta.env.VITE_CONSENTING_COGNITO_CLIENTID,
-        redirect_uri: `${import.meta.env.VITE_REDIRECT_BASE}/consenting`,
+        client_id: clientId,
+        redirect_uri: `${import.meta.env.VITE_REDIRECT_BASE}/${redirectUri}`,
         state: state,
         code_challenge: codeChallenge,
         code_challenge_method: 'S256'
