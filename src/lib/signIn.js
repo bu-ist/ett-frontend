@@ -1,3 +1,6 @@
+import { Base64 } from 'js-base64';
+import queryString from 'query-string';
+
 /**
  * Authenticate with the cognito user pool in such a way as to reflect that it implements the
  * oauth PKCE standard. The final redirect should come with a JWT for all api access.
@@ -21,25 +24,15 @@ function signIn(clientId, redirectUri) {
  * Generate a code verifier
  */
 function generateCodeVerifier() {
-    const codeVerifierLength = 64;
-    const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-._~';
-    let codeVerifier = '';
-
-    for (let i = 0; i < codeVerifierLength; i++) {
-        const randomIndex = Math.floor(Math.random() * chars.length);
-        codeVerifier += chars.charAt(randomIndex);
-    }
-
-    return codeVerifier;
+    const array = new Uint32Array(64);
+    window.crypto.getRandomValues(array);
+    return Array.from(array, dec => ('0' + dec.toString(36)).substr(-2)).join('');
 }
 
 function getRandomString(length) {
-    const s = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
-    return Array(length).join().split(',').map(
-        function () {
-            return s.charAt(Math.floor(Math.random() * s.length));
-        }
-    ).join('');
+    const array = new Uint8Array(length);
+    window.crypto.getRandomValues(array);
+    return Array.from(array, byte => String.fromCharCode(byte % 36 + (byte % 36 < 10 ? 48 : 87))).join('');
 }
 
 /**
@@ -48,24 +41,14 @@ function getRandomString(length) {
 async function generateCodeChallenge(codeVerifier) {
     const encoder = new TextEncoder();
     const encodedVerifier = encoder.encode(codeVerifier);
-    const codeChallenge = base64UrlEncode(await crypto.subtle.digest('SHA-256', encodedVerifier));
-    return codeChallenge;
-}
+    const hashBuffer = await crypto.subtle.digest('SHA-256', encodedVerifier);
 
-/**
- * Generate a base64 encoded string from input and return the url safe result.
- * NOTE: The base64 value is NOT url encoded, but any non-url compliant characters are stripped out.
- * Any platform implementing the oauth PKCE standard will account for this when processing the code challenge.
- */
-async function base64UrlEncode(sha256HashBuffer) {
-    // Convert the SHA-256 hash to a base64 URL encoded string
-    const sha256HashArray = Array.from(new Uint8Array(sha256HashBuffer));
-    const base64UrlEncoded = btoa(String.fromCharCode(...sha256HashArray))
-        .replace(/=/g, '')
-        .replace(/\+/g, '-')
-        .replace(/\//g, '_');
+    // base64 encode the hash
+    // NOTE: The base64 value is NOT url encoded, but any non-url compliant characters are stripped out.
+    // Any platform implementing the oauth PKCE standard will account for this when processing the code challenge.
+    const encodedHash = Base64.fromUint8Array(new Uint8Array(hashBuffer), true);
 
-    return base64UrlEncoded;
+    return encodedHash;
 }
 
 /**
@@ -82,8 +65,7 @@ function initiateAuthorizationRequest(codeChallenge, state, clientId, redirectUr
         code_challenge_method: 'S256'
     };
 
-    const queryString = Object.keys(params).map(key => `${encodeURIComponent(key)}=${encodeURIComponent(params[key])}`).join('&');
-    const authorizationUrl = `https://${import.meta.env.VITE_COGNITO_DOMAIN}/oauth2/authorize?${queryString}`;
+    const authorizationUrl = `https://${import.meta.env.VITE_COGNITO_DOMAIN}/oauth2/authorize?${queryString.stringify(params)}`;
 
     window.location.href = authorizationUrl;
 }
