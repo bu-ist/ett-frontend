@@ -1,6 +1,8 @@
 import { Icon, Tabs, TabList, TabPanels, Tab, TabPanel, Text, Box, Button, Card, CardBody, SimpleGrid, CardFooter } from '@chakra-ui/react';
 import { HiCheckCircle } from 'react-icons/hi';
 
+import RescindModal from "./consentDetails/rescindModal";
+
 export default function ConsentDetails({ consentData, consenterInfo }) {
 
     const { consenter, fullName, activeConsent, entities } = consentData;
@@ -33,7 +35,7 @@ export default function ConsentDetails({ consentData, consenterInfo }) {
                             <Card>
                                 <CardBody>Rescind this Consent Form</CardBody>
                                 <CardFooter>
-                                    <Button>Rescind</Button>
+                                    <RescindModal />
                                 </CardFooter>
                             </Card>
                             <Card>
