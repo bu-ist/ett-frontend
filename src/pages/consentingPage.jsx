@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import Cookies from 'js-cookie';
-import { Button, Heading } from '@chakra-ui/react';
+import { Button, Heading, Spinner } from '@chakra-ui/react';
 
 import { exchangeAuthorizationCode } from '../lib/exchangeAuthorizationCode';
 import { getConsentData } from '../lib/getConsentData';
@@ -19,7 +19,8 @@ export default function ConsentingPage() {
         const fetchData = async () => {
             if (searchParams.has('code') && Cookies.get('EttAccessJwt') === undefined) {
                 // If this exists, then there is a sign in request, so use the code to get the tokens and store them as cookies.
-                await exchangeAuthorizationCode('consenter', setConsenterInfo);
+                const clientId = import.meta.env.VITE_CONSENTING_COGNITO_CLIENTID;
+                await exchangeAuthorizationCode( clientId, 'consenting');
                 //Once the tokens are stored, should remove the code from the URL.
 
                 // Use setSearchParams to empty the search params once exchangeAuthorizationCode is done with them.
@@ -52,7 +53,15 @@ export default function ConsentingPage() {
                     {JSON.stringify(consentData) != '{}' &&
                         <ConsentDetails consentData={consentData} consenterInfo={consenterInfo} />
                     }
-                    {JSON.stringify(consentData) == '{}' && <p>Loading</p>}
+                    {JSON.stringify(consentData) == '{}' &&
+                        <Spinner
+                            thickness='4px'
+                            speed='0.65s'
+                            emptyColor='gray.200'
+                            color='blue.500'
+                            size='xl'
+                        />
+                    }
                 </>
             }
         </div>

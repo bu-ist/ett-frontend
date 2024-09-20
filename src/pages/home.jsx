@@ -12,7 +12,27 @@ export default function Home() {
 
     function handleConsentingSignIn(event) {
         event.preventDefault();
-        idToken ? navigate('/consenting') : signIn();
+
+        const consentClientId = import.meta.env.VITE_CONSENTING_COGNITO_CLIENTID;
+
+        // If there is an idToken, navigate to the consenting page, otherwise sign in with the consenting role.
+        idToken ? navigate('/consenting') : signIn( consentClientId, 'consenting' );
+    }
+
+    function handleAuthorizedSignIn(event) {
+        event.preventDefault();
+
+        const authClientId = import.meta.env.VITE_AUTHORIZED_COGNITO_CLIENTID;
+
+        idToken ? navigate('/auth-ind') : signIn( authClientId, 'auth-ind' );
+    }
+
+    function handleEntitySignIn(event) {
+        event.preventDefault();
+
+        const entityClientId = import.meta.env.VITE_ENTITY_COGNITO_CLIENTID;
+
+        idToken ? navigate('/entity') : signIn( entityClientId, 'entity' );
     }
 
     return (
@@ -36,7 +56,7 @@ export default function Home() {
                             </Text>
                         </CardBody>
                         <CardFooter>
-                            <Button as={ReactRouterLink} to='/entity' colorScheme="gray" variant="solid">Sign In</Button>
+                            <Button onClick={handleEntitySignIn} colorScheme="gray" variant="solid">Sign In</Button>
                         </CardFooter>
                     </Stack>
                 </Card>
@@ -53,7 +73,7 @@ export default function Home() {
                             </Text>
                         </CardBody>
                         <CardFooter paddingTop={"-2"}>
-                            <Button as={ReactRouterLink} to='/authorized' colorScheme="gray" variant="solid">Sign In</Button>
+                            <Button onClick={handleAuthorizedSignIn} colorScheme="gray" variant="solid">Sign In</Button>
                         </CardFooter>
                     </Stack>
                 </Card>

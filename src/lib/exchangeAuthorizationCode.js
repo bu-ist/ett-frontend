@@ -6,7 +6,7 @@ import { setJwt } from "./jwtUtil";
   * SEE: https://docs.aws.amazon.com/cognito/latest/developerguide/token-endpoint.html
   *      https://www.rfc-editor.org/rfc/rfc6749#section-3.2
   */
-async function exchangeAuthorizationCode() {
+async function exchangeAuthorizationCode(clientId, redirectUri) {
     const queryParams = new URLSearchParams(window.location.search);
     const authorizationCode = queryParams.get('code');
     const returnedState = queryParams.get('state')
@@ -23,8 +23,8 @@ async function exchangeAuthorizationCode() {
     const codeVerifier = window.sessionStorage.getItem("code_verifier");
     const params = {
         grant_type: 'authorization_code',
-        client_id: import.meta.env.VITE_CONSENTING_COGNITO_CLIENTID,
-        redirect_uri: `${import.meta.env.VITE_REDIRECT_BASE}/consenting`,
+        client_id: clientId,
+        redirect_uri: `${import.meta.env.VITE_REDIRECT_BASE}/${redirectUri}`,
         state: savedState,
         code: authorizationCode,
         code_verifier: codeVerifier
