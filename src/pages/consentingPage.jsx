@@ -46,7 +46,7 @@ export default function ConsentingPage() {
 
     return (
         <div>
-            <Heading as="h2" size={"xl"} >Consenting Person</Heading>
+            <Heading as="h2" size={"lg"} >Consenting Person</Heading>
             {consenterInfo && consenterInfo.email &&
                 <>
                     <p>Signed in as {consenterInfo.email}</p>
