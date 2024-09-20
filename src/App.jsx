@@ -18,7 +18,7 @@ const router = createBrowserRouter(
     <Route path="/" element={<RootLayout />}>
       <Route index element={<Home />} />
       <Route path="consenting" element={<ConsentingPage />} />
-      <Route path="authorized" element={<AuthorizedPage />} />
+      <Route path="auth-ind" element={<AuthorizedPage />} />
       <Route path="entity" element={<EntityPage />} />
       <Route path="logout" element={<LogoutPage />} />
     </Route>
