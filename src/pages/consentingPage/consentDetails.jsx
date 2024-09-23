@@ -2,6 +2,7 @@ import { Icon, Text, Button, Card, CardBody, SimpleGrid, CardFooter, Heading, Di
 import { HiCheckCircle, HiMinusCircle } from 'react-icons/hi';
 
 import RescindModal from "./consentDetails/rescindModal";
+import RenewModal from './consentDetails/renewModal';
 
 export default function ConsentDetails({ consentData, consenterInfo }) {
 
@@ -54,7 +55,7 @@ export default function ConsentDetails({ consentData, consenterInfo }) {
                 <Card>
                     <CardBody>Renew this Consent Form for 10 years</CardBody>
                     <CardFooter>
-                        <Button>Renew</Button>
+                        <RenewModal />
                     </CardFooter>
                 </Card>
                 <Card>
