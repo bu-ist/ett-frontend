@@ -1,9 +1,10 @@
 import { Icon, Text, Button, Card, CardBody, SimpleGrid, CardFooter, Heading, Divider, Stack } from '@chakra-ui/react';
 import { HiCheckCircle, HiMinusCircle } from 'react-icons/hi';
 
-import RescindModal from "./consentDetails/rescindModal";
+import RescindModal from './consentDetails/rescindModal';
+import RenewModal from './consentDetails/renewModal';
 
-export default function ConsentDetails({ consentData, consenterInfo }) {
+export default function ConsentDetails({ consentData, setConsentData, consenterInfo }) {
 
     const { consenter, fullName, activeConsent, entities } = consentData;
     const { email } = consenterInfo;
@@ -54,7 +55,7 @@ export default function ConsentDetails({ consentData, consenterInfo }) {
                 <Card>
                     <CardBody>Renew this Consent Form for 10 years</CardBody>
                     <CardFooter>
-                        <Button>Renew</Button>
+                        <RenewModal setConsentData={setConsentData} consentData={consentData} />
                     </CardFooter>
                 </Card>
                 <Card>
