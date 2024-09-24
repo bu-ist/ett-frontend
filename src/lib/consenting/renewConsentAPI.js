@@ -18,7 +18,7 @@ async function renewConsentAPI(accessToken, email) {
 
     // Extract and return the payload from the response.
     const data = await response.json();
-    return data.payload;
+    return data;
 }
 
 export { renewConsentAPI };
