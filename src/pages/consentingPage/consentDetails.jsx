@@ -30,16 +30,18 @@ export default function ConsentDetails({ consentData, setConsentData, consenterI
                 variant={"outline"}
             >
                 <Icon 
+                    my="0.5em"
                     as={activeConsent ? HiCheckCircle : HiMinusCircle} 
                     color={activeConsent ? "green.500" : "red.500"} 
                     boxSize={"20"}
                 />
                 <Stack>
                     <CardBody>
-                        <Heading size="sm">
+                        <Heading size="md">
                             Consent for {fullName}
                         </Heading>
                         <Text>{activeConsent ? `Consent granted on ${consenter.consented_timestamp}` : "Consent not active"}</Text>
+                        {activeConsent && consenter?.renewed_timestamp && <Text>Renewed on {consenter.renewed_timestamp.reverse()[0]}</Text>}
                     </CardBody>
                 </Stack>
             </Card>
