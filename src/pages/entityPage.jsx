@@ -1,9 +1,10 @@
 import { useEffect, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import Cookies from 'js-cookie';
+import { Heading, Button } from '@chakra-ui/react';
 
 import { exchangeAuthorizationCode } from '../lib/exchangeAuthorizationCode';
-import { Heading, Button } from '@chakra-ui/react';
+import { signOut } from '../lib/signOut';
 
 export default function EntityPage() {
 
@@ -38,25 +39,13 @@ export default function EntityPage() {
         fetchData();
     }, []);
 
-    function handleSignOut() {
-        // This function redirects to the cognito logout page.
-        // Cognito will redirect back to the logout page, which will clear the cookies and display a message.
-        const cognitoDomain = import.meta.env.VITE_COGNITO_DOMAIN;
-        const clientId = import.meta.env.VITE_ENTITY_COGNITO_CLIENTID;
-        const logoutRedirect = encodeURIComponent(`${import.meta.env.VITE_REDIRECT_BASE}/logout`);
-
-        const logoutUrl = `https://${cognitoDomain}/logout?client_id=${clientId}&logout_uri=${logoutRedirect}`;
-
-        window.location.href = logoutUrl;
-    }
-
     return (
         <div>
             <Heading as={"h3"} size={"lg"}>Registered Entity Administrator</Heading>
             {entityAdminInfo && entityAdminInfo.email &&
                 <>
                     <p>Signed in as {entityAdminInfo.email}</p>
-                    <Button my="2em" onClick={handleSignOut}>Sign Out</Button>
+                    <Button my="2em" onClick={signOut}>Sign Out</Button>
                 </>
             }
         </div>

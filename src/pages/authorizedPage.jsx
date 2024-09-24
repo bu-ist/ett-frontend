@@ -4,6 +4,7 @@ import Cookies from 'js-cookie';
 import { Box, Button, FormControl, FormLabel, Heading, Input } from '@chakra-ui/react';
 
 import { exchangeAuthorizationCode } from '../lib/exchangeAuthorizationCode';
+import { signOut } from '../lib/signOut';
 
 export default function AuthorizedPage() {
     let [searchParams, setSearchParams] = useSearchParams();
@@ -37,18 +38,6 @@ export default function AuthorizedPage() {
         fetchData();
     }, []);
 
-    function handleSignOut() {
-        // This function redirects to the cognito logout page.
-        // Cognito will redirect back to the logout page, which will clear the cookies and display a message.
-        const cognitoDomain = import.meta.env.VITE_COGNITO_DOMAIN;
-        const clientId = import.meta.env.VITE_AUTHORIZED_COGNITO_CLIENTID;
-        const logoutRedirect = encodeURIComponent(`${import.meta.env.VITE_REDIRECT_BASE}/logout`);
-
-        const logoutUrl = `https://${cognitoDomain}/logout?client_id=${clientId}&logout_uri=${logoutRedirect}`;
-
-        window.location.href = logoutUrl;
-    }
-
     return (
         <div>
             <Heading as="h2" size={"xl"}>Authorized Individual</Heading>
@@ -68,7 +57,7 @@ export default function AuthorizedPage() {
                         <Button my="2em">Send</Button>
                     </Box>
 
-                    <Button my="2em" onClick={handleSignOut}>Sign Out</Button>
+                    <Button my="2em" onClick={signOut}>Sign Out</Button>
                 </>
             }
         </div>
