@@ -12,6 +12,7 @@ import LogoutPage from './pages/logoutPage';
 import ConsentingPage from './pages/consentingPage';
 import AuthorizedPage from './pages/authorizedPage';
 import EntityPage from './pages/entityPage';
+import SysadminPage from './pages/sysadminPage';
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -20,6 +21,7 @@ const router = createBrowserRouter(
       <Route path="consenting" element={<ConsentingPage />} />
       <Route path="auth-ind" element={<AuthorizedPage />} />
       <Route path="entity" element={<EntityPage />} />
+      <Route path="sysadmin" element={<SysadminPage />} />
       <Route path="logout" element={<LogoutPage />} />
     </Route>
   )
