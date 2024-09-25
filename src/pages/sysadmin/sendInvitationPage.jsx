@@ -1,0 +1,112 @@
+import { useState } from 'react';
+import { Link } from "react-router-dom";
+import Cookies from 'js-cookie';
+import { Heading, Text, Input, Button, Breadcrumb, BreadcrumbItem, BreadcrumbLink, useDisclosure, Modal, ModalOverlay, ModalContent, ModalHeader, ModalCloseButton, ModalBody, ModalFooter, Icon } from "@chakra-ui/react";
+import { HiCheckCircle, HiMinusCircle } from 'react-icons/hi';
+
+import { sysAdminInviteUserAPI  } from "../../lib/sysadmin/sysAdminInviteUserAPI";
+
+export default function SendInvitationPage() {
+
+    const [email, setEmail] = useState('');
+
+    const { isOpen, onOpen, onClose } = useDisclosure();
+    const [apiState, setApiState] = useState('idle');
+
+    async function sendInvitation(event) {
+        event.preventDefault();
+    
+        // Set a loading state while the API call is in progress.
+        setApiState('loading');
+    
+        const accessToken = Cookies.get('EttAccessJwt');
+        const role = 'RE_ADMIN';
+    
+        try {
+            // Call the sysAdminInviteUserAPI function with the access token, email, and role.
+            const inviteResult = await sysAdminInviteUserAPI(accessToken, email, role);
+    
+            // Set the UI state based on the result of the API call.
+            if (inviteResult.message === 'Ok') {
+                setApiState('success');
+                onOpen();
+            } else {
+                setApiState('error');
+                onOpen();
+                // Should add more robust error handling here.
+                console.error(inviteResult);
+            }
+        } catch (error) {
+            setApiState('error');
+            onOpen();
+            // Handle any unexpected errors.
+            console.error(error);
+        }
+    }
+
+    function handleClose() {
+        onClose();
+        if (apiState == 'success') {
+            setEmail('');
+        }
+        setApiState('idle');
+    }
+
+    return (
+        <div>
+            <Breadcrumb separator=">">
+                <BreadcrumbItem>
+                    <BreadcrumbLink as={Link} to='/'>Home</BreadcrumbLink>
+                </BreadcrumbItem>
+                <BreadcrumbItem>
+                    <BreadcrumbLink as={Link} to='/sysadmin'>Sysadmin</BreadcrumbLink>
+                </BreadcrumbItem>
+                <BreadcrumbItem isCurrentPage>
+                    <BreadcrumbLink>Send Invitation</BreadcrumbLink>
+                </BreadcrumbItem>
+            </Breadcrumb>
+            <Heading as="h1" size="lg" my="1em">Send an Invitation</Heading>
+            <Text>
+                To send an invitation to a new ASP user, enter their email address below.
+            </Text>
+            <Input 
+                placeholder="Email Address"
+                value={email}
+                onChange={event => setEmail(event.target.value)}
+            />
+            <Button isDisabled={apiState !== 'idle'} onClick={sendInvitation} mt="1em">
+                {apiState == 'idle' && 'Send Invitation'}
+                {apiState == 'loading' && 'Sending...'}
+            </Button>
+            <Modal isOpen={isOpen} onClose={onClose}>
+                <ModalOverlay />
+                <ModalContent>
+                    <ModalHeader>
+                        <Icon 
+                            as={apiState == 'success' ? HiCheckCircle : HiMinusCircle}
+                            color={apiState == 'success' ? "green.500" : "red.500"}
+                        />
+                        Invitation {apiState == 'error' && 'Not'} Sent
+                    </ModalHeader>
+                    <ModalCloseButton />
+                    <ModalBody>
+                        {apiState == 'success' &&
+                            <Text>
+                                An invitation has been sent to {email}.
+                            </Text>
+                        }
+                        {apiState == 'error' &&
+                            <Text>
+                                There was an error sending the invitation. Please try again.
+                            </Text>
+                        }
+                    </ModalBody>
+                    <ModalFooter>
+                        <Button onClick={handleClose}>Close</Button>
+                    </ModalFooter>
+                </ModalContent>
+
+            </Modal>
+        </div>
+    )
+}

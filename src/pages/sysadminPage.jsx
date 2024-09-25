@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useSearchParams, Link } from 'react-router-dom';
 import Cookies from 'js-cookie';
-import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, Button, Heading, Text } from '@chakra-ui/react';
+import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, Button, Heading, Text, SimpleGrid, Card, CardBody, CardFooter } from '@chakra-ui/react';
 
 import { signIn } from '../lib/signIn';
 import { signOut } from "../lib/signOut";
@@ -59,6 +59,16 @@ export default function SysadminPage() {
             </Breadcrumb>
             <Heading as={"h3"} size={"lg"}>Sysadmin Page</Heading>
             <Text my="2em">Signed in as {sysadminInfo.email}</Text>
+
+            <SimpleGrid spacing={4} mt="2em" templateColumns='repeat(auto-fill, minmax(200px, 1fr))'>
+                <Card>
+                    <CardBody>Send a new invitation</CardBody>
+                    <CardFooter>
+                        <Button as={Link} to="/sysadmin/send-invitation">Go</Button>
+                    </CardFooter>
+                </Card>
+            </SimpleGrid>
+
             <Button my="2em" onClick={signOut}>Sign Out</Button>
         </div>
     );
