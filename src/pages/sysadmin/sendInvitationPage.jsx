@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Link } from "react-router-dom";
 import Cookies from 'js-cookie';
-import { Heading, Text, Input, Button, Breadcrumb, BreadcrumbItem, BreadcrumbLink, useDisclosure, Modal, ModalOverlay, ModalContent, ModalHeader, ModalCloseButton, ModalBody, ModalFooter, Icon } from "@chakra-ui/react";
+import { Heading, Text, Input, Button, Breadcrumb, BreadcrumbItem, BreadcrumbLink, useDisclosure, Modal, ModalOverlay, ModalContent, ModalHeader, ModalCloseButton, ModalBody, ModalFooter, Icon, Stack } from "@chakra-ui/react";
 import { HiCheckCircle, HiMinusCircle } from 'react-icons/hi';
 
 import { sysAdminInviteUserAPI  } from "../../lib/sysadmin/sysAdminInviteUserAPI";
@@ -22,6 +22,8 @@ export default function SendInvitationPage() {
         const accessToken = Cookies.get('EttAccessJwt');
         const role = 'RE_ADMIN';
     
+        // Should probably add some validation of the email address here.
+
         try {
             // Call the sysAdminInviteUserAPI function with the access token, email, and role.
             const inviteResult = await sysAdminInviteUserAPI(accessToken, email, role);
@@ -77,29 +79,34 @@ export default function SendInvitationPage() {
             <Button isDisabled={apiState !== 'idle'} onClick={sendInvitation} mt="1em">
                 {apiState == 'idle' && 'Send Invitation'}
                 {apiState == 'loading' && 'Sending...'}
+                {apiState == 'success' && 'Sent'}
+                {apiState == 'error' && 'Error'}
             </Button>
             <Modal isOpen={isOpen} onClose={onClose}>
                 <ModalOverlay />
                 <ModalContent>
                     <ModalHeader>
-                        <Icon 
-                            as={apiState == 'success' ? HiCheckCircle : HiMinusCircle}
-                            color={apiState == 'success' ? "green.500" : "red.500"}
-                        />
                         Invitation {apiState == 'error' && 'Not'} Sent
                     </ModalHeader>
                     <ModalCloseButton />
                     <ModalBody>
-                        {apiState == 'success' &&
-                            <Text>
-                                An invitation has been sent to {email}.
-                            </Text>
-                        }
-                        {apiState == 'error' &&
-                            <Text>
-                                There was an error sending the invitation. Please try again.
-                            </Text>
-                        }
+                        <Stack direction="row" spacing="1em">
+                            <Icon 
+                                as={apiState == 'success' ? HiCheckCircle : HiMinusCircle}
+                                color={apiState == 'success' ? "green.500" : "red.500"}
+                                boxSize="3.5em"
+                            />
+                            {apiState == 'success' &&
+                                <Text>
+                                    An invitation has been sent to: {email}
+                                </Text>
+                            }
+                            {apiState == 'error' &&
+                                <Text>
+                                    There was an error sending the invitation. Please try again.
+                                </Text>
+                            }
+                        </Stack>
                     </ModalBody>
                     <ModalFooter>
                         <Button onClick={handleClose}>Close</Button>
