@@ -27,7 +27,7 @@ export default function SendInvitationPage() {
             const inviteResult = await sysAdminInviteUserAPI(accessToken, email, role);
     
             // Set the UI state based on the result of the API call.
-            if (inviteResult.message === 'Ok') {
+            if (inviteResult.payload.ok) {
                 setApiState('success');
                 onOpen();
             } else {
@@ -105,7 +105,6 @@ export default function SendInvitationPage() {
                         <Button onClick={handleClose}>Close</Button>
                     </ModalFooter>
                 </ModalContent>
-
             </Modal>
         </div>
     )
