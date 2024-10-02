@@ -15,6 +15,7 @@ import EntityPage from './pages/entityPage';
 import SysadminPage from './pages/sysadminPage';
 
 import SendInvitationPage from "./pages/sysadmin/sendInvitationPage";
+import AcknowledgeEntityPage from "./pages/entity/acknowledgeEntityPage";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -23,6 +24,7 @@ const router = createBrowserRouter(
       <Route path="consenting" element={<ConsentingPage />} />
       <Route path="auth-ind" element={<AuthorizedPage />} />
       <Route path="entity" element={<EntityPage />} />
+      <Route path="entity/acknowledge" element={<AcknowledgeEntityPage />} />
       <Route path="sysadmin" element={<SysadminPage />} />
       <Route path="sysadmin/send-invitation" element={<SendInvitationPage />} />
       <Route path="logout" element={<LogoutPage />} />
