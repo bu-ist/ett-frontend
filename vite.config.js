@@ -8,7 +8,7 @@ import react from '@vitejs/plugin-react'
 export default defineConfig(({ mode }) => {
   // Load environment variables from .env files
   const env = loadEnv(mode, process.cwd());
-  const { VITE_CONSENTING_API_HOST, VITE_AUTHORIZED_API_HOST, VITE_SYSADMIN_API_HOST, VITE_ACKNOWLEDGE_ENTITY_API_HOST } = env;
+  const { VITE_CONSENTING_API_HOST, VITE_AUTHORIZED_API_HOST, VITE_SYSADMIN_API_HOST, VITE_ACKNOWLEDGE_ENTITY_API_HOST, VITE_ENTITY_API_HOST, VITE_REGISTER_ENTITY_API_HOST } = env;
 
   return {
     plugins: [react()],
@@ -24,6 +24,11 @@ export default defineConfig(({ mode }) => {
           changeOrigin: true,
           rewrite: (path) => path.replace(/^\/authorizedApi/, '')
         },
+        '/entityApi': {
+          target: VITE_ENTITY_API_HOST,
+          changeOrigin: true,
+          rewrite: (path) => path.replace(/^\/entityApi/, '')
+        },
         '/sysadminApi': {
           target: VITE_SYSADMIN_API_HOST,
           changeOrigin: true,
@@ -33,6 +38,11 @@ export default defineConfig(({ mode }) => {
           target: VITE_ACKNOWLEDGE_ENTITY_API_HOST,
           changeOrigin: true,
           rewrite: (path) => path.replace(/^\/acknowledgeEntityApi/, '')
+        },
+        '/registerEntityApi': {
+          target: VITE_REGISTER_ENTITY_API_HOST,
+          changeOrigin: true,
+          rewrite: (path) => path.replace(/^\/registerEntityApi/, '')
         }
       }
     }

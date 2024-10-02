@@ -6,6 +6,7 @@ import { lookupInvitationAPI } from '../../lib/entity/lookupInvitationAPI';
 import { acknowledgeEntityAPI } from '../../lib/entity/acknowledgeEntityAPI';
 
 import RegisterEntityStepper from "./acknowledgeEntity/registerEntityStepper";
+import RegisterEntityForm from './acknowledgeEntity/registerEntityForm';
 
 export default function AcknowledgeEntityPage() {
     let [searchParams, setSearchParams] = useSearchParams();
@@ -105,7 +106,7 @@ export default function AcknowledgeEntityPage() {
                 </>
             }
             {apiState == 'acknowledged' &&
-                <Text>Entity Acknowledged</Text>
+               <RegisterEntityForm code={searchParams.get('code')} setStepIndex={setStepIndex} />
             }
         </div>
     );
