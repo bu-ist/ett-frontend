@@ -3,12 +3,20 @@ import Cookies from 'js-cookie';
 import { Box, Button, Card, CardBody, CardFooter, Heading, SimpleGrid, Stack, Text } from "@chakra-ui/react";
 
 import { signIn } from '../lib/signIn';
+import { getRoleForScope } from '../lib/getRoleForScope';
 
 export default function Home() {
 
     const navigate = useNavigate();
 
     const idToken = Cookies.get('EttIdJwt');
+    const accessToken = Cookies.get('EttAccessJwt');
+
+    const decodedIdToken = idToken ? JSON.parse(atob(idToken.split('.')[1])) : {};
+    const decodedAccessToken = accessToken ? JSON.parse(atob(accessToken.split('.')[1])) : null;
+
+    const sessionRole = decodedAccessToken ? getRoleForScope(decodedAccessToken.scope) : 'none';
+
 
     function handleConsentingSignIn(event) {
         event.preventDefault();
@@ -56,7 +64,14 @@ export default function Home() {
                             </Text>
                         </CardBody>
                         <CardFooter>
-                            <Button onClick={handleEntitySignIn} colorScheme="gray" variant="solid">Sign In</Button>
+                            <Button 
+                              onClick={handleEntitySignIn} 
+                              isDisabled={sessionRole !== 'none' && sessionRole !== 'entity'} 
+                              colorScheme="gray" 
+                              variant="solid"
+                            >
+                                {sessionRole === 'entity' ? 'Enter' : 'Sign In'}
+                            </Button>
                         </CardFooter>
                     </Stack>
                 </Card>
@@ -73,7 +88,14 @@ export default function Home() {
                             </Text>
                         </CardBody>
                         <CardFooter paddingTop={"-2"}>
-                            <Button onClick={handleAuthorizedSignIn} colorScheme="gray" variant="solid">Sign In</Button>
+                            <Button 
+                              onClick={handleAuthorizedSignIn} 
+                              isDisabled={sessionRole !== 'none' && sessionRole !== 'auth-ind'} 
+                              colorScheme="gray" 
+                              variant="solid"
+                            >
+                                {sessionRole === 'auth-ind' ? 'Enter' : 'Sign In'}
+                            </Button>
                         </CardFooter>
                     </Stack>
                 </Card>
@@ -90,8 +112,15 @@ export default function Home() {
                             </Text>
                         </CardBody>
                         <CardFooter paddingTop={"-2"}>
-                            <Button mr="1em" onClick={handleConsentingSignIn} colorScheme="gray" variant="solid">{ idToken ? 'Enter' : 'Sign In'}</Button>
-                            <Button as={ReactRouterLink} to='/consenting' colorScheme="gray" variant="solid">Register</Button>
+                            <Button
+                                mr="1em"
+                                isDisabled={sessionRole !== 'none' && sessionRole !== 'consenting'}
+                                onClick={handleConsentingSignIn} colorScheme="gray"
+                                variant="solid"
+                            >
+                                {sessionRole === 'consenting' ? 'Enter' : 'Sign In'}
+                            </Button>
+                            <Button as={ReactRouterLink} isDisabled={true} to='/consenting' colorScheme="gray" variant="solid">Register</Button>
                         </CardFooter>
                     </Stack>
                 </Card>
