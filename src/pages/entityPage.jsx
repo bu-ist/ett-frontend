@@ -1,11 +1,13 @@
 import { useEffect, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import Cookies from 'js-cookie';
-import { Heading, Button, Text, Spinner, Box, Card, CardHeader, CardBody } from '@chakra-ui/react';
+import { Heading, Button, Text, Spinner, Box, Card, CardHeader, CardBody, CardFooter } from '@chakra-ui/react';
 
 import { exchangeAuthorizationCode } from '../lib/exchangeAuthorizationCode';
 import { lookupUserContextAPI } from '../lib/entity/lookupUserContextAPI';
 import { signOut } from '../lib/signOut';
+
+import InviteUsersModal from './entityPage/inviteUsersModal';
 
 export default function EntityPage() {
 
@@ -93,6 +95,9 @@ export default function EntityPage() {
                                             <Text key={index}>{member.fullname}</Text>
                                         ))}
                                     </CardBody>
+                                    <CardFooter>
+                                        <InviteUsersModal entity={userInfo.user.entity} />
+                                    </CardFooter>
                                 </Card>
                             </>
                         }
