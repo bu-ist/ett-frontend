@@ -44,7 +44,7 @@ export default function EntityPage() {
 
     return (
         <div>
-            <Heading as={"h3"} size={"lg"}>Registered Entity Administrator</Heading>
+            <Heading as={"h2"} size={"xl"}>Registered Entity Administrator</Heading>
             {entityAdminInfo && entityAdminInfo.email &&
                 <>
                     <p>Signed in as {entityAdminInfo.email}</p>
@@ -62,21 +62,33 @@ export default function EntityPage() {
                             <>
                                 <Card my="1em">
                                     <CardHeader>
-                                        <Heading as="h3" size="md">{userInfo.user.fullname}</Heading>
+                                        <Heading as="h3" size="lg">{userInfo.user.fullname}</Heading>
                                         {userInfo.user.title && <Text>{userInfo.user.title}</Text>
                                         }
                                     </CardHeader>
-                                    <CardBody>Lorem Ipsum</CardBody>
+                                    <CardBody>
+                                        <Text>
+                                            {userInfo.user.active == 'Y' ? 'Active' : 'Inactive' } {'>'} Last updated {userInfo.user.update_timestamp}
+                                        </Text>
+                                    </CardBody>
                                 </Card>
 
                                 <Card mb="1em">
-                                    <CardHeader>Entity</CardHeader>
-                                    <CardBody>{userInfo.user.entity.entity_name}</CardBody>
+                                    <CardHeader>
+                                        <Heading as="h3" size="lg">{userInfo.user.entity.entity_name}</Heading>
+                                    </CardHeader>
+                                    <CardBody>
+                                        <Text>
+                                            {userInfo.user.entity.active == 'Y' ? 'Active' : 'Inactive' } {'>'} Last updated {userInfo.user.entity.update_timestamp}
+                                        </Text>
+                                    </CardBody>
                                 </Card>
                                 <Card>
-                                    <CardHeader>Members</CardHeader>
+                                    <CardHeader>
+                                        <Heading as="h4" size="md">Authorized Individuals</Heading>
+                                    </CardHeader>
                                     <CardBody>
-                                        {userInfo.user.entity.users.length == 0 && <Text>No Members</Text>}
+                                        {userInfo.user.entity.users.length == 0 && <Text>None</Text>}
                                         {userInfo.user.entity.users.map((member, index) => (
                                             <Text key={index}>{member.fullname}</Text>
                                         ))}
