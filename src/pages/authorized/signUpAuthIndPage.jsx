@@ -123,7 +123,7 @@ export default function SignUpAuthIndPage() {
                 </>
             }
             {apiState == 'acknowledged' &&
-               <SignUpAuthIndForm entityInfo={entityInfo} />
+               <SignUpAuthIndForm entityInfo={entityInfo} setStepIndex={setStepIndex} code={searchParams.get('code')} />
             }
 
         </>

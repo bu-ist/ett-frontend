@@ -1,8 +1,13 @@
 import { useState } from 'react';
-import { Button, Card, CardBody, CardHeader, FormControl, FormLabel, Heading, Input, Text } from "@chakra-ui/react";
+import { Button, Card, CardBody, CardHeader, FormControl, FormLabel, Heading, Input, Spinner, Text } from "@chakra-ui/react";
 
-export default function SignUpAuthIndForm({entityInfo}) {
+import { registerEntityAPI } from '../../../lib/entity/registerEntityAPI';
+import { signUp } from '../../../lib/signUp';
+
+export default function SignUpAuthIndForm({entityInfo, setStepIndex, code}) {
     const  { entity, invitation, users }  = entityInfo;
+
+    const [apiState, setApiState] = useState('idle');
 
     // Initialize state for each form input
     const [formData, setFormData] = useState({
@@ -23,24 +28,27 @@ export default function SignUpAuthIndForm({entityInfo}) {
     // Handle form submission
     async function handleSubmit(e) {
         e.preventDefault();
-        console.log('Registering: ', formData);
 
-        // setApiState('loading');
+        setApiState('loading');
 
-        // const registerResult = await registerEntityAPI(code, formData);
-        // console.log(registerResult);
+        const registerResult = await registerEntityAPI(code, formData);
+        console.log(registerResult);
 
-        // if (registerResult.payload.ok) {
+         if (registerResult.payload.ok) {
 
-        //     console.log('Registration successful');
-        //     setStepIndex(3);
-        //     setApiState('success');
-        // }
+            console.log('Registration successful');
+            setStepIndex(3);
+            setApiState('success');
+        }
+    }
+
+    function handleRegisterClick() {
+        signUp(formData.email, import.meta.env.VITE_AUTHORIZED_COGNITO_CLIENTID, 'auth-ind')
     }
 
     return (
         <>
-            <Heading as="h3" mb="1em" size="md">Register Account</Heading>
+            <Heading as="h3" mb="1em" size="md">Sign Up For Account</Heading>
             <Card mb="1em" variant="filled">
                 <CardHeader>
                     <Heading as="h4" size="sm">{entity.entity_name}</Heading>
@@ -73,8 +81,22 @@ export default function SignUpAuthIndForm({entityInfo}) {
                     value={formData.email}
                     onChange={handleChange}
                 />
-                <Button my="1em" type="submit">Sign Up</Button>
+                <Button my="1em" type="submit">
+                    { apiState === 'loading' && <Spinner /> }
+                    { apiState !== 'loading' && 'Sign Up' }
+                </Button>
             </FormControl>
+            {apiState === 'success' &&
+                <>
+                    <Heading as="h4" size={"sm"} >Registration successful</Heading>
+                    <Text>Click Sign Up to create a password and complete registration.</Text>
+                    <Button
+                        onClick={handleRegisterClick}
+                    >
+                        Sign Up
+                    </Button>
+                </>
+            }
         </>
     );
 }
