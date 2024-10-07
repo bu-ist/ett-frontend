@@ -1,6 +1,8 @@
 import { useState } from 'react';
 import { Button, Card, CardBody, CardHeader, FormControl, FormLabel, Heading, Input, Spinner, Text } from "@chakra-ui/react";
 
+import SignUpCognitoButton from './signUpCognitoButton';
+
 import { registerEntityAPI } from '../../../lib/entity/registerEntityAPI';
 import { signUp } from '../../../lib/signUp';
 
@@ -42,16 +44,16 @@ export default function SignUpAuthIndForm({entityInfo, setStepIndex, code}) {
         }
     }
 
-    function handleRegisterClick() {
+    function signUpRedirect() {
         signUp(formData.email, import.meta.env.VITE_AUTHORIZED_COGNITO_CLIENTID, 'auth-ind')
     }
 
     return (
         <>
-            <Heading as="h3" mb="1em" size="md">Sign Up For Account</Heading>
+            <Heading as="h3" mb="1em" size="md">Register For an Account</Heading>
             <Card mb="1em" variant="filled">
                 <CardHeader>
-                    <Heading as="h4" size="sm">{entity.entity_name}</Heading>
+                    <Heading as="h4" size="sm">Invitation from {entity.entity_name}</Heading>
                 </CardHeader>
                 <CardBody>
                     <Heading as="h5" size="xs">Entity Administrator</Heading>
@@ -81,21 +83,14 @@ export default function SignUpAuthIndForm({entityInfo, setStepIndex, code}) {
                     value={formData.email}
                     onChange={handleChange}
                 />
-                <Button my="1em" type="submit">
+                <Button my="1em" type="submit" isDisabled={apiState !== 'idle'}>
                     { apiState === 'loading' && <Spinner /> }
-                    { apiState !== 'loading' && 'Sign Up' }
+                    { apiState === 'idle' && 'Register' }
+                    { apiState === 'success' && 'Registered' }
                 </Button>
             </FormControl>
             {apiState === 'success' &&
-                <>
-                    <Heading as="h4" size={"sm"} >Registration successful</Heading>
-                    <Text>Click Sign Up to create a password and complete registration.</Text>
-                    <Button
-                        onClick={handleRegisterClick}
-                    >
-                        Sign Up
-                    </Button>
-                </>
+                <SignUpCognitoButton signUpRedirect={signUpRedirect} />
             }
         </>
     );
