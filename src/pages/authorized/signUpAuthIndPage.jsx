@@ -8,6 +8,7 @@ import { lookupEntityAPI } from '../../lib/entity/lookupEntityAPI';
 
 import SignUpAuthIndStepper from './signUpAuthInd/signUpAuthIndStepper';
 import SignUpAuthIndForm from "./signUpAuthInd/signUpAuthIndForm";
+import AcknowledgePrivacy from "./signUpAuthInd/acknowledgePrivacy";
 
 export default function SignUpAuthIndPage() {
     let [searchParams, setSearchParams] = useSearchParams();
@@ -103,6 +104,16 @@ export default function SignUpAuthIndPage() {
                 <Text>Error: There was an error acknowledging the entity. Please try again.</Text>
             }
             {apiState == 'validated' &&
+                <>
+                    <Text>Invitation Code Validated for {inviteInfo.entity_name}</Text>
+                    <AcknowledgePrivacy acknowledgeEntity={acknowledgeEntity}  />
+                </>
+            }
+            {
+                // Leaving this validated-with-checkbox here for now, but at the moment the new component doesn't have a checkbox,
+                // so this state is not being used.
+            }
+            {apiState == 'validated-with-checkbox' &&
                 <>
                     <Text>Invitation Code Validated for {inviteInfo.entity_name}</Text>
                     <Text>Privacy Policy</Text>
