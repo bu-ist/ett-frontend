@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
-import { Heading, Text, Spinner, Box, Checkbox, Button } from "@chakra-ui/react";
+import { Heading, Text, Spinner, Box, Checkbox, Button, Fade } from "@chakra-ui/react";
 
 import { lookupInvitationAPI } from '../../lib/entity/lookupInvitationAPI';
 import { acknowledgeEntityAPI } from '../../lib/entity/acknowledgeEntityAPI';
@@ -134,7 +134,9 @@ export default function SignUpAuthIndPage() {
                 </>
             }
             {apiState == 'acknowledged' &&
-               <SignUpAuthIndForm entityInfo={entityInfo} setStepIndex={setStepIndex} code={searchParams.get('code')} />
+                <Fade in={apiState == 'acknowledged'}>
+                    <SignUpAuthIndForm entityInfo={entityInfo} setStepIndex={setStepIndex} code={searchParams.get('code')} />
+                </Fade>
             }
 
         </>
