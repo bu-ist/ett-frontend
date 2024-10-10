@@ -51,12 +51,6 @@ export default function ConsentDetails({ consentData, setConsentData, consenterI
                     </CardFooter>
                 </Card>
                 <Card>
-                    <CardBody>Make corrections to this Consent Form</CardBody>
-                    <CardFooter>
-                        <Button>Correct</Button>
-                    </CardFooter>
-                </Card>
-                <Card>
                     <CardBody>Email a copy of this Consent form to {email} </CardBody>
                     <CardFooter>
                         <Button>Email</Button>
