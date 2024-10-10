@@ -120,7 +120,7 @@ export default function Home() {
                             >
                                 {sessionRole === 'consenting' ? 'Enter' : 'Sign In'}
                             </Button>
-                            <Button as={ReactRouterLink} isDisabled={true} to='/consenting' colorScheme="gray" variant="solid">Register</Button>
+                            <Button as={ReactRouterLink} isDisabled={sessionRole !== 'none'} to='/consenting/register' colorScheme="gray" variant="solid">Register</Button>
                         </CardFooter>
                     </Stack>
                 </Card>
