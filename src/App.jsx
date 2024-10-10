@@ -10,6 +10,7 @@ import Home from './pages/home';
 import LogoutPage from './pages/logoutPage';
 
 import ConsentingPage from './pages/consentingPage';
+import ConsentingRegisterPage from './pages/consenting/consentingRegisterPage';
 
 import AuthorizedPage from './pages/authorizedPage';
 import SignUpAuthIndPage from './pages/authorized/signUpAuthIndPage';
@@ -25,6 +26,7 @@ const router = createBrowserRouter(
     <Route path="/" element={<RootLayout />}>
       <Route index element={<Home />} />
       <Route path="consenting" element={<ConsentingPage />} />
+      <Route path="consenting/register" element={<ConsentingRegisterPage />} />
       <Route path="auth-ind" element={<AuthorizedPage />} />
       <Route path="auth-ind/sign-up" element={<SignUpAuthIndPage />} />
       <Route path="entity" element={<EntityPage />} />
