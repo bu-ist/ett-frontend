@@ -27,6 +27,7 @@ const router = createBrowserRouter(
       <Route index element={<Home />} />
       <Route path="consenting" element={<ConsentingPage />} />
       <Route path="consenting/register" element={<ConsentingRegisterPage />} />
+      <Route path="consenting/consent-form" element={<ConsentFormPage />} />
       <Route path="auth-ind" element={<AuthorizedPage />} />
       <Route path="auth-ind/sign-up" element={<SignUpAuthIndPage />} />
       <Route path="entity" element={<EntityPage />} />
