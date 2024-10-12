@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
-import { useSearchParams } from 'react-router-dom';
+import { useSearchParams, Link } from 'react-router-dom';
 import Cookies from 'js-cookie';
-import { Button, Heading, Spinner } from '@chakra-ui/react';
+import { Heading, Spinner, Breadcrumb, BreadcrumbItem, BreadcrumbLink } from '@chakra-ui/react';
 
 import { exchangeAuthorizationCode } from '../lib/exchangeAuthorizationCode';
 import { getConsentData } from '../lib/getConsentData';
@@ -46,6 +46,14 @@ export default function ConsentingPage() {
 
     return (
         <div>
+            <Breadcrumb separator=">">
+                <BreadcrumbItem>
+                    <BreadcrumbLink as={Link} to='/'>Home</BreadcrumbLink>
+                </BreadcrumbItem>
+                <BreadcrumbItem isCurrentPage>
+                    <BreadcrumbLink>Consenting Person</BreadcrumbLink>
+                </BreadcrumbItem>
+            </Breadcrumb>
             <Heading as="h2" size={"lg"} >Consenting Person</Heading>
             {consenterInfo && consenterInfo.email &&
                 <>
