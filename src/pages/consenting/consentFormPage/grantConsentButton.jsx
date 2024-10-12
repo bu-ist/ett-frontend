@@ -13,8 +13,6 @@ export default function GrantConsentButton({ consentData }) {
         setApiState('loading');
         const accessToken = Cookies.get('EttAccessJwt');
 
-        console.log( 'consetndata', consentData);
-
         if (accessToken) {
             const { fullName: fullname, consenter } = consentData;
             const { email, phone_number } = consenter;
