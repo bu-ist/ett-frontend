@@ -11,6 +11,7 @@ import LogoutPage from './pages/logoutPage';
 
 import ConsentingPage from './pages/consentingPage';
 import ConsentingRegisterPage from './pages/consenting/consentingRegisterPage';
+import ConsentFormPage from "./pages/consenting/consentFormPage";
 
 import AuthorizedPage from './pages/authorizedPage';
 import SignUpAuthIndPage from './pages/authorized/signUpAuthIndPage';
