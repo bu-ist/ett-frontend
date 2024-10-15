@@ -6,10 +6,17 @@ import { Box, Button, FormControl, FormLabel, Heading, Input } from '@chakra-ui/
 import { exchangeAuthorizationCode } from '../lib/exchangeAuthorizationCode';
 import { signOut } from '../lib/signOut';
 
+import { getConsenterListAPI } from '../lib/auth-ind/getConsenterListAPI';
+
+import ConsentersAutocomplete from "./authorizedPage/consentersAutocomplete";
+
 export default function AuthorizedPage() {
     let [searchParams, setSearchParams] = useSearchParams();
 
     const [authorizedInfo, setAuthorizedInfo] = useState({});
+
+    const [apiState, setApiState] = useState('idle');
+    const [consenterList, setConsenterList] = useState([]);
 
     useEffect(() => {
         const fetchData = async () => {
@@ -32,6 +39,11 @@ export default function AuthorizedPage() {
 
                 //console.log("decodedIdToken", decodedIdToken);
                 setAuthorizedInfo(decodedIdToken);
+
+                const consenterListResponse = await getConsenterListAPI(accessToken);
+
+                setConsenterList(consenterListResponse.payload.consenters);
+
             }
         };
 
@@ -44,6 +56,9 @@ export default function AuthorizedPage() {
             {authorizedInfo && authorizedInfo.email &&
                 <>
                     <p>Signed in as {authorizedInfo.email}</p>
+
+                    <Heading as="h3" my="1em" size={"lg"}>Make an Exhibit Form request</Heading>
+                    <ConsentersAutocomplete consenterList={consenterList} />
 
                     <Heading as="h3" my="1em" size={"lg"}>Make a disclosure request</Heading>
                     <Box my={"2em"}>
