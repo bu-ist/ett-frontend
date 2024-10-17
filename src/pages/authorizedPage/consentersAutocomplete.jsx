@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import Cookies from 'js-cookie';
 
 import { Box, Button, Modal, ModalBody, ModalCloseButton, ModalContent, ModalHeader, ModalOverlay, Spinner, useDisclosure } from "@chakra-ui/react";
 import {
@@ -8,7 +9,9 @@ import {
     AutoCompleteList,
   } from "@choc-ui/chakra-autocomplete";
 
-export default function ConsentersAutocomplete({ consenterList }) {
+import { sendExhibitRequestAPI } from '../../lib/auth-ind/sendExhibitRequestAPI';
+
+export default function ConsentersAutocomplete({ consenterList, entityId }) {
     const { isOpen, onOpen, onClose } = useDisclosure();
     
     const [selectedConsenter, setSelectedConsenter] = useState('');
@@ -18,9 +21,15 @@ export default function ConsentersAutocomplete({ consenterList }) {
         // Send the request to the API
         console.log('selectedConsenter send', selectedConsenter);
         setApiState('loading');
-        // API call here
 
-        setApiState('success');
+        const accessToken = Cookies.get('EttAccessJwt');
+        const sendResult = await sendExhibitRequestAPI(accessToken, selectedConsenter, entityId);
+
+        if (sendResult.payload.ok) {
+            setApiState('success');
+        } else {
+            setApiState('error');
+        }
 
         onOpen();
     }
