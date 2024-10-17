@@ -1,15 +1,25 @@
 import { useEffect, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import Cookies from 'js-cookie';
-import { Box, Button, FormControl, FormLabel, Heading, Input } from '@chakra-ui/react';
+import { Box, Button, FormControl, FormLabel, Heading, Input, Spinner } from '@chakra-ui/react';
 
 import { exchangeAuthorizationCode } from '../lib/exchangeAuthorizationCode';
 import { signOut } from '../lib/signOut';
+
+import { lookupAuthIndAPI } from '../lib/auth-ind/lookupAuthIndAPI';
+import { getConsenterListAPI } from '../lib/auth-ind/getConsenterListAPI';
+
+import ConsentersAutocomplete from "./authorizedPage/consentersAutocomplete";
 
 export default function AuthorizedPage() {
     let [searchParams, setSearchParams] = useSearchParams();
 
     const [authorizedInfo, setAuthorizedInfo] = useState({});
+    const [userData, setUserData] = useState({});
+
+    const [apiState, setApiState] = useState('idle');
+
+    const [consenterList, setConsenterList] = useState([]);
 
     useEffect(() => {
         const fetchData = async () => {
@@ -29,9 +39,20 @@ export default function AuthorizedPage() {
 
             if (accessToken && idToken) {
                 const decodedIdToken = JSON.parse(atob(idToken.split('.')[1]));
-
-                //console.log("decodedIdToken", decodedIdToken);
                 setAuthorizedInfo(decodedIdToken);
+
+                // Get the consenter list and user data.
+                setApiState('loading');
+
+                const consenterListResponse = await getConsenterListAPI(accessToken);
+                setConsenterList(consenterListResponse.payload.consenters);
+
+                const authIndResponse = await lookupAuthIndAPI(accessToken, decodedIdToken.email);
+                setUserData(authIndResponse.payload.user);
+
+                // Need to add error checking, but I'm not yet sure all these components will stay on the same page.
+                setApiState('success');
+
             }
         };
 
@@ -41,9 +62,13 @@ export default function AuthorizedPage() {
     return (
         <div>
             <Heading as="h2" size={"xl"}>Authorized Individual</Heading>
-            {authorizedInfo && authorizedInfo.email &&
+            {apiState === 'loading' && <Spinner />}
+            {(authorizedInfo && authorizedInfo.email && apiState == 'success') &&
                 <>
                     <p>Signed in as {authorizedInfo.email}</p>
+
+                    <Heading as="h3" my="1em" size={"lg"}>Make an Exhibit Form request</Heading>
+                    <ConsentersAutocomplete consenterList={consenterList} entityId={userData.entity.entity_id} />
 
                     <Heading as="h3" my="1em" size={"lg"}>Make a disclosure request</Heading>
                     <Box my={"2em"}>
