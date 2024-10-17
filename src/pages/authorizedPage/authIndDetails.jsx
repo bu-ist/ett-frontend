@@ -1,6 +1,10 @@
 import { Heading, Card, CardHeader, Text, CardBody, HStack, Box, StackDivider } from "@chakra-ui/react";
 
 export default function AuthIndDetails({ userInfo }) {
+
+    // Get the entity administrator as the user in the entity users array with a role of "RE_ADMIN".
+    const entityAdmin = userInfo.entity.users.find(user => user.role === 'RE_ADMIN');
+
     return (
         <Card my="2em">
             <CardHeader>
@@ -22,9 +26,9 @@ export default function AuthIndDetails({ userInfo }) {
                     <Box>
                         <Heading mt="2em" as="h4" size="sm">Administrator</Heading>
                         <Text>
-                            {userInfo.entity.users[0].fullname}
+                            {entityAdmin.fullname}
                         </Text>
-                    <Text>{userInfo.entity.users[0].email}</Text>
+                    <Text>{entityAdmin.email}</Text>
                     </Box>
                 </HStack>
             </CardBody>
