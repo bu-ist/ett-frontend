@@ -9,7 +9,8 @@ import { signOut } from '../lib/signOut';
 import { lookupAuthIndAPI } from '../lib/auth-ind/lookupAuthIndAPI';
 import { getConsenterListAPI } from '../lib/auth-ind/getConsenterListAPI';
 
-import ConsentersAutocomplete from "./authorizedPage/consentersAutocomplete";
+import ConsentersAutocomplete from './authorizedPage/consentersAutocomplete';
+import AuthIndDetails from './authorizedPage/authIndDetails';
 
 export default function AuthorizedPage() {
     let [searchParams, setSearchParams] = useSearchParams();
@@ -61,12 +62,12 @@ export default function AuthorizedPage() {
 
     return (
         <div>
+             <p>Signed in as {authorizedInfo.email}</p>
             <Heading as="h2" size={"xl"}>Authorized Individual</Heading>
             {apiState === 'loading' && <Spinner />}
             {(authorizedInfo && authorizedInfo.email && apiState == 'success') &&
                 <>
-                    <p>Signed in as {authorizedInfo.email}</p>
-
+                    <AuthIndDetails userInfo={userData} />
                     <Heading as="h3" my="1em" size={"lg"}>Make an Exhibit Form request</Heading>
                     <ConsentersAutocomplete consenterList={consenterList} entityId={userData.entity.entity_id} />
 
