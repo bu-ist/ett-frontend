@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import Cookies from 'js-cookie';
-import { Box, Button, FormControl, FormLabel, Heading, Input, Spinner } from '@chakra-ui/react';
+import { Button, Heading, Spinner } from '@chakra-ui/react';
 
 import { exchangeAuthorizationCode } from '../lib/exchangeAuthorizationCode';
 import { signOut } from '../lib/signOut';
@@ -11,6 +11,7 @@ import { getConsenterListAPI } from '../lib/auth-ind/getConsenterListAPI';
 
 import ConsentersAutocomplete from './authorizedPage/consentersAutocomplete';
 import AuthIndDetails from './authorizedPage/authIndDetails';
+import DisclosureRequestForm from './authorizedPage/disclosureRequestForm';
 
 export default function AuthorizedPage() {
     let [searchParams, setSearchParams] = useSearchParams();
@@ -72,17 +73,7 @@ export default function AuthorizedPage() {
                     <ConsentersAutocomplete consenterList={consenterList} entityId={userData.entity.entity_id} />
 
                     <Heading as="h3" my="1em" size={"lg"}>Make a disclosure request</Heading>
-                    <Box my={"2em"}>
-                        <FormControl>
-                            <FormLabel>Consenting individual email</FormLabel>
-                            <Input placeholder="email@example.com" />
-                            <FormLabel>Affiliate of the consenting individual email</FormLabel>
-                            <Input placeholder="email@example.com" />
-
-                        </FormControl>
-                        <Button my="2em">Send</Button>
-                    </Box>
-
+                    <DisclosureRequestForm entityId={userData.entity.entity_id} />
                     <Button my="2em" onClick={signOut}>Sign Out</Button>
                 </>
             }
