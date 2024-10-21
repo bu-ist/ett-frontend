@@ -12,6 +12,7 @@ import LogoutPage from './pages/logoutPage';
 import ConsentingPage from './pages/consentingPage';
 import ConsentingRegisterPage from './pages/consenting/consentingRegisterPage';
 import ConsentFormPage from "./pages/consenting/consentFormPage";
+import NewContactListPage from './pages/consenting/newContactListPage';
 
 import AuthorizedPage from './pages/authorizedPage';
 import SignUpAuthIndPage from './pages/authorized/signUpAuthIndPage';
@@ -29,6 +30,7 @@ const router = createBrowserRouter(
       <Route path="consenting" element={<ConsentingPage />} />
       <Route path="consenting/register" element={<ConsentingRegisterPage />} />
       <Route path="consenting/consent-form" element={<ConsentFormPage />} />
+      <Route path="consenting/add-exhibit-form" element={<NewContactListPage />} />
       <Route path="auth-ind" element={<AuthorizedPage />} />
       <Route path="auth-ind/sign-up" element={<SignUpAuthIndPage />} />
       <Route path="entity" element={<EntityPage />} />
