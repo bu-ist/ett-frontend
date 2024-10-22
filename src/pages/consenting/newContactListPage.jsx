@@ -49,10 +49,10 @@ export default function NewContactListPage() {
     }, []);
 
     // Handle contact field change
-    const handleContactChange = (index, e) => {
+    const handleContactChange = (id, e) => {
         const { name, value } = e.target;
-        const updatedContacts = contacts.map((contact, i) => 
-            i === index ? { ...contact, [name]: value } : contact
+        const updatedContacts = contacts.map((contact) => 
+            contact.id === id ? { ...contact, [name]: value } : contact
         );
         setContacts(updatedContacts);
     };
@@ -95,42 +95,42 @@ export default function NewContactListPage() {
                     type="text"
                     name="organizationName"
                     value={contact.organizationName}
-                    onChange={(e) => handleContactChange(index, e)}
+                    onChange={(e) => handleContactChange(contact.id, e)}
                 />
                 <FormLabel>Organization Type</FormLabel>
                 <Input
                     type="text"
                     name="organizationType"
                     value={contact.organizationType}
-                    onChange={(e) => handleContactChange(index, e)}
+                    onChange={(e) => handleContactChange(contact.id, e)}
                 />
                 <FormLabel>Contact Name</FormLabel>
                 <Input
                     type="text"
                     name="contactName"
                     value={contact.contactName}
-                    onChange={(e) => handleContactChange(index, e)}
+                    onChange={(e) => handleContactChange(contact.id, e)}
                 />
                 <FormLabel>Contact Title</FormLabel>
                 <Input
                     type="text"
                     name="contactTitle"
                     value={contact.contactTitle}
-                    onChange={(e) => handleContactChange(index, e)}
+                    onChange={(e) => handleContactChange(contact.id, e)}
                 />
                 <FormLabel>Contact Email</FormLabel>
                 <Input
                     type="email"
                     name="contactEmail"
                     value={contact.contactEmail}
-                    onChange={(e) => handleContactChange(index, e)}
+                    onChange={(e) => handleContactChange(contact.id, e)}
                 />
                 <FormLabel>Contact Phone</FormLabel>
                 <Input
                     type="tel"
                     name="contactPhone"
                     value={contact.contactPhone}
-                    onChange={(e) => handleContactChange(index, e)}
+                    onChange={(e) => handleContactChange(contact.id, e)}
                 />
             </CardBody>
             <CardFooter>
