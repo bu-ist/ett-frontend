@@ -57,6 +57,14 @@ export default function NewContactListPage() {
         setContacts(updatedContacts);
     };
 
+    // Radio button change handler has a custom handler because 'event' returned is just the radio button value.
+    function handleOrgTypeRadioChange(id, value) {
+        const updatedContacts = contacts.map((contact) =>
+            contact.id === id ? { ...contact, organizationType: value } : contact
+        );
+        setContacts(updatedContacts);
+    }
+
     // Add a new blank contact card to the form state data.
     function handleAddContact() {
         setContacts([
@@ -98,12 +106,18 @@ export default function NewContactListPage() {
                     onChange={(e) => handleContactChange(contact.id, e)}
                 />
                 <FormLabel>Organization Type</FormLabel>
-                <Input
-                    type="text"
+                <RadioGroup
+                    my="0.5em"
                     name="organizationType"
                     value={contact.organizationType}
-                    onChange={(e) => handleContactChange(contact.id, e)}
-                />
+                    onChange={(value) => handleOrgTypeRadioChange(contact.id, value)}
+                >
+                    <Stack spacing="1.5em" direction="row">
+                        <Radio value="EMPLOYER">Employer</Radio>
+                        <Radio value="ACADEMIC">Academic</Radio>
+                        <Radio value="OTHER">Other</Radio>
+                    </Stack>
+                </RadioGroup>
                 <FormLabel>Contact Name</FormLabel>
                 <Input
                     type="text"
