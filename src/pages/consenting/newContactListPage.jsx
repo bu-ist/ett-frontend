@@ -2,16 +2,20 @@ import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import Cookies from 'js-cookie';
 import { nanoid } from "nanoid";
-import { Text, Box, Breadcrumb, BreadcrumbItem, BreadcrumbLink, Heading, Spinner, FormControl, FormLabel, Input, Card, CardBody, CardHeader, Button, Divider, CardFooter } from "@chakra-ui/react";
+import { Text, Box, Breadcrumb, BreadcrumbItem, BreadcrumbLink, Heading, Spinner, FormControl, FormLabel, Input, Card, CardBody, CardHeader, Button, Divider, CardFooter, RadioGroup, Stack, Radio } from "@chakra-ui/react";
+
+import { getConsentData } from '../../lib/getConsentData';
+import { sendExhibitFormAPI } from '../../lib/consenting/sendExhibitFormAPI';
 
 import ConsenterCard from './consentFormPage/consenterCard';
 import EntityAutocomplete from './newContactListPage/entityAutocomplete';
 
-import { getConsentData } from '../../lib/getConsentData';
 
 export default function NewContactListPage() {
     const [apiState, setApiState] = useState('');
     const [consentData, setConsentData] = useState({});
+
+    const [submitResult, setSubmitResult] = useState('');
 
     const [entity, setEntity] = useState('');
     const [contacts, setContacts] = useState([
@@ -82,14 +86,24 @@ export default function NewContactListPage() {
     }
 
     // Handle form submission
-    const handleSubmit = (e) => {
+    async function handleSubmit(e) {
         e.preventDefault();
-        const formData = {
-            entity,
-            contacts
-        };
-        console.log('Form submitted:', formData);
-        // Add form submission logic here
+
+        const accessToken = Cookies.get('EttAccessJwt');
+        const idToken = Cookies.get('EttIdJwt');
+        const email = JSON.parse(atob(idToken.split('.')[1])).email;
+
+        // Send the contact list to the API.
+        const response = await sendExhibitFormAPI(accessToken, contacts, entity, email);
+
+        console.log('send exhibit form response', response);
+        
+        if (response.payload.ok) {
+            setSubmitResult('success');
+        } else {
+            setSubmitResult('error');
+        }
+
     };
 
     const contactCards = contacts.map((contact, index) => (
@@ -187,7 +201,8 @@ export default function NewContactListPage() {
                     <Divider my="1em" />
                     <Button mt="0.5em" type="submit">Submit</Button>
                 </FormControl>
-
+                {submitResult === 'success' && <Text>Form submitted successfully.</Text>}
+                {submitResult === 'error' && <Text>There was an error submitting the form.</Text>}
             </>
             }
         </Box>
