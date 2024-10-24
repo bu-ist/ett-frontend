@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import Cookies from 'js-cookie';
-import { Button, Heading, Spinner } from '@chakra-ui/react';
+import { Button, Card, CardBody, Heading, SimpleGrid, Spinner, Stack, Text } from '@chakra-ui/react';
 
 import { exchangeAuthorizationCode } from '../lib/exchangeAuthorizationCode';
 import { signOut } from '../lib/signOut';
@@ -63,17 +63,42 @@ export default function AuthorizedPage() {
 
     return (
         <div>
-             <p>Signed in as {authorizedInfo.email}</p>
+            <p>Signed in as {authorizedInfo.email}</p>
             <Heading as="h2" size={"xl"}>Authorized Individual</Heading>
             {apiState === 'loading' && <Spinner />}
             {(authorizedInfo && authorizedInfo.email && apiState == 'success') &&
                 <>
                     <AuthIndDetails userInfo={userData} />
-                    <Heading as="h3" my="1em" size={"lg"}>Make an Exhibit Form request</Heading>
-                    <ConsentersAutocomplete consenterList={consenterList} entityId={userData.entity.entity_id} />
-
-                    <Heading as="h3" my="1em" size={"lg"}>Make a disclosure request</Heading>
-                    <DisclosureRequestForm entityId={userData.entity.entity_id} />
+                    <SimpleGrid spacing={4} columns={2}>
+                        <Card
+                            overflow={"hidden"}
+                            variant={"outline"}
+                        >
+                            <Stack>
+                                <CardBody>
+                                    <Heading size="md">Make an Exhibit Form request</Heading>
+                                    <Text py={"2"} mb={"1em"}>
+                                       Minim ut velit fugiat dolore incididunt ullamco reprehenderit irure culpa. Occaecat aliquip consequat occaecat occaecat excepteur. Fugiat occaecat voluptate consectetur qui sunt est. Officia magna id aute incididunt cupidatat non ut sit in sit ea mollit minim. Nulla irure dolore occaecat Lorem amet proident duis adipisicing qui ex cillum laborum velit. Eiusmod aliquip velit nostrud elit aliqua ea reprehenderit Lorem anim minim. Ad nisi aute proident laborum proident minim Lorem velit.
+                                    </Text>
+                                    <ConsentersAutocomplete consenterList={consenterList} entityId={userData.entity.entity_id} />
+                                </CardBody>
+                            </Stack>
+                        </Card>
+                        <Card
+                            overflow={"hidden"}
+                            variant={"outline"}
+                        >
+                            <Stack>
+                                <CardBody>
+                                    <Heading size="md">Make a disclosure request</Heading>
+                                    <Text py={"2"} mb={"1em"}>
+                                    Minim ut velit fugiat dolore incididunt ullamco reprehenderit irure culpa. Occaecat aliquip consequat occaecat occaecat excepteur. Fugiat occaecat voluptate consectetur qui sunt est. Officia magna id aute incididunt cupidatat non ut sit in sit ea mollit minim. Nulla irure dolore occaecat Lorem amet proident duis adipisicing qui ex cillum laborum velit. Eiusmod aliquip velit nostrud elit aliqua ea reprehenderit Lorem anim minim. Ad nisi aute proident laborum proident minim Lorem velit.
+                                    </Text>
+                                    <DisclosureRequestForm entityId={userData.entity.entity_id} />
+                                </CardBody>
+                            </Stack>
+                        </Card>
+                    </SimpleGrid>
                     <Button my="2em" onClick={signOut}>Sign Out</Button>
                 </>
             }
