@@ -15,7 +15,7 @@ export default function NewContactListPage() {
     const [apiState, setApiState] = useState('');
     const [consentData, setConsentData] = useState({});
 
-    const [submitResult, setSubmitResult] = useState('');
+    const [submitResult, setSubmitResult] = useState('idle');
 
     const [entity, setEntity] = useState('');
     const [contacts, setContacts] = useState([
@@ -199,7 +199,12 @@ export default function NewContactListPage() {
                     <Divider my="1em" />
                     <ConsenterCard consentData={consentData} />
                     <Divider my="1em" />
-                    <Button mt="0.5em" type="submit">Submit</Button>
+                    <Button mt="0.5em" isDisabled={submitResult != 'idle'} type="submit">
+                        {submitResult === 'idle' && 'Submit'}
+                        {submitResult === 'loading' && <Spinner />}
+                        {submitResult === 'success' && 'Submitted'}
+                        {submitResult === 'error' && 'Error'}
+                    </Button>
                 </FormControl>
                 {submitResult === 'success' && <Text>Form submitted successfully.</Text>}
                 {submitResult === 'error' && <Text>There was an error submitting the form.</Text>}
