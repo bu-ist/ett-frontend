@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import Cookies from 'js-cookie';
 import { Button, Modal, ModalBody, ModalCloseButton, ModalContent, ModalHeader, ModalOverlay, useDisclosure, FormControl, Text, FormLabel, Input, Spinner } from '@chakra-ui/react';
+import { RiMailLine } from "react-icons/ri"
 
 
 import { inviteAuthIndFromEntityAPI } from '../../lib/entity/inviteAuthIndFromEntityAPI';
@@ -72,7 +73,7 @@ export default function InviteUsersModal({ numUsers, entity }) {
                             />
                             <Button my="1em" type="submit">
                                 {apiState == 'loading' && <Spinner />}
-                                {apiState == 'idle' && 'Send Invitations'}
+                                {apiState == 'idle' &&  <><RiMailLine style={{ marginRight: '0.5em' }} /> Send Invitations </>}
                                 {apiState == 'success' && 'Invitations Sent'}
                             </Button>
                         </FormControl>
