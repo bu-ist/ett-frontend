@@ -96,7 +96,7 @@ export default function EntityPage() {
                                         ))}
                                     </CardBody>
                                     <CardFooter>
-                                        <InviteUsersModal entity={userInfo.user.entity} />
+                                        <InviteUsersModal numUsers={userInfo.user.entity.users.length} entity={userInfo.user.entity} />
                                     </CardFooter>
                                 </Card>
                             </>

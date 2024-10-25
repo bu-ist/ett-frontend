@@ -5,7 +5,7 @@ import { Button, Modal, ModalBody, ModalCloseButton, ModalContent, ModalHeader, 
 
 import { inviteAuthIndFromEntityAPI } from '../../lib/entity/inviteAuthIndFromEntityAPI';
 
-export default function InviteUsersModal({ entity }) {
+export default function InviteUsersModal({ numUsers, entity }) {
     // Form State
     const [emailsToInvite, setEmailsToInvite] = useState({
         email1: '',
@@ -47,7 +47,7 @@ export default function InviteUsersModal({ entity }) {
 
     return (
         <>
-            <Button onClick={onOpen}>Add Authorized Individuals</Button>
+            <Button isDisabled={numUsers > 0} onClick={onOpen}>Add Authorized Individuals</Button>
             <Modal isOpen={isOpen} onClose={handleClose}>
                 <ModalOverlay />
                 <ModalContent>
