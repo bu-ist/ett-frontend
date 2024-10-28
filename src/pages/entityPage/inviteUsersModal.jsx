@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import Cookies from 'js-cookie';
 import { Button, Modal, ModalBody, ModalCloseButton, ModalContent, ModalHeader, ModalOverlay, useDisclosure, FormControl, Text, FormLabel, Input, Spinner } from '@chakra-ui/react';
-import { RiMailLine } from "react-icons/ri"
+import { RiMailLine } from "react-icons/ri";
 
 
 import { inviteAuthIndFromEntityAPI } from '../../lib/entity/inviteAuthIndFromEntityAPI';
