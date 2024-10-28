@@ -5,6 +5,7 @@ const NavBreadcrumb = () => {
     const location = useLocation();
     const pathnames = location.pathname.split('/').filter(Boolean);
 
+    // Assign names to the paths for the breadcrumb; this could possibly be in the router file.
     const navNames = {
         'consenting': 'Consenting Person', // Consenting Person
         'register': 'Register',
