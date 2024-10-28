@@ -1,8 +1,7 @@
 import { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
 import Cookies from 'js-cookie';
 import { nanoid } from "nanoid";
-import { Text, Box, Breadcrumb, BreadcrumbItem, BreadcrumbLink, Heading, Spinner, FormControl, FormLabel, Input, Card, CardBody, CardHeader, Button, Divider, CardFooter, RadioGroup, Stack, Radio } from "@chakra-ui/react";
+import { Text, Box, Heading, Spinner, FormControl, FormLabel, Input, Card, CardBody, CardHeader, Button, Divider, CardFooter, RadioGroup, Stack, Radio } from "@chakra-ui/react";
 
 import { getConsentData } from '../../lib/getConsentData';
 import { sendExhibitFormAPI } from '../../lib/consenting/sendExhibitFormAPI';
@@ -174,17 +173,6 @@ export default function NewContactListPage() {
 
     return (
         <Box>
-            <Breadcrumb separator=">">
-                <BreadcrumbItem>
-                    <BreadcrumbLink as={Link} to='/'>Home</BreadcrumbLink>
-                </BreadcrumbItem>
-                <BreadcrumbItem>
-                    <BreadcrumbLink as={Link} to={'/consenting'}>Consenting Person</BreadcrumbLink>
-                </BreadcrumbItem>
-                <BreadcrumbItem isCurrentPage>
-                    <BreadcrumbLink>New Contact List</BreadcrumbLink>   
-                </BreadcrumbItem>
-            </Breadcrumb>
             {apiState === 'loading' && <Spinner />}
             {apiState === 'error' && <Text>There was an error loading the new contact list page.</Text>}
             {apiState === 'success' && 

@@ -1,7 +1,6 @@
 import { useState } from 'react';
-import { Link } from "react-router-dom";
 import Cookies from 'js-cookie';
-import { Heading, Text, Input, Button, Breadcrumb, BreadcrumbItem, BreadcrumbLink, useDisclosure, Modal, ModalOverlay, ModalContent, ModalHeader, ModalCloseButton, ModalBody, ModalFooter, Icon, Stack } from "@chakra-ui/react";
+import { Heading, Text, Input, Button, useDisclosure, Modal, ModalOverlay, ModalContent, ModalHeader, ModalCloseButton, ModalBody, ModalFooter, Icon, Stack } from "@chakra-ui/react";
 import { HiCheckCircle, HiMinusCircle } from 'react-icons/hi';
 
 import { sysAdminInviteUserAPI  } from "../../lib/sysadmin/sysAdminInviteUserAPI";
@@ -56,17 +55,6 @@ export default function SendInvitationPage() {
 
     return (
         <div>
-            <Breadcrumb separator=">">
-                <BreadcrumbItem>
-                    <BreadcrumbLink as={Link} to='/'>Home</BreadcrumbLink>
-                </BreadcrumbItem>
-                <BreadcrumbItem>
-                    <BreadcrumbLink as={Link} to='/sysadmin'>Sysadmin</BreadcrumbLink>
-                </BreadcrumbItem>
-                <BreadcrumbItem isCurrentPage>
-                    <BreadcrumbLink>Send Invitation</BreadcrumbLink>
-                </BreadcrumbItem>
-            </Breadcrumb>
             <Heading as="h1" size="lg" my="1em">Send an Invitation</Heading>
             <Text>
                 To send an invitation to a new ASP user, enter their email address below.

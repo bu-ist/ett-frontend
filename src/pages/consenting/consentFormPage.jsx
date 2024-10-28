@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
 import Cookies from 'js-cookie';
-import { Box, Breadcrumb, BreadcrumbItem, BreadcrumbLink, Heading, Spinner, Text } from "@chakra-ui/react";
+import { Box, Heading, Spinner, Text } from "@chakra-ui/react";
 
 import { getConsentData } from "../../lib/getConsentData";
 
@@ -37,17 +36,6 @@ export default function ConsentFormPage() {
     // Should require valid session token to access this page.
     return (
         <Box>
-            <Breadcrumb separator=">">
-                <BreadcrumbItem>
-                    <BreadcrumbLink as={Link} to='/'>Home</BreadcrumbLink>
-                </BreadcrumbItem>
-                <BreadcrumbItem>
-                    <BreadcrumbLink as={Link} to={'/consenting'}>Consenting Person</BreadcrumbLink>
-                </BreadcrumbItem>
-                <BreadcrumbItem isCurrentPage>
-                    <BreadcrumbLink>Consent Form</BreadcrumbLink>   
-                </BreadcrumbItem>
-            </Breadcrumb>
             <Heading as={"h2"} size={"lg"}>Consent Form {(consentData?.fullName) && `for ${consentData.fullName}` }</Heading>
             {apiState === 'loading' && <Spinner />}
             {apiState === 'error' && <Text>There was an error loading the consent form.</Text>}

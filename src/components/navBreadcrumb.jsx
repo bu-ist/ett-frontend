@@ -1,0 +1,46 @@
+import { Breadcrumb, BreadcrumbItem, BreadcrumbLink } from '@chakra-ui/react';
+import { useLocation, Link } from 'react-router-dom';
+
+const NavBreadcrumb = () => {
+    const location = useLocation();
+    const pathnames = location.pathname.split('/').filter(Boolean);
+
+    const navNames = {
+        'consenting': 'Consenting Person', // Consenting Person
+        'register': 'Register',
+        'consent-form': 'Consent Form',
+        'add-exhibit-form': 'New Contact List',
+        'auth-ind': 'Authorized Individual', // Authorized Individual
+        'sign-up': 'Sign Up',
+        'entity': 'Entity Admin', // Entity Admin
+        'acknowledge': 'Register Entity',
+        'sysadmin': 'System Admin', // System Admin
+        'send-invitation': 'Send Invitation',
+        'logout': 'Logout',
+    };
+
+
+    return (
+        <Breadcrumb mt="0.5em" mb="1em" separator=">">
+            {pathnames.length > 0 && (
+                <BreadcrumbItem>
+                    <BreadcrumbLink as={Link} to='/'>Home</BreadcrumbLink>
+                </BreadcrumbItem>
+            )}
+        {pathnames.map((path, index) => {
+            const routeTo = `/${pathnames.slice(0, index + 1).join('/')}`;
+            const isCurrentPage = index === pathnames.length - 1;
+
+            return (
+            <BreadcrumbItem isCurrentPage={isCurrentPage} key={index}>
+                <BreadcrumbLink as={Link} to={routeTo}>
+                    {navNames[path]}
+                </BreadcrumbLink>
+            </BreadcrumbItem>
+            );
+        })}
+        </Breadcrumb>
+    );
+};
+
+export default NavBreadcrumb;
