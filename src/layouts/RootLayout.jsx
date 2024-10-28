@@ -2,6 +2,7 @@ import { Container, Heading } from '@chakra-ui/react';
 import { Link, Outlet } from 'react-router-dom';
 
 import NavBreadcrumb from '../components/navBreadcrumb';
+import SiteFooter from "../components/siteFooter";
 
 export default function RootLayout() {
     return (
@@ -13,6 +14,7 @@ export default function RootLayout() {
             <div>
                 <Outlet />
             </div>
+            <SiteFooter />
         </Container>
     );
 }
