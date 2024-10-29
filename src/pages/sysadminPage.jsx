@@ -1,7 +1,9 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useContext } from 'react';
 import { useSearchParams, Link } from 'react-router-dom';
 import Cookies from 'js-cookie';
 import { Button, Heading, Text, SimpleGrid, Card, CardBody, CardFooter } from '@chakra-ui/react';
+
+import { UserContext } from '../lib/userContext';
 
 import { signIn } from '../lib/signIn';
 import { signOut } from "../lib/signOut";
@@ -10,6 +12,8 @@ import { exchangeAuthorizationCode } from '../lib/exchangeAuthorizationCode';
 export default function SysadminPage() {
 
     let [searchParams, setSearchParams] = useSearchParams();
+
+    const { setUser } = useContext(UserContext);
 
     const [sysadminInfo, setSysadminInfo] = useState({});
 
@@ -41,6 +45,9 @@ export default function SysadminPage() {
                 const decodedIdToken = JSON.parse(atob(idToken.split('.')[1]));
 
                 setSysadminInfo(decodedIdToken);
+
+                // Set the user context; sysadmins don't have a user object, so just set the email.
+                setUser( {email: decodedIdToken.email } );
             }
         };
 

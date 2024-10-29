@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useContext } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import Cookies from 'js-cookie';
 import { Heading, Button, Text, Spinner, Box, Card, CardHeader, CardBody, CardFooter } from '@chakra-ui/react';
@@ -7,11 +7,15 @@ import { exchangeAuthorizationCode } from '../lib/exchangeAuthorizationCode';
 import { lookupUserContextAPI } from '../lib/entity/lookupUserContextAPI';
 import { signOut } from '../lib/signOut';
 
+import { UserContext } from '../lib/userContext';
+
 import InviteUsersModal from './entityPage/inviteUsersModal';
 
 export default function EntityPage() {
 
     let [searchParams, setSearchParams] = useSearchParams();
+
+    const {setUser} = useContext(UserContext);
 
     const [entityAdminInfo, setEntityAdminInfo] = useState({});
     const [userInfo, setUserInfo] = useState({});
@@ -36,8 +40,12 @@ export default function EntityPage() {
                 const decodedIdToken = JSON.parse(atob(idToken.split('.')[1]));
                 setEntityAdminInfo(decodedIdToken);
 
+                // Get the user data from the API and store it in local state.
                 const userInfoResponse = await lookupUserContextAPI(accessToken, decodedIdToken.email);
                 setUserInfo(userInfoResponse.payload);
+
+                // Also set the user context for the avatar in the header.
+                setUser(userInfoResponse.payload.user);
             }
         };
 
