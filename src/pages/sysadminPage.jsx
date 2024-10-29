@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useSearchParams, Link } from 'react-router-dom';
 import Cookies from 'js-cookie';
-import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, Button, Heading, Text, SimpleGrid, Card, CardBody, CardFooter } from '@chakra-ui/react';
+import { Button, Heading, Text, SimpleGrid, Card, CardBody, CardFooter } from '@chakra-ui/react';
 
 import { signIn } from '../lib/signIn';
 import { signOut } from "../lib/signOut";
@@ -49,14 +49,6 @@ export default function SysadminPage() {
 
     return (
         <div>
-            <Breadcrumb separator=">">
-                <BreadcrumbItem>
-                    <BreadcrumbLink as={Link} to='/'>Home</BreadcrumbLink>
-                </BreadcrumbItem>
-                <BreadcrumbItem isCurrentPage>
-                    <BreadcrumbLink>Sysadmin</BreadcrumbLink>
-                </BreadcrumbItem>
-            </Breadcrumb>
             <Heading as={"h3"} size={"lg"}>Sysadmin Page</Heading>
             <Text my="2em">Signed in as {sysadminInfo.email}</Text>
 
