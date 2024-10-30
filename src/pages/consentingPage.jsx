@@ -56,7 +56,6 @@ export default function ConsentingPage() {
             <Heading as="h2" size={"lg"} >Consenting Person</Heading>
             {consenterInfo && consenterInfo.email &&
                 <>
-                    <p>Signed in as {consenterInfo.email}</p>
                     {JSON.stringify(consentData) != '{}' &&
                         <ConsentDetails consentData={consentData} setConsentData={setConsentData} consenterInfo={consenterInfo} />
                     }

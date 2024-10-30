@@ -57,7 +57,6 @@ export default function EntityPage() {
             <Heading as={"h2"} size={"xl"}>Registered Entity Administrator</Heading>
             {entityAdminInfo && entityAdminInfo.email &&
                 <>
-                    <p>Signed in as {entityAdminInfo.email}</p>
                     <Box my="2em">
                         {JSON.stringify(userInfo) == '{}' &&
                             <Spinner
@@ -73,8 +72,8 @@ export default function EntityPage() {
                                 <Card my="1em">
                                     <CardHeader>
                                         <Heading as="h3" size="lg">{userInfo.user.fullname}</Heading>
-                                        {userInfo.user.title && <Text>{userInfo.user.title}</Text>
-                                        }
+                                        {userInfo.user.title && <Text>{userInfo.user.title}</Text>}
+                                        {entityAdminInfo.email && <Text>{entityAdminInfo.email}</Text>}
                                     </CardHeader>
                                     <CardBody>
                                         <Text>

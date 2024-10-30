@@ -57,8 +57,6 @@ export default function SysadminPage() {
     return (
         <div>
             <Heading as={"h3"} size={"lg"}>Sysadmin Page</Heading>
-            <Text my="2em">Signed in as {sysadminInfo.email}</Text>
-
             <SimpleGrid spacing={4} mt="2em" templateColumns='repeat(auto-fill, minmax(200px, 1fr))'>
                 <Card>
                     <CardBody>Send a new invitation</CardBody>

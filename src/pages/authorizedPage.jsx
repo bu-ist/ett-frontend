@@ -71,7 +71,6 @@ export default function AuthorizedPage() {
 
     return (
         <div>
-            <p>Signed in as {authorizedInfo.email}</p>
             <Heading as="h2" size={"xl"}>Authorized Individual</Heading>
             {apiState === 'loading' && <Spinner />}
             {(authorizedInfo && authorizedInfo.email && apiState == 'success') &&

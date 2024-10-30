@@ -9,8 +9,8 @@ export default function AuthIndDetails({ userInfo }) {
         <Card my="2em">
             <CardHeader>
                 <Heading as="h3" size="md">{userInfo.fullname}</Heading>
-                {userInfo.title && <Text>{userInfo.title}</Text>
-                }
+                {userInfo.title && <Text>{userInfo.title}</Text>}
+                {userInfo.email && <Text>{userInfo.email}</Text>}
             </CardHeader>
             <CardBody>
                 <HStack 
