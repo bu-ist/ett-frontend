@@ -55,6 +55,9 @@ export default function EntityPage() {
     return (
         <div>
             <Heading as={"h2"} size={"xl"}>Registered Entity Administrator</Heading>
+            <Text>
+                Lorem ipsum minim anim id do nisi aliqua. Consequat cillum sint qui ad aliqua proident nostrud. Cillum ullamco consectetur mollit eu labore amet ullamco mollit dolor veniam adipisicing veniam nulla ex. Quis irure minim id commodo dolore anim nulla aliqua reprehenderit pariatur. Id aute mollit pariatur tempor ex aute id voluptate enim. Et excepteur dolore non non ad deserunt duis voluptate aliqua officia qui ut elit.
+            </Text>
             {entityAdminInfo && entityAdminInfo.email &&
                 <>
                     <Box my="2em">

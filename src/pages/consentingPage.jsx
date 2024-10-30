@@ -1,7 +1,7 @@
 import { useEffect, useState, useContext } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import Cookies from 'js-cookie';
-import { Heading, Spinner, } from '@chakra-ui/react';
+import { Heading, Spinner, Text } from '@chakra-ui/react';
 
 import { UserContext } from '../lib/userContext';
 
@@ -54,6 +54,9 @@ export default function ConsentingPage() {
     return (
         <div>
             <Heading as="h2" size={"lg"} >Consenting Person</Heading>
+            <Text>
+                Lorem ipsum minim anim id do nisi aliqua. Consequat cillum sint qui ad aliqua proident nostrud. Cillum ullamco consectetur mollit eu labore amet ullamco mollit dolor veniam adipisicing veniam nulla ex. Quis irure minim id commodo dolore anim nulla aliqua reprehenderit pariatur. Id aute mollit pariatur tempor ex aute id voluptate enim. Et excepteur dolore non non ad deserunt duis voluptate aliqua officia qui ut elit.
+            </Text>
             {consenterInfo && consenterInfo.email &&
                 <>
                     {JSON.stringify(consentData) != '{}' &&

@@ -72,6 +72,9 @@ export default function AuthorizedPage() {
     return (
         <div>
             <Heading as="h2" size={"xl"}>Authorized Individual</Heading>
+            <Text>
+                Lorem ipsum minim anim id do nisi aliqua. Consequat cillum sint qui ad aliqua proident nostrud. Cillum ullamco consectetur mollit eu labore amet ullamco mollit dolor veniam adipisicing veniam nulla ex. Quis irure minim id commodo dolore anim nulla aliqua reprehenderit pariatur. Id aute mollit pariatur tempor ex aute id voluptate enim. Et excepteur dolore non non ad deserunt duis voluptate aliqua officia qui ut elit.
+            </Text>
             {apiState === 'loading' && <Spinner />}
             {(authorizedInfo && authorizedInfo.email && apiState == 'success') &&
                 <>
