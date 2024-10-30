@@ -1,7 +1,9 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useContext } from 'react';
 import { useSearchParams, Link } from 'react-router-dom';
 import Cookies from 'js-cookie';
 import { Button, Heading, Text, SimpleGrid, Card, CardBody, CardFooter } from '@chakra-ui/react';
+
+import { UserContext } from '../lib/userContext';
 
 import { signIn } from '../lib/signIn';
 import { signOut } from "../lib/signOut";
@@ -10,6 +12,8 @@ import { exchangeAuthorizationCode } from '../lib/exchangeAuthorizationCode';
 export default function SysadminPage() {
 
     let [searchParams, setSearchParams] = useSearchParams();
+
+    const { setUser } = useContext(UserContext);
 
     const [sysadminInfo, setSysadminInfo] = useState({});
 
@@ -41,6 +45,9 @@ export default function SysadminPage() {
                 const decodedIdToken = JSON.parse(atob(idToken.split('.')[1]));
 
                 setSysadminInfo(decodedIdToken);
+
+                // Set the user context; sysadmins don't have a user object, so just set the email.
+                setUser( {email: decodedIdToken.email } );
             }
         };
 
@@ -50,8 +57,6 @@ export default function SysadminPage() {
     return (
         <div>
             <Heading as={"h3"} size={"lg"}>Sysadmin Page</Heading>
-            <Text my="2em">Signed in as {sysadminInfo.email}</Text>
-
             <SimpleGrid spacing={4} mt="2em" templateColumns='repeat(auto-fill, minmax(200px, 1fr))'>
                 <Card>
                     <CardBody>Send a new invitation</CardBody>

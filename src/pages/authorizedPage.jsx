@@ -1,7 +1,9 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useContext } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import Cookies from 'js-cookie';
 import { Button, Card, CardBody, Heading, SimpleGrid, Spinner, Stack, Text } from '@chakra-ui/react';
+
+import { UserContext } from '../lib/userContext';
 
 import { exchangeAuthorizationCode } from '../lib/exchangeAuthorizationCode';
 import { signOut } from '../lib/signOut';
@@ -15,6 +17,8 @@ import DisclosureRequestForm from './authorizedPage/disclosureRequestForm';
 
 export default function AuthorizedPage() {
     let [searchParams, setSearchParams] = useSearchParams();
+
+    const { setUser } = useContext(UserContext);
 
     const [authorizedInfo, setAuthorizedInfo] = useState({});
     const [userData, setUserData] = useState({});
@@ -49,8 +53,12 @@ export default function AuthorizedPage() {
                 const consenterListResponse = await getConsenterListAPI(accessToken);
                 setConsenterList(consenterListResponse.payload.consenters);
 
+                // Get the user data from the API and store it in local state.
                 const authIndResponse = await lookupAuthIndAPI(accessToken, decodedIdToken.email);
                 setUserData(authIndResponse.payload.user);
+
+                // Also set the user context for the avatar in the header.
+                setUser(authIndResponse.payload.user);
 
                 // Need to add error checking, but I'm not yet sure all these components will stay on the same page.
                 setApiState('success');
@@ -63,7 +71,6 @@ export default function AuthorizedPage() {
 
     return (
         <div>
-            <p>Signed in as {authorizedInfo.email}</p>
             <Heading as="h2" size={"xl"}>Authorized Individual</Heading>
             {apiState === 'loading' && <Spinner />}
             {(authorizedInfo && authorizedInfo.email && apiState == 'success') &&
