@@ -1,7 +1,7 @@
 import { useEffect, useState, useContext } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import Cookies from 'js-cookie';
-import { Heading, Button, Text, Spinner, Box, Card, CardHeader, CardBody, CardFooter } from '@chakra-ui/react';
+import { Heading, Button, Text, Spinner, Box, Card, CardHeader, CardBody, Flex } from '@chakra-ui/react';
 
 import { exchangeAuthorizationCode } from '../lib/exchangeAuthorizationCode';
 import { lookupUserContextAPI } from '../lib/entity/lookupUserContextAPI';
@@ -9,7 +9,7 @@ import { signOut } from '../lib/signOut';
 
 import { UserContext } from '../lib/userContext';
 
-import InviteUsersModal from './entityPage/inviteUsersModal';
+import AuthorizedCard from './entityPage/authorizedCard';
 
 export default function EntityPage() {
 
@@ -72,43 +72,32 @@ export default function EntityPage() {
                         }
                         {userInfo.ok &&
                             <>
-                                <Card my="1em">
-                                    <CardHeader>
-                                        <Heading as="h3" size="lg">{userInfo.user.fullname}</Heading>
-                                        {userInfo.user.title && <Text>{userInfo.user.title}</Text>}
-                                        {entityAdminInfo.email && <Text>{entityAdminInfo.email}</Text>}
-                                    </CardHeader>
-                                    <CardBody>
-                                        <Text>
-                                            {userInfo.user.active == 'Y' ? 'Active' : 'Inactive' } {'>'} Last updated {userInfo.user.update_timestamp}
-                                        </Text>
-                                    </CardBody>
-                                </Card>
+                                <Flex direction="row" gap="4" mb="6">
+                                    <Card flex="1">
+                                        <CardHeader>
+                                            <Heading as="h3" size="lg">{userInfo.user.fullname}</Heading>
+                                            {userInfo.user.title && <Text>{userInfo.user.title}</Text>}
+                                            {entityAdminInfo.email && <Text>{entityAdminInfo.email}</Text>}
+                                        </CardHeader>
+                                        <CardBody>
+                                            <Text>
+                                                {userInfo.user.active == 'Y' ? 'Active' : 'Inactive' } {'>'} Last updated {userInfo.user.update_timestamp}
+                                            </Text>
+                                        </CardBody>
+                                    </Card>
+                                    <Card flex="1">
+                                        <CardHeader>
+                                            <Heading as="h3" size="lg">{userInfo.user.entity.entity_name}</Heading>
+                                        </CardHeader>
+                                        <CardBody>
+                                            <Text>
+                                                {userInfo.user.entity.active == 'Y' ? 'Active' : 'Inactive' } {'>'} Last updated {userInfo.user.entity.update_timestamp}
+                                            </Text>
+                                        </CardBody>
+                                    </Card>
+                                </Flex>
 
-                                <Card mb="1em">
-                                    <CardHeader>
-                                        <Heading as="h3" size="lg">{userInfo.user.entity.entity_name}</Heading>
-                                    </CardHeader>
-                                    <CardBody>
-                                        <Text>
-                                            {userInfo.user.entity.active == 'Y' ? 'Active' : 'Inactive' } {'>'} Last updated {userInfo.user.entity.update_timestamp}
-                                        </Text>
-                                    </CardBody>
-                                </Card>
-                                <Card>
-                                    <CardHeader>
-                                        <Heading as="h4" size="md">Authorized Individuals</Heading>
-                                    </CardHeader>
-                                    <CardBody>
-                                        {userInfo.user.entity.users.length == 0 && <Text>None</Text>}
-                                        {userInfo.user.entity.users.map((member, index) => (
-                                            <Text key={index}>{member.fullname}</Text>
-                                        ))}
-                                    </CardBody>
-                                    <CardFooter>
-                                        <InviteUsersModal numUsers={userInfo.user.entity.users.length} entity={userInfo.user.entity} />
-                                    </CardFooter>
-                                </Card>
+                                <AuthorizedCard entity={userInfo.user.entity} />
                             </>
                         }
                     </Box>
