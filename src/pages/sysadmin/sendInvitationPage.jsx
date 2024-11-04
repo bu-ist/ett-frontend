@@ -2,6 +2,7 @@ import { useState } from 'react';
 import Cookies from 'js-cookie';
 import { Heading, Text, Input, Button, useDisclosure, Modal, ModalOverlay, ModalContent, ModalHeader, ModalCloseButton, ModalBody, ModalFooter, Icon, Stack } from "@chakra-ui/react";
 import { HiCheckCircle, HiMinusCircle } from 'react-icons/hi';
+import { RiMailLine } from "react-icons/ri";
 
 import { sysAdminInviteUserAPI  } from "../../lib/sysadmin/sysAdminInviteUserAPI";
 
@@ -65,7 +66,7 @@ export default function SendInvitationPage() {
                 onChange={event => setEmail(event.target.value)}
             />
             <Button isDisabled={apiState !== 'idle'} onClick={sendInvitation} mt="1em">
-                {apiState == 'idle' && 'Send Invitation'}
+                {apiState == 'idle' && <><RiMailLine style={{ marginRight: '0.5em' }} /> Send Invitation</>}
                 {apiState == 'loading' && 'Sending...'}
                 {apiState == 'success' && 'Sent'}
                 {apiState == 'error' && 'Error'}
