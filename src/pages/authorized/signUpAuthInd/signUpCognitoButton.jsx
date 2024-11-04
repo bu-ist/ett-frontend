@@ -11,13 +11,13 @@ export default function SignUpCognitoButton({ signUpRedirect}) {
 
     return (
         <>
-            <Heading as="h4" size={"sm"} >Registration successful</Heading>
+            <Heading as="h4" size={"sm"} mt="2">Registration successful</Heading>
             <Text>Click Sign Up to create a password and complete registration.</Text>
             <Button
                 my="1em"
                 onClick={handleSignUpClick}
             >
-                {apiState === 'loading' && <>Redirecting <Spinner /></>}
+                {apiState === 'loading' && <>Redirecting {' '} <Spinner /></>}
                 {apiState !== 'loading' && 'Sign Up'}
             </Button>
         </>

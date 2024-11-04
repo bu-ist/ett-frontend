@@ -1,4 +1,4 @@
-import { Button, FormControl, FormLabel, Input, Spinner } from "@chakra-ui/react";
+import { Button, FormControl, FormLabel, Heading, Input, Spinner } from "@chakra-ui/react";
 import { useState } from "react";
 
 import SignUpCognitoButton from '../../authorized/signUpAuthInd/signUpCognitoButton';
@@ -43,6 +43,7 @@ export default function ConsentingRegisterForm() {
 
     return (
         <FormControl as="form" onSubmit={handleSubmit}>
+            <Heading as="h3" size="lg" my="6">Register</Heading>
             <FormLabel>First Name</FormLabel>
             <Input
                 name="firstname"

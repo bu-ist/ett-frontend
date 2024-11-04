@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { Link as ReactRouterLink, useNavigate } from 'react-router-dom';
 import { Button, FormControl, FormLabel, Input, Spinner } from '@chakra-ui/react';
 import Cookies from 'js-cookie';
 
@@ -39,6 +40,7 @@ export default function GrantConsentButton({ consentData }) {
                 {apiState === 'error' && 'Error'}
                 {apiState === 'success' && 'Consent Granted'}
             </Button>
+            <Button ml="6" as={ReactRouterLink} to="/consenting" my="2em"> {"< "} Dashboard</Button>
         </>
     );
 }
