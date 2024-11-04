@@ -60,7 +60,7 @@ export default function Home() {
                         <CardBody>
                             <Heading size="md">Registered Entity Administrator</Heading>
                             <Text py={"2"}>
-                                The Registered Entity Administrator is responsible for managing the entity’s profile, including adding and removing Authorized Individuals and Consenting Persons.
+                                lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud 
                             </Text>
                         </CardBody>
                         <CardFooter>
