@@ -1,4 +1,4 @@
-import { Card, CardHeader, Heading, CardBody, CardFooter, Text, Icon } from "@chakra-ui/react";
+import { Card, CardHeader, Heading, CardBody, CardFooter, Text, Icon, Stack, Badge } from "@chakra-ui/react";
 import { HiMinusCircle } from "react-icons/hi";
 
 import InviteUsersModal from "./inviteUsersModal";
