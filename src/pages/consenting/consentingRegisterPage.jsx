@@ -58,6 +58,7 @@ Consequat irure laboris labore culpa labore amet quis exercitation esse labore o
                     <Checkbox
                         value={privacyPolicyAccepted}
                         onChange={(e) => setPrivacyPolicyAccepted(e.target.checked)}
+                        isDisabled={apiState === 'accepted'}
                     >
                         Accept Privacy Policy
                     </Checkbox>
