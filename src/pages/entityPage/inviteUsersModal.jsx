@@ -35,6 +35,8 @@ export default function InviteUsersModal({ numUsers, entity }) {
         if (inviteResult.payload.ok) {
             console.log('Invitation successful');
             setApiState('success');
+        } else {
+            setApiState('error');
         }
     }
 
@@ -74,6 +76,7 @@ export default function InviteUsersModal({ numUsers, entity }) {
                             <Button my="1em" type="submit">
                                 {apiState == 'loading' && <Spinner />}
                                 {apiState == 'idle' &&  <><RiMailLine style={{ marginRight: '0.5em' }} /> Send Invitations </>}
+                                {apiState == 'error' && 'Error please try again'}
                                 {apiState == 'success' && 'Invitations Sent'}
                             </Button>
                         </FormControl>

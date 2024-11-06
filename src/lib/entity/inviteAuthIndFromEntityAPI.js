@@ -33,6 +33,11 @@ async function inviteAuthIndFromEntityAPI( accessToken, fromEmail, entity, email
     });
 
     // Extract and return the payload from the response.
+    if ( !response.ok ) {
+        // Don't try to parse error responses to json (it hard crashes), just early return a payload with a false 'ok' result.
+        return { payload: { ok: false } }
+    }
+
     const data = await response.json();
     return data;
 }
