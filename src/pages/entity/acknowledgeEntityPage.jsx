@@ -1,11 +1,12 @@
 import { useEffect, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
-import { Heading, Text, Spinner, Button, Checkbox, Box } from '@chakra-ui/react';
+import { Heading, Text, Spinner, Button, Checkbox, Box, Card, CardBody } from '@chakra-ui/react';
 
 import { lookupInvitationAPI } from '../../lib/entity/lookupInvitationAPI';
 import { acknowledgeEntityAPI } from '../../lib/entity/acknowledgeEntityAPI';
 
 import RegisterEntityStepper from "./acknowledgeEntity/registerEntityStepper";
+import EntityPrivacyPolicy from './acknowledgeEntity/entityPrivacyPolicy';
 import RegisterEntityForm from './acknowledgeEntity/registerEntityForm';
 
 export default function AcknowledgeEntityPage() {
@@ -86,10 +87,19 @@ export default function AcknowledgeEntityPage() {
             }
             {apiState == 'validated' &&
                 <>
-                    <Text>Invitation Code Validated for {entityInfo.entity_name}</Text>
-                    <Text>Privacy Policy</Text>
-                    <Box>
+                    <Card>
+                        <CardBody>
+                            <Text>Invitation Code Validated</Text>
+                        </CardBody>
+                    </Card>
+                    <Text mt="6">
+                        Nisi occaecat Lorem velit reprehenderit magna ea anim sint ut excepteur nostrud laborum excepteur. Quis labore quis eu mollit. Cillum anim ex elit ut eu eiusmod est adipisicing minim irure. Voluptate velit veniam elit id cupidatat officia culpa velit amet irure commodo duis. Elit veniam eu ipsum et amet qui cillum elit elit occaecat. Id est enim ut eiusmod qui velit ipsum consectetur enim.
+                    </Text>
+                    <EntityPrivacyPolicy accepted={privacyPolicyAccepted} />
+                    <Box mt="4">
                         <Checkbox
+                        size={"lg"}
+                        my="4"
                             value={privacyPolicyAccepted}
                             onChange={(e) => setPrivacyPolicyAccepted(e.target.checked)}
                         >
@@ -101,7 +111,7 @@ export default function AcknowledgeEntityPage() {
                         isDisabled={!privacyPolicyAccepted}
                         onClick={acknowledgeEntity}
                     >
-                        Acknowledge Entity: {entityInfo.entity_name}
+                        Acknowledge Entity
                     </Button>
                 </>
             }

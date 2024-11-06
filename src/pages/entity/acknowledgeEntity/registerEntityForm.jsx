@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Heading, FormControl, FormLabel, Input, Button, Spinner, Text } from "@chakra-ui/react";
+import { Heading, FormControl, FormLabel, Input, Button, Spinner, Text, Card, CardHeader, CardBody, CardFooter } from "@chakra-ui/react";
 
 import { registerEntityAPI } from '../../../lib/entity/registerEntityAPI';
 import { signUp } from '../../../lib/signUp';
@@ -40,12 +40,15 @@ export default function RegisterEntityForm({ code, setStepIndex }) {
     }
 
     function handleRegisterClick() {
-        signUp(formData.email, import.meta.env.VITE_ENTITY_COGNITO_CLIENTID, 'entity')
+        signUp(formData.email, import.meta.env.VITE_ENTITY_COGNITO_CLIENTID, 'entity');
     }
 
     return (
         <>
             <Heading as="h3" size={"md"} >Register Entity</Heading>
+            <Text my="6">
+                Nisi ex qui dolore irure dolor ut id velit veniam consequat. Veniam aliqua sint magna culpa proident dolore qui laborum ut mollit esse ea. Dolor pariatur aliquip non dolor nulla ipsum. Aute esse mollit commodo ad minim aute ut. Ullamco exercitation aliqua deserunt incididunt anim non aliquip.
+            </Text>
             <FormControl as="form" onSubmit={handleSubmit} isDisabled={apiState != 'idle'}>
                 <FormLabel>Entity Name</FormLabel>
                 <Input
@@ -72,21 +75,28 @@ export default function RegisterEntityForm({ code, setStepIndex }) {
                     value={formData.email}
                     onChange={handleChange}
                 />
-                <Button my="1em" type="submit">
+                <Button my="1em" type="submit" isDisabled={apiState != 'idle'}>
                     { apiState == 'loading' && <Spinner /> }
-                    { apiState != 'loading' && 'Register' }
+                    { apiState == 'idle' && 'Register' }
+                    { apiState == 'success' && 'Registered' }
                 </Button>
             </FormControl>
             {apiState == 'success' &&
-                <>
-                    <Heading as="h4" size={"sm"} >Registration successful</Heading>
-                    <Text>Click Sign Up to create a password and complete registration.</Text>
-                    <Button
-                        onClick={handleRegisterClick}
-                    >
-                        Sign Up
-                    </Button>
-                </>
+                <Card>
+                    <CardHeader>
+                        <Heading as="h4" size={"sm"}>Registration successful</Heading>
+                    </CardHeader>
+                    <CardBody>
+                        <Text>Click Sign Up to be redirected to the account creation page.</Text>
+                    </CardBody>
+                    <CardFooter>
+                        <Button
+                            onClick={handleRegisterClick}
+                        >
+                            Sign Up
+                        </Button>
+                    </CardFooter>
+                </Card>
             }
         </>
     );

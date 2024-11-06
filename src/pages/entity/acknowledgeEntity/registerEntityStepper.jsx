@@ -3,7 +3,8 @@ import { Box, Step, StepDescription, StepIcon, StepIndicator, StepNumber, Steppe
 const steps =[
     { title: 'Validate Invitation', description: '' },
     { title: 'Acknowledge Entity', description: '' },
-    { title: 'Register Entity', description: '' },  
+    { title: 'Register Entity', description: '' },
+    { title: 'Sign Up', description: '' },
 ];
 
 export default function RegisterEntityStepper({ currentIndex }) {
