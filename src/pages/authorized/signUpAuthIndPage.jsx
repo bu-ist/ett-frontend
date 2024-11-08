@@ -7,8 +7,8 @@ import { acknowledgeEntityAPI } from '../../lib/entity/acknowledgeEntityAPI';
 import { lookupEntityAPI } from '../../lib/entity/lookupEntityAPI';
 
 import SignUpAuthIndStepper from './signUpAuthInd/signUpAuthIndStepper';
-import SignUpAuthIndForm from "./signUpAuthInd/signUpAuthIndForm";
-import AcknowledgePrivacy from "./signUpAuthInd/acknowledgePrivacy";
+import SignUpAuthIndForm from './signUpAuthInd/signUpAuthIndForm';
+import AcknowledgePrivacy from './signUpAuthInd/acknowledgePrivacy';
 
 export default function SignUpAuthIndPage() {
     let [searchParams, setSearchParams] = useSearchParams();
