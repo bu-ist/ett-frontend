@@ -3,7 +3,8 @@ import { Box, Step, StepDescription, StepIcon, StepIndicator, StepNumber, Steppe
 const steps =[
     { title: 'Validate Invitation', description: '' },
     { title: 'Privacy Policy', description: '' },
-    { title: 'Register Account', description: '' },  
+    { title: 'Register Account', description: '' },
+    { title: 'Sign Up', description: '' },
 ];
 
 export default function SignUpAuthIndStepper({ currentIndex }) {
