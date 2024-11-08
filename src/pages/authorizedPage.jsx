@@ -2,6 +2,7 @@ import { useEffect, useState, useContext } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import Cookies from 'js-cookie';
 import { Button, Card, CardBody, Heading, SimpleGrid, Spinner, Stack, Text } from '@chakra-ui/react';
+import { Bs1CircleFill, Bs2CircleFill } from "react-icons/bs";
 
 import { UserContext } from '../lib/userContext';
 
@@ -86,7 +87,10 @@ export default function AuthorizedPage() {
                         >
                             <Stack>
                                 <CardBody>
-                                    <Heading size="md">Make an Exhibit Form request</Heading>
+                                    <Stack direction="row">
+                                        <Bs1CircleFill size="1.6rem" color="gray" />
+                                        <Heading size="md">Make an Exhibit Form request</Heading>
+                                    </Stack>
                                     <Text py={"2"} mb={"1em"}>
                                        Minim ut velit fugiat dolore incididunt ullamco reprehenderit irure culpa. Occaecat aliquip consequat occaecat occaecat excepteur. Fugiat occaecat voluptate consectetur qui sunt est. Officia magna id aute incididunt cupidatat non ut sit in sit ea mollit minim. Nulla irure dolore occaecat Lorem amet proident duis adipisicing qui ex cillum laborum velit. Eiusmod aliquip velit nostrud elit aliqua ea reprehenderit Lorem anim minim. Ad nisi aute proident laborum proident minim Lorem velit.
                                     </Text>
@@ -100,7 +104,10 @@ export default function AuthorizedPage() {
                         >
                             <Stack>
                                 <CardBody>
-                                    <Heading size="md">Make a disclosure request</Heading>
+                                    <Stack direction="row">
+                                        <Bs2CircleFill size="1.6rem" color="gray" />
+                                        <Heading size="md">Make a disclosure request</Heading>
+                                    </Stack>
                                     <Text py={"2"} mb={"1em"}>
                                     Minim ut velit fugiat dolore incididunt ullamco reprehenderit irure culpa. Occaecat aliquip consequat occaecat occaecat excepteur. Fugiat occaecat voluptate consectetur qui sunt est. Officia magna id aute incididunt cupidatat non ut sit in sit ea mollit minim. Nulla irure dolore occaecat Lorem amet proident duis adipisicing qui ex cillum laborum velit. Eiusmod aliquip velit nostrud elit aliqua ea reprehenderit Lorem anim minim. Ad nisi aute proident laborum proident minim Lorem velit.
                                     </Text>
