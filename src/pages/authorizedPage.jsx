@@ -10,7 +10,6 @@ import { exchangeAuthorizationCode } from '../lib/exchangeAuthorizationCode';
 import { signOut } from '../lib/signOut';
 
 import { lookupAuthIndAPI } from '../lib/auth-ind/lookupAuthIndAPI';
-import { getConsenterListAPI } from '../lib/auth-ind/getConsenterListAPI';
 
 import ConsentersAutocomplete from './authorizedPage/consentersAutocomplete';
 import AuthIndDetails from './authorizedPage/authIndDetails';
@@ -25,8 +24,6 @@ export default function AuthorizedPage() {
     const [userData, setUserData] = useState({});
 
     const [apiState, setApiState] = useState('idle');
-
-    const [consenterList, setConsenterList] = useState([]);
 
     useEffect(() => {
         const fetchData = async () => {
@@ -50,9 +47,6 @@ export default function AuthorizedPage() {
 
                 // Get the consenter list and user data.
                 setApiState('loading');
-
-                const consenterListResponse = await getConsenterListAPI(accessToken);
-                setConsenterList(consenterListResponse.payload.consenters);
 
                 // Get the user data from the API and store it in local state.
                 const authIndResponse = await lookupAuthIndAPI(accessToken, decodedIdToken.email);
@@ -94,7 +88,7 @@ export default function AuthorizedPage() {
                                     <Text py={"2"} mb={"1em"}>
                                        Minim ut velit fugiat dolore incididunt ullamco reprehenderit irure culpa. Occaecat aliquip consequat occaecat occaecat excepteur. Fugiat occaecat voluptate consectetur qui sunt est. Officia magna id aute incididunt cupidatat non ut sit in sit ea mollit minim. Nulla irure dolore occaecat Lorem amet proident duis adipisicing qui ex cillum laborum velit. Eiusmod aliquip velit nostrud elit aliqua ea reprehenderit Lorem anim minim. Ad nisi aute proident laborum proident minim Lorem velit.
                                     </Text>
-                                    <ConsentersAutocomplete consenterList={consenterList} entityId={userData.entity.entity_id} />
+                                    <ConsentersAutocomplete entityId={userData.entity.entity_id} />
                                 </CardBody>
                             </Stack>
                         </Card>
