@@ -1,7 +1,7 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Cookies from 'js-cookie';
 
-import { Box, Button, Modal, ModalBody, ModalCloseButton, ModalContent, ModalHeader, ModalOverlay, Spinner, useDisclosure } from "@chakra-ui/react";
+import { Box, Button, Center, Modal, ModalBody, ModalCloseButton, ModalContent, ModalHeader, ModalOverlay, Spinner, useDisclosure } from "@chakra-ui/react";
 import {
     AutoComplete,
     AutoCompleteInput,
@@ -10,12 +10,18 @@ import {
   } from "@choc-ui/chakra-autocomplete";
 
 import { sendExhibitRequestAPI } from '../../lib/auth-ind/sendExhibitRequestAPI';
+import { searchConsentersAPI } from '../../lib/auth-ind/searchConsentersAPI';
 
-export default function ConsentersAutocomplete({ consenterList, entityId }) {
+export default function ConsentersAutocomplete({ entityId }) {
     const { isOpen, onOpen, onClose } = useDisclosure();
+
+    const [selectedConsenter, setSelectedConsenter] = useState(null);
     
-    const [selectedConsenter, setSelectedConsenter] = useState('');
     const [apiState, setApiState] = useState('idle');
+    
+    const [value, setValue] = useState(null);
+    const [options, setOptions] = useState([]);
+    const [isLoading, setIsLoading] = useState(false);
 
     async function handleSendButton() {
         // Send the request to the API
@@ -37,20 +43,64 @@ export default function ConsentersAutocomplete({ consenterList, entityId }) {
     function handleModalClose() {
         // Reset the state and close the modal
         setApiState('idle');
-        setSelectedConsenter('');
+        setSelectedConsenter(null);
+        setValue(null);
+        // This doesn't fully work yet as the autocomplete doesn't reset the value.
+        setOptions([]);
         onClose();
     }
+
+    async function fetchConsenters(query) {
+        const accessToken = Cookies.get('EttAccessJwt');
+        const result = await searchConsentersAPI(accessToken, query);
+
+        if (result.payload.ok) {
+            setOptions(result.payload.consenters);
+        } else {
+            setOptions([]);
+        }
+    }
+
+    function onChangeInputHandler(event) {
+        const { target: { value } } = event;
+        setValue(value);
+    };
+
+    // Use a useEffect to call the API when the value changes.
+    useEffect(() => {
+        if (value) {
+            setIsLoading(true);
+            // Use a timeout to debounce the search API call.
+            const timer = setTimeout(async () => {
+                try {
+                    await fetchConsenters(value);
+                } finally {
+                    setIsLoading(false);
+                }
+            }, 300);
+    
+            // Cleanup function to clear the timeout
+            return () => clearTimeout(timer);
+        }
+    }, [value, setOptions, setIsLoading]);
+
+    const emptyState = <Center>{value ? 'No results found' : 'Start typing to search'}</Center>;
 
     return (
         <Box>
             <AutoComplete
                 openOnFocus
-                value={selectedConsenter}
+                isLoading={isLoading}
                 onChange={setSelectedConsenter}
+                emptyState={emptyState}
             >
-                <AutoCompleteInput placeholder="Search for a consenter" />
+                <AutoCompleteInput
+                    onChange={onChangeInputHandler} 
+                    placeholder="Search for a consenter"
+                    loadingIcon={<Spinner />}
+                />
                 <AutoCompleteList>
-                    {consenterList.map((consenter) => {
+                    {options.map((consenter) => {
                         return (
                             <AutoCompleteItem key={consenter.email} value={consenter.email} label={consenter.fullname}>
                                 {consenter.fullname} {consenter.email}
@@ -61,7 +111,7 @@ export default function ConsentersAutocomplete({ consenterList, entityId }) {
             </AutoComplete>
             <Button onClick={handleSendButton} my="2em">
                 {apiState === 'idle' && 
-                    <>Send{selectedConsenter !== '' ? ` to ${selectedConsenter}` : '' }</>
+                    <>Send{selectedConsenter ? ` to ${selectedConsenter}` : '' }</>
                 }
                 {apiState === 'loading' && <Spinner />}
                 {apiState === 'error' && 'Error'}
