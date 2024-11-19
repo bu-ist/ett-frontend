@@ -27,12 +27,10 @@ export default function AuthorizedPage() {
 
     useEffect(() => {
         const fetchData = async () => {
-
             if (searchParams.has('code') && Cookies.get('EttAccessJwt') === undefined) {
                 // If this exists, then there is a sign in request, so use the code to get the tokens and store them as cookies.
                 const clientId = import.meta.env.VITE_AUTHORIZED_COGNITO_CLIENTID;
-                await exchangeAuthorizationCode( clientId, 'auth-ind');
-                //Once the tokens are stored, should remove the code from the URL.
+                await exchangeAuthorizationCode(clientId, 'auth-ind');
 
                 // Use setSearchParams to empty the search params once exchangeAuthorizationCode is done with them.
                 setSearchParams({});
@@ -41,24 +39,28 @@ export default function AuthorizedPage() {
             const accessToken = Cookies.get('EttAccessJwt');
             const idToken = Cookies.get('EttIdJwt');
 
-            if (accessToken && idToken) {
-                const decodedIdToken = JSON.parse(atob(idToken.split('.')[1]));
-                setAuthorizedInfo(decodedIdToken);
-
-                // Get the consenter list and user data.
-                setApiState('loading');
-
-                // Get the user data from the API and store it in local state.
-                const authIndResponse = await lookupAuthIndAPI(accessToken, decodedIdToken.email);
-                setUserData(authIndResponse.payload.user);
-
-                // Also set the user context for the avatar in the header.
-                setUser(authIndResponse.payload.user);
-
-                // Need to add error checking, but I'm not yet sure all these components will stay on the same page.
-                setApiState('success');
-
+            if (!accessToken || !idToken) {
+                // Set the apiState to 'not-logged-in' to provide feedback
+                setApiState('not-logged-in');
+                return;
             }
+
+            // If there are login tokens, get the user data.
+            const decodedIdToken = JSON.parse(atob(idToken.split('.')[1]));
+            setAuthorizedInfo(decodedIdToken);
+
+            // Get the consenter list and user data.
+            setApiState('loading');
+
+            // Get the user data from the API and store it in local state.
+            const authIndResponse = await lookupAuthIndAPI(accessToken, decodedIdToken.email);
+            setUserData(authIndResponse.payload.user);
+
+            // Also set the user context for the avatar in the header.
+            setUser(authIndResponse.payload.user);
+
+            // Need to add error checking, but I'm not yet sure all these components will stay on the same page.
+            setApiState('success');
         };
 
         fetchData();
