@@ -1,10 +1,12 @@
 import { useEffect, useState, useContext } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import Cookies from 'js-cookie';
-import { Heading, Button, Text, Spinner, Box, Card, CardHeader, CardBody, Flex } from '@chakra-ui/react';
+import { Heading, Button, Text, Spinner, Box, Card, CardHeader, CardBody, Flex, Icon, CardFooter } from '@chakra-ui/react';
+import { BsFileEarmarkLock2 } from 'react-icons/bs';
 
 import { exchangeAuthorizationCode } from '../lib/exchangeAuthorizationCode';
 import { lookupUserContextAPI } from '../lib/entity/lookupUserContextAPI';
+import { signIn } from '../lib/signIn';
 import { signOut } from '../lib/signOut';
 
 import { UserContext } from '../lib/userContext';
@@ -36,17 +38,23 @@ export default function EntityPage() {
             const accessToken = Cookies.get('EttAccessJwt');
             const idToken = Cookies.get('EttIdJwt');
 
-            if (accessToken && idToken) {
-                const decodedIdToken = JSON.parse(atob(idToken.split('.')[1]));
-                setEntityAdminInfo(decodedIdToken);
-
-                // Get the user data from the API and store it in local state.
-                const userInfoResponse = await lookupUserContextAPI(accessToken, decodedIdToken.email);
-                setUserInfo(userInfoResponse.payload);
-
-                // Also set the user context for the avatar in the header.
-                setUser(userInfoResponse.payload.user);
+            if (!accessToken || !idToken) {
+                // If there are not login tokens, signal that there is not a login session and return early.
+                setEntityAdminInfo({login: false});
+                return;
             }
+
+            // If there are login tokens, use them to get the user data.
+            const decodedIdToken = JSON.parse(atob(idToken.split('.')[1]));
+            setEntityAdminInfo(decodedIdToken);
+
+            // Get the user data from the API and store it in local state.
+            const userInfoResponse = await lookupUserContextAPI(accessToken, decodedIdToken.email);
+            setUserInfo(userInfoResponse.payload);
+
+            // Also set the user context for the avatar in the header.
+            setUser(userInfoResponse.payload.user);
+            
         };
 
         fetchData();
@@ -58,6 +66,21 @@ export default function EntityPage() {
             <Text>
                 Lorem ipsum minim anim id do nisi aliqua. Consequat cillum sint qui ad aliqua proident nostrud. Cillum ullamco consectetur mollit eu labore amet ullamco mollit dolor veniam adipisicing veniam nulla ex. Quis irure minim id commodo dolore anim nulla aliqua reprehenderit pariatur. Id aute mollit pariatur tempor ex aute id voluptate enim. Et excepteur dolore non non ad deserunt duis voluptate aliqua officia qui ut elit.
             </Text>
+            {entityAdminInfo.login === false &&
+                <Card my={6} align="center">
+                    <CardHeader><Heading as="h2" color="gray.500" >Not logged in</Heading></CardHeader>
+                    <CardBody>
+                        <Icon color="gray.500" as={BsFileEarmarkLock2} w={24} h={24} />
+                    </CardBody>
+                    <CardFooter>
+                        <Button
+                            onClick={() => signIn( import.meta.env.VITE_ENTITY_COGNITO_CLIENTID, 'entity' )}
+                        >
+                            Sign In as an Entity Administrator
+                        </Button>
+                    </CardFooter>
+                </Card>
+            }
             {entityAdminInfo && entityAdminInfo.email &&
                 <>
                     <Box my="2em">
