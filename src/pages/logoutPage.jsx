@@ -1,4 +1,6 @@
 import Cookies from 'js-cookie';
+import { Card, CardBody, CardHeader, Heading, Icon } from '@chakra-ui/react';
+import { BsFileEarmarkLock2 } from "react-icons/bs";
 
 export default function LogoutPage() {
     // Clear the cookies
@@ -6,8 +8,11 @@ export default function LogoutPage() {
     Cookies.remove('EttIdJwt');
 
     return (
-        <div>
-            <p>Logged out</p>
-        </div>
+        <Card my={6} align="center">
+            <CardHeader><Heading as="h2" color="gray.500" >Logged out</Heading></CardHeader>
+            <CardBody>
+                <Icon color="gray.500" as={BsFileEarmarkLock2} w={24} h={24} />
+            </CardBody>
+        </Card>
     );
 }
