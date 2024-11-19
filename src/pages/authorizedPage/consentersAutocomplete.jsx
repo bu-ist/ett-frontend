@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import Cookies from 'js-cookie';
 
-import { Box, Button, Center, Modal, ModalBody, ModalCloseButton, ModalContent, ModalHeader, ModalOverlay, Spinner, useDisclosure } from "@chakra-ui/react";
+import { Box, Button, Center, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Spinner, useDisclosure } from "@chakra-ui/react";
 import {
     AutoComplete,
     AutoCompleteInput,
@@ -11,6 +11,8 @@ import {
 
 import { sendExhibitRequestAPI } from '../../lib/auth-ind/sendExhibitRequestAPI';
 import { searchConsentersAPI } from '../../lib/auth-ind/searchConsentersAPI';
+
+import SuccessModalBody from "./consentersAutocomplete/successModalBody";
 
 export default function ConsentersAutocomplete({ entityId }) {
     const { isOpen, onOpen, onClose } = useDisclosure();
@@ -117,7 +119,7 @@ export default function ConsentersAutocomplete({ entityId }) {
                 {apiState === 'error' && 'Error'}
                 {apiState === 'success' && 'Sent'}
             </Button>
-            <Modal isOpen={isOpen} onClose={handleModalClose} >
+            <Modal isOpen={isOpen} onClose={handleModalClose} size="lg" >
                 <ModalOverlay />
                 <ModalContent>
                     <ModalHeader>
@@ -127,8 +129,11 @@ export default function ConsentersAutocomplete({ entityId }) {
                     <ModalCloseButton />
                     <ModalBody>
                         {apiState === 'error' && 'There was an error sending the request.'}
-                        {apiState === 'success' && `Request sent successfully to ${selectedConsenter}.`}
+                        {apiState === 'success' && <SuccessModalBody selectedConsenter={selectedConsenter} />}
                     </ModalBody>
+                    <ModalFooter>
+                        <Button onClick={onClose}>Close</Button>
+                    </ModalFooter>
                 </ModalContent>
             </Modal>
         </Box>
