@@ -1,12 +1,13 @@
 import { useEffect, useState, useContext } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import Cookies from 'js-cookie';
-import { Button, Card, CardBody, Heading, SimpleGrid, Spinner, Stack, Text } from '@chakra-ui/react';
-import { Bs1CircleFill, Bs2CircleFill } from "react-icons/bs";
+import { Button, Card, CardBody, CardFooter, CardHeader, Heading, Icon, SimpleGrid, Spinner, Stack, Text } from '@chakra-ui/react';
+import { Bs1CircleFill, Bs2CircleFill, BsFileEarmarkLock2 } from "react-icons/bs";
 
 import { UserContext } from '../lib/userContext';
 
 import { exchangeAuthorizationCode } from '../lib/exchangeAuthorizationCode';
+import { signIn } from '../lib/signIn';
 import { signOut } from '../lib/signOut';
 
 import { lookupAuthIndAPI } from '../lib/auth-ind/lookupAuthIndAPI';
@@ -73,6 +74,17 @@ export default function AuthorizedPage() {
                 Lorem ipsum minim anim id do nisi aliqua. Consequat cillum sint qui ad aliqua proident nostrud. Cillum ullamco consectetur mollit eu labore amet ullamco mollit dolor veniam adipisicing veniam nulla ex. Quis irure minim id commodo dolore anim nulla aliqua reprehenderit pariatur. Id aute mollit pariatur tempor ex aute id voluptate enim. Et excepteur dolore non non ad deserunt duis voluptate aliqua officia qui ut elit.
             </Text>
             {apiState === 'loading' && <Spinner />}
+            {apiState === 'not-logged-in' &&
+                <Card my={6} align="center">
+                    <CardHeader><Heading as="h2" color="gray.500">Not logged in</Heading></CardHeader>
+                    <CardBody>
+                        <Icon color="gray.500" as={BsFileEarmarkLock2} w={24} h={24} />
+                    </CardBody>
+                    <CardFooter>
+                        <Button onClick={() => signIn( import.meta.env.VITE_AUTHORIZED_COGNITO_CLIENTID, 'auth-ind' )}>Sign In as Authorized Individual</Button>
+                    </CardFooter>
+                </Card>
+            }
             {(authorizedInfo && authorizedInfo.email && apiState == 'success') &&
                 <>
                     <AuthIndDetails userInfo={userData} />
