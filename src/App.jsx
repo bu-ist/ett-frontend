@@ -8,6 +8,7 @@ import RootLayout from './layouts/RootLayout';
 // Pages
 import Home from './pages/home';
 import LogoutPage from './pages/logoutPage';
+import NotFoundPage from './pages/notFoundPage';
 
 import ConsentingPage from './pages/consentingPage';
 import ConsentingRegisterPage from './pages/consenting/consentingRegisterPage';
@@ -38,6 +39,7 @@ const router = createBrowserRouter(
       <Route path="sysadmin" element={<SysadminPage />} />
       <Route path="sysadmin/send-invitation" element={<SendInvitationPage />} />
       <Route path="logout" element={<LogoutPage />} />
+      <Route path="*" element={<NotFoundPage />} />
     </Route>
   )
 )
