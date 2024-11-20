@@ -25,7 +25,7 @@ const NavBreadcrumb = () => {
 
 
     return (
-        <Breadcrumb mt={2} mb={4} separator={<HiChevronDoubleRight color="gray" />}>
+        <Breadcrumb separator={<HiChevronDoubleRight color="gray" />}>
             {pathnames.length > 0 && (
                 <BreadcrumbItem>
                     <BreadcrumbLink as={Link} to='/'>Home</BreadcrumbLink>

@@ -15,10 +15,10 @@ export default function RootLayout() {
     return (
         <UserContext.Provider value={{ user, setUser }}>
             <Container maxWidth="5xl">
-                <Box backgroundColor="gray.50">
-                    <Flex minWidth='max-content' alignItems='center' gap='2'>
-                        <Heading as="h1" size="2xl" mt="30px">
-                            <Link to="/"> Ethical Transparency Tool</Link>
+                <Box backgroundColor="gray.100" padding={3.5} mb={4}>
+                    <Flex mt={4} minWidth='max-content' alignItems='center' gap='2'>
+                        <Heading as="h1" size="2xl">
+                            <Link to="/">Ethical Transparency Tool</Link>
                         </Heading>
                         <Spacer />
                         <UserAvatar user={user} />

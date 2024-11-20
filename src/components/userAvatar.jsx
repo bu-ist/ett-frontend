@@ -4,13 +4,13 @@ import { signOut } from '../lib/signOut';
 
 export default function UserAvatar({user}) {
     return (
-        <Box pt={7} pr={7}>
+        <Box pr={7}>
             {user !== null && 
                 <Popover placement="bottom-end">
                     <PopoverTrigger>
                         <Avatar
                             as="button"
-                            backgroundColor="gray.300"
+                            backgroundColor="gray.400"
                             name={user.fullname}
                         />
                     </PopoverTrigger>
