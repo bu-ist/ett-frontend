@@ -1,5 +1,6 @@
 import { Breadcrumb, BreadcrumbItem, BreadcrumbLink } from '@chakra-ui/react';
 import { useLocation, Link } from 'react-router-dom';
+import { HiChevronDoubleRight } from 'react-icons/hi';
 
 const NavBreadcrumb = () => {
     const location = useLocation();
@@ -24,7 +25,7 @@ const NavBreadcrumb = () => {
 
 
     return (
-        <Breadcrumb mt="0.5em" mb="1em" separator=">">
+        <Breadcrumb mt="0.5em" mb="1em" separator={<HiChevronDoubleRight color="gray" />}>
             {pathnames.length > 0 && (
                 <BreadcrumbItem>
                     <BreadcrumbLink as={Link} to='/'>Home</BreadcrumbLink>
