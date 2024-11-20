@@ -1,3 +1,4 @@
+import { Link as RouterLink } from 'react-router-dom';
 import { Box, Flex, Link, Spacer, Text } from "@chakra-ui/react";
 
 export default function SiteFooter() {
@@ -12,7 +13,8 @@ export default function SiteFooter() {
                 <Spacer />
                 <Box p='2'>
                     <Text fontSize="sm" color="gray.500">
-                        <Link href="/">Privacy Policy</Link>
+                        <Link as={RouterLink} to="/privacy">Privacy Policy</Link> {" "} | {" "}
+                        <Link as={RouterLink} to="/about">About</Link>
                     </Text>
                 </Box>
             </Flex>

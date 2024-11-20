@@ -17,7 +17,9 @@ const NavBreadcrumb = () => {
         'acknowledge': 'Register Entity',
         'sysadmin': 'System Admin', // System Admin
         'send-invitation': 'Send Invitation',
-        'logout': 'Logout',
+        'logout': 'Logout', // Other
+        'about': 'About',
+        'privacy': 'Privacy Policy',
     };
 
 
