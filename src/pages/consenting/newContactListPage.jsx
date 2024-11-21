@@ -97,11 +97,7 @@ export default function NewContactListPage() {
 
         console.log('send exhibit form response', response);
         
-        if (response.payload.ok) {
-            setSubmitResult('success');
-        } else {
-            setSubmitResult('error');
-        }
+        setSubmitResult(response.payload.ok ? 'success' : 'error');
 
     };
 
