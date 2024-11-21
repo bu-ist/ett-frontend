@@ -6,7 +6,7 @@ async function lookupAuthIndAPI(accessToken, email) {
 
     const requestUri = `${apiUrlBase}/RE_AUTH_IND`;
 
-    // Fetch the consenting person data from the API with the token from sign in.
+    // Fetch the authorized person data from the API with the token from sign in.
     const response = await fetch(requestUri, {
         method: 'GET',
         mode: 'cors',
