@@ -1,11 +1,14 @@
+import { useEffect } from 'react';
 import Cookies from 'js-cookie';
 import { Card, CardBody, CardHeader, Heading, Icon } from '@chakra-ui/react';
 import { BsFileEarmarkLock2 } from "react-icons/bs";
 
 export default function LogoutPage() {
-    // Clear the cookies
-    Cookies.remove('EttAccessJwt');
-    Cookies.remove('EttIdJwt');
+    useEffect(() => {
+        // Clear the cookies when the component mounts
+        Cookies.remove('EttAccessJwt');
+        Cookies.remove('EttIdJwt');
+    }, []);
 
     return (
         <Card my={6} align="center">
