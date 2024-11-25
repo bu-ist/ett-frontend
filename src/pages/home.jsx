@@ -58,7 +58,7 @@ export default function Home() {
                 >
                     <Stack>
                         <CardBody>
-                            <Heading size="md">Registered Entity Administrator</Heading>
+                            <Heading size="md">Administrative Support Person</Heading>
                             <Text py={"2"}>
                                 lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud 
                             </Text>

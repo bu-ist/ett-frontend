@@ -14,7 +14,7 @@ const NavBreadcrumb = () => {
         'add-exhibit-form': 'New Contact List',
         'auth-ind': 'Authorized Individual', // Authorized Individual
         'sign-up': 'Sign Up',
-        'entity': 'Entity Admin', // Entity Admin
+        'entity': 'Administrative Support', // Entity Admin
         'acknowledge': 'Register Entity',
         'sysadmin': 'System Admin', // System Admin
         'send-invitation': 'Send Invitation',
