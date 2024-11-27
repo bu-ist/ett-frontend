@@ -1,8 +1,8 @@
 import { useEffect, useState, useContext } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import Cookies from 'js-cookie';
-import { Heading, Button, Text, Spinner, Box, Card, CardHeader, CardBody, Flex, Icon, CardFooter } from '@chakra-ui/react';
-import { BsFileEarmarkLock2 } from 'react-icons/bs';
+import { Heading, Button, Text, Spinner, Box, Card, CardHeader, CardBody, Flex, Icon, CardFooter, VStack } from '@chakra-ui/react';
+import { BsFileEarmarkLock2, BsExclamationTriangle } from 'react-icons/bs';
 
 import { exchangeAuthorizationCode } from '../lib/exchangeAuthorizationCode';
 import { lookupUserContextAPI } from '../lib/entity/lookupUserContextAPI';
@@ -50,6 +50,14 @@ export default function EntityPage() {
 
             // Get the user data from the API and store it in local state.
             const userInfoResponse = await lookupUserContextAPI(accessToken, decodedIdToken.email);
+
+            // If invalid, set api state to error and return early.
+            if (!userInfoResponse.payload.ok) {
+                setEntityAdminInfo({error: true});
+                return;
+            }
+
+            // Set the user info in local state.
             setUserInfo(userInfoResponse.payload);
 
             // Also set the user context for the avatar in the header.
@@ -66,6 +74,20 @@ export default function EntityPage() {
             <Text>
                 Lorem ipsum minim anim id do nisi aliqua. Consequat cillum sint qui ad aliqua proident nostrud. Cillum ullamco consectetur mollit eu labore amet ullamco mollit dolor veniam adipisicing veniam nulla ex. Quis irure minim id commodo dolore anim nulla aliqua reprehenderit pariatur. Id aute mollit pariatur tempor ex aute id voluptate enim. Et excepteur dolore non non ad deserunt duis voluptate aliqua officia qui ut elit.
             </Text>
+            {entityAdminInfo.error === true &&
+                <Card my={6} align="center">
+                    <CardHeader><Heading as="h2" color="gray.500" >Login Error</Heading></CardHeader>
+                    <CardBody>
+                        <VStack>
+                            <Icon color="gray.500" as={BsExclamationTriangle} w={24} h={24} />
+                            <Text>There was an error looking up the user context. Please try again.</Text>
+                        </VStack>
+                    </CardBody>
+                    <CardFooter>
+                        <Button onClick={signOut}>Sign Out</Button>
+                    </CardFooter>
+                </Card>
+            }
             {entityAdminInfo.login === false &&
                 <Card my={6} align="center">
                     <CardHeader><Heading as="h2" color="gray.500" >Not logged in</Heading></CardHeader>
