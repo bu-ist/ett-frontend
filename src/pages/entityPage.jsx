@@ -52,7 +52,7 @@ export default function EntityPage() {
             const userInfoResponse = await lookupUserContextAPI(accessToken, decodedIdToken.email);
 
             // If invalid, set api state to error and return early.
-            if (!userInfoResponse.payload.ok) {
+            if (!userInfoResponse.payload || !userInfoResponse.payload.ok) {
                 setEntityAdminInfo({error: true});
                 return;
             }
