@@ -57,8 +57,8 @@ export default function SendInvitationPage() {
     return (
         <div>
             <Heading as="h1" size="lg" my="1em">Send an Invitation</Heading>
-            <Text>
-                To send an invitation to a new ASP user, enter their email address below.
+            <Text mb={2}>
+                To send an invitation to a new ASP user, enter their email address below:
             </Text>
             <Input 
                 placeholder="Email Address"
