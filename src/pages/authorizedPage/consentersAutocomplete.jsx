@@ -12,7 +12,7 @@ import {
 import { sendExhibitRequestAPI } from '../../lib/auth-ind/sendExhibitRequestAPI';
 import { searchConsentersAPI } from '../../lib/auth-ind/searchConsentersAPI';
 
-import SuccessModalBody from "./consentersAutocomplete/successModalBody";
+import ExhibitSuccessModalBody from "./consentersAutocomplete/exhibitSuccessModalBody";
 
 export default function ConsentersAutocomplete({ entityId }) {
     const { isOpen, onOpen, onClose } = useDisclosure();
@@ -32,6 +32,9 @@ export default function ConsentersAutocomplete({ entityId }) {
 
         const accessToken = Cookies.get('EttAccessJwt');
         const sendResult = await sendExhibitRequestAPI(accessToken, selectedConsenter, entityId);
+
+        // This won't work yet because we have to account for the bifurcated request fields.
+        console.log('sendResult', sendResult);
 
         if (sendResult.payload.ok) {
             setApiState('success');
@@ -129,7 +132,7 @@ export default function ConsentersAutocomplete({ entityId }) {
                     <ModalCloseButton />
                     <ModalBody>
                         {apiState === 'error' && 'There was an error sending the request.'}
-                        {apiState === 'success' && <SuccessModalBody selectedConsenter={selectedConsenter} />}
+                        {apiState === 'success' && <ExhibitSuccessModalBody selectedConsenter={selectedConsenter} />}
                     </ModalBody>
                     <ModalFooter>
                         <Button onClick={onClose}>Close</Button>

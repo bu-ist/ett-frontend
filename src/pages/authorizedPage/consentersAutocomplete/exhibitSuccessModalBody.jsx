@@ -1,6 +1,6 @@
 import { Alert, AlertIcon, Stack, Text } from "@chakra-ui/react";
 
-export default function SuccessModalBody( { selectedConsenter } ) {
+export default function ExhibitSuccessModalBody( { selectedConsenter } ) {
     return (
         <Stack spacing={3}>
             <Alert status="success">
