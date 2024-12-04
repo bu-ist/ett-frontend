@@ -36,6 +36,9 @@ export default function RegisterEntityForm({ code, setStepIndex }) {
             console.log('Registration successful');
             setStepIndex(3);
             setApiState('success');
+        } else {
+            console.error('register result was:',  registerResult);
+            setApiState('error');
         }
     }
 
@@ -96,6 +99,16 @@ export default function RegisterEntityForm({ code, setStepIndex }) {
                             Sign Up
                         </Button>
                     </CardFooter>
+                </Card>
+            }
+            {apiState == 'error' &&
+                <Card>
+                    <CardHeader>
+                        <Heading as="h4" size={"sm"}>Error</Heading>
+                    </CardHeader>
+                    <CardBody>
+                        <Text>There was an error registering the entity. Please try again.</Text>
+                    </CardBody>
                 </Card>
             }
         </>
