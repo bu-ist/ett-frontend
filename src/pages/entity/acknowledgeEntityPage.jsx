@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
-import { Heading, Text, Spinner, Button, Checkbox, Box, Card, CardBody } from '@chakra-ui/react';
+import { Heading, Text, Spinner, Button, Checkbox, Box, Card, CardBody, VStack, Alert, AlertIcon } from '@chakra-ui/react';
 
 import { lookupInvitationAPI } from '../../lib/entity/lookupInvitationAPI';
 import { acknowledgeEntityAPI } from '../../lib/entity/acknowledgeEntityAPI';
@@ -66,7 +66,7 @@ export default function AcknowledgeEntityPage() {
 
     return (
         <div>
-            <Heading as="h2" size={"lg"} >Acknowledge Entity</Heading>
+            <Heading as="h2" size={"lg"} >Register Entity</Heading>
 
             <RegisterEntityStepper currentIndex={stepIndex} />
 
@@ -87,11 +87,12 @@ export default function AcknowledgeEntityPage() {
             }
             {apiState == 'validated' &&
                 <>
-                    <Card>
-                        <CardBody>
-                            <Text>Invitation Code Validated</Text>
-                        </CardBody>
-                    </Card>
+                    <VStack>
+                        <Alert status='success'>
+                            <AlertIcon />
+                            Invitation Code Validated
+                        </Alert>
+                    </VStack>
                     <Text mt="6">
                         Nisi occaecat Lorem velit reprehenderit magna ea anim sint ut excepteur nostrud laborum excepteur. Quis labore quis eu mollit. Cillum anim ex elit ut eu eiusmod est adipisicing minim irure. Voluptate velit veniam elit id cupidatat officia culpa velit amet irure commodo duis. Elit veniam eu ipsum et amet qui cillum elit elit occaecat. Id est enim ut eiusmod qui velit ipsum consectetur enim.
                     </Text>
@@ -111,7 +112,7 @@ export default function AcknowledgeEntityPage() {
                         isDisabled={!privacyPolicyAccepted}
                         onClick={acknowledgeEntity}
                     >
-                        Acknowledge Entity
+                        Accept
                     </Button>
                 </>
             }

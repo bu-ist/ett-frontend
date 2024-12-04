@@ -2,7 +2,7 @@ import { Box, Step, StepDescription, StepIcon, StepIndicator, StepNumber, Steppe
 
 const steps =[
     { title: 'Validate Invitation', description: '' },
-    { title: 'Acknowledge Entity', description: '' },
+    { title: 'Privacy Policy', description: '' },
     { title: 'Register Entity', description: '' },
     { title: 'Sign Up', description: '' },
 ];
