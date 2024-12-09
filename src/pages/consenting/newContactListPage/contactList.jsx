@@ -2,31 +2,30 @@ import { useState } from 'react';
 import { nanoid } from 'nanoid';
 import Cookies from 'js-cookie';
 
-import { Box, Text, Heading, Divider, FormControl, FormLabel, Button, Spinner } from '@chakra-ui/react';
+import { Box, Text, Heading, Divider, FormControl, FormLabel, Button, Spinner, useDisclosure } from '@chakra-ui/react';
 
 import { sendExhibitFormAPI } from '../../../lib/consenting/sendExhibitFormAPI';
 
 import ContactEditCard from './contactEditCard';
+import ContactEditModal from './contactEditModal';
 import ConsenterCard from '../consentFormPage/consenterCard';
 import EntityAutocomplete from './entityAutocomplete';
 
 // Contains the full contact list form and form state.
 export default function ContactList({ consentData }) {
 
+    // State for the form submission result.
     const [submitResult, setSubmitResult] = useState('idle');
 
+    // State for the contact list form data.
     const [entity, setEntity] = useState('');
-    const [contacts, setContacts] = useState([
-        {
-            id: nanoid(),
-            organizationName: '',
-            organizationType: '',
-            contactName: '',
-            contactTitle: '',
-            contactEmail: '',
-            contactPhone: ''
-        }
-    ]);
+    const [contacts, setContacts] = useState([]);
+
+    // State for the contact modal.
+    const [contactModalId, setContactModalId] = useState('');
+    const [isEditOrAdd, setIsEditOrAdd] = useState('add');
+
+    const { isOpen, onOpen, onClose } = useDisclosure();
 
     // Handle contact field change
     const handleContactChange = (id, e) => {
@@ -45,12 +44,19 @@ export default function ContactList({ consentData }) {
         setContacts(updatedContacts);
     }
 
-    // Add a new blank contact card to the form state data.
+    // Add a new blank contact card to the form state data and open the editing modal.
     function handleAddContact() {
+        // Signal that the modal is for adding a new contact.
+        setIsEditOrAdd('add');
+
+        // Generate a new ID for the new contact.
+        const newId = nanoid();
+
+        // Add the new blank contact to the form state.
         setContacts([
             ...contacts,
             {
-                id: nanoid(),
+                id: newId,
                 organizationName: '',
                 organizationType: '',
                 contactName: '',
@@ -59,6 +65,18 @@ export default function ContactList({ consentData }) {
                 contactPhone: ''
             }
         ]);
+
+        // Open the editing modal for the new contact.
+        setContactModalId(newId);
+        onOpen();
+    }
+
+    // Handle editing an existing contact by setting the modal to edit mode and opening it.
+    function handleEditContact(id) {
+        // Signal that the modal is for editing an existing contact.
+        setIsEditOrAdd('edit');
+        setContactModalId(id);
+        onOpen();
     }
 
     function removeContact(id) {
@@ -89,8 +107,27 @@ export default function ContactList({ consentData }) {
             <FormControl my="2em" as="form" onSubmit={handleSubmit}>
                 <FormLabel>Receiving Institution</FormLabel>
                 <EntityAutocomplete entities={consentData.entities} entity={entity} setEntity={setEntity} />
-                <Heading my="1em" as={"h3"} size={"md"}>Contacts</Heading>
-                {contacts.map((contact, index) => (<ContactEditCard key={contact.id} contact={contact} removeContact={removeContact} disableRemove={contacts.length === 1} setContacts={setContacts} index={index} handleContactChange={handleContactChange} handleOrgTypeRadioChange={handleOrgTypeRadioChange} />))}
+                <Heading my="1em" as={"h3"} size={"md"}>Contacts</Heading>      
+                {contacts.length > 0 && contacts.map((contact, index) => (
+                    <Text key={contact.id}>
+                        {contact.id} {contact.organizationName}
+                        <Button size="sm" onClick={() => { handleEditContact(contact.id) }}>Edit</Button>
+                        <Button size="sm" onClick={() => removeContact(contact.id)}>Remove</Button>
+                    </Text>
+                ))}
+                {contacts.length == 0 && <Text>Click the Add Contact button to begin</Text>}
+                <Box>Number of contacts is {contacts.length}</Box>
+                {contacts.length > 0 && (
+                    <ContactEditModal
+                        isOpen={isOpen}
+                        onClose={onClose}
+                        isEditOrAdd={isEditOrAdd}
+                        contact={contacts.find((contact) => contact.id === contactModalId) || {}}
+                        removeContact={removeContact}
+                        handleContactChange={handleContactChange}
+                        handleOrgTypeRadioChange={handleOrgTypeRadioChange}
+                    />
+                )}
                 <Button mt="0.5em" onClick={handleAddContact}>Add Contact</Button>
                 <Divider my="1em" />
                 <ConsenterCard consentData={consentData} />
