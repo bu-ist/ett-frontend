@@ -103,11 +103,11 @@ export default function ContactList({ consentData }) {
 
     return (
         <Box>
-            <Heading as={"h2"} mb="1em" size={"lg"}>New Contact List for {consentData.fullName}</Heading>
-            <FormControl my="2em" as="form" onSubmit={handleSubmit}>
+            <Heading as="h2" mb="4" size="lg">New Contact List for {consentData.fullName}</Heading>
+            <FormControl my="8" as="form" onSubmit={handleSubmit}>
                 <FormLabel>Receiving Institution</FormLabel>
                 <EntityAutocomplete entities={consentData.entities} entity={entity} setEntity={setEntity} />
-                <Heading my="1em" as={"h3"} size={"md"}>Contacts</Heading>      
+                <Heading my="4" as={"h3"} size={"md"}>Contacts</Heading>      
                 {contacts.length > 0 && contacts.map((contact, index) => (
                     <Text key={contact.id}>
                         {contact.id} {contact.organizationName}
