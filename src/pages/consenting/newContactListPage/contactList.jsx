@@ -6,7 +6,7 @@ import { Box, Text, Heading, Divider, FormControl, FormLabel, Button, Spinner } 
 
 import { sendExhibitFormAPI } from '../../../lib/consenting/sendExhibitFormAPI';
 
-import ContactCard from "./contactCard";
+import ContactEditCard from './contactEditCard';
 import ConsenterCard from '../consentFormPage/consenterCard';
 import EntityAutocomplete from './entityAutocomplete';
 
@@ -90,7 +90,7 @@ export default function ContactList({ consentData }) {
                 <FormLabel>Receiving Institution</FormLabel>
                 <EntityAutocomplete entities={consentData.entities} entity={entity} setEntity={setEntity} />
                 <Heading my="1em" as={"h3"} size={"md"}>Contacts</Heading>
-                {contacts.map((contact, index) => (<ContactCard key={contact.id} contact={contact} removeContact={removeContact} disableRemove={contacts.length === 1} setContacts={setContacts} index={index} handleContactChange={handleContactChange} handleOrgTypeRadioChange={handleOrgTypeRadioChange} />))}
+                {contacts.map((contact, index) => (<ContactEditCard key={contact.id} contact={contact} removeContact={removeContact} disableRemove={contacts.length === 1} setContacts={setContacts} index={index} handleContactChange={handleContactChange} handleOrgTypeRadioChange={handleOrgTypeRadioChange} />))}
                 <Button mt="0.5em" onClick={handleAddContact}>Add Contact</Button>
                 <Divider my="1em" />
                 <ConsenterCard consentData={consentData} />

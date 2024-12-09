@@ -1,6 +1,6 @@
 import { Card, CardHeader, CardBody, CardFooter, Button, Heading, Stack, FormLabel, Input, RadioGroup, Radio } from "@chakra-ui/react";
 
-export default function ContactCard( {contact, disableRemove, removeContact, index, handleContactChange, handleOrgTypeRadioChange} ) {
+export default function ContactEditCard( {contact, disableRemove, removeContact, index, handleContactChange, handleOrgTypeRadioChange} ) {
     return (
         <Card mb="1em" key={contact.id}>
             <CardHeader>
