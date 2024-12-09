@@ -1,6 +1,6 @@
 import { Card, CardHeader, CardBody, CardFooter, Button, Heading, Stack, FormLabel, Input, RadioGroup, Radio } from "@chakra-ui/react";
 
-export default function ContactCard( {contact, contacts, setContacts, index, handleContactChange, handleOrgTypeRadioChange} ) {
+export default function ContactCard( {contact, contacts, removeContact, index, handleContactChange, handleOrgTypeRadioChange} ) {
     return (
         <Card mb="1em" key={contact.id}>
             <CardHeader>
@@ -58,7 +58,7 @@ export default function ContactCard( {contact, contacts, setContacts, index, han
             </CardBody>
             <CardFooter>
                 <Button 
-                    onClick={() => setContacts(contacts.filter((_, i) => i !== index))}
+                    onClick={() => removeContact(contact.id)}
                     isDisabled={contacts.length === 1}
                 >
                     Remove Contact

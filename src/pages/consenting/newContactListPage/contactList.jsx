@@ -61,6 +61,11 @@ export default function ContactList({ consentData }) {
         ]);
     }
 
+    function removeContact(id) {
+        const updatedContacts = contacts.filter((contact) => contact.id !== id);
+        setContacts(updatedContacts);
+    }
+
     // Handle form submission
     async function handleSubmit(e) {
         e.preventDefault();
@@ -85,7 +90,7 @@ export default function ContactList({ consentData }) {
                 <FormLabel>Receiving Institution</FormLabel>
                 <EntityAutocomplete entities={consentData.entities} entity={entity} setEntity={setEntity} />
                 <Heading my="1em" as={"h3"} size={"md"}>Contacts</Heading>
-                {contacts.map((contact, index) => (<ContactCard key={contact.id} contact={contact} contacts={contacts} setContacts={setContacts} index={index} handleContactChange={handleContactChange} handleOrgTypeRadioChange={handleOrgTypeRadioChange} />))}
+                {contacts.map((contact, index) => (<ContactCard key={contact.id} contact={contact} removeContact={removeContact} contacts={contacts} setContacts={setContacts} index={index} handleContactChange={handleContactChange} handleOrgTypeRadioChange={handleOrgTypeRadioChange} />))}
                 <Button mt="0.5em" onClick={handleAddContact}>Add Contact</Button>
                 <Divider my="1em" />
                 <ConsenterCard consentData={consentData} />
