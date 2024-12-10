@@ -134,8 +134,6 @@ export default function ContactList({ consentData }) {
                 )}
                 <Button mt="0.5em" onClick={handleAddContact}>Add Contact</Button>
                 <Divider my="1em" />
-                <ConsenterCard consentData={consentData} />
-                <Divider my="1em" />
                 <Button mt="0.5em" isDisabled={submitResult != 'idle'} type="submit">
                     {submitResult === 'idle' && 'Submit'}
                     {submitResult === 'loading' && <Spinner />}
