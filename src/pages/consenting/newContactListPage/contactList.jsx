@@ -120,7 +120,6 @@ export default function ContactList({ consentData }) {
                     </Text>
                 ))}
                 {contacts.length == 0 && <Text>Click the Add Contact button to begin</Text>}
-                <Box>Number of contacts is {contacts.length}</Box>
                 {contacts.length > 0 && (
                     <ContactEditModal
                         isOpen={isOpen}
