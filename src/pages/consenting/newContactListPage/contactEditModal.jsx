@@ -15,7 +15,7 @@ export default function ContactEditModal( {isOpen, onClose, isEditOrAdd, contact
             <ModalOverlay />
             <ModalContent>
                 <ModalHeader>
-                    Add Contact
+                    {isEditOrAdd == 'add' && 'Add'} {isEditOrAdd == 'edit' && 'Edit'} Contact
                 </ModalHeader>
                 <ModalCloseButton />
                 <ModalBody>
