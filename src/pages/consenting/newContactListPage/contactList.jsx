@@ -104,6 +104,10 @@ export default function ContactList({ consentData }) {
     return (
         <Box>
             <Heading as="h2" mb="4" size="lg">New Contact List for {consentData.fullName}</Heading>
+            <Text mb="4">
+                Dolor nulla minim esse laboris ad. Esse non dolore dolor mollit in sunt esse. Ipsum aliqua aute eu minim Lorem duis elit.
+                Irure esse ex ipsum elit tempor id esse in cillum id officia ipsum. Culpa labore consectetur esse excepteur incididunt ex eu aliqua laboris esse esse occaecat elit. Nulla aliquip mollit elit aute.
+            </Text>
             <FormControl my="8" as="form" onSubmit={handleSubmit}>
                 <FormLabel>Receiving Institution</FormLabel>
                 <EntityAutocomplete entities={consentData.entities} entity={entity} setEntity={setEntity} />
