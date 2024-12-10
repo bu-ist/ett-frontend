@@ -8,6 +8,7 @@ import { sendExhibitFormAPI } from '../../../lib/consenting/sendExhibitFormAPI';
 
 import ContactEditCard from './contactEditCard';
 import ContactEditModal from './contactEditModal';
+import ContactDisplayCard from './contactDisplayCard';
 import ConsenterCard from '../consentFormPage/consenterCard';
 import EntityAutocomplete from './entityAutocomplete';
 
@@ -113,11 +114,12 @@ export default function ContactList({ consentData }) {
                 <EntityAutocomplete entities={consentData.entities} entity={entity} setEntity={setEntity} />
                 <Heading my="4" as={"h3"} size={"md"}>Contacts</Heading>      
                 {contacts.length > 0 && contacts.map((contact, index) => (
-                    <Text key={contact.id}>
-                        {contact.id} {contact.organizationName}
-                        <Button size="sm" onClick={() => { handleEditContact(contact.id) }}>Edit</Button>
-                        <Button size="sm" onClick={() => removeContact(contact.id)}>Remove</Button>
-                    </Text>
+                    <ContactDisplayCard
+                        key={contact.id}
+                        contact={contact}
+                        handleEditContact={handleEditContact}
+                        removeContact={removeContact}
+                    />
                 ))}
                 {contacts.length == 0 && <Text>Click the Add Contact button to begin</Text>}
                 {contacts.length > 0 && (
