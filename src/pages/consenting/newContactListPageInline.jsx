@@ -15,7 +15,7 @@ import ConsenterCard from './consentFormPage/consenterCard';
 import EntityAutocomplete from './newContactListPage/entityAutocomplete';
 
 
-export default function NewContactListPage() {
+export default function NewContactListPageInline() {
     const { setUser } = useContext(UserContext);
     const [apiState, setApiState] = useState('');
     const [consentData, setConsentData] = useState({});
