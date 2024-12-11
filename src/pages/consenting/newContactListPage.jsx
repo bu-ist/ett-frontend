@@ -14,7 +14,7 @@ import { getConsentData } from '../../lib/getConsentData';
 
 import ContactList from "./newContactListPage/contactList";
 
-export default function NewContactListPageAlt() {
+export default function NewContactListPage() {
     const { setUser } = useContext(UserContext);
     const [apiState, setApiState] = useState('');
     const [consentData, setConsentData] = useState({});
