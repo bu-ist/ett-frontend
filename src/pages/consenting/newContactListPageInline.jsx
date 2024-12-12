@@ -1,4 +1,4 @@
-// This is an experimental version of the page, don't mistake it for the final version.
+// This no longer the actual implementation, it is a reference for the original inline implementation.
 
 import { useState, useEffect, useContext } from 'react';
 import { useSearchParams } from 'react-router-dom';
@@ -17,7 +17,7 @@ import ConsenterCard from './consentFormPage/consenterCard';
 import EntityAutocomplete from './newContactListPage/entityAutocomplete';
 
 
-export default function NewContactListPageAlt() {
+export default function NewContactListPageInline() {
     const { setUser } = useContext(UserContext);
     const [apiState, setApiState] = useState('');
     const [consentData, setConsentData] = useState({});
