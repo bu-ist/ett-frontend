@@ -6,10 +6,8 @@ import { Box, Text, Heading, Divider, FormControl, FormLabel, Button, Spinner, u
 
 import { sendExhibitFormAPI } from '../../../lib/consenting/sendExhibitFormAPI';
 
-import ContactEditCard from './contactEditCard';
 import ContactEditModal from './contactEditModal';
 import ContactDisplayCard from './contactDisplayCard';
-import ConsenterCard from '../consentFormPage/consenterCard';
 import EntityAutocomplete from './entityAutocomplete';
 
 // Contains the full contact list form and form state.
