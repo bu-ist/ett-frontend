@@ -1,3 +1,5 @@
+// This no longer the actual implementation, it is a reference for the original inline implementation.
+
 import { useState, useEffect, useContext } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import Cookies from 'js-cookie';

@@ -1,5 +1,3 @@
-// This is an experimental version of the page, don't mistake it for the final version.
-
 import { useState, useEffect, useContext } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import Cookies from 'js-cookie';
