@@ -34,6 +34,9 @@ const router = createBrowserRouter(
       <Route path="consenting/register" element={<ConsentingRegisterPage />} />
       <Route path="consenting/consent-form" element={<ConsentFormPage />} />
       <Route path="consenting/add-exhibit-form" element={<NewContactListPage />} />
+      <Route path="consenting/add-exhibit-form/other" element={<NewContactListPage />} />
+      <Route path="consenting/add-exhibit-form/current" element={<NewContactListPage />} />
+      <Route path="consenting/add-exhibit-form/both" element={<NewContactListPage />} />
       <Route path="auth-ind" element={<AuthorizedPage />} />
       <Route path="auth-ind/sign-up" element={<SignUpAuthIndPage />} />
       <Route path="entity" element={<EntityPage />} />
