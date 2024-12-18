@@ -1,8 +1,11 @@
 async function lookupUserContextAPI(accessToken, email) {
+    // Destructure environment variables from import.meta.env
+    const { MODE, VITE_API_STAGE, VITE_ENTITY_API_HOST } = import.meta.env;
+    
     // Set the API URL based on the environment, local dev needs a proxy to avoid CORS issues.
-    const apiUrlBase = import.meta.env.MODE === 'development'
-        ? '/entityApi/dev/'
-        : `${import.meta.env.VITE_ENTITY_API_HOST}/dev/`;
+    const apiUrlBase = MODE === 'development'
+        ? `/entityApi/${VITE_API_STAGE}`
+        : `${VITE_ENTITY_API_HOST}/${VITE_API_STAGE}`;
 
     const requestUri = `${apiUrlBase}/RE_ADMIN`;
 
