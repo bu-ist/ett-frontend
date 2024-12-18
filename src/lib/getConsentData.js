@@ -13,9 +13,9 @@ async function getConsentData(accessToken, email) {
         mode: 'cors',
         credentials: 'include',
         headers: {
-        'Authorization': `Bearer ${accessToken}`,
-        'Content-Type': 'application/json',
-        'ettpayload': JSON.stringify({ task: 'get-consenter', parameters: { email: email} })
+            'Authorization': `Bearer ${accessToken}`,
+            'Content-Type': 'application/json',
+            'ettpayload': JSON.stringify({ task: 'get-consenter', parameters: { email: email } })
         }
     });
 
