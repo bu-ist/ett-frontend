@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import Cookies from 'js-cookie';
 
-import { Box, Button, Center, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Spinner, useDisclosure } from "@chakra-ui/react";
+import { Box, Button, Center, Heading, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Stack, Radio, RadioGroup, Spinner, useDisclosure } from "@chakra-ui/react";
 import {
     AutoComplete,
     AutoCompleteInput,
@@ -25,13 +25,16 @@ export default function ConsentersAutocomplete({ entityId }) {
     const [options, setOptions] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
 
+    // State for the type radio group.
+    const [constraint, setConstraint] = useState('both');
+
     async function handleSendButton() {
         // Send the request to the API
         console.log('selectedConsenter send', selectedConsenter);
         setApiState('loading');
 
         const accessToken = Cookies.get('EttAccessJwt');
-        const sendResult = await sendExhibitRequestAPI(accessToken, selectedConsenter, entityId);
+        const sendResult = await sendExhibitRequestAPI(accessToken, selectedConsenter, entityId, constraint);
 
         // This won't work yet because we have to account for the bifurcated request fields.
         console.log('sendResult', sendResult);
@@ -93,6 +96,15 @@ export default function ConsentersAutocomplete({ entityId }) {
 
     return (
         <Box>
+            <Heading as="h3" my="4" size="sm">Select type of contact information</Heading>
+            <RadioGroup onChange={setConstraint} value={constraint}>
+                <Stack mb="8">
+                    <Radio value="current">Current Employer(s) only</Radio>
+                    <Radio value="other">Prior Employer(s) and other Affiliates</Radio>
+                    <Radio value="both">All</Radio>
+                </Stack>
+            </RadioGroup>
+            <Heading as="h3" my="4" size="sm">Select the consenting person</Heading>
             <AutoComplete
                 openOnFocus
                 isLoading={isLoading}
