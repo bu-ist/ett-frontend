@@ -1,3 +1,4 @@
+// This endpoint has been removed from the API, so the acknowledgeEntityAPI function is no longer needed.
 async function acknowledgeEntityAPI(code) {
     // Set the API URL based on the environment, local dev needs a proxy to avoid CORS issues.
     const apiUrlBase = import.meta.env.MODE === 'development'
