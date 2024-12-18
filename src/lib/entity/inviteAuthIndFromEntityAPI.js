@@ -8,10 +8,13 @@ async function inviteAuthIndFromEntityAPI( accessToken, fromEmail, entity, email
         ? `/entityApi/${VITE_API_STAGE}/RE_ADMIN`
         : `${VITE_ENTITY_API_HOST}/${VITE_API_STAGE}/RE_ADMIN`;
 
+    const registrationUri = `${VITE_REDIRECT_BASE}/auth-ind/sign-up`;
+
     const outgoingPayload = {
         task: 'invite-users',
         parameters: {
             entity: entity,
+            registrationUri: registrationUri,
             invitations: {
                 from: {
                     email: fromEmail,

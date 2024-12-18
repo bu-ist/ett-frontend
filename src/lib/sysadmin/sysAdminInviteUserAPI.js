@@ -7,6 +7,8 @@ async function sysAdminInviteUserAPI(accessToken, email, role) {
         ? `/sysadminApi/${VITE_API_STAGE}/SYS_ADMIN`
         : `${ VITE_SYSADMIN_API_HOST}/${VITE_API_STAGE}/SYS_ADMIN`;
 
+    const registrationUri = `${VITE_REDIRECT_BASE}/entity/register`;
+
     // Fetch the consenting person data from the API with the token from sign in.
     const response = await fetch(apiUrl, {
         method: 'GET',
@@ -15,7 +17,7 @@ async function sysAdminInviteUserAPI(accessToken, email, role) {
         headers: {
         'Authorization': `Bearer ${accessToken}`,
         'Content-Type': 'application/json',
-        'ettpayload': JSON.stringify({ task: 'invite-user', parameters: { email: email, role: role} })
+        'ettpayload': JSON.stringify({ task: 'invite-user', parameters: { email: email, role: role, registrationUri: registrationUri} })
         }
     });
 
