@@ -56,31 +56,10 @@ export default function SignUpAuthIndPage() {
         }
     }, []);
 
-    async function acknowledgeEntity() {
-        const code = searchParams.get('code');
 
-        const acknowledgeResult = await acknowledgeEntityAPI(code);
-
-        if (acknowledgeResult.payload.ok) {
-
-            console.log('acknowlege result:', acknowledgeResult);
-
-            // Look up the entity information.
-            const entityId = inviteInfo.entity_id;
-            const entityResult = await lookupEntityAPI(code);
-
-            //console.log('entityResult: ', entityResult);
-
-            if (entityResult.payload.ok) {
-                setEntityInfo(entityResult.payload);
-                setApiState('acknowledged');
-                setStepIndex(2);
-            }
-
-        } else {
-            setApiState('error');
-            console.error(acknowledgeResult);
-        }
+    function acceptPrivacyPolicy() {
+        setApiState('acknowledged');
+        setStepIndex(2);
     }
 
     return (
@@ -106,7 +85,7 @@ export default function SignUpAuthIndPage() {
             {apiState == 'validated' &&
                 <>
                     <Text>Invitation Code Validated for {inviteInfo.entity_name}</Text>
-                    <AcknowledgePrivacy acknowledgeEntity={acknowledgeEntity}  />
+                    <AcknowledgePrivacy acceptPrivacyPolicy={acceptPrivacyPolicy}  />
                 </>
             }
             {
@@ -127,7 +106,7 @@ export default function SignUpAuthIndPage() {
                     </Box>
                     <Button
                         isDisabled={!privacyPolicyAccepted}
-                        onClick={acknowledgeEntity}
+                        onClick={acceptPrivacyPolicy}
                     >
                         Accept
                     </Button>

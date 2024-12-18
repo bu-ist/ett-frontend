@@ -1,12 +1,11 @@
 import { useState } from 'react';
 import { Button, Card, CardBody, CardFooter, CardHeader, Heading, Link, Text, Spinner } from "@chakra-ui/react";
 
-export default function AcknowledgePrivacy({ acknowledgeEntity }) {
+export default function AcknowledgePrivacy({ acceptPrivacyPolicy }) {
     const [apiState, setApiState] = useState('idle');
 
     async function handleAcceptClick() {
-        setApiState('loading');
-        await acknowledgeEntity();
+        acceptPrivacyPolicy();
         setApiState('success');
     }
 
