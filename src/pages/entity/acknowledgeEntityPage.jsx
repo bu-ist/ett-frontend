@@ -49,19 +49,9 @@ export default function AcknowledgeEntityPage() {
         }
     }, []);
 
-    async function acknowledgeEntity() {
-        const code = searchParams.get('code');
-
-        const acknowledgeResult = await acknowledgeEntityAPI(code);
-
-        if (acknowledgeResult.payload.ok) {
-            setApiState('acknowledged');
-            setStepIndex(2);
-            console.log(acknowledgeResult);
-        } else {
-            setApiState('error');
-            console.error(acknowledgeResult);
-        }
+    function acceptPrivacyPolicy() {
+        setApiState('acknowledged');
+        setStepIndex(2);
     }
 
     return (
@@ -110,7 +100,7 @@ export default function AcknowledgeEntityPage() {
 
                     <Button
                         isDisabled={!privacyPolicyAccepted}
-                        onClick={acknowledgeEntity}
+                        onClick={acceptPrivacyPolicy}
                     >
                         Accept
                     </Button>
