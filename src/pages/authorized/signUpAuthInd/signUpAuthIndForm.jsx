@@ -19,7 +19,8 @@ export default function SignUpAuthIndForm({entityInfo, setStepIndex, code}) {
     });
 
     // Find the user with a role property of 'RE_ADMIN', which is the administator of the entity.
-    const entityAdmin = users.find(user => user.role === 'RE_ADMIN');
+    // Diabled because the endpoint was removed.
+    //const entityAdmin = users.find(user => user.role === 'RE_ADMIN');
 
     // Handle form input changes
     function handleChange(e) {
@@ -51,6 +52,9 @@ export default function SignUpAuthIndForm({entityInfo, setStepIndex, code}) {
     return (
         <>
             <Heading as="h3" mb="1em" size="md">Register For an Account</Heading>
+            {/* Display the entity name and the entity administrator, disabled for now */}
+            {
+            /*
             <Card mb="1em" variant="filled">
                 <CardHeader>
                     <Heading as="h4" size="sm">Invitation from {entity.entity_name}</Heading>
@@ -63,6 +67,8 @@ export default function SignUpAuthIndForm({entityInfo, setStepIndex, code}) {
                     <Text>{entityAdmin.phone_number}</Text>
                 </CardBody>
             </Card>
+            */
+            }
             <FormControl as="form" onSubmit={handleSubmit}>
                 <FormLabel>Your Full Name</FormLabel>
                 <Input
