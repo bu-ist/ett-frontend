@@ -43,7 +43,7 @@ export default function RegisterEntityForm({ code, setStepIndex }) {
     }
 
     function handleRegisterClick() {
-        signUp(formData.email, import.meta.env.VITE_ENTITY_COGNITO_CLIENTID, 'entity');
+        signUp(formData.email, import.meta.env.VITE_ENTITY_COGNITO_CLIENTID, 'entity?action=post-signup');
     }
 
     return (
