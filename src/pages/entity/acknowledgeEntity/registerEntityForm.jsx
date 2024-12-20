@@ -90,7 +90,7 @@ export default function RegisterEntityForm({ code, setStepIndex }) {
                         <Heading as="h4" size={"sm"}>Registration successful</Heading>
                     </CardHeader>
                     <CardBody>
-                        <Text>Click Sign Up to be redirected to the account creation page.</Text>
+                        <Text>Click Sign Up to create a password and complete registration.</Text>
                     </CardBody>
                     <CardFooter>
                         <Button
