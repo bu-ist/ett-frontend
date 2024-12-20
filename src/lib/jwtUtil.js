@@ -20,5 +20,4 @@ function setJwt(jwt, cookieName) {
     storage.clear();
 };
 
-
 export { setJwt };
