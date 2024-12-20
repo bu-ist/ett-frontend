@@ -46,7 +46,7 @@ export default function SignUpAuthIndForm({entityInfo, setStepIndex, code}) {
     }
 
     function signUpRedirect() {
-        signUp(formData.email, import.meta.env.VITE_AUTHORIZED_COGNITO_CLIENTID, 'auth-ind')
+        signUp(formData.email, import.meta.env.VITE_AUTHORIZED_COGNITO_CLIENTID, 'auth-ind?action=post-signup')
     }
 
     return (

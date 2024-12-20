@@ -26,6 +26,14 @@ export default function ConsentingPage() {
             if (searchParams.has('code') && Cookies.get('EttAccessJwt') === undefined) {
                 // If this exists, then there is a sign in request, so use the code to get the tokens and store them as cookies.
                 const clientId = import.meta.env.VITE_CONSENTING_COGNITO_CLIENTID;
+                
+                // Check to see if this is a first time login from the cognito redirect, and if so do a signIn.
+                // This workaround has to do with the state and code_verifier, which aren't part of the sign up flow.
+                if ( searchParams.get('action') === 'post-signup' ) {
+                    // Sign in does a window.location redirect, so execution will stop here.
+                     signIn( clientId, 'consenting' );
+                }
+
                 await exchangeAuthorizationCode( clientId, 'consenting');
                 //Once the tokens are stored, should remove the code from the URL.
 

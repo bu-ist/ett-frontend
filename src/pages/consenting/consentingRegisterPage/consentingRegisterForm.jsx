@@ -38,7 +38,7 @@ export default function ConsentingRegisterForm() {
     }
 
     function signUpRedirect() {
-        signUp(formData.email, import.meta.env.VITE_CONSENTING_COGNITO_CLIENTID, 'consenting')
+        signUp(formData.email, import.meta.env.VITE_CONSENTING_COGNITO_CLIENTID, 'consenting?action=post-signup');
     }
 
     return (
