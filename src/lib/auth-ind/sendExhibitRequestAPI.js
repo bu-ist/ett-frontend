@@ -1,6 +1,6 @@
 async function sendExhibitRequestAPI(accessToken, email, entityId, constraint) {
     // Destructure environment variables from import.meta.env
-    const { MODE, VITE_API_STAGE, VITE_AUTHORIZED_API_HOST } = import.meta.env;
+    const { MODE, VITE_API_STAGE, VITE_AUTHORIZED_API_HOST, VITE_REDIRECT_BASE } = import.meta.env;
 
     // Set the API URL based on the environment, local dev needs a proxy to avoid CORS issues.
     const apiUrlBase = MODE === 'development'
@@ -8,6 +8,8 @@ async function sendExhibitRequestAPI(accessToken, email, entityId, constraint) {
     : `${VITE_AUTHORIZED_API_HOST}/${VITE_API_STAGE}`;
     
     const requestUri = `${apiUrlBase}/RE_AUTH_IND`;
+
+    const redirectUri = `${VITE_REDIRECT_BASE}/consenting/add-exhibit-form/${constraint}`;
 
     // Send a request to the API to send exhibit request.
     const response = await fetch(requestUri, {
