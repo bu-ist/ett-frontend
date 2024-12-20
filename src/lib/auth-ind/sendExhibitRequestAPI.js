@@ -1,8 +1,11 @@
-async function sendExhibitRequestAPI(accessToken, email, entityId) {
+async function sendExhibitRequestAPI(accessToken, email, entityId, constraint) {
+    // Destructure environment variables from import.meta.env
+    const { MODE, VITE_API_STAGE, VITE_AUTHORIZED_API_HOST } = import.meta.env;
+
     // Set the API URL based on the environment, local dev needs a proxy to avoid CORS issues.
-    const apiUrlBase = import.meta.env.MODE === 'development'
-    ? '/authorizedApi/dev/'
-    : `${import.meta.env.VITE_AUTHORIZED_API_HOST}/dev/`;
+    const apiUrlBase = MODE === 'development'
+    ? `/authorizedApi/${VITE_API_STAGE}`
+    : `${VITE_AUTHORIZED_API_HOST}/${VITE_API_STAGE}`;
     
     const requestUri = `${apiUrlBase}/RE_AUTH_IND`;
 
@@ -16,7 +19,11 @@ async function sendExhibitRequestAPI(accessToken, email, entityId) {
             'Content-Type': 'application/json',
             'ettPayload': JSON.stringify({ 
                 task: 'send-exhibit-form-request',
-                parameters: { consenterEmail: email, entity_id: entityId }
+                parameters: {
+                    consenterEmail: email,
+                    entity_id: entityId,
+                    constraint: constraint,
+                }
             })
         }
     });

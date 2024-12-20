@@ -1,14 +1,20 @@
 // This function sends a POST request to the Entity API to invite two 'Authorized Individual' users to an entity.
 async function inviteAuthIndFromEntityAPI( accessToken, fromEmail, entity, emailsToInvite ) {
+     // Destructure environment variables from import.meta.env
+     const { MODE, VITE_API_STAGE, VITE_ENTITY_API_HOST, VITE_REDIRECT_BASE } = import.meta.env;
+    
     // Set the API URL based on the environment, local dev needs a proxy to avoid CORS issues.
-    const apiUrl = import.meta.env.MODE === 'development'
-        ? '/entityApi/dev/RE_ADMIN'
-        : `${import.meta.env.VITE_ENTITY_API_HOST}/dev/RE_ADMIN`;
+    const apiUrl = MODE === 'development'
+        ? `/entityApi/${VITE_API_STAGE}/RE_ADMIN`
+        : `${VITE_ENTITY_API_HOST}/${VITE_API_STAGE}/RE_ADMIN`;
+
+    const registrationUri = `${VITE_REDIRECT_BASE}/auth-ind/sign-up`;
 
     const outgoingPayload = {
         task: 'invite-users',
         parameters: {
             entity: entity,
+            registrationUri: registrationUri,
             invitations: {
                 from: {
                     email: fromEmail,

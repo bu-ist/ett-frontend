@@ -1,8 +1,11 @@
 async function lookupInvitationAPI(code) {
+    // Destructure environment variables from import.meta.env
+    const { MODE, VITE_API_STAGE, VITE_ACKNOWLEDGE_ENTITY_API_HOST } = import.meta.env;
+
     // Set the API URL based on the environment, local dev needs a proxy to avoid CORS issues.
-    const apiUrlBase = import.meta.env.MODE === 'development'
-        ? '/acknowledgeEntityApi/dev/'
-        : `${import.meta.env.VITE_ACKNOWLEDGE_ENTITY_API_HOST}/dev/`;
+    const apiUrlBase = MODE === 'development'
+        ? `/acknowledgeEntityApi/${VITE_API_STAGE}/`
+        : `${VITE_ACKNOWLEDGE_ENTITY_API_HOST}/${VITE_API_STAGE}/`;
 
     const requestUri = `${apiUrlBase}/acknowledge-entity/lookup-invitation/${code}`;
 

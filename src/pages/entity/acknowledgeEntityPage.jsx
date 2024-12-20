@@ -20,6 +20,8 @@ export default function AcknowledgeEntityPage() {
 
 
     useEffect(() => {
+        // Validation of the invite code was taken out, but might be put back in later.
+        /*
         const lookupInvitation = async () => {
             // This is where the API call to acknowledge the entity would go.
             const code = searchParams.get('code');
@@ -37,31 +39,27 @@ export default function AcknowledgeEntityPage() {
             }
 
         }
-
+        */
+        
         if (searchParams.has('code') && searchParams.has('entity_id')) {
-            // If there are both a code and an entity ID, call the acknowledgeEntity function.
-            // First, set the API state to loading.
-            setApiState('loading');
-            lookupInvitation();
+
+            // This is a temporary workaround to skip the lookupInvitation function.
+            // Instead we are just validating that the code and entity ID are present, not if they are valid.
+            setApiState('validated');
+            setStepIndex(1);
+
+            // If we start using the lookupInvitation function again, this is where it would be called.
+            //setApiState('loading');
+            //lookupInvitation();
         } else {
             // If there is no code, display an error message.
             setApiState('no-code');
         }
     }, []);
 
-    async function acknowledgeEntity() {
-        const code = searchParams.get('code');
-
-        const acknowledgeResult = await acknowledgeEntityAPI(code);
-
-        if (acknowledgeResult.payload.ok) {
-            setApiState('acknowledged');
-            setStepIndex(2);
-            console.log(acknowledgeResult);
-        } else {
-            setApiState('error');
-            console.error(acknowledgeResult);
-        }
+    function acceptPrivacyPolicy() {
+        setApiState('acknowledged');
+        setStepIndex(2);
     }
 
     return (
@@ -110,7 +108,7 @@ export default function AcknowledgeEntityPage() {
 
                     <Button
                         isDisabled={!privacyPolicyAccepted}
-                        onClick={acknowledgeEntity}
+                        onClick={acceptPrivacyPolicy}
                     >
                         Accept
                     </Button>

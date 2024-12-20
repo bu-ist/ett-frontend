@@ -2,9 +2,9 @@ import { useEffect, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { Heading, Text, Spinner, Box, Checkbox, Button, Fade } from "@chakra-ui/react";
 
-import { lookupInvitationAPI } from '../../lib/entity/lookupInvitationAPI';
-import { acknowledgeEntityAPI } from '../../lib/entity/acknowledgeEntityAPI';
-import { lookupEntityAPI } from '../../lib/entity/lookupEntityAPI';
+// Unused now, but might return in the future.
+//import { lookupInvitationAPI } from '../../lib/entity/lookupInvitationAPI';
+//import { lookupEntityAPI } from '../../lib/entity/lookupEntityAPI';
 
 import SignUpAuthIndStepper from './signUpAuthInd/signUpAuthIndStepper';
 import SignUpAuthIndForm from './signUpAuthInd/signUpAuthIndForm';
@@ -24,6 +24,8 @@ export default function SignUpAuthIndPage() {
 
 
     useEffect(() => {
+        // Invitation lookup is being disabled because the endpoint was removed, but we may want to re-enable it later.
+        /*
         async function lookupInvitation() {
            // Get the code and the entity from the request parameters.
             const code = searchParams.get('code');
@@ -44,43 +46,30 @@ export default function SignUpAuthIndPage() {
             }
 
         }
+        */
 
         if (searchParams.has('code') && searchParams.has('entity_id')) {
             // If there are both a code and an entity ID, call the acknowledgeEntity function.
             // First, set the API state to loading.
             setApiState('loading');
-            lookupInvitation();
+            
+            // We may start using an invitation lookup function again in the future, so this is here but commented out.
+            //lookupInvitation();
+
+            // This is a temporary workaround to skip the lookupInvitation function.
+            setApiState('validated');
+            setStepIndex(1);
+
         } else {
             // If there is no code, display an error message.
             setApiState('no-code');
         }
     }, []);
 
-    async function acknowledgeEntity() {
-        const code = searchParams.get('code');
 
-        const acknowledgeResult = await acknowledgeEntityAPI(code);
-
-        if (acknowledgeResult.payload.ok) {
-
-            console.log('acknowlege result:', acknowledgeResult);
-
-            // Look up the entity information.
-            const entityId = inviteInfo.entity_id;
-            const entityResult = await lookupEntityAPI(code);
-
-            //console.log('entityResult: ', entityResult);
-
-            if (entityResult.payload.ok) {
-                setEntityInfo(entityResult.payload);
-                setApiState('acknowledged');
-                setStepIndex(2);
-            }
-
-        } else {
-            setApiState('error');
-            console.error(acknowledgeResult);
-        }
+    function acceptPrivacyPolicy() {
+        setApiState('acknowledged');
+        setStepIndex(2);
     }
 
     return (
@@ -106,7 +95,7 @@ export default function SignUpAuthIndPage() {
             {apiState == 'validated' &&
                 <>
                     <Text>Invitation Code Validated for {inviteInfo.entity_name}</Text>
-                    <AcknowledgePrivacy acknowledgeEntity={acknowledgeEntity}  />
+                    <AcknowledgePrivacy acceptPrivacyPolicy={acceptPrivacyPolicy}  />
                 </>
             }
             {
@@ -127,7 +116,7 @@ export default function SignUpAuthIndPage() {
                     </Box>
                     <Button
                         isDisabled={!privacyPolicyAccepted}
-                        onClick={acknowledgeEntity}
+                        onClick={acceptPrivacyPolicy}
                     >
                         Accept
                     </Button>

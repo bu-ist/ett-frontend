@@ -1,8 +1,11 @@
 async function renewConsentAPI(accessToken, email) {
+    // Destructure environment variables from import.meta.env
+    const { MODE, VITE_API_STAGE, VITE_CONSENTING_API_HOST } = import.meta.env;
+
     // Set the API URL based on the environment, local dev needs a proxy to avoid CORS issues.
-    const apiUrl = import.meta.env.MODE === 'development'
-        ? '/consentingApi/dev/CONSENTING_PERSON'
-        : `${import.meta.env.VITE_CONSENTING_API_HOST}/dev/CONSENTING_PERSON`;
+    const apiUrl = MODE === 'development'
+        ? `/consentingApi/${VITE_API_STAGE}/CONSENTING_PERSON`
+        : `${VITE_CONSENTING_API_HOST}/${VITE_API_STAGE}/CONSENTING_PERSON`;
 
     // Fetch the consenting person data from the API with the token from sign in.
     const response = await fetch(apiUrl, {

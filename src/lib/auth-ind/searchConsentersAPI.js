@@ -1,8 +1,11 @@
 async function searchConsentersAPI(accessToken, searchFragment) {
+    // Destructure environment variables from import.meta.env
+    const { MODE, VITE_API_STAGE, VITE_AUTHORIZED_API_HOST } = import.meta.env;
+
     // Set the API URL based on the environment, local dev needs a proxy to avoid CORS issues.
-    const apiUrl = import.meta.env.MODE === 'development'
-        ? '/authorizedApi/dev/RE_AUTH_IND'
-        : `${import.meta.env.VITE_AUTHORIZED_API_HOST}/dev/RE_AUTH_IND`;
+    const apiUrl = MODE === 'development'
+        ? `/authorizedApi/${VITE_API_STAGE}/RE_AUTH_IND`
+        : `${VITE_AUTHORIZED_API_HOST}/${VITE_API_STAGE}/RE_AUTH_IND`;
 
     // Send a request to the API to get consenter names that match the fragment parameter.
     const response = await fetch(apiUrl, {
