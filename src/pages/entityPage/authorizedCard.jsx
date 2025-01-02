@@ -11,9 +11,12 @@ export default function AuthorizedCard({ entity }) {
     return (
         <Card>
             <CardHeader>
-                <Heading as="h4" size="md">Authorized Individuals</Heading>
+                <Heading as="h3" size="lg" color="gray.600">Authorized Individuals</Heading>
             </CardHeader>
             <CardBody>
+                <Text>
+                    Lorem ipsum minim anim id do nisi aliqua. Consequat cillum sint qui ad aliqua proident nostrud. Cillum ullamco consectetur mollit eu labore amet ullamco mollit dolor veniam adipisicing veniam nulla ex. Quis irure minim id commodo dolore anim nulla aliqua reprehenderit pariatur. 
+                </Text>
                 {entity.users.length == 0 && 
                     <Stack direction="row"><Icon as={HiMinusCircle} color="gray.400" boxSize="6" /><Text>No Authorized Individuals currently registered</Text></Stack>
                 }
