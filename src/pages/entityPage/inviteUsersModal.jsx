@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import Cookies from 'js-cookie';
-import { Button, Modal, ModalBody, ModalCloseButton, ModalContent, ModalHeader, ModalOverlay, useDisclosure, FormControl, Text, FormLabel, Input, Spinner } from '@chakra-ui/react';
+import { Button, Modal, ModalBody, ModalCloseButton, ModalContent, ModalHeader, ModalOverlay, useDisclosure, FormControl, Text, FormLabel, Input, Spinner, VStack, Alert, AlertIcon } from '@chakra-ui/react';
 import { RiMailLine } from "react-icons/ri";
 
 
@@ -36,14 +36,15 @@ export default function InviteUsersModal({ numUsers, entity, updatePendingInvita
             console.log('Invitation successful');
             setApiState('success');
 
-            // Update the pending invitations in the main page state in order to show the new invitations in the UI.
-            updatePendingInvitations(emailsToInvite.email1, emailsToInvite.email2);
         } else {
             setApiState('error');
         }
     }
 
     function handleClose() {
+         // Update the pending invitations in the main page state in order to show the new invitations in the UI.
+         updatePendingInvitations(emailsToInvite.email1, emailsToInvite.email2);
+
         onClose();
         setEmailsToInvite({
             email1: '',
