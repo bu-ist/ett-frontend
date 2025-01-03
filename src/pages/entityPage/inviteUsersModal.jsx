@@ -64,6 +64,14 @@ export default function InviteUsersModal({ numUsers, entity, updatePendingInvita
                     <ModalHeader>Add Authorized Individuals</ModalHeader>
                     <ModalCloseButton />
                     <ModalBody>
+                        { apiState == 'success' &&
+                            <VStack mb="4">
+                                <Alert status='success'>
+                                    <AlertIcon />
+                                    Invitations sent successfully
+                                </Alert>
+                            </VStack>
+                        }
                         <Text mb="1em">lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</Text>
                         <FormControl as="form" onSubmit={handleSubmit} >
                             <FormLabel>Email 1</FormLabel>
@@ -80,12 +88,16 @@ export default function InviteUsersModal({ numUsers, entity, updatePendingInvita
                                 value={emailsToInvite.email2}
                                 onChange={(e) => setEmailsToInvite({ ...emailsToInvite, email2: e.target.value })}
                             />
-                            <Button my="1em" type="submit">
-                                {apiState == 'loading' && <Spinner />}
-                                {apiState == 'idle' &&  <><RiMailLine style={{ marginRight: '0.5em' }} /> Send Invitations </>}
-                                {apiState == 'error' && 'Error please try again'}
-                                {apiState == 'success' && 'Invitations Sent'}
-                            </Button>
+                            {apiState !== 'success' &&
+                                <Button my="1em" type="submit">
+                                    {apiState == 'loading' && <Spinner />}
+                                    {apiState == 'idle' &&  <><RiMailLine style={{ marginRight: '0.5em' }} /> Send Invitations </>}
+                                    {apiState == 'error' && 'Error please try again'}
+                                </Button>
+                            }
+                            {apiState == 'success' && 
+                                <Button my="4" onClick={handleClose} >Close</Button>
+                            }
                         </FormControl>
                     </ModalBody>
                 </ModalContent>
