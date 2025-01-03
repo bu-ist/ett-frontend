@@ -23,7 +23,7 @@ export default function AuthorizedCard({ entity, updatePendingInvitations }) {
                 <Icon as={HiMinusCircle} color="yellow.300" boxSize="6" />
                 <Text>
                     { (invitation.status === 'invited-in-page') && `Invitation sent just now to ${invitation.email}` }
-                    { ('code' in invitation) && `Invitation code starting ${invitation.code.substring(0,6)} sent on ${sentDate}` }
+                    { ('code' in invitation) && `Invitation code starting with ${invitation.code.substring(0,6)} sent on ${sentDate}` }
                 </Text>
                 <Badge color="gray.600">pending</Badge>
             </Stack>
