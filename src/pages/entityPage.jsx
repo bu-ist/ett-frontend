@@ -76,6 +76,19 @@ export default function EntityPage() {
         fetchData();
     }, []);
 
+    // Function to update the pending invitations in the userInfo object, passed down to the AuthorizedCard component.
+    function updatePendingInvitations(email1, email2) {
+        // Make a copy of the userInfo object, and update the pending invitations with the new emails.
+        const updatedUserInfo = {...userInfo};
+        updatedUserInfo.user.entity.pendingInvitations = [
+            {email: email1, status: 'invited-in-page'},
+            {email: email2, status: 'invited-in-page'},
+        ];
+
+        // Set the userInfo state to the updated object.
+        setUserInfo(updatedUserInfo);
+    }
+
     return (
         <div>
             <Heading as={"h2"} size={"xl"}>Administrative Support Person</Heading>
@@ -150,7 +163,7 @@ export default function EntityPage() {
                                     </Card>
                                 </Flex>
 
-                                <AuthorizedCard entity={userInfo.user.entity} />
+                                <AuthorizedCard entity={userInfo.user.entity} updatePendingInvitations={updatePendingInvitations}  />
                             </>
                         }
                     </Box>
