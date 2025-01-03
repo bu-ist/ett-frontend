@@ -42,8 +42,11 @@ export default function InviteUsersModal({ numUsers, entity, updatePendingInvita
     }
 
     function handleClose() {
-         // Update the pending invitations in the main page state in order to show the new invitations in the UI.
-         updatePendingInvitations(emailsToInvite.email1, emailsToInvite.email2);
+
+        if (apiState == 'success') {
+            // If we are closing after successful invites, update the pending invitations in the main page state in order to show the new invitations in the UI.
+            updatePendingInvitations(emailsToInvite.email1, emailsToInvite.email2);
+        }
 
         onClose();
         setEmailsToInvite({
