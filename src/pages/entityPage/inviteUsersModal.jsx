@@ -6,7 +6,7 @@ import { RiMailLine } from "react-icons/ri";
 
 import { inviteAuthIndFromEntityAPI } from '../../lib/entity/inviteAuthIndFromEntityAPI';
 
-export default function InviteUsersModal({ numUsers, entity }) {
+export default function InviteUsersModal({ numUsers, entity, updatePendingInvitations }) {
     // Form State
     const [emailsToInvite, setEmailsToInvite] = useState({
         email1: '',
@@ -35,6 +35,9 @@ export default function InviteUsersModal({ numUsers, entity }) {
         if (inviteResult.payload.ok) {
             console.log('Invitation successful');
             setApiState('success');
+
+            // Update the pending invitations in the main page state in order to show the new invitations in the UI.
+            updatePendingInvitations(emailsToInvite.email1, emailsToInvite.email2);
         } else {
             setApiState('error');
         }
