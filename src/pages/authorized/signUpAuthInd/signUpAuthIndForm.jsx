@@ -51,7 +51,7 @@ export default function SignUpAuthIndForm({entityInfo, setStepIndex, code}) {
 
     return (
         <>
-            <Heading as="h3" mb="1em" size="md">Register For an Account</Heading>
+            <Heading as="h3" mb="1" size="md">Register For an Account</Heading>
             {/* Display the entity name and the entity administrator, disabled for now */}
             {
             /*
@@ -69,6 +69,9 @@ export default function SignUpAuthIndForm({entityInfo, setStepIndex, code}) {
             </Card>
             */
             }
+            <Text mb="8">
+                Nisi voluptate irure culpa dolor laborum enim consectetur eu incididunt. Id culpa esse ad Lorem dolor cupidatat incididunt ipsum ipsum velit. Incididunt non velit et minim eiusmod occaecat ex consectetur voluptate cillum.
+            </Text>
             <FormControl as="form" onSubmit={handleSubmit}>
                 <FormLabel>Your Full Name</FormLabel>
                 <Input
