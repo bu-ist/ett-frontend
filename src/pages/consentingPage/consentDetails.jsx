@@ -24,7 +24,7 @@ export default function ConsentDetails({ consentData, setConsentData, consenterI
                 <Icon 
                     my="0.5em"
                     as={activeConsent ? HiCheckCircle : HiMinusCircle} 
-                    color={activeConsent ? "green.500" : "red.500"} 
+                    color={activeConsent ? "green.500" : "yellow.300"} 
                     boxSize="32"
                 />
                 <Stack>
