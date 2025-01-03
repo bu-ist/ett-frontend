@@ -12,7 +12,7 @@ export default function EntityPrivacyPolicy({ accepted }) {
             bg="gray.50"
             color={ accepted ? "gray.400" : "black"}
         >
-<Heading as="h3" size="lg" mb="6">Privacy Policy</Heading>
+            <Heading as="h3" size="lg" mb="6">Privacy Policy</Heading>
                 <Text>
                     Nisi ex qui dolore irure dolor ut id velit veniam consequat. Veniam aliqua sint magna culpa proident dolore qui laborum ut mollit esse ea. Dolor pariatur aliquip non dolor nulla ipsum. Aute esse mollit commodo ad minim aute ut. Ullamco exercitation aliqua deserunt incididunt anim non aliquip.
 
