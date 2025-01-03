@@ -3,20 +3,15 @@ import { HiMinusCircle, HiCheckCircle } from "react-icons/hi";
 
 import InviteUsersModal from "./inviteUsersModal";
 
+import { formatTimestamp } from '../../lib/formatting/formatTimestamp';
+
 export default function AuthorizedCard({ entity, updatePendingInvitations }) {
 
     const authInds = entity.users.filter(user => user.role === 'RE_AUTH_IND');
     const authIndsNames = authInds.map(member => member.fullname);
 
     const pendingInvitationsList = entity.pendingInvitations.map((invitation, index) => {
-        const sentDate = new Date(invitation.sent_timestamp).toLocaleString('en-US', {
-            year: 'numeric',
-            month: 'long',
-            day: 'numeric',
-            hour: '2-digit',
-            minute: '2-digit',
-            second: '2-digit',
-        });
+        const sentDate = formatTimestamp( invitation.sent_timestamp );
 
         return (
             <Stack mb="2" key={index} direction="row">

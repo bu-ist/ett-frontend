@@ -13,6 +13,8 @@ import { UserContext } from '../lib/userContext';
 
 import AuthorizedCard from './entityPage/authorizedCard';
 
+import { formatTimestamp } from '../lib/formatting/formatTimestamp';
+
 export default function EntityPage() {
 
     let [searchParams, setSearchParams] = useSearchParams();
@@ -147,7 +149,7 @@ export default function EntityPage() {
                                         </CardHeader>
                                         <CardBody>
                                             <Text>
-                                                {userInfo.user.active == 'Y' ? 'Active' : 'Inactive' } {'>'} Last updated {userInfo.user.update_timestamp}
+                                                {userInfo.user.active == 'Y' ? 'Active' : 'Inactive' } {'>'} Last updated {formatTimestamp(userInfo.user.update_timestamp)}
                                             </Text>
                                         </CardBody>
                                     </Card>
@@ -157,7 +159,7 @@ export default function EntityPage() {
                                         </CardHeader>
                                         <CardBody>
                                             <Text>
-                                                {userInfo.user.entity.active == 'Y' ? 'Active' : 'Inactive' } {'>'} Last updated {userInfo.user.entity.update_timestamp}
+                                                {userInfo.user.entity.active == 'Y' ? 'Active' : 'Inactive' } {'>'} Last updated {formatTimestamp(userInfo.user.entity.update_timestamp)}
                                             </Text>
                                         </CardBody>
                                     </Card>
