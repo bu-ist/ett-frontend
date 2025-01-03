@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
-import { Heading, Text, Spinner, Box, Checkbox, Button, Fade } from "@chakra-ui/react";
+import { Heading, Text, Spinner, Box, Checkbox, Button, Fade, VStack, Alert, AlertIcon } from "@chakra-ui/react";
 
 // Unused now, but might return in the future.
 //import { lookupInvitationAPI } from '../../lib/entity/lookupInvitationAPI';
@@ -94,7 +94,15 @@ export default function SignUpAuthIndPage() {
             }
             {apiState == 'validated' &&
                 <>
-                    <Text>Invitation Code Validated for {inviteInfo.entity_name}</Text>
+                    <VStack>
+                        <Alert status='success'>
+                            <AlertIcon />
+                            Invitation Code Validated
+                        </Alert>
+                    </VStack>
+                    <Text mt="6">
+                        Nisi occaecat Lorem velit reprehenderit magna ea anim sint ut excepteur nostrud laborum excepteur. Quis labore quis eu mollit. Cillum anim ex elit ut eu eiusmod est adipisicing minim irure. Voluptate velit veniam elit id cupidatat officia culpa velit amet irure commodo duis. Elit veniam eu ipsum et amet qui cillum elit elit occaecat. Id est enim ut eiusmod qui velit ipsum consectetur enim.
+                    </Text>
                     <AcknowledgePrivacy acceptPrivacyPolicy={acceptPrivacyPolicy}  />
                 </>
             }
