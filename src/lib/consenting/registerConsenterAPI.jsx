@@ -1,11 +1,11 @@
-async function registerConsenterAPI(formData) {
-    // Destructure environment variables from import.meta.env
-    const { MODE, VITE_API_STAGE, VITE_REGISTER_CONSENTER_API_HOST } = import.meta.env;
+async function registerConsenterAPI(registerConsenterHost, apiStage, formData) {
+    // Look up if we are in local development mode.
+    const { MODE } = import.meta.env;
 
     // Set the API URL based on the environment, local dev needs a proxy to avoid CORS issues.
     const apiUrlBase = MODE === 'development'
-        ? `/registerConsenterApi/${VITE_API_STAGE}/`
-        : `${VITE_REGISTER_CONSENTER_API_HOST}/${VITE_API_STAGE}/`;
+        ? `/registerConsenterApi/${apiStage}/`
+        : `${registerConsenterHost}/${apiStage}/`;
 
     const requestUri = `${apiUrlBase}register-consenter`;
 

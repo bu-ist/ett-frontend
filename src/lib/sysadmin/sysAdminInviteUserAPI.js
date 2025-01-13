@@ -1,13 +1,18 @@
-async function sysAdminInviteUserAPI(accessToken, email, role) {
-    // Destructure environment variables from import.meta.env
-    const { MODE, VITE_API_STAGE,  VITE_SYSADMIN_API_HOST, VITE_REDIRECT_BASE } = import.meta.env;
+async function sysAdminInviteUserAPI(apiHost, apiStage, accessToken, email, role) {
+    // Look up if we are in local development mode.
+    const { MODE } = import.meta.env;
  
     // Set the API URL based on the environment, local dev needs a proxy to avoid CORS issues.
     const apiUrl = MODE === 'development'
-        ? `/sysadminApi/${VITE_API_STAGE}/SYS_ADMIN`
-        : `${ VITE_SYSADMIN_API_HOST}/${VITE_API_STAGE}/SYS_ADMIN`;
+        ? `/sysadminApi/${apiStage}/SYS_ADMIN`
+        : `${apiHost}/${apiStage}/SYS_ADMIN`;
 
-    const registrationUri = `${VITE_REDIRECT_BASE}/entity/register`;
+    // Construct the redirect base from window.location.
+    const port = window.location.port ? `:${window.location.port}` : '';
+    const redirectBase = `${window.location.protocol}//${window.location.hostname}${port}`;
+
+    // Construct the registration URI for the email invitation, which cognito will redirect to.
+    const registrationUri = `${redirectBase}/entity/register`;
 
     // Fetch the consenting person data from the API with the token from sign in.
     const response = await fetch(apiUrl, {
