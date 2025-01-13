@@ -4,6 +4,7 @@ import Cookies from 'js-cookie';
 
 import { Text, Box, Heading, Spinner, Card, CardBody, CardHeader, Button, CardFooter } from "@chakra-ui/react";
 
+import { ConfigContext } from '../../lib/configContext';
 import { UserContext } from '../../lib/userContext';
 
 import { signIn } from '../../lib/signIn';
@@ -13,6 +14,7 @@ import { getConsentData } from '../../lib/getConsentData';
 import ContactList from "./newContactListPage/contactList";
 
 export default function NewContactListPage() {
+    const { appConfig } = useContext(ConfigContext);
     const { setUser } = useContext(UserContext);
     const [apiState, setApiState] = useState('');
     const [consentData, setConsentData] = useState({});
@@ -33,12 +35,18 @@ export default function NewContactListPage() {
         }
 
         async function fetchData() {
+            // appConfig is initially loaded through an api call, which won't have been completed on the first render, so return early if it's not loaded yet.
+            // Because appConfig is a dependency of this useEffect, fetchData will be called again when appConfig is loaded.
+            if (!appConfig) {
+                return;
+            }
+            const { cognitoDomain, apiStage, consentingPerson: { cognitoID, apiHost } } = appConfig;
+
             setApiState('loading');
 
             // First check if there is a code in the URL, and if so, exchange it for tokens.
             if (searchParams.has('code')) {
-                const clientId = import.meta.env.VITE_CONSENTING_COGNITO_CLIENTID;
-                await exchangeAuthorizationCode(clientId, 'consenting/add-exhibit-form');
+                await exchangeAuthorizationCode( cognitoDomain, cognitoID, 'consenting/add-exhibit-form/both' );
                 // Use setSearchParams to empty the search params once exchangeAuthorizationCode is done with them.
                 setSearchParams({});
 
@@ -51,7 +59,7 @@ export default function NewContactListPage() {
             if (accessToken && idToken) {
                 const decodedIdToken = JSON.parse(atob(idToken.split('.')[1]));
 
-                const consentResponse = await getConsentData(accessToken, decodedIdToken.email);
+                const consentResponse = await getConsentData(apiStage, apiHost, accessToken, decodedIdToken.email);
                 setConsentData(consentResponse);
 
                 // Set the user context for the site header avatar.
@@ -64,7 +72,11 @@ export default function NewContactListPage() {
         }
 
         fetchData();
-    }, []);
+    }, [appConfig]);
+
+    if (!appConfig) {
+        return <Spinner />;
+    }
 
     return (
         <Box>
@@ -77,7 +89,7 @@ export default function NewContactListPage() {
                         <Text>Sign in to access this page.</Text>
                     </CardBody>
                     <CardFooter>
-                        <Button onClick={() => signIn(import.meta.env.VITE_CONSENTING_COGNITO_CLIENTID, 'consenting/add-exhibit-form')}>Sign in as a Consenting Person</Button>
+                        <Button onClick={() => signIn(appConfig.consentingPerson.cognitoID, 'consenting/add-exhibit-form/both')}>Sign in as a Consenting Person</Button>
                     </CardFooter>
                 </Card>
             }

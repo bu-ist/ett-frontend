@@ -1,11 +1,11 @@
-async function getConsentData(accessToken, email) {
-    // Destructure environment variables from import.meta.env
-    const { MODE, VITE_API_STAGE, VITE_CONSENTING_API_HOST } = import.meta.env;
+async function getConsentData( apiStage, apiHost, accessToken, email) {
+    // Look up if we are in local development mode.
+    const { MODE } = import.meta.env;
 
     // Set the API URL based on the environment, local dev needs a proxy to avoid CORS issues.
     const apiUrl = MODE === 'development'
-        ? `/consentingApi/${VITE_API_STAGE}/CONSENTING_PERSON`
-        : `${VITE_CONSENTING_API_HOST}/${VITE_API_STAGE}/CONSENTING_PERSON`;
+        ? `/consentingApi/${apiStage}/CONSENTING_PERSON`
+        : `${apiHost}/${apiStage}/CONSENTING_PERSON`;
 
     // Fetch the consenting person data from the API with the token from sign in.
     const response = await fetch(apiUrl, {

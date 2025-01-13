@@ -4,6 +4,7 @@ import Cookies from 'js-cookie';
 import { Button, Card, CardBody, CardFooter, CardHeader, Heading, Icon, Spinner, Text } from '@chakra-ui/react';
 import { BsFileEarmarkLock2 } from "react-icons/bs";
 
+import { ConfigContext } from '../lib/configContext';
 import { UserContext } from '../lib/userContext';
 
 import { exchangeAuthorizationCode } from '../lib/exchangeAuthorizationCode';
@@ -15,6 +16,9 @@ import ConsentDetails from "./consentingPage/consentDetails";
 export default function ConsentingPage() {
     let [searchParams, setSearchParams] = useSearchParams();
 
+    // Get the appConfig from the ConfigContext.
+    const { appConfig } = useContext( ConfigContext );
+
     const { setUser } = useContext(UserContext);
 
     const [consenterInfo, setConsenterInfo] = useState({});
@@ -23,18 +27,27 @@ export default function ConsentingPage() {
     useEffect(() => {
         // This isn't really fully baked maybe, probably needs more consideration on how to enter the page both with and without a cognito code.
         const fetchData = async () => {
+
+            // appConfig is initially loaded through an api call, which won't have been completed on the first render, so return early if it's not loaded yet.
+            // Because appConfig is a dependency of this useEffect, fetchData will be called again when appConfig is loaded.
+            if (!appConfig) {
+                return;
+            }
+
+            // De-structure useful values from the appConfig.
+            const { cognitoDomain, apiStage, consentingPerson: { cognitoID, apiHost } }  = appConfig;
+
             if (searchParams.has('code') && Cookies.get('EttAccessJwt') === undefined) {
                 // If this exists, then there is a sign in request, so use the code to get the tokens and store them as cookies.
-                const clientId = import.meta.env.VITE_CONSENTING_COGNITO_CLIENTID;
                 
                 // Check to see if this is a first time login from the cognito redirect, and if so do a signIn.
                 // This workaround has to do with the state and code_verifier, which aren't part of the sign up flow.
                 if ( searchParams.get('action') === 'post-signup' ) {
                     // Sign in does a window.location redirect, so execution will stop here.
-                     signIn( clientId, 'consenting' );
+                     signIn( cognitoID, 'consenting' );
                 }
 
-                await exchangeAuthorizationCode( clientId, 'consenting');
+                await exchangeAuthorizationCode( cognitoDomain, cognitoID, 'consenting');
                 //Once the tokens are stored, should remove the code from the URL.
 
                 // Use setSearchParams to empty the search params once exchangeAuthorizationCode is done with them.
@@ -55,7 +68,7 @@ export default function ConsentingPage() {
             setConsenterInfo(decodedIdToken);
 
             // At this point one way or another there should be a consenterInfo object with the email.
-            const consentResponse = await getConsentData(accessToken, decodedIdToken.email);
+            const consentResponse = await getConsentData( apiStage, apiHost, accessToken, decodedIdToken.email);
             setConsentData(consentResponse);
 
             // Set the fullname and email in the user context for the header avatar.
@@ -63,7 +76,7 @@ export default function ConsentingPage() {
         };
 
         fetchData();
-    }, []);
+    }, [appConfig]);
 
     return (
         <div>
@@ -81,14 +94,14 @@ export default function ConsentingPage() {
                     </CardBody>
                     <CardFooter>
                         <Button
-                            onClick={() => signIn( import.meta.env.VITE_CONSENTING_COGNITO_CLIENTID, 'consenting' )}
+                            onClick={() => signIn( appConfig.consentingPerson.cognitoID, 'consenting' )}
                         >
                             Sign in as a Consenting Person
                         </Button>
                     </CardFooter>
                 </Card>
             }
-            {consenterInfo && consenterInfo.email &&
+            {consenterInfo && consenterInfo.email && appConfig &&
                 <>
                     {JSON.stringify(consentData) != '{}' &&
                         <ConsentDetails consentData={consentData} setConsentData={setConsentData} consenterInfo={consenterInfo} />

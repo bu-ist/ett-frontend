@@ -2,14 +2,14 @@ import queryString from 'query-string';
 
 // This is the API call to register an entity. It is called from the acknowledgeEntityPage.jsx page.
 // I think this should be a POST request, not a GET request... But it is a GET right now. 
-async function registerEntityAPI(code, formData) {
-    // Destructure environment variables from import.meta.env
-    const { MODE, VITE_API_STAGE, VITE_REGISTER_ENTITY_API_HOST } = import.meta.env;
+async function registerEntityAPI(registerEntityApiHost, apiStage, code, formData) {
+    // Look up if we are in local development mode.
+    const { MODE } = import.meta.env;
 
     // Set the API URL based on the environment, local dev needs a proxy to avoid CORS issues.
     const apiUrlBase = MODE === 'development'
-        ? `/registerEntityApi/${VITE_API_STAGE}/`
-        : `${VITE_REGISTER_ENTITY_API_HOST}/${VITE_API_STAGE}/`;
+        ? `/registerEntityApi/${apiStage}/`
+        : `${registerEntityApiHost}/${apiStage}/`;
 
         
     // Take the form data and convert it to a query string.

@@ -1,11 +1,11 @@
-async function sendExhibitRequestAPI(accessToken, email, entityId, constraint) {
-    // Destructure environment variables from import.meta.env
-    const { MODE, VITE_API_STAGE, VITE_AUTHORIZED_API_HOST, VITE_REDIRECT_BASE } = import.meta.env;
+async function sendExhibitRequestAPI(apiHost, apiStage, accessToken, email, entityId, constraint) {
+    // Look up if we are in local development mode.
+    const { MODE } = import.meta.env;
 
     // Set the API URL based on the environment, local dev needs a proxy to avoid CORS issues.
     const apiUrlBase = MODE === 'development'
-    ? `/authorizedApi/${VITE_API_STAGE}`
-    : `${VITE_AUTHORIZED_API_HOST}/${VITE_API_STAGE}`;
+    ? `/authorizedApi/${apiStage}`
+    : `${apiHost}/${apiStage}`;
     
     const requestUri = `${apiUrlBase}/RE_AUTH_IND`;
 

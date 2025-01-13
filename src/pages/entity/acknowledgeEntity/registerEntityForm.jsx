@@ -1,10 +1,15 @@
-import { useState } from 'react';
+import { useState, useContext } from 'react';
 import { Heading, FormControl, FormLabel, Input, Button, Spinner, Text, Card, CardHeader, CardBody, CardFooter } from "@chakra-ui/react";
 
 import { registerEntityAPI } from '../../../lib/entity/registerEntityAPI';
 import { signUp } from '../../../lib/signUp';
 
+import { ConfigContext } from '../../../lib/configContext';
+
 export default function RegisterEntityForm({ code, setStepIndex }) {
+    // Get the appConfig from the ConfigContext.
+    const { appConfig } = useContext( ConfigContext );
+
     // Initialize state for each form input
     const [formData, setFormData] = useState({
         entity_name: '',
@@ -26,9 +31,11 @@ export default function RegisterEntityForm({ code, setStepIndex }) {
         e.preventDefault();
         console.log('Registering: ', formData);
 
+        const { apiStage, registerEntityApiHost } = appConfig;
+
         setApiState('loading');
 
-        const registerResult = await registerEntityAPI(code, formData);
+        const registerResult = await registerEntityAPI(registerEntityApiHost, apiStage, code, formData);
         console.log(registerResult);
 
         if (registerResult.payload.ok) {
@@ -43,7 +50,8 @@ export default function RegisterEntityForm({ code, setStepIndex }) {
     }
 
     function handleRegisterClick() {
-        signUp(formData.email, import.meta.env.VITE_ENTITY_COGNITO_CLIENTID, 'entity?action=post-signup');
+        const { cognitoDomain, entityAdmin: { cognitoID } } = appConfig;
+        signUp( cognitoDomain, formData.email, cognitoID, 'entity?action=post-signup');
     }
 
     return (

@@ -1,11 +1,16 @@
+import { useContext } from "react";
 import { Link as ReactRouterLink, useNavigate } from 'react-router-dom';
 import Cookies from 'js-cookie';
 import { Box, Button, Card, CardBody, CardFooter, Heading, SimpleGrid, Stack, Text } from "@chakra-ui/react";
+
+import { ConfigContext } from "../lib/configContext";
 
 import { signIn } from '../lib/signIn';
 import { getRoleForScope } from '../lib/getRoleForScope';
 
 export default function Home() {
+
+    const { appConfig } = useContext(ConfigContext);
 
     const navigate = useNavigate();
 
@@ -21,26 +26,31 @@ export default function Home() {
     function handleConsentingSignIn(event) {
         event.preventDefault();
 
-        const consentClientId = import.meta.env.VITE_CONSENTING_COGNITO_CLIENTID;
+        // Get the correct cognitoID from the appConfig.
+        const { cognitoDomain, consentingPerson: { cognitoID } } = appConfig;
 
         // If there is an idToken, navigate to the consenting page, otherwise sign in with the consenting role.
-        idToken ? navigate('/consenting') : signIn( consentClientId, 'consenting' );
+        idToken ? navigate('/consenting') : signIn( cognitoID, 'consenting', cognitoDomain );
     }
 
     function handleAuthorizedSignIn(event) {
         event.preventDefault();
 
-        const authClientId = import.meta.env.VITE_AUTHORIZED_COGNITO_CLIENTID;
+        // Get the correct cognitoID from the appConfig.
+        const { cognitoDomain, authorizedIndividual: { cognitoID } } = appConfig;
 
-        idToken ? navigate('/auth-ind') : signIn( authClientId, 'auth-ind' );
+        // If there is an idToken, navigate to the auth-ind page, otherwise sign in with the auth-ind role.
+        idToken ? navigate('/auth-ind') : signIn( cognitoID, 'auth-ind', cognitoDomain );
     }
 
     function handleEntitySignIn(event) {
         event.preventDefault();
 
-        const entityClientId = import.meta.env.VITE_ENTITY_COGNITO_CLIENTID;
+        // Get the correct cognitoID from the appConfig.
+        const { cognitoDomain, entityAdmin: { cognitoID } } = appConfig;
 
-        idToken ? navigate('/entity') : signIn( entityClientId, 'entity' );
+        // If there is an idToken, navigate to the entity page, otherwise sign in with the entity role.
+        idToken ? navigate('/entity') : signIn( cognitoID, 'entity', cognitoDomain );
     }
 
     return (
@@ -66,7 +76,7 @@ export default function Home() {
                         <CardFooter>
                             <Button 
                               onClick={handleEntitySignIn} 
-                              isDisabled={sessionRole !== 'none' && sessionRole !== 'entity'} 
+                              isDisabled={(sessionRole !== 'none' && sessionRole !== 'entity') || !appConfig} 
                               colorScheme="gray" 
                               variant="solid"
                             >
@@ -90,7 +100,7 @@ export default function Home() {
                         <CardFooter paddingTop={"-2"}>
                             <Button 
                               onClick={handleAuthorizedSignIn} 
-                              isDisabled={sessionRole !== 'none' && sessionRole !== 'auth-ind'} 
+                              isDisabled={(sessionRole !== 'none' && sessionRole !== 'auth-ind') || !appConfig} 
                               colorScheme="gray" 
                               variant="solid"
                             >
@@ -114,7 +124,7 @@ export default function Home() {
                         <CardFooter paddingTop={"-2"}>
                             <Button
                                 mr="1em"
-                                isDisabled={sessionRole !== 'none' && sessionRole !== 'consenting'}
+                                isDisabled={(sessionRole !== 'none' && sessionRole !== 'consenting') || !appConfig}
                                 onClick={handleConsentingSignIn} colorScheme="gray"
                                 variant="solid"
                             >

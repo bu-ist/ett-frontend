@@ -6,6 +6,7 @@ import Cookies from 'js-cookie';
 import { nanoid } from "nanoid";
 import { Text, Box, Heading, Spinner, FormControl, FormLabel, Input, Card, CardBody, CardHeader, Button, Divider, CardFooter, RadioGroup, Stack, Radio } from "@chakra-ui/react";
 
+import { ConfigContext } from '../../lib/configContext';
 import { UserContext } from '../../lib/userContext';
 
 import { signIn } from '../../lib/signIn';
@@ -18,6 +19,7 @@ import EntityAutocomplete from './newContactListPage/entityAutocomplete';
 
 
 export default function NewContactListPageInline() {
+    const { appConfig } = useContext(ConfigContext);
     const { setUser } = useContext(UserContext);
     const [apiState, setApiState] = useState('');
     const [consentData, setConsentData] = useState({});
@@ -53,6 +55,13 @@ export default function NewContactListPageInline() {
         }
 
         async function fetchData() {
+            // appConfig is initially loaded through an api call, which won't have been completed on the first render, so return early if it's not loaded yet.
+            // Because appConfig is a dependency of this useEffect, fetchData will be called again when appConfig is loaded.
+            if (!appConfig) {
+                return;
+            }
+            const {apiStage, consentingPerson: { cognitoID, apiHost } } = appConfig;
+
             setApiState('loading');
 
             // First check if there is a code in the URL, and if so, exchange it for tokens.
@@ -71,7 +80,7 @@ export default function NewContactListPageInline() {
             if (accessToken && idToken) {
                 const decodedIdToken = JSON.parse(atob(idToken.split('.')[1]));
 
-                const consentResponse = await getConsentData(accessToken, decodedIdToken.email);
+                const consentResponse = await getConsentData(apiStage, apiHost, accessToken, decodedIdToken.email);
                 setConsentData(consentResponse);
 
                 // Set the user context for the site header avatar.
@@ -84,7 +93,7 @@ export default function NewContactListPageInline() {
         }
 
         fetchData();
-    }, []);
+    }, [appConfig]);
 
     // Handle contact field change
     const handleContactChange = (id, e) => {
@@ -217,9 +226,9 @@ export default function NewContactListPageInline() {
                     </CardFooter>
                 </Card>
             }
-            {apiState === 'loading' && <Spinner />}
+            {(apiState === 'loading' || !appConfig) && <Spinner />}
             {apiState === 'error' && <Text>There was an error loading the new contact list page.</Text>}
-            {apiState === 'success' && 
+            {apiState === 'success' && appConfig &&
             <>
                 <Heading as={"h2"} mb="1em" size={"lg"}>New Contact List for {consentData.fullName}</Heading>
                 <FormControl my="2em" as="form" onSubmit={handleSubmit}>

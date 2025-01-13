@@ -1,12 +1,16 @@
-import { useState } from 'react';
+import { useState, useContext } from 'react';
 import Cookies from 'js-cookie';
 import { Button, Modal, ModalBody, ModalCloseButton, ModalContent, ModalHeader, ModalOverlay, useDisclosure, FormControl, Text, FormLabel, Input, Spinner, VStack, Alert, AlertIcon } from '@chakra-ui/react';
 import { RiMailLine } from "react-icons/ri";
 
+import { ConfigContext } from "../../lib/configContext";
 
 import { inviteAuthIndFromEntityAPI } from '../../lib/entity/inviteAuthIndFromEntityAPI';
 
 export default function InviteUsersModal({ numUsers, entity, updatePendingInvitations }) {
+    // get the appConfig from the ConfigContext.
+    const { appConfig } = useContext( ConfigContext );
+    
     // Form State
     const [emailsToInvite, setEmailsToInvite] = useState({
         email1: '',
@@ -29,7 +33,10 @@ export default function InviteUsersModal({ numUsers, entity, updatePendingInvita
 
         setApiState('loading');
 
-        const inviteResult = await inviteAuthIndFromEntityAPI( accessToken, email, entity, emailsToInvite );
+        // Get the api details from the appConfig.
+        const { apiStage, entityAdmin: { apiHost } } = appConfig;
+
+        const inviteResult = await inviteAuthIndFromEntityAPI( apiStage, apiHost, accessToken, email, entity, emailsToInvite );
         console.log(JSON.stringify(inviteResult));
 
         if (inviteResult.payload.ok) {

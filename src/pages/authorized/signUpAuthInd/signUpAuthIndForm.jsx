@@ -1,13 +1,18 @@
-import { useState } from 'react';
+import { useState, useContext } from 'react';
 import { Button, Card, CardBody, CardHeader, FormControl, FormLabel, Heading, Input, Spinner, Text } from "@chakra-ui/react";
 
 import SignUpCognitoButton from './signUpCognitoButton';
+
+import { ConfigContext } from '../../../lib/configContext';
 
 import { registerEntityAPI } from '../../../lib/entity/registerEntityAPI';
 import { signUp } from '../../../lib/signUp';
 
 export default function SignUpAuthIndForm({entityInfo, setStepIndex, code}) {
     const  { entity, invitation, users }  = entityInfo;
+
+    // Get the appConfig from the ConfigContext.
+    const { appConfig } = useContext( ConfigContext );
 
     const [apiState, setApiState] = useState('idle');
 
@@ -32,9 +37,11 @@ export default function SignUpAuthIndForm({entityInfo, setStepIndex, code}) {
     async function handleSubmit(e) {
         e.preventDefault();
 
+        const { apiStage, registerEntityApiHost } = appConfig;
+
         setApiState('loading');
 
-        const registerResult = await registerEntityAPI(code, formData);
+        const registerResult = await registerEntityAPI(registerEntityApiHost, apiStage, code, formData);
         console.log(registerResult);
 
          if (registerResult.payload.ok) {
@@ -46,7 +53,8 @@ export default function SignUpAuthIndForm({entityInfo, setStepIndex, code}) {
     }
 
     function signUpRedirect() {
-        signUp(formData.email, import.meta.env.VITE_AUTHORIZED_COGNITO_CLIENTID, 'auth-ind?action=post-signup')
+        const { authorizedIndividual: { cognitoID } } = appConfig;
+        signUp(formData.email, cognitoID, 'auth-ind?action=post-signup')
     }
 
     return (

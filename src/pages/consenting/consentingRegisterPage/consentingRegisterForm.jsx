@@ -1,12 +1,17 @@
 import { Button, FormControl, FormLabel, Heading, Input, Spinner, Text } from "@chakra-ui/react";
-import { useState } from "react";
+import { useState, useContext } from "react";
 
 import SignUpCognitoButton from '../../authorized/signUpAuthInd/signUpCognitoButton';
+
+import { ConfigContext } from '../../../lib/configContext';
 
 import { registerConsenterAPI } from '../../../lib/consenting/registerConsenterAPI';
 import { signUp } from '../../../lib/signUp';
 
 export default function ConsentingRegisterForm() {
+    // Get the appConfig from the ConfigContext.
+    const { appConfig } = useContext( ConfigContext );
+
     const [formData, setFormData] = useState({
         firstname: '',
         middlename: '',
@@ -25,7 +30,10 @@ export default function ConsentingRegisterForm() {
         e.preventDefault();
         setApiState('loading');
 
-        const response = await registerConsenterAPI(formData);
+        // Get config values from the context.
+        const { apiStage, registerConsenterHost } = appConfig;
+
+        const response = await registerConsenterAPI(registerConsenterHost, apiStage, formData);
         console.log('register Response', response);
 
 
@@ -38,7 +46,8 @@ export default function ConsentingRegisterForm() {
     }
 
     function signUpRedirect() {
-        signUp(formData.email, import.meta.env.VITE_CONSENTING_COGNITO_CLIENTID, 'consenting?action=post-signup');
+        const { consentingPerson: { cognitoID } } = appConfig;
+        signUp(formData.email, cognitoID, 'consenting?action=post-signup');
     }
 
     return (

@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useContext } from 'react';
 import Cookies from 'js-cookie';
 
 import { Box, Button, Center, Heading, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Stack, Radio, RadioGroup, Spinner, useDisclosure } from "@chakra-ui/react";
@@ -9,12 +9,19 @@ import {
     AutoCompleteList,
   } from "@choc-ui/chakra-autocomplete";
 
+import { ConfigContext } from '../../lib/configContext';
+
 import { sendExhibitRequestAPI } from '../../lib/auth-ind/sendExhibitRequestAPI';
 import { searchConsentersAPI } from '../../lib/auth-ind/searchConsentersAPI';
 
 import ExhibitSuccessModalBody from "./consentersAutocomplete/exhibitSuccessModalBody";
 
 export default function ConsentersAutocomplete({ entityId }) {
+    const { appConfig } = useContext( ConfigContext );
+
+    // Destructure useful values from the appConfig.
+    const { apiStage, authorizedIndividual: { apiHost } } = appConfig;
+
     const { isOpen, onOpen, onClose } = useDisclosure();
 
     const [selectedConsenter, setSelectedConsenter] = useState(null);
@@ -34,7 +41,7 @@ export default function ConsentersAutocomplete({ entityId }) {
         setApiState('loading');
 
         const accessToken = Cookies.get('EttAccessJwt');
-        const sendResult = await sendExhibitRequestAPI(accessToken, selectedConsenter, entityId, constraint);
+        const sendResult = await sendExhibitRequestAPI(apiHost, apiStage, accessToken, selectedConsenter, entityId, constraint);
 
         // This won't work yet because we have to account for the bifurcated request fields.
         console.log('sendResult', sendResult);
@@ -60,7 +67,7 @@ export default function ConsentersAutocomplete({ entityId }) {
 
     async function fetchConsenters(query) {
         const accessToken = Cookies.get('EttAccessJwt');
-        const result = await searchConsentersAPI(accessToken, query);
+        const result = await searchConsentersAPI(apiHost, apiStage, accessToken, query);
 
         if (result.payload.ok) {
             setOptions(result.payload.consenters);

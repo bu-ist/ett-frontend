@@ -6,7 +6,7 @@ import { setJwt } from "./jwtUtil";
   * SEE: https://docs.aws.amazon.com/cognito/latest/developerguide/token-endpoint.html
   *      https://www.rfc-editor.org/rfc/rfc6749#section-3.2
   */
-async function exchangeAuthorizationCode(clientId, redirectUri) {
+async function exchangeAuthorizationCode( cognitoDomain, clientId, redirectUri ) {
     const queryParams = new URLSearchParams(window.location.search);
     const authorizationCode = queryParams.get('code');
     const returnedState = queryParams.get('state')
@@ -20,18 +20,22 @@ async function exchangeAuthorizationCode(clientId, redirectUri) {
         throw Error('Authorization code not found in the URL.');
     }
 
+    // Construct the redirect URI
+    const port = window.location.port ? `:${window.location.port}` : '';
+    const redirectBase = `${window.location.protocol}//${window.location.hostname}${port}`;
+
     const codeVerifier = window.sessionStorage.getItem("code_verifier");
     const params = {
         grant_type: 'authorization_code',
         client_id: clientId,
-        redirect_uri: `${import.meta.env.VITE_REDIRECT_BASE}/${redirectUri}`,
+        redirect_uri: `${redirectBase}/${redirectUri}`,
         state: savedState,
         code: authorizationCode,
         code_verifier: codeVerifier
     };
 
     const formData = Object.keys(params).map(key => `${encodeURIComponent(key)}=${encodeURIComponent(params[key])}`).join('&');
-    const tokenUrl = `https://${import.meta.env.VITE_COGNITO_DOMAIN}/oauth2/token`;
+    const tokenUrl = `https://${cognitoDomain}/oauth2/token`;
 
     const response = await fetch(tokenUrl, {
         method: 'POST',

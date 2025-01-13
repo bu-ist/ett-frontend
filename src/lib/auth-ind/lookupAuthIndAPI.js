@@ -1,11 +1,11 @@
-async function lookupAuthIndAPI(accessToken, email) {
-    // Destructure environment variables from import.meta.env
-    const { MODE, VITE_API_STAGE, VITE_AUTHORIZED_API_HOST } = import.meta.env;
+async function lookupAuthIndAPI(apiHost, apiStage, accessToken, email) {
+    // Look up if we are in local development mode.
+    const { MODE } = import.meta.env;
 
     // Set the API URL based on the environment, local dev needs a proxy to avoid CORS issues.
     const apiUrlBase = MODE === 'development'
-        ? `/authorizedApi/${VITE_API_STAGE}`
-        : `${VITE_AUTHORIZED_API_HOST}/${VITE_API_STAGE}`;
+        ? `/authorizedApi/${apiStage}`
+        : `${apiHost}/${apiStage}`;
 
     const requestUri = `${apiUrlBase}/RE_AUTH_IND`;
 
