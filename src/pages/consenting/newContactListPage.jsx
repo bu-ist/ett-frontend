@@ -89,7 +89,7 @@ export default function NewContactListPage() {
                         <Text>Sign in to access this page.</Text>
                     </CardBody>
                     <CardFooter>
-                        <Button onClick={() => signIn(appConfig.consentingPerson.cognitoID, 'consenting/add-exhibit-form/both')}>Sign in as a Consenting Person</Button>
+                        <Button onClick={() => signIn(appConfig.consentingPerson.cognitoID, 'consenting/add-exhibit-form/both', appConfig.cognitoDomain)}>Sign in as a Consenting Person</Button>
                     </CardFooter>
                 </Card>
             }

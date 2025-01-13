@@ -48,7 +48,7 @@ export default function EntityPage() {
                 // This workaround has to do with the state and code_verifier, which aren't part of the sign up flow.
                 if ( searchParams.get('action') === 'post-signup' ) {
                     // Sign in does a window.location redirect, so execution will stop here.
-                     signIn( cognitoID, 'entity' );
+                     signIn( cognitoID, 'entity', cognitoDomain );
                 }
 
                 await exchangeAuthorizationCode( cognitoDomain, cognitoID, 'entity');

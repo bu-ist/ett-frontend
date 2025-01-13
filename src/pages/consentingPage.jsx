@@ -44,7 +44,7 @@ export default function ConsentingPage() {
                 // This workaround has to do with the state and code_verifier, which aren't part of the sign up flow.
                 if ( searchParams.get('action') === 'post-signup' ) {
                     // Sign in does a window.location redirect, so execution will stop here.
-                     signIn( cognitoID, 'consenting' );
+                     signIn( cognitoID, 'consenting', cognitoDomain );
                 }
 
                 await exchangeAuthorizationCode( cognitoDomain, cognitoID, 'consenting');
@@ -94,7 +94,7 @@ export default function ConsentingPage() {
                     </CardBody>
                     <CardFooter>
                         <Button
-                            onClick={() => signIn( appConfig.consentingPerson.cognitoID, 'consenting' )}
+                            onClick={() => signIn( appConfig.consentingPerson.cognitoID, 'consenting', appConfig.cognitoDomain )}
                         >
                             Sign in as a Consenting Person
                         </Button>
