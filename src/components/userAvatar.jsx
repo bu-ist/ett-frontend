@@ -15,6 +15,13 @@ export default function UserAvatar({user}) {
 
     const sessionRole = decodedAccessToken ? getRoleForScope(decodedAccessToken.scope) : 'none';
 
+    const roles = {
+        'consenting': 'Consenting Person',
+        'auth-ind': 'Authorized Individual',
+        'entity': 'Administrative Support Professional',
+        'sysadmin': 'System Admin',
+    }
+
     // Match the session role to the correct cognitoID, and use that to sign out.
     function handleSignOut() {
         let cognitoID = '';
@@ -56,6 +63,7 @@ export default function UserAvatar({user}) {
                         <PopoverBody>
                             <Text>{user.fullname}</Text>
                             <Text>{user.email}</Text>
+                            <Text>{roles[sessionRole]}</Text>
                         </PopoverBody>
                         <PopoverFooter>
                             <Flex justifyContent="flex-end">
