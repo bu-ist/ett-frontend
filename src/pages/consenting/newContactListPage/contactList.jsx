@@ -1,8 +1,10 @@
-import { useState } from 'react';
+import { useState, useContext } from 'react';
 import { nanoid } from 'nanoid';
 import Cookies from 'js-cookie';
 
 import { Box, Text, Heading, Divider, FormControl, FormLabel, Button, Spinner, useDisclosure } from '@chakra-ui/react';
+
+import { ConfigContext } from '../../../lib/configContext';
 
 import { sendExhibitFormAPI } from '../../../lib/consenting/sendExhibitFormAPI';
 
@@ -12,6 +14,7 @@ import EntityAutocomplete from './entityAutocomplete';
 
 // Contains the full contact list form and form state.
 export default function ContactList({ consentData }) {
+    const { appConfig } = useContext(ConfigContext);
 
     // State for the form submission result.
     const [submitResult, setSubmitResult] = useState('idle');
@@ -87,12 +90,15 @@ export default function ContactList({ consentData }) {
     async function handleSubmit(e) {
         e.preventDefault();
 
+        // De-structure useful values from the appConfig.
+        const { apiStage, consentingPerson: { cognitoID, apiHost } }  = appConfig;
+
         const accessToken = Cookies.get('EttAccessJwt');
         const idToken = Cookies.get('EttIdJwt');
         const email = JSON.parse(atob(idToken.split('.')[1])).email;
 
         // Send the contact list to the API.
-        const response = await sendExhibitFormAPI(accessToken, contacts, entity, email);
+        const response = await sendExhibitFormAPI(apiHost, apiStage, accessToken, contacts, entity, email);
 
         console.log('send exhibit form response', response);
         

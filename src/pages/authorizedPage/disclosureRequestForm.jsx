@@ -1,12 +1,17 @@
-import { useState } from 'react';
+import { useState, useContext } from 'react';
 import Cookies from 'js-cookie';
 
 import { Box, FormControl, Button, FormLabel, Input, Spinner, useDisclosure, Modal, ModalOverlay, ModalContent, ModalHeader, ModalCloseButton, ModalBody } from "@chakra-ui/react";
 
 import { sendDisclosureRequestAPI } from '../../lib/auth-ind/sendDisclosureRequestAPI';
 
+import { ConfigContext } from '../../lib/configContext';
+
 export default function DisclosureRequestForm({ entityId }) {
     const { isOpen, onOpen, onClose } = useDisclosure();
+
+    // Get the appConfig from the ConfigContext.
+    const { appConfig } = useContext( ConfigContext );
 
     const [apiState, setApiState] = useState('idle');
 
@@ -26,12 +31,15 @@ export default function DisclosureRequestForm({ entityId }) {
     async function handleSubmit(e) {
         e.preventDefault();
 
+        // Destructure useful values from the appConfig.
+        const { apiStage, authorizedIndividual: { apiHost } } = appConfig;
+
         const { consenterEmail, affiliateEmail } = formData;
 
         setApiState('loading');
 
         const accessToken = Cookies.get('EttAccessJwt');
-        const sendResult = await sendDisclosureRequestAPI(accessToken, consenterEmail, affiliateEmail, entityId);
+        const sendResult = await sendDisclosureRequestAPI( apiHost, apiStage, accessToken, consenterEmail, affiliateEmail, entityId);
 
         console.log( 'sendResult', sendResult);
 

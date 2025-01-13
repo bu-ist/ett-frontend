@@ -27,30 +27,30 @@ export default function Home() {
         event.preventDefault();
 
         // Get the correct cognitoID from the appConfig.
-        const { consentingPerson: { cognitoID } } = appConfig;
+        const { cognitoDomain, consentingPerson: { cognitoID } } = appConfig;
 
         // If there is an idToken, navigate to the consenting page, otherwise sign in with the consenting role.
-        idToken ? navigate('/consenting') : signIn( cognitoID, 'consenting' );
+        idToken ? navigate('/consenting') : signIn( cognitoID, 'consenting', cognitoDomain );
     }
 
     function handleAuthorizedSignIn(event) {
         event.preventDefault();
 
         // Get the correct cognitoID from the appConfig.
-        const { authorizedIndividual: { cognitoID } } = appConfig;
+        const { cognitoDomain, authorizedIndividual: { cognitoID } } = appConfig;
 
         // If there is an idToken, navigate to the auth-ind page, otherwise sign in with the auth-ind role.
-        idToken ? navigate('/auth-ind') : signIn( cognitoID, 'auth-ind' );
+        idToken ? navigate('/auth-ind') : signIn( cognitoID, 'auth-ind', cognitoDomain );
     }
 
     function handleEntitySignIn(event) {
         event.preventDefault();
 
         // Get the correct cognitoID from the appConfig.
-        const { entityAdmin: { cognitoID } } = appConfig;
+        const { cognitoDomain, entityAdmin: { cognitoID } } = appConfig;
 
         // If there is an idToken, navigate to the entity page, otherwise sign in with the entity role.
-        idToken ? navigate('/entity') : signIn( cognitoID, 'entity' );
+        idToken ? navigate('/entity') : signIn( cognitoID, 'entity', cognitoDomain );
     }
 
     return (

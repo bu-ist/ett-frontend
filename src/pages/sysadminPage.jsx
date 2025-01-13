@@ -29,12 +29,12 @@ export default function SysadminPage() {
             return;
         }
 
-        // Desctructure useful values from the appConfig.
-        const { sysadmin: { cognitoID } } = appConfig;
+        // Destructure useful values from the appConfig.
+        const { cognitoDomain, sysadmin: { cognitoID } } = appConfig;
 
         // If there is no existing session, and no code in the URL, redirect to the cognito login page.
         if (!searchParams.has('code') && Cookies.get('EttAccessJwt') === undefined) {
-            signIn(cognitoID, 'sysadmin'); // This will immediately redirect to the cognito login page.
+            signIn( cognitoID, 'sysadmin', cognitoDomain ); // This will immediately redirect to the cognito login page.
         }
         
         // Otherwise, declare an async function in the useEffect hook to get the session token.
@@ -42,7 +42,7 @@ export default function SysadminPage() {
             
             if (searchParams.has('code') && Cookies.get('EttAccessJwt') === undefined) {
                 // If this exists, then there is a sign in request, so use the code to get the tokens and store them as cookies.
-                await exchangeAuthorizationCode( cognitoID, 'sysadmin');
+                await exchangeAuthorizationCode( cognitoDomain, cognitoID, 'sysadmin');
                 //Once the tokens are stored, should remove the code from the URL.
 
                 // Use setSearchParams to empty the search params once exchangeAuthorizationCode is done with them.
@@ -64,6 +64,11 @@ export default function SysadminPage() {
 
         getSessionToken();
     }, [appConfig]);
+
+    function handleSignOut() {
+        const { cognitoDomain, sysadmin: { cognitoID } } = appConfig;
+        signOut(cognitoDomain, cognitoID);
+    }
 
     if ( !sysadminInfo || !appConfig ) {
         // If the sysadminInfo or appConfig is not loaded yet, show a spinner.
@@ -87,7 +92,7 @@ export default function SysadminPage() {
                 </Card>
             </SimpleGrid>
 
-            <Button my="2em" onClick={signOut}>Sign Out</Button>
+            <Button my="2em" onClick={handleSignOut}>Sign Out</Button>
         </div>
     );
 }

@@ -4,6 +4,7 @@ import Cookies from 'js-cookie';
 import { Button, Card, CardBody, CardFooter, CardHeader, Heading, Icon, SimpleGrid, Spinner, Stack, Text } from '@chakra-ui/react';
 import { Bs1CircleFill, Bs2CircleFill, BsFileEarmarkLock2 } from "react-icons/bs";
 
+import { ConfigContext } from "../lib/configContext";
 import { UserContext } from '../lib/userContext';
 
 import { exchangeAuthorizationCode } from '../lib/exchangeAuthorizationCode';
@@ -19,6 +20,7 @@ import DisclosureRequestForm from './authorizedPage/disclosureRequestForm';
 export default function AuthorizedPage() {
     let [searchParams, setSearchParams] = useSearchParams();
 
+    const { appConfig } = useContext(ConfigContext);
     const { setUser } = useContext(UserContext);
 
     const [authorizedInfo, setAuthorizedInfo] = useState({});
@@ -28,18 +30,26 @@ export default function AuthorizedPage() {
 
     useEffect(() => {
         const fetchData = async () => {
+            // appConfig is initially loaded through an api call, which won't have been completed on the first render, so return early if it's not loaded yet.
+            // Because appConfig is a dependency of this useEffect, fetchData will be called again when appConfig is loaded.
+            if (!appConfig) {
+                return;
+            }
+
+            // Desctructure useful values from the appConfig.
+            const { cognitoDomain, apiStage, authorizedIndividual: { cognitoID, apiHost } } = appConfig;
+
             if (searchParams.has('code') && Cookies.get('EttAccessJwt') === undefined) {
                 // If this exists, then there is a sign in request, so use the code to get the tokens and store them as cookies.
-                const clientId = import.meta.env.VITE_AUTHORIZED_COGNITO_CLIENTID;
 
                 // Check to see if this is a first time login from the cognito redirect, and if so do a signIn.
                 // This workaround has to do with the state and code_verifier, which aren't part of the sign up flow.
                 if ( searchParams.get('action') === 'post-signup' ) {
                     // Sign in does a window.location redirect, so execution will stop here.
-                     signIn( clientId, 'auth-ind' );
+                     signIn( cognitoID, 'auth-ind' );
                 }
 
-                await exchangeAuthorizationCode(clientId, 'auth-ind');
+                await exchangeAuthorizationCode( cognitoDomain, cognitoID, 'auth-ind');
 
                 // Use setSearchParams to empty the search params once exchangeAuthorizationCode is done with them.
                 setSearchParams({});
@@ -62,7 +72,7 @@ export default function AuthorizedPage() {
             setApiState('loading');
 
             // Get the user data from the API and store it in local state.
-            const authIndResponse = await lookupAuthIndAPI(accessToken, decodedIdToken.email);
+            const authIndResponse = await lookupAuthIndAPI(apiHost, apiStage, accessToken, decodedIdToken.email);
             setUserData(authIndResponse.payload.user);
 
             // Also set the user context for the avatar in the header.
@@ -73,7 +83,7 @@ export default function AuthorizedPage() {
         };
 
         fetchData();
-    }, []);
+    }, [appConfig]);
 
     return (
         <div>
@@ -89,11 +99,11 @@ export default function AuthorizedPage() {
                         <Icon color="gray.500" as={BsFileEarmarkLock2} w={24} h={24} />
                     </CardBody>
                     <CardFooter>
-                        <Button onClick={() => signIn( import.meta.env.VITE_AUTHORIZED_COGNITO_CLIENTID, 'auth-ind' )}>Sign In as Authorized Individual</Button>
+                        <Button onClick={() => signIn( appConfig.authorizedIndividual.cognitoID, 'auth-ind' )}>Sign In as Authorized Individual</Button>
                     </CardFooter>
                 </Card>
             }
-            {(authorizedInfo && authorizedInfo.email && apiState == 'success') &&
+            {(authorizedInfo && authorizedInfo.email && apiState == 'success' && appConfig) &&
                 <>
                     <AuthIndDetails userInfo={userData} />
                     <SimpleGrid spacing={4} columns={2}>
@@ -132,7 +142,7 @@ export default function AuthorizedPage() {
                             </Stack>
                         </Card>
                     </SimpleGrid>
-                    <Button my="2em" onClick={signOut}>Sign Out</Button>
+                    <Button my="2em" onClick={ () => signOut( appConfig.cognitoDomain, appConfig.authorizedIndividual.cognitoID ) }>Sign Out</Button>
                 </>
             }
         </div>

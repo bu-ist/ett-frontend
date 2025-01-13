@@ -1,7 +1,10 @@
+import { useContext } from 'react';
 import { Link as ReactRouterLink } from 'react-router-dom';
 
 import { Icon, Text, Button, Card, CardBody, SimpleGrid, CardFooter, Heading, Divider, Stack } from '@chakra-ui/react';
 import { HiCheckCircle, HiMinusCircle } from 'react-icons/hi';
+
+import { ConfigContext } from '../../lib/configContext';
 
 import { signOut } from '../../lib/signOut';
 
@@ -9,9 +12,15 @@ import RescindModal from './consentDetails/rescindModal';
 import RenewModal from './consentDetails/renewModal';
 
 export default function ConsentDetails({ consentData, setConsentData, consenterInfo }) {
+    const { appConfig } = useContext(ConfigContext);
 
     const { consenter, fullName, activeConsent, entities } = consentData;
     const { email } = consenterInfo;
+
+    function handleSignOut() {
+        const { cognitoDomain, consentingPerson: { cognitoID } } = appConfig;
+        signOut( cognitoDomain, cognitoID );
+    }
 
     return (
         <div>
@@ -69,7 +78,7 @@ export default function ConsentDetails({ consentData, setConsentData, consenterI
                     </SimpleGrid>
                     </>
                 )}
-                <Button my="2em" onClick={signOut}>Sign Out</Button>
+                <Button my="2em" onClick={handleSignOut}>Sign Out</Button>
         </div>
     );
 }

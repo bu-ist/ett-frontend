@@ -1,16 +1,21 @@
-import { useState } from 'react';
+import { useState, useContext } from 'react';
 import Cookies from 'js-cookie';
 import { useDisclosure, Button, Modal, ModalOverlay, ModalHeader, ModalContent, ModalCloseButton, ModalBody, ModalFooter, Spinner, Text } from '@chakra-ui/react';
+
+import { ConfigContext } from "../../../lib/configContext";
 
 import { renewConsentAPI } from "../../../lib/consenting/renewConsentAPI";
 
 export default function RenewModal({setConsentData, consentData}) {
     const { isOpen, onOpen, onClose } = useDisclosure();
+    const { appConfig } = useContext( ConfigContext );
 
     const [apiState, setApiState] = useState('idle');
 
     // Handles renewing the consent expiration date.
     function handleRenew() {
+        const { apiStage, consentingPerson: { apiHost } } = appConfig;
+
         // Need to declare an async function to handle the API call.
         // This function should get the access token from the cookies.
         async function renewConsent() {
@@ -30,7 +35,7 @@ export default function RenewModal({setConsentData, consentData}) {
             const email = JSON.parse(atob(idToken.split('.')[1])).email;
 
             // Call the renewConsentAPI function with the access token and email.
-            const renewResult = await renewConsentAPI(accessToken, email);
+            const renewResult = await renewConsentAPI(apiHost, apiStage, accessToken, email);
 
             // Set the UI state based on the result of the API call.
             if (renewResult.message == 'Ok') {

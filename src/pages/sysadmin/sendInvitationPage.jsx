@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useContext } from 'react';
 import Cookies from 'js-cookie';
 import { Heading, Text, Input, Button, useDisclosure, Modal, ModalOverlay, ModalContent, ModalHeader, ModalCloseButton, ModalBody, ModalFooter, Icon, Stack } from "@chakra-ui/react";
 import { HiCheckCircle, HiMinusCircle } from 'react-icons/hi';
@@ -6,7 +6,12 @@ import { RiMailLine } from "react-icons/ri";
 
 import { sysAdminInviteUserAPI  } from "../../lib/sysadmin/sysAdminInviteUserAPI";
 
+import { ConfigContext } from "../../lib/configContext";
+
 export default function SendInvitationPage() {
+
+    // Get the appConfig from the ConfigContext.
+    const { appConfig } = useContext( ConfigContext );
 
     const [email, setEmail] = useState('');
 
@@ -16,6 +21,9 @@ export default function SendInvitationPage() {
     async function sendInvitation(event) {
         event.preventDefault();
     
+        // Get config values from the context.
+        const { apiStage, sysadmin: { apiHost } } = appConfig;
+
         // Set a loading state while the API call is in progress.
         setApiState('loading');
     
@@ -26,7 +34,7 @@ export default function SendInvitationPage() {
 
         try {
             // Call the sysAdminInviteUserAPI function with the access token, email, and role.
-            const inviteResult = await sysAdminInviteUserAPI(accessToken, email, role);
+            const inviteResult = await sysAdminInviteUserAPI(apiHost, apiStage, accessToken, email, role);
     
             // Set the UI state based on the result of the API call.
             if (inviteResult.payload.ok) {

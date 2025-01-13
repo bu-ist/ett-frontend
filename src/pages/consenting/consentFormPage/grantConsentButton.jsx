@@ -1,16 +1,25 @@
-import { useState } from 'react';
+import { useState, useContext } from 'react';
 import { Link as ReactRouterLink, useNavigate } from 'react-router-dom';
 import { Button, FormControl, FormLabel, Input, Spinner } from '@chakra-ui/react';
 import Cookies from 'js-cookie';
 
+import { ConfigContext } from '../../../lib/configContext';
+
 import { grantConsentAPI } from '../../../lib/consenting/grantConsentAPI';
 
 export default function GrantConsentButton({ consentData }) {
+    // Get the appConfig from the ConfigContext.
+    const { appConfig } = useContext( ConfigContext );
+
     const [apiState, setApiState] = useState('idle');
 
     const [digitalSignature, setDigitalSignature] = useState('');
 
     async function handleConsentButton() {
+        // De-structure useful values from the appConfig.
+        const { apiStage, consentingPerson: { apiHost } }  = appConfig;
+
+
         setApiState('loading');
         const accessToken = Cookies.get('EttAccessJwt');
 
@@ -19,7 +28,7 @@ export default function GrantConsentButton({ consentData }) {
             const { email, phone_number } = consenter;
             const grantRequestPayload = { digitalSignature, fullname, email, phone_number };
             
-            const grantResult = await grantConsentAPI(accessToken, grantRequestPayload);
+            const grantResult = await grantConsentAPI(apiHost, apiStage, accessToken, grantRequestPayload);
 
             console.log('grantResult', grantResult);
             if (grantResult.payload.ok) {

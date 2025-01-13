@@ -9,6 +9,7 @@ import { lookupUserContextAPI } from '../lib/entity/lookupUserContextAPI';
 import { signIn } from '../lib/signIn';
 import { signOut } from '../lib/signOut';
 
+import { ConfigContext } from '../lib/configContext';
 import { UserContext } from '../lib/userContext';
 
 import AuthorizedCard from './entityPage/authorizedCard';
@@ -19,26 +20,38 @@ export default function EntityPage() {
 
     let [searchParams, setSearchParams] = useSearchParams();
 
+    // Get the appConfig from the ConfigContext.
+    const { appConfig } = useContext( ConfigContext );
+
     const {setUser} = useContext(UserContext);
 
     const [entityAdminInfo, setEntityAdminInfo] = useState({});
     const [userInfo, setUserInfo] = useState({});
 
     useEffect(() => {
+        // Asynchronously operations need to be declared in a local function to be called in useEffect.
         const fetchData = async () => {
+
+            // appConfig is initially loaded through an api call, which won't have been completed on the first render, so return early if it's not loaded yet.
+            // Because appConfig is a dependency of this useEffect, fetchData will be called again when appConfig is loaded.
+            if (!appConfig) {
+                return;
+            }
+
+            // De-structure useful values from the appConfig.
+            const { cognitoDomain, apiStage, entityAdmin: { cognitoID, apiHost } }  = appConfig;
 
             if (searchParams.has('code') && Cookies.get('EttAccessJwt') === undefined) {
                 // If this exists, then there is a sign in request, so use the code to get the tokens and store them as cookies.
-                const clientId = import.meta.env.VITE_ENTITY_COGNITO_CLIENTID;
-                
+
                 // Check to see if this is a first time login from the cognito redirect, and if so do a signIn.
                 // This workaround has to do with the state and code_verifier, which aren't part of the sign up flow.
                 if ( searchParams.get('action') === 'post-signup' ) {
                     // Sign in does a window.location redirect, so execution will stop here.
-                     signIn( clientId, 'entity' );
+                     signIn( cognitoID, 'entity' );
                 }
 
-                await exchangeAuthorizationCode( clientId, 'entity');
+                await exchangeAuthorizationCode( cognitoDomain, cognitoID, 'entity');
                 //Once the tokens are stored, should remove the code from the URL.
 
                 // Use setSearchParams to empty the search params once exchangeAuthorizationCode is done with them.
@@ -59,7 +72,7 @@ export default function EntityPage() {
             setEntityAdminInfo(decodedIdToken);
 
             // Get the user data from the API and store it in local state.
-            const userInfoResponse = await lookupUserContextAPI(accessToken, decodedIdToken.email);
+            const userInfoResponse = await lookupUserContextAPI( apiStage, apiHost, accessToken, decodedIdToken.email);
 
             // If invalid, set api state to error and return early.
             if (!userInfoResponse.payload || !userInfoResponse.payload.ok) {
@@ -75,8 +88,9 @@ export default function EntityPage() {
             
         };
 
+        // Run the async wrapper function.
         fetchData();
-    }, []);
+    }, [appConfig]);
 
     // Function to update the pending invitations in the userInfo object, passed down to the AuthorizedCard component.
     function updatePendingInvitations(email1, email2) {
@@ -107,11 +121,11 @@ export default function EntityPage() {
                         </VStack>
                     </CardBody>
                     <CardFooter>
-                        <Button onClick={signOut}>Sign Out</Button>
+                        <Button onClick={ () => signOut(appConfig.cognitoDomain, appConfig.entityAdmin.cognitoID) }>Sign Out</Button>
                     </CardFooter>
                 </Card>
             }
-            {entityAdminInfo.login === false &&
+            {( appConfig && entityAdminInfo.login === false ) &&
                 <Card my={6} align="center">
                     <CardHeader><Heading as="h2" color="gray.500" >Not logged in</Heading></CardHeader>
                     <CardBody>
@@ -119,14 +133,14 @@ export default function EntityPage() {
                     </CardBody>
                     <CardFooter>
                         <Button
-                            onClick={() => signIn( import.meta.env.VITE_ENTITY_COGNITO_CLIENTID, 'entity' )}
+                            onClick={() => signIn( appConfig.entityAdmin.cognitoID, 'entity' )}
                         >
                             Sign In as an Entity Administrator
                         </Button>
                     </CardFooter>
                 </Card>
             }
-            {entityAdminInfo && entityAdminInfo.email &&
+            {(entityAdminInfo && entityAdminInfo.email && appConfig) &&
                 <>
                     <Box my="2em">
                         {JSON.stringify(userInfo) == '{}' &&
@@ -169,7 +183,7 @@ export default function EntityPage() {
                             </>
                         }
                     </Box>
-                    <Button my="2em" onClick={signOut}>Sign Out</Button>
+                    <Button my="2em" onClick={() => signOut(appConfig.cognitoDomain, appConfig.entityAdmin.cognitoID)}>Sign Out</Button>
                 </>
             }
         </div>
