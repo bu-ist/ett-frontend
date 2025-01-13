@@ -14,6 +14,11 @@ function getRoleForScope(scope) {
         return 'consenting';
     }
 
+    // If the space delimited scope string contains any string that starts with SYS_ADMIN/ then return 'sysadmin'
+    if (scope.split(' ').some( s => s.startsWith('SYS_ADMIN/'))) {
+        return 'sysadmin';
+    }
+
     // If unknown, return null
     return null;
 }
