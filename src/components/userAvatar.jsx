@@ -22,27 +22,21 @@ export default function UserAvatar({user}) {
         'sysadmin': 'System Admin',
     }
 
-    // Match the session role to the correct cognitoID, and use that to sign out.
+    // Mapping object to get the correct cognitoID based on the sessionRole.
+    const cognitoIDs = {
+        'consenting': appConfig?.consentingPerson?.cognitoID,
+        'auth-ind': appConfig?.authorizedIndividual?.cognitoID,
+        'entity': appConfig?.entityAdmin?.cognitoID,
+        'sysadmin': appConfig?.sysadmin?.cognitoID,
+    };
+
     function handleSignOut() {
-        let cognitoID = '';
-
-        if (sessionRole === 'consenting') {
-            cognitoID = appConfig.consentingPerson.cognitoID;
+        // Get the cognitoID from the cognitoIDs object based on the sessionRole.
+        const cognitoID = cognitoIDs[sessionRole];
+        if (cognitoID) {
+            // Call the signOut function with the cognitoID and cognitoDomain.
+            signOut(appConfig.cognitoDomain, cognitoID);
         }
-
-        if (sessionRole === 'auth-ind') {
-            cognitoID = appConfig.authorizedIndividual.cognitoID;
-        }
-
-        if (sessionRole === 'entity') {
-            cognitoID = appConfig.entityAdmin.cognitoID;
-        }
-
-        if (sessionRole === 'sysadmin') {
-            cognitoID = appConfig.sysadmin.cognitoID;
-        }
-
-        signOut(appConfig.cognitoDomain, cognitoID);
     }
 
     return (
