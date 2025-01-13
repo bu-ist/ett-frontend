@@ -5,7 +5,7 @@ import queryString from 'query-string';
  * Authenticate with the cognito user pool in such a way as to reflect that it implements the
  * oauth PKCE standard. The final redirect should come with a JWT for all api access.
  */
-function signIn(clientId, redirectUri) {
+function signIn(clientId, redirectUri, cognitoDomain) {
     const codeVerifier = generateCodeVerifier();
     const state = getRandomString(12);
 
@@ -16,7 +16,7 @@ function signIn(clientId, redirectUri) {
     storage.setItem("code_verifier", codeVerifier);
 
     generateCodeChallenge(codeVerifier).then(codeChallenge => {
-        initiateAuthorizationRequest(codeChallenge, state, clientId, redirectUri);
+        initiateAuthorizationRequest(codeChallenge, state, clientId, redirectUri, cognitoDomain);
     });
 }
 
@@ -55,17 +55,21 @@ async function generateCodeChallenge(codeVerifier) {
  * Issue a code challenge to the cognito authorization endpoint as the first step in 
  * acquiring an authorization code to exchange for a JWT.
  */
-function initiateAuthorizationRequest(codeChallenge, state, clientId, redirectUri) {
+function initiateAuthorizationRequest(codeChallenge, state, clientId, redirectUri, cognitoDomain) {
+    // Construct the redirect URI
+    const port = window.location.port ? `:${window.location.port}` : '';
+    const redirectBase = `${window.location.protocol}//${window.location.hostname}${port}`;
+        
     const params = {
         response_type: 'code',
         client_id: clientId,
-        redirect_uri: `${import.meta.env.VITE_REDIRECT_BASE}/${redirectUri}`,
+        redirect_uri: `${redirectBase}/${redirectUri}`,
         state: state,
         code_challenge: codeChallenge,
         code_challenge_method: 'S256'
     };
 
-    const authorizationUrl = `https://${import.meta.env.VITE_COGNITO_DOMAIN}/oauth2/authorize?${queryString.stringify(params)}`;
+    const authorizationUrl = `https://${cognitoDomain}/oauth2/authorize?${queryString.stringify(params)}`;
 
     window.location.href = authorizationUrl;
 }
