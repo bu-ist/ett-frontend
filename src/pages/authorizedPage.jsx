@@ -36,7 +36,7 @@ export default function AuthorizedPage() {
                 return;
             }
 
-            // Desctructure useful values from the appConfig.
+            // De-structure useful values from the appConfig.
             const { cognitoDomain, apiStage, authorizedIndividual: { cognitoID, apiHost } } = appConfig;
 
             // Check to see if this is a first time login from the cognito redirect, and if so do a signIn.
