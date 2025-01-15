@@ -43,7 +43,6 @@ export default function ConsentersAutocomplete({ entityId }) {
         const accessToken = Cookies.get('EttAccessJwt');
         const sendResult = await sendExhibitRequestAPI(apiHost, apiStage, accessToken, selectedConsenter, entityId, constraint);
 
-        // This won't work yet because we have to account for the bifurcated request fields.
         console.log('sendResult', sendResult);
 
         if (sendResult.payload.ok) {
