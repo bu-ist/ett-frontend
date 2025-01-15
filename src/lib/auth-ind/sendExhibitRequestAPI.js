@@ -9,8 +9,6 @@ async function sendExhibitRequestAPI(apiHost, apiStage, accessToken, email, enti
     
     const requestUri = `${apiUrlBase}/RE_AUTH_IND`;
 
-    const redirectUri = `${VITE_REDIRECT_BASE}/consenting/add-exhibit-form/${constraint}`;
-
     // Send a request to the API to send exhibit request.
     const response = await fetch(requestUri, {
         method: 'GET',
