@@ -46,8 +46,8 @@ export default function ConsentingRegisterForm() {
     }
 
     function signUpRedirect() {
-        const { consentingPerson: { cognitoID } } = appConfig;
-        signUp(formData.email, cognitoID, 'consenting?action=post-signup');
+        const { cognitoDomain, consentingPerson: { cognitoID } } = appConfig;
+        signUp(cognitoDomain, formData.email, cognitoID, 'consenting?action=post-signup');
     }
 
     return (
