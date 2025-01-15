@@ -1,17 +1,23 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useContext } from 'react';
 import { useSearchParams } from 'react-router-dom';
-import { Heading, Text, Spinner, Box, Checkbox, Button, Fade, VStack, Alert, AlertIcon } from "@chakra-ui/react";
+import { Heading, Text, Spinner, Box, Checkbox, Button, Fade, VStack, Alert, AlertIcon, Card, CardBody, Code } from "@chakra-ui/react";
 
-// Unused now, but might return in the future.
-//import { lookupInvitationAPI } from '../../lib/entity/lookupInvitationAPI';
-//import { lookupEntityAPI } from '../../lib/entity/lookupEntityAPI';
+import { lookupEntityAPI } from '../../lib/entity/lookupEntityAPI';
+
+import { ConfigContext } from '../../lib/configContext';
 
 import SignUpAuthIndStepper from './signUpAuthInd/signUpAuthIndStepper';
 import SignUpAuthIndForm from './signUpAuthInd/signUpAuthIndForm';
 import AcknowledgePrivacy from './signUpAuthInd/acknowledgePrivacy';
 
+
+// This may have some weakness around ensuring the appConfig is loaded before this component is rendered.
+
 export default function SignUpAuthIndPage() {
     let [searchParams, setSearchParams] = useSearchParams();
+
+    // Get the appConfig from the ConfigContext.
+    const { appConfig } = useContext( ConfigContext );
 
     const [inviteInfo, setInviteInfo] = useState({});
     const [entityInfo, setEntityInfo] = useState({});
@@ -25,14 +31,21 @@ export default function SignUpAuthIndPage() {
 
     useEffect(() => {
         // Invitation lookup is being disabled because the endpoint was removed, but we may want to re-enable it later.
-        /*
+        
+        // Check if appConfig is loaded.
+        if (!appConfig) {
+            setApiState('loading');
+            return;
+        }
+        
+
         async function lookupInvitation() {
            // Get the code and the entity from the request parameters.
             const code = searchParams.get('code');
             const entityId = searchParams.get('entity_id');
 
             // Call the lookupInvitationAPI function with the code and entity ID.
-            const lookupResult = await lookupInvitationAPI(code, entityId);
+            const lookupResult = await lookupEntityAPI(appConfig, code);
 
             console.log( 'lookupResult: ', lookupResult);
 
@@ -40,13 +53,15 @@ export default function SignUpAuthIndPage() {
                 setApiState('validated');
                 setInviteInfo(lookupResult.payload);
                 setStepIndex(1);
+            } else if (lookupResult.payload.unauthorized) {
+                setApiState('unauthorized');
+                //console.error(lookupResult);
             } else {
                 setApiState('error');
                 console.error(lookupResult);
             }
 
         }
-        */
 
         if (searchParams.has('code') && searchParams.has('entity_id')) {
             // If there are both a code and an entity ID, call the acknowledgeEntity function.
@@ -54,23 +69,26 @@ export default function SignUpAuthIndPage() {
             setApiState('loading');
             
             // We may start using an invitation lookup function again in the future, so this is here but commented out.
-            //lookupInvitation();
+            lookupInvitation();
 
             // This is a temporary workaround to skip the lookupInvitation function.
-            setApiState('validated');
+            //setApiState('validated');
             setStepIndex(1);
 
         } else {
             // If there is no code, display an error message.
             setApiState('no-code');
         }
-    }, []);
+    }, [appConfig, searchParams]);
 
 
     function acceptPrivacyPolicy() {
         setApiState('acknowledged');
         setStepIndex(2);
     }
+
+    // If there are users in the inviteInfo, get the email of the user whose role is 'RE_ADMIN'.
+    const adminUser = inviteInfo?.users?.find(user => user.role === 'RE_ADMIN') || '';
 
     return (
         <>
@@ -90,7 +108,10 @@ export default function SignUpAuthIndPage() {
                 />
             }
             {apiState == 'error' &&
-                <Text>Error: There was an error acknowledging the entity. Please try again.</Text>
+                <Text>Error: There was an error validating the invitation code. Please try again.</Text>
+            }
+            {apiState == 'unauthorized' &&
+                <Text>Code not accepted, check that the emailed link is intact. Or the invitation could have expired or been rescinded.</Text>
             }
             {apiState == 'validated' &&
                 <>
@@ -100,6 +121,14 @@ export default function SignUpAuthIndPage() {
                             Invitation Code Validated
                         </Alert>
                     </VStack>
+                    <Card mt="4">
+                        <CardBody>
+                            <Text>
+                                You have been invited by <Code>{adminUser.email}</Code> to register as an Authorized Individual on behalf of 
+                                {(inviteInfo.entity) ? ` ${inviteInfo.entity.entity_name}` : ' a new entity'}.
+                            </Text>
+                        </CardBody>
+                    </Card>
                     <Text mt="6">
                         Nisi occaecat Lorem velit reprehenderit magna ea anim sint ut excepteur nostrud laborum excepteur. Quis labore quis eu mollit. Cillum anim ex elit ut eu eiusmod est adipisicing minim irure. Voluptate velit veniam elit id cupidatat officia culpa velit amet irure commodo duis. Elit veniam eu ipsum et amet qui cillum elit elit occaecat. Id est enim ut eiusmod qui velit ipsum consectetur enim.
                     </Text>
@@ -132,7 +161,7 @@ export default function SignUpAuthIndPage() {
             }
             {apiState == 'acknowledged' &&
                 <Fade in={apiState == 'acknowledged'}>
-                    <SignUpAuthIndForm entityInfo={entityInfo} setStepIndex={setStepIndex} code={searchParams.get('code')} />
+                    <SignUpAuthIndForm inviteInfo={inviteInfo} setStepIndex={setStepIndex} code={searchParams.get('code')} />
                 </Fade>
             }
 
