@@ -13,7 +13,8 @@ function setJwt(jwt, cookieName) {
         return;
     }
     const expires = `; expires=${expirationDate.toUTCString()}`;
-    const cookieValue = encodeURIComponent(jwt) + expires + secureFlag + '; SameSite=Strict';
+    const path = '; path=/'; // Set the path to the root of the site
+    const cookieValue = encodeURIComponent(jwt) + expires + secureFlag + path + '; SameSite=Strict';
     document.cookie = `${cookieName}=${cookieValue}`;
     // Now that the cookie is set and we have the JWT, we don't need the state and code verfier values anymore.
     const storage = window.sessionStorage;
