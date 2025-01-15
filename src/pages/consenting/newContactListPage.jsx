@@ -1,5 +1,5 @@
 import { useState, useEffect, useContext } from 'react';
-import { useSearchParams } from 'react-router-dom';
+import { useSearchParams, useLocation } from 'react-router-dom';
 import Cookies from 'js-cookie';
 
 import { Text, Box, Heading, Spinner, Card, CardBody, CardHeader, Button, CardFooter } from "@chakra-ui/react";
@@ -20,6 +20,9 @@ export default function NewContactListPage() {
     const [consentData, setConsentData] = useState({});
 
     let [searchParams, setSearchParams] = useSearchParams();
+
+    const location = useLocation();
+    const currentPath = location.pathname.substring(1); // Remove the leading slash
 
     useEffect(() => {
         // Should probably add a handler for the case where the user is not signed in.
@@ -46,7 +49,7 @@ export default function NewContactListPage() {
 
             // First check if there is a code in the URL, and if so, exchange it for tokens.
             if (searchParams.has('code')) {
-                await exchangeAuthorizationCode( cognitoDomain, cognitoID, 'consenting/add-exhibit-form/both' );
+                await exchangeAuthorizationCode( cognitoDomain, cognitoID, currentPath );
                 // Use setSearchParams to empty the search params once exchangeAuthorizationCode is done with them.
                 setSearchParams({});
 
@@ -89,7 +92,7 @@ export default function NewContactListPage() {
                         <Text>Sign in to access this page.</Text>
                     </CardBody>
                     <CardFooter>
-                        <Button onClick={() => signIn(appConfig.consentingPerson.cognitoID, 'consenting/add-exhibit-form/both', appConfig.cognitoDomain)}>Sign in as a Consenting Person</Button>
+                        <Button onClick={() => signIn(appConfig.consentingPerson.cognitoID, currentPath, appConfig.cognitoDomain)}>Sign in as a Consenting Person</Button>
                     </CardFooter>
                 </Card>
             }
