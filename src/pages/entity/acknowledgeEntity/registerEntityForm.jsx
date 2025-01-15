@@ -31,11 +31,9 @@ export default function RegisterEntityForm({ code, setStepIndex }) {
         e.preventDefault();
         console.log('Registering: ', formData);
 
-        const { apiStage, registerEntityApiHost } = appConfig;
-
         setApiState('loading');
 
-        const registerResult = await registerEntityAPI(registerEntityApiHost, apiStage, code, formData);
+        const registerResult = await registerEntityAPI(appConfig, code, formData);
         console.log(registerResult);
 
         if (registerResult.payload.ok) {

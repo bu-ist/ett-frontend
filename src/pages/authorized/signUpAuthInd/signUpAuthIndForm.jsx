@@ -8,8 +8,8 @@ import { ConfigContext } from '../../../lib/configContext';
 import { registerEntityAPI } from '../../../lib/entity/registerEntityAPI';
 import { signUp } from '../../../lib/signUp';
 
-export default function SignUpAuthIndForm({entityInfo, setStepIndex, code}) {
-    const  { entity, invitation, users }  = entityInfo;
+export default function SignUpAuthIndForm({inviteInfo, setStepIndex, code}) {
+    //const  { entity, invitation, users }  = entityInfo;
 
     // Get the appConfig from the ConfigContext.
     const { appConfig } = useContext( ConfigContext );
@@ -23,10 +23,6 @@ export default function SignUpAuthIndForm({entityInfo, setStepIndex, code}) {
         email: ''
     });
 
-    // Find the user with a role property of 'RE_ADMIN', which is the administator of the entity.
-    // Diabled because the endpoint was removed.
-    //const entityAdmin = users.find(user => user.role === 'RE_ADMIN');
-
     // Handle form input changes
     function handleChange(e) {
         const { name, value } = e.target;
@@ -37,11 +33,9 @@ export default function SignUpAuthIndForm({entityInfo, setStepIndex, code}) {
     async function handleSubmit(e) {
         e.preventDefault();
 
-        const { apiStage, registerEntityApiHost } = appConfig;
-
         setApiState('loading');
 
-        const registerResult = await registerEntityAPI(registerEntityApiHost, apiStage, code, formData);
+        const registerResult = await registerEntityAPI(appConfig, code, formData);
         console.log(registerResult);
 
          if (registerResult.payload.ok) {
@@ -53,30 +47,30 @@ export default function SignUpAuthIndForm({entityInfo, setStepIndex, code}) {
     }
 
     function signUpRedirect() {
-        const { authorizedIndividual: { cognitoID } } = appConfig;
-        signUp(formData.email, cognitoID, 'auth-ind?action=post-signup')
+        const { cognitoDomain, authorizedIndividual: { cognitoID } } = appConfig;
+        signUp( cognitoDomain, formData.email, cognitoID, 'auth-ind?action=post-signup')
     }
+
+    // If there are users in the inviteInfo, get the email of the user whose role is 'RE_ADMIN'.
+    const adminUser = inviteInfo?.users?.find(user => user.role === 'RE_ADMIN') || '';
+    const { entity: { entity_name } } = inviteInfo;
 
     return (
         <>
             <Heading as="h3" mb="1" size="md">Register For an Account</Heading>
-            {/* Display the entity name and the entity administrator, disabled for now */}
-            {
-            /*
-            <Card mb="1em" variant="filled">
+            <Card my="4" variant="filled">
                 <CardHeader>
-                    <Heading as="h4" size="sm">Invitation from {entity.entity_name}</Heading>
+                    <Heading as="h4" size="sm">Invitation from {entity_name} </Heading>
                 </CardHeader>
                 <CardBody>
                     <Heading as="h5" size="xs">Entity Administrator</Heading>
-                    <Text>{entityAdmin.fullname}</Text>
-                    <Text>{entityAdmin.title}</Text>
-                    <Text>{entityAdmin.email}</Text>
-                    <Text>{entityAdmin.phone_number}</Text>
+                    <Text>{adminUser.fullname}</Text>
+                    <Text>{adminUser.title}</Text>
+                    <Text>{adminUser.email}</Text>
+                    <Text>{adminUser.phone_number}</Text>
                 </CardBody>
             </Card>
-            */
-            }
+
             <Text mb="8">
                 Nisi voluptate irure culpa dolor laborum enim consectetur eu incididunt. Id culpa esse ad Lorem dolor cupidatat incididunt ipsum ipsum velit. Incididunt non velit et minim eiusmod occaecat ex consectetur voluptate cillum.
             </Text>
