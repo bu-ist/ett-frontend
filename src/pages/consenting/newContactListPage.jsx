@@ -24,6 +24,9 @@ export default function NewContactListPage() {
     const location = useLocation();
     const currentPath = location.pathname.substring(1); // Remove the leading slash
 
+    // The form type is given by the last segment of the path, which is either 'other', 'current', or 'both'.
+    const formType = currentPath.split('/').pop();
+
     useEffect(() => {
         let accessToken = Cookies.get('EttAccessJwt');
         let idToken = Cookies.get('EttIdJwt');
@@ -94,7 +97,7 @@ export default function NewContactListPage() {
             {apiState === 'loading' && <Spinner />}
             {apiState === 'error' && <Text>There was an error loading the new contact list page.</Text>}
             {apiState === 'success' && 
-                <ContactList consentData={consentData} />
+                <ContactList consentData={consentData} formType={formType} />
             }
         </Box>
     );

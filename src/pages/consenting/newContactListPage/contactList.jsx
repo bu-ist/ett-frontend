@@ -13,7 +13,7 @@ import ContactDisplayCard from './contactDisplayCard';
 import EntityAutocomplete from './entityAutocomplete';
 
 // Contains the full contact list form and form state.
-export default function ContactList({ consentData }) {
+export default function ContactList({ consentData, formType }) {
     const { appConfig } = useContext(ConfigContext);
 
     // State for the form submission result.
@@ -106,11 +106,18 @@ export default function ContactList({ consentData }) {
 
     };
 
+    // The formType is either 'current', 'other', or 'both'.
+    const typeMessages = {
+        'current': 'Current Employer(s) only',
+        'other': 'Prior Employer(s) and other Affiliates',
+        'both': 'All Employer(s) and Affiliates, including Prior Employers'
+    };
+
     return (
         <Box>
             <Heading as="h2" mb="4" size="lg">New Contact List for {consentData.fullName}</Heading>
             <Text mb="4">
-                Dolor nulla minim esse laboris ad. Esse non dolore dolor mollit in sunt esse. Ipsum aliqua aute eu minim Lorem duis elit.
+                {`This is a request for ${typeMessages[formType]}.`}
             </Text>
             <FormControl my="8" as="form" onSubmit={handleSubmit}>
                 <Heading my="4" as={"h3"} size={"md"}>Receiving Institution</Heading>
