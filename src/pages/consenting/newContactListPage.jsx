@@ -25,8 +25,6 @@ export default function NewContactListPage() {
     const currentPath = location.pathname.substring(1); // Remove the leading slash
 
     useEffect(() => {
-        // Should probably add a handler for the case where the user is not signed in.
-
         let accessToken = Cookies.get('EttAccessJwt');
         let idToken = Cookies.get('EttIdJwt');
 
