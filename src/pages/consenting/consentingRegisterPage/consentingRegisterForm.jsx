@@ -1,4 +1,4 @@
-import { Box, Button, FormControl, FormErrorMessage, FormLabel, Heading, Input, Spinner, Text } from "@chakra-ui/react";
+import { Alert, AlertDescription, AlertIcon, AlertTitle, Box, Button, FormControl, FormErrorMessage, FormLabel, Heading, Input, Spinner, Text } from "@chakra-ui/react";
 import { useState, useContext } from "react";
 import { useForm } from 'react-hook-form';
 
@@ -24,6 +24,7 @@ export default function ConsentingRegisterForm() {
     const [ signUpEmail, setSignUpEmail ] = useState('');
 
     const [apiState, setApiState] = useState('idle');
+    const [apiError, setApiError] = useState(null);
 
     async function processRegistration(values) {
         // Setup the signUp email value for the cognito sign up redirect.
@@ -36,7 +37,9 @@ export default function ConsentingRegisterForm() {
 
         // Use a ternary conditional to set the apiState based on the response
         setApiState(response.payload.ok ? 'success' : 'error');
-
+        
+        // Capture the error message if the response is not ok.
+        setApiError(response.payload.ok ? null : response.message);
     }
 
     function signUpRedirect() {
@@ -115,14 +118,21 @@ export default function ConsentingRegisterForm() {
                     </FormErrorMessage>
                 </Box>
             </FormControl>
-            <Button my="1em" type="submit" isDisabled={apiState !== 'idle'}>
+            <Button my="4" type="submit" isDisabled={apiState !== 'idle'}>
                 { apiState === 'loading' && <Spinner /> }
                 { apiState === 'idle' && 'Register' }
                 { apiState === 'success' && 'Registered' }
+                { apiState === 'error' && 'Error' }
             </Button>
 
             {apiState === 'error' &&
-                <p>Error registering consenter</p>
+                <Box mt="4">
+                    <Alert status="error">
+                        <AlertIcon />
+                        <AlertTitle>Error registering consenter: </AlertTitle>
+                        <AlertDescription>{apiError}</AlertDescription>
+                    </Alert>
+                </Box>
             }
 
             {apiState === 'success' &&
