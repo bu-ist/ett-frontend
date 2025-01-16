@@ -8,7 +8,7 @@ import { ConfigContext } from '../lib/configContext';
 import { UserContext } from '../lib/userContext';
 
 import { exchangeAuthorizationCode } from '../lib/exchangeAuthorizationCode';
-import { getConsentData } from '../lib/getConsentData';
+import { getConsentData } from '../lib/consenting/getConsentData';
 import { signIn } from '../lib/signIn';
 
 import ConsentDetails from "./consentingPage/consentDetails";

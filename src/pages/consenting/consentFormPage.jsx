@@ -5,7 +5,7 @@ import { Box, Heading, Spinner, Text } from "@chakra-ui/react";
 import { ConfigContext } from '../../lib/configContext';
 import { UserContext } from '../../lib/userContext';
 
-import { getConsentData } from "../../lib/getConsentData";
+import { getConsentData } from "../../lib/consenting/getConsentData";
 
 import ConsentFormText from './consentFormPage/consentFormText';
 import ConsenterCard from "./consentFormPage/consenterCard";

@@ -11,7 +11,7 @@ import { UserContext } from '../../lib/userContext';
 
 import { signIn } from '../../lib/signIn';
 import { exchangeAuthorizationCode } from '../../lib/exchangeAuthorizationCode';
-import { getConsentData } from '../../lib/getConsentData';
+import { getConsentData } from '../../lib/consenting/getConsentData';
 import { sendExhibitFormAPI } from '../../lib/consenting/sendExhibitFormAPI';
 
 import ConsenterCard from './consentFormPage/consenterCard';

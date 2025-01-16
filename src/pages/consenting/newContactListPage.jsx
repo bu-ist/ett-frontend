@@ -9,7 +9,7 @@ import { UserContext } from '../../lib/userContext';
 
 import { signIn } from '../../lib/signIn';
 import { exchangeAuthorizationCode } from '../../lib/exchangeAuthorizationCode';
-import { getConsentData } from '../../lib/getConsentData';
+import { getConsentData } from '../../lib/consenting/getConsentData';
 
 import ContactList from "./newContactListPage/contactList";
 
