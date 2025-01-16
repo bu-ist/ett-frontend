@@ -11,7 +11,7 @@ import { UserContext } from '../../lib/userContext';
 
 import { signIn } from '../../lib/signIn';
 import { exchangeAuthorizationCode } from '../../lib/exchangeAuthorizationCode';
-import { getConsentData } from '../../lib/getConsentData';
+import { getConsentData } from '../../lib/consenting/getConsentData';
 import { sendExhibitFormAPI } from '../../lib/consenting/sendExhibitFormAPI';
 
 import ConsenterCard from './consentFormPage/consenterCard';
@@ -58,9 +58,9 @@ export default function NewContactListPageInline() {
             // appConfig is initially loaded through an api call, which won't have been completed on the first render, so return early if it's not loaded yet.
             // Because appConfig is a dependency of this useEffect, fetchData will be called again when appConfig is loaded.
             if (!appConfig) {
+                setApiState('loading');
                 return;
             }
-            const {apiStage, consentingPerson: { cognitoID, apiHost } } = appConfig;
 
             setApiState('loading');
 
@@ -80,7 +80,7 @@ export default function NewContactListPageInline() {
             if (accessToken && idToken) {
                 const decodedIdToken = JSON.parse(atob(idToken.split('.')[1]));
 
-                const consentResponse = await getConsentData(apiStage, apiHost, accessToken, decodedIdToken.email);
+                const consentResponse = await getConsentData(appConfig, accessToken, decodedIdToken.email);
                 setConsentData(consentResponse);
 
                 // Set the user context for the site header avatar.

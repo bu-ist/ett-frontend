@@ -5,7 +5,7 @@ import { Box, Heading, Spinner, Text } from "@chakra-ui/react";
 import { ConfigContext } from '../../lib/configContext';
 import { UserContext } from '../../lib/userContext';
 
-import { getConsentData } from "../../lib/getConsentData";
+import { getConsentData } from "../../lib/consenting/getConsentData";
 
 import ConsentFormText from './consentFormPage/consentFormText';
 import ConsenterCard from "./consentFormPage/consenterCard";
@@ -31,16 +31,13 @@ export default function ConsentFormPage() {
                 return;
             }
 
-            // De-structure useful values from the appConfig.
-            const { apiStage, consentingPerson: { apiHost } }  = appConfig;
-
             const accessToken = Cookies.get('EttAccessJwt');
             const idToken = Cookies.get('EttIdJwt');
 
             if (accessToken && idToken) {
                 const decodedIdToken = JSON.parse(atob(idToken.split('.')[1]));
 
-                const consentResponse = await getConsentData( apiStage, apiHost, accessToken, decodedIdToken.email);
+                const consentResponse = await getConsentData( appConfig, accessToken, decodedIdToken.email);
                 setConsentData(consentResponse);
 
                 // Set the fullname and email in the user context for the header avatar.
