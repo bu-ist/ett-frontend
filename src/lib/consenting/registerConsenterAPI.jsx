@@ -1,6 +1,9 @@
-async function registerConsenterAPI(registerConsenterHost, apiStage, formData) {
+async function registerConsenterAPI(appConfig, formData) {
     // Look up if we are in local development mode.
     const { MODE } = import.meta.env;
+
+    // De-structure api values from the appConfig.
+    const { apiStage, registerConsenterHost } = appConfig;
 
     // Set the API URL based on the environment, local dev needs a proxy to avoid CORS issues.
     const apiUrlBase = MODE === 'development'
