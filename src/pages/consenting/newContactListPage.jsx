@@ -44,12 +44,12 @@ export default function NewContactListPage() {
                 setApiState('loading');
                 return;
             }
-            const { cognitoDomain, apiStage, consentingPerson: { cognitoID, apiHost } } = appConfig;
 
             setApiState('loading');
 
             // First check if there is a code in the URL, and if so, exchange it for tokens.
             if (searchParams.has('code')) {
+                const { cognitoDomain, consentingPerson: { cognitoID } } = appConfig;
                 await exchangeAuthorizationCode( cognitoDomain, cognitoID, currentPath );
                 // Use setSearchParams to empty the search params once exchangeAuthorizationCode is done with them.
                 setSearchParams({});
@@ -63,7 +63,7 @@ export default function NewContactListPage() {
             if (accessToken && idToken) {
                 const decodedIdToken = JSON.parse(atob(idToken.split('.')[1]));
 
-                const consentResponse = await getConsentData(apiStage, apiHost, accessToken, decodedIdToken.email);
+                const consentResponse = await getConsentData(appConfig, accessToken, decodedIdToken.email);
                 setConsentData(consentResponse);
 
                 // Set the user context for the site header avatar.

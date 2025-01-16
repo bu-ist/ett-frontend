@@ -34,9 +34,6 @@ export default function ConsentingPage() {
                 return;
             }
 
-            // De-structure useful values from the appConfig.
-            const { cognitoDomain, apiStage, consentingPerson: { cognitoID, apiHost } }  = appConfig;
-
             // Check to see if this is a first time login from the cognito redirect, and if so do a signIn.
             // This workaround has to do with the state and code_verifier, which aren't part of the sign up flow.
             if ( searchParams.get('action') === 'post-signup' ) {
@@ -44,12 +41,16 @@ export default function ConsentingPage() {
                 Cookies.remove('EttAccessJwt');
                 Cookies.remove('EttIdJwt');
 
+                const { cognitoDomain, consentingPerson: { cognitoID } } = appConfig;
+
                 // Sign in does a window.location redirect, so execution will stop here.
                 signIn( cognitoID, 'consenting', cognitoDomain );
             }
 
             if (searchParams.has('code') && Cookies.get('EttAccessJwt') === undefined) {
                 // If this exists, then there is a sign in request, so use the code to get the tokens and store them as cookies.
+
+                const { cognitoDomain, consentingPerson: { cognitoID } } = appConfig;
 
                 await exchangeAuthorizationCode( cognitoDomain, cognitoID, 'consenting');
                 //Once the tokens are stored, should remove the code from the URL.
@@ -72,7 +73,7 @@ export default function ConsentingPage() {
             setConsenterInfo(decodedIdToken);
 
             // At this point one way or another there should be a consenterInfo object with the email.
-            const consentResponse = await getConsentData( apiStage, apiHost, accessToken, decodedIdToken.email);
+            const consentResponse = await getConsentData( appConfig, accessToken, decodedIdToken.email);
             setConsentData(consentResponse);
 
             // Set the fullname and email in the user context for the header avatar.
