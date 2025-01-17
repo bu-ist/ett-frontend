@@ -14,8 +14,6 @@ export default function RenewModal({setConsentData, consentData}) {
 
     // Handles renewing the consent expiration date.
     function handleRenew() {
-        const { apiStage, consentingPerson: { apiHost } } = appConfig;
-
         // Need to declare an async function to handle the API call.
         // This function should get the access token from the cookies.
         async function renewConsent() {
@@ -35,7 +33,7 @@ export default function RenewModal({setConsentData, consentData}) {
             const email = JSON.parse(atob(idToken.split('.')[1])).email;
 
             // Call the renewConsentAPI function with the access token and email.
-            const renewResult = await renewConsentAPI(apiHost, apiStage, accessToken, email);
+            const renewResult = await renewConsentAPI(appConfig, accessToken, email);
 
             // Set the UI state based on the result of the API call.
             if (renewResult.message == 'Ok') {
