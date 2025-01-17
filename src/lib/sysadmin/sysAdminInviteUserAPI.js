@@ -10,12 +10,8 @@ async function sysAdminInviteUserAPI(appConfig, accessToken, email, role) {
         ? `/sysadminApi/${apiStage}/SYS_ADMIN`
         : `${apiHost}/${apiStage}/SYS_ADMIN`;
 
-    // Construct the redirect base from window.location.
-    const port = window.location.port ? `:${window.location.port}` : '';
-    const redirectBase = `${window.location.protocol}//${window.location.hostname}${port}`;
-
     // Construct the registration URI for the email invitation, which cognito will redirect to.
-    const registrationUri = `${redirectBase}/entity/register`;
+    const registrationUri = `${window.location.origin}/entity/register`;
 
     // Fetch the consenting person data from the API with the token from sign in.
     const response = await fetch(apiUrl, {
