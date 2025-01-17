@@ -145,7 +145,7 @@ export default function SignUpAuthIndForm({inviteInfo, setStepIndex, code}) {
                         <Alert status="error">
                             <AlertIcon />
                             <AlertTitle>Error registering: </AlertTitle>
-                            <AlertDescription>{apiError}</AlertDescription>
+                            <AlertDescription>{apiError ? apiError : 'Unknown Error, API not responsive'}</AlertDescription>
                         </Alert>
                     </Box>
                 }
