@@ -1,6 +1,6 @@
-import { Alert, AlertDescription, AlertIcon, AlertTitle, Box, Button, FormControl, FormErrorMessage, FormLabel, Heading, Input, Spinner, Text } from "@chakra-ui/react";
 import { useState, useContext } from "react";
 import { useForm } from 'react-hook-form';
+import { Alert, AlertDescription, AlertIcon, AlertTitle, Box, Button, FormControl, FormErrorMessage, FormLabel, Heading, Input, Spinner, Text } from "@chakra-ui/react";
 
 import SignUpCognitoButton from '../../authorized/signUpAuthInd/signUpCognitoButton';
 
@@ -129,7 +129,7 @@ export default function ConsentingRegisterForm() {
                 <Box mt="4">
                     <Alert status="error">
                         <AlertIcon />
-                        <AlertTitle>Error registering consenter: </AlertTitle>
+                        <AlertTitle>Error registering: </AlertTitle>
                         <AlertDescription>{apiError}</AlertDescription>
                     </Alert>
                 </Box>
