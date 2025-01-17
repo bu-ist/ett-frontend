@@ -16,10 +16,6 @@ export default function GrantConsentButton({ consentData }) {
     const [digitalSignature, setDigitalSignature] = useState('');
 
     async function handleConsentButton() {
-        // De-structure useful values from the appConfig.
-        const { apiStage, consentingPerson: { apiHost } }  = appConfig;
-
-
         setApiState('loading');
         const accessToken = Cookies.get('EttAccessJwt');
 
@@ -28,7 +24,7 @@ export default function GrantConsentButton({ consentData }) {
             const { email, phone_number } = consenter;
             const grantRequestPayload = { digitalSignature, fullname, email, phone_number };
             
-            const grantResult = await grantConsentAPI(apiHost, apiStage, accessToken, grantRequestPayload);
+            const grantResult = await grantConsentAPI(appConfig, accessToken, grantRequestPayload);
 
             console.log('grantResult', grantResult);
             if (grantResult.payload.ok) {
