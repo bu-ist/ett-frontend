@@ -20,9 +20,6 @@ export default function SendInvitationPage() {
 
     async function sendInvitation(event) {
         event.preventDefault();
-    
-        // Get config values from the context.
-        const { apiStage, sysadmin: { apiHost } } = appConfig;
 
         // Set a loading state while the API call is in progress.
         setApiState('loading');
@@ -34,7 +31,7 @@ export default function SendInvitationPage() {
 
         try {
             // Call the sysAdminInviteUserAPI function with the access token, email, and role.
-            const inviteResult = await sysAdminInviteUserAPI(apiHost, apiStage, accessToken, email, role);
+            const inviteResult = await sysAdminInviteUserAPI(appConfig, accessToken, email, role);
     
             // Set the UI state based on the result of the API call.
             if (inviteResult.payload.ok) {

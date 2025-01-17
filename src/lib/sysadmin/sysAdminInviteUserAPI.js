@@ -1,7 +1,10 @@
-async function sysAdminInviteUserAPI(apiHost, apiStage, accessToken, email, role) {
+async function sysAdminInviteUserAPI(appConfig, accessToken, email, role) {
     // Look up if we are in local development mode.
     const { MODE } = import.meta.env;
  
+    // Get the API URL from appConfig.
+    const { apiStage, sysadmin: { apiHost } } = appConfig;
+
     // Set the API URL based on the environment, local dev needs a proxy to avoid CORS issues.
     const apiUrl = MODE === 'development'
         ? `/sysadminApi/${apiStage}/SYS_ADMIN`
