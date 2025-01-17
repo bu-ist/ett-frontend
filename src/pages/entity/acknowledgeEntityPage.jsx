@@ -3,7 +3,6 @@ import { useSearchParams } from 'react-router-dom';
 import { Heading, Text, Spinner, Button, Checkbox, Box, Card, CardBody, VStack, Alert, AlertIcon, Code } from '@chakra-ui/react';
 
 import { lookupEntityAPI } from '../../lib/entity/lookupEntityAPI';
-import { acknowledgeEntityAPI } from '../../lib/entity/acknowledgeEntityAPI';
 
 import { ConfigContext } from '../../lib/configContext';
 
