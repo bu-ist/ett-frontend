@@ -33,10 +33,7 @@ export default function InviteUsersModal({ numUsers, entity, updatePendingInvita
 
         setApiState('loading');
 
-        // Get the api details from the appConfig.
-        const { apiStage, entityAdmin: { apiHost } } = appConfig;
-
-        const inviteResult = await inviteAuthIndFromEntityAPI( apiStage, apiHost, accessToken, email, entity, emailsToInvite );
+        const inviteResult = await inviteAuthIndFromEntityAPI( appConfig, accessToken, email, entity, emailsToInvite );
         console.log(JSON.stringify(inviteResult));
 
         if (inviteResult.payload.ok) {

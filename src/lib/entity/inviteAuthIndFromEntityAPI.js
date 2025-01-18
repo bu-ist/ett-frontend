@@ -1,7 +1,10 @@
 // This function sends a POST request to the Entity API to invite two 'Authorized Individual' users to an entity.
-async function inviteAuthIndFromEntityAPI( apiStage, apiHost, accessToken, fromEmail, entity, emailsToInvite ) {
+async function inviteAuthIndFromEntityAPI( appConfig, accessToken, fromEmail, entity, emailsToInvite ) {
     // Look up if we are in local development mode.
      const { MODE } = import.meta.env;
+    
+    // Get the api details from the appConfig.
+    const { apiStage, entityAdmin: { apiHost } } = appConfig;
     
     // Set the API URL based on the environment, local dev needs a proxy to avoid CORS issues.
     const apiUrl = MODE === 'development'
@@ -9,8 +12,7 @@ async function inviteAuthIndFromEntityAPI( apiStage, apiHost, accessToken, fromE
         : `${apiHost}/${apiStage}/RE_ADMIN`;
 
     // Construct the registration URI for the email invitation, which cognito will redirect to.
-    const port = window.location.port ? `:${window.location.port}` : '';
-    const registrationUri = `${window.location.protocol}//${window.location.hostname}${port}/auth-ind/sign-up`;
+    const registrationUri = `${window.location.origin}/auth-ind/sign-up`;
 
     const outgoingPayload = {
         task: 'invite-users',
