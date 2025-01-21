@@ -106,6 +106,7 @@ export default function InviteUsersModal({ numUsers, entity, updatePendingInvita
                                     name="email1"
                                     type="email"
                                     placeholder="Email Address"
+                                    isDisabled={apiState === 'success'}
                                     {...register('email1', {
                                         required: 'Email 1 is required',
                                         pattern: {
@@ -127,6 +128,7 @@ export default function InviteUsersModal({ numUsers, entity, updatePendingInvita
                                     name="email2"
                                     type="email"
                                     placeholder="Email Address"
+                                    isDisabled={apiState === 'success'}
                                     {...register('email2', {
                                         required: 'Email 2 is required',
                                         pattern: {
