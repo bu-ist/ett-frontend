@@ -77,7 +77,7 @@ export default function InviteUsersModal({ numUsers, entity, updatePendingInvita
     return (
         <>
             <Button isDisabled={numUsers > 0} onClick={onOpen}>Add Authorized Individuals</Button>
-            <Modal isOpen={isOpen} onClose={handleClose}>
+            <Modal size="xl" isOpen={isOpen} onClose={handleClose}>
                 <ModalOverlay />
                 <ModalContent>
                     <ModalHeader>Add Authorized Individuals</ModalHeader>
@@ -91,8 +91,13 @@ export default function InviteUsersModal({ numUsers, entity, updatePendingInvita
                                 </Alert>
                             </VStack>
                         }
-                        <Text mb="1em">lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</Text>
-                         
+                        <Text mb="2">
+                            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+                            Elit deserunt labore cillum sunt qui excepteur ut. Quis nulla quis occaecat et ex eiusmod dolor est voluptate est aliquip deserunt minim quis. Id proident cupidatat aliquip ut tempor ipsum esse laborum laboris nostrud. Mollit ea labore aliqua et laborum adipisicing dolore. Laborum esse cupidatat magna exercitation.
+                        </Text>
+                        <Text mb="4">
+                            Commodo ullamco commodo tempor amet aliqua elit amet esse ut sint aliquip id laborum. Consectetur eu id pariatur cillum. Excepteur velit in enim deserunt.
+                        </Text>
                         <form onSubmit={handleSubmit(processInvitations)} >
                             <FormControl mb="4" isInvalid={errors.email1}>
                                 <FormLabel>Email 1</FormLabel>
