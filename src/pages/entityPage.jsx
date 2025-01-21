@@ -71,7 +71,7 @@ export default function EntityPage() {
 
             if (!accessToken || !idToken) {
                 // If there are not login tokens, signal that there is not a login session and return early.
-                setEntityAdminInfo({login: false});
+                setApiState('not-logged-in');
                 return;
             }
 
@@ -140,7 +140,7 @@ export default function EntityPage() {
                     </CardFooter>
                 </Card>
             }
-            {( appConfig && entityAdminInfo.login === false ) &&
+            { appConfig && apiState === 'not-logged-in' &&
                 <Card my={6} align="center">
                     <CardHeader><Heading as="h2" color="gray.500" >Not logged in</Heading></CardHeader>
                     <CardBody>
