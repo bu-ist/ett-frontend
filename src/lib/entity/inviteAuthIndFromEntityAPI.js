@@ -20,7 +20,7 @@ async function inviteAuthIndFromEntityAPI( appConfig, accessToken, fromEmail, en
             entity: entity,
             registrationUri: registrationUri,
             invitations: {
-                from: {
+                inviter: {
                     email: fromEmail,
                     role: 'RE_ADMIN'
                 },
