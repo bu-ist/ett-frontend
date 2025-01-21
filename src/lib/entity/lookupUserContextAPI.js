@@ -1,6 +1,9 @@
-async function lookupUserContextAPI( apiStage, apiHost, accessToken, email) {
+async function lookupUserContextAPI( appConfig, accessToken, email) {
     // Look up if we are in local development mode.
     const { MODE } = import.meta.env;
+
+    // Get the API URL from appConfig.
+    const { apiStage, entityAdmin: {  apiHost } }  = appConfig;
 
     // Set the API URL based on the environment, local dev needs a proxy to avoid CORS issues.
     const apiUrlBase = MODE === 'development'

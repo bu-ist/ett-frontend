@@ -38,8 +38,8 @@ export default function EntityPage() {
                 return;
             }
 
-            // De-structure useful values from the appConfig.
-            const { cognitoDomain, apiStage, entityAdmin: { cognitoID, apiHost } }  = appConfig;
+            // Get the cognitoDomain and cognitoID from the appConfig.
+            const { cognitoDomain, entityAdmin: { cognitoID } }  = appConfig;
 
             // Check to see if this is a first time login from the cognito redirect, and if so do a signIn.
             // This workaround has to do with the state and code_verifier, which aren't part of the sign up flow.
@@ -77,7 +77,7 @@ export default function EntityPage() {
             setEntityAdminInfo(decodedIdToken);
 
             // Get the user data from the API and store it in local state.
-            const userInfoResponse = await lookupUserContextAPI( apiStage, apiHost, accessToken, decodedIdToken.email);
+            const userInfoResponse = await lookupUserContextAPI( appConfig, accessToken, decodedIdToken.email);
 
             // If invalid, set api state to error and return early.
             if (!userInfoResponse.payload || !userInfoResponse.payload.ok) {
