@@ -158,36 +158,31 @@ export default function EntityPage() {
             {entityAdminInfo && entityAdminInfo.email && userInfo.ok && apiState == 'success' && appConfig &&
                 <>
                     <Box my="2em">
-                        {userInfo.ok &&
-                            <>
-                                <Flex direction="row" gap="4" mb="6">
-                                    <Card flex="1">
-                                        <CardHeader>
-                                            <Heading as="h3" size="lg">{userInfo.user.fullname}</Heading>
-                                            {userInfo.user.title && <Text>{userInfo.user.title}</Text>}
-                                            {entityAdminInfo.email && <Text>{entityAdminInfo.email}</Text>}
-                                        </CardHeader>
-                                        <CardBody>
-                                            <Text>
-                                                {userInfo.user.active == 'Y' ? 'Active' : 'Inactive' } {'>'} Last updated {formatTimestamp(userInfo.user.update_timestamp)}
-                                            </Text>
-                                        </CardBody>
-                                    </Card>
-                                    <Card flex="1">
-                                        <CardHeader>
-                                            <Heading as="h3" size="lg">{userInfo.user.entity.entity_name}</Heading>
-                                        </CardHeader>
-                                        <CardBody>
-                                            <Text>
-                                                {userInfo.user.entity.active == 'Y' ? 'Active' : 'Inactive' } {'>'} Last updated {formatTimestamp(userInfo.user.entity.update_timestamp)}
-                                            </Text>
-                                        </CardBody>
-                                    </Card>
-                                </Flex>
-
-                                <AuthorizedCard entity={userInfo.user.entity} updatePendingInvitations={updatePendingInvitations}  />
-                            </>
-                        }
+                        <Flex direction="row" gap="4" mb="6">
+                            <Card flex="1">
+                                <CardHeader>
+                                    <Heading as="h3" size="lg">{userInfo.user.fullname}</Heading>
+                                    {userInfo.user.title && <Text>{userInfo.user.title}</Text>}
+                                    {entityAdminInfo.email && <Text>{entityAdminInfo.email}</Text>}
+                                </CardHeader>
+                                <CardBody>
+                                    <Text>
+                                        {userInfo.user.active == 'Y' ? 'Active' : 'Inactive' } {'>'} Last updated {formatTimestamp(userInfo.user.update_timestamp)}
+                                    </Text>
+                                </CardBody>
+                            </Card>
+                            <Card flex="1">
+                                <CardHeader>
+                                    <Heading as="h3" size="lg">{userInfo.user.entity.entity_name}</Heading>
+                                </CardHeader>
+                                <CardBody>
+                                    <Text>
+                                        {userInfo.user.entity.active == 'Y' ? 'Active' : 'Inactive' } {'>'} Last updated {formatTimestamp(userInfo.user.entity.update_timestamp)}
+                                    </Text>
+                                </CardBody>
+                            </Card>
+                        </Flex>
+                        <AuthorizedCard entity={userInfo.user.entity} updatePendingInvitations={updatePendingInvitations}  />
                     </Box>
                     <Button my="2em" onClick={() => signOut(appConfig.cognitoDomain, appConfig.entityAdmin.cognitoID)}>Sign Out</Button>
                 </>
