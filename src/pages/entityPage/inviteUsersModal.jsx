@@ -55,15 +55,13 @@ export default function InviteUsersModal({ numUsers, entity, updatePendingInvita
             setEmailsToInvite(values);
 
             setApiState('success');
-
         } else {
             setApiState('error');
         }
     }
 
     function handleClose() {
-
-        if (apiState == 'success') {
+        if (apiState === 'success') {
             // If we are closing after successful invites, update the pending invitations in the main page state in order to show the new invitations in the UI.
             updatePendingInvitations(emailsToInvite.email1, emailsToInvite.email2);
         }
@@ -86,7 +84,7 @@ export default function InviteUsersModal({ numUsers, entity, updatePendingInvita
                     <ModalHeader>Add Authorized Individuals</ModalHeader>
                     <ModalCloseButton />
                     <ModalBody>
-                        { apiState == 'success' &&
+                        {apiState === 'success' &&
                             <VStack mb="4">
                                 <Alert status='success'>
                                     <AlertIcon />
@@ -101,7 +99,7 @@ export default function InviteUsersModal({ numUsers, entity, updatePendingInvita
                         <Text mb="4">
                             Commodo ullamco commodo tempor amet aliqua elit amet esse ut sint aliquip id laborum. Consectetur eu id pariatur cillum. Excepteur velit in enim deserunt.
                         </Text>
-                        <form onSubmit={handleSubmit(processInvitations)} >
+                        <form onSubmit={handleSubmit(processInvitations)}>
                             <FormControl mb="4" isInvalid={errors.email1}>
                                 <FormLabel>Email 1</FormLabel>
                                 <Input
@@ -150,15 +148,15 @@ export default function InviteUsersModal({ numUsers, entity, updatePendingInvita
                             </FormControl>
                             {apiState !== 'success' &&
                                 <Button my="1em" type="submit">
-                                    {apiState == 'loading' && <Spinner />}
-                                    {apiState == 'idle' &&  <><RiMailLine style={{ marginRight: '0.5em' }} /> Send Invitations </>}
-                                    {apiState == 'error' && 'Error please try again'}
+                                    {apiState === 'loading' && <Spinner />}
+                                    {apiState === 'idle' && <><RiMailLine style={{ marginRight: '0.5em' }} /> Send Invitations </>}
+                                    {apiState === 'error' && 'Error please try again'}
                                 </Button>
                             }
-                            {apiState == 'success' && 
-                                <Button my="4" onClick={handleClose} >Close</Button>
-                            }
                         </form>
+                        {apiState === 'success' &&
+                            <Button my="4" onClick={handleClose}>Close</Button>
+                        }
                     </ModalBody>
                 </ModalContent>
             </Modal>
