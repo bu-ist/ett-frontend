@@ -1,8 +1,9 @@
 import { useEffect, useState, useContext } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import Cookies from 'js-cookie';
-import { Heading, Button, Text, Spinner, Box, Card, CardHeader, CardBody, Flex, Icon, CardFooter, VStack } from '@chakra-ui/react';
+import { Heading, Button, Text, Spinner, Box, Card, CardHeader, CardBody, Flex, Icon, CardFooter, VStack, Stack } from '@chakra-ui/react';
 import { BsFileEarmarkLock2, BsExclamationTriangle } from 'react-icons/bs';
+import { HiMinusCircle, HiCheckCircle } from "react-icons/hi";
 
 import { exchangeAuthorizationCode } from '../lib/exchangeAuthorizationCode';
 import { lookupUserContextAPI } from '../lib/entity/lookupUserContextAPI';
@@ -179,6 +180,19 @@ export default function EntityPage() {
                                     <Text>
                                         {userInfo.user.entity.active == 'Y' ? 'Active' : 'Inactive' } {'>'} Last updated {formatTimestamp(userInfo.user.entity.update_timestamp)}
                                     </Text>
+    
+                                    {userInfo.user.entity.users.length < 2 &&
+                                        <Stack mt="2" direction="row">
+                                            <Icon as={HiMinusCircle} color="gray.300" boxSize={6} />
+                                            <Text>Not fully registered, two Authorized Individuals required</Text>
+                                        </Stack>
+                                    }
+                                    {userInfo.user.entity.users.length === 2 &&
+                                        <Stack mt="2" direction="row">
+                                            <Icon as={HiCheckCircle} color="green.300" boxSize={6} />
+                                            <Text>Fully registered</Text>
+                                        </Stack>
+                                    }
                                 </CardBody>
                             </Card>
                         </Flex>
