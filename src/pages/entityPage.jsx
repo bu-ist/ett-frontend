@@ -28,6 +28,8 @@ export default function EntityPage() {
     const [entityAdminInfo, setEntityAdminInfo] = useState({});
     const [userInfo, setUserInfo] = useState({});
 
+    const [apiState, setApiState] = useState('idle');
+
     useEffect(() => {
         // Asynchronously operations need to be declared in a local function to be called in useEffect.
         const fetchData = async () => {
@@ -35,6 +37,7 @@ export default function EntityPage() {
             // appConfig is initially loaded through an api call, which won't have been completed on the first render, so return early if it's not loaded yet.
             // Because appConfig is a dependency of this useEffect, fetchData will be called again when appConfig is loaded.
             if (!appConfig) {
+                setApiState('loading');
                 return;
             }
 
@@ -76,11 +79,15 @@ export default function EntityPage() {
             const decodedIdToken = JSON.parse(atob(idToken.split('.')[1]));
             setEntityAdminInfo(decodedIdToken);
 
+            // Signal that we are loading the user data.
+            setApiState('loading');
+
             // Get the user data from the API and store it in local state.
             const userInfoResponse = await lookupUserContextAPI( appConfig, accessToken, decodedIdToken.email);
 
             // If invalid, set api state to error and return early.
             if (!userInfoResponse.payload || !userInfoResponse.payload.ok) {
+                setApiState('error');
                 setEntityAdminInfo({error: true});
                 return;
             }
@@ -91,6 +98,8 @@ export default function EntityPage() {
             // Also set the user context for the avatar in the header.
             setUser(userInfoResponse.payload.user);
             
+            // Need to add error checking, but I'm not yet sure all these components will stay on the same page.
+            setApiState('success');
         };
 
         // Run the async wrapper function.
@@ -116,6 +125,7 @@ export default function EntityPage() {
             <Text>
                 Lorem ipsum minim anim id do nisi aliqua. Consequat cillum sint qui ad aliqua proident nostrud. Cillum ullamco consectetur mollit eu labore amet ullamco mollit dolor veniam adipisicing veniam nulla ex. Quis irure minim id commodo dolore anim nulla aliqua reprehenderit pariatur. Id aute mollit pariatur tempor ex aute id voluptate enim. Et excepteur dolore non non ad deserunt duis voluptate aliqua officia qui ut elit.
             </Text>
+            {apiState === 'loading' && <Spinner />}
             {entityAdminInfo.error === true &&
                 <Card my={6} align="center">
                     <CardHeader><Heading as="h2" color="gray.500" >Login Error</Heading></CardHeader>
@@ -145,18 +155,9 @@ export default function EntityPage() {
                     </CardFooter>
                 </Card>
             }
-            {(entityAdminInfo && entityAdminInfo.email && appConfig) &&
+            {entityAdminInfo && entityAdminInfo.email && userInfo.ok && apiState == 'success' && appConfig &&
                 <>
                     <Box my="2em">
-                        {JSON.stringify(userInfo) == '{}' &&
-                            <Spinner
-                                thickness='4px'
-                                speed='0.65s'
-                                emptyColor='gray.200'
-                                color='blue.500'
-                                size='xl'
-                            />
-                        }
                         {userInfo.ok &&
                             <>
                                 <Flex direction="row" gap="4" mb="6">
