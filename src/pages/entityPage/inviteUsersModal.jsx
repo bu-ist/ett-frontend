@@ -23,8 +23,11 @@ export default function InviteUsersModal({ numUsers, entity, updatePendingInvita
         handleSubmit,
         register,
         formState: { errors, isSubmitting },
-        } = useForm();
+        watch,
+    } = useForm();
 
+    // Watch the value of email1 to use it in the validation of email2
+    const email1Value = watch('email1');
 
     // UI State
     const { isOpen, onOpen, onClose } = useDisclosure();
@@ -134,7 +137,9 @@ export default function InviteUsersModal({ numUsers, entity, updatePendingInvita
                                         pattern: {
                                             value: /\S+@\S+\.\S+/,
                                             message: 'Invalid email address'
-                                        }
+                                        },
+                                        validate: value =>
+                                            value !== email1Value || 'Email 2 cannot be the same as Email 1'
                                     })}
                                 />
                                 {!errors.email2 ? (
