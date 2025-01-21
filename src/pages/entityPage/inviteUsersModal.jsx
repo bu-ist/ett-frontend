@@ -1,6 +1,7 @@
 import { useState, useContext } from 'react';
+import { useForm } from 'react-hook-form';
 import Cookies from 'js-cookie';
-import { Button, Modal, ModalBody, ModalCloseButton, ModalContent, ModalHeader, ModalOverlay, useDisclosure, FormControl, Text, FormLabel, Input, Spinner, VStack, Alert, AlertIcon } from '@chakra-ui/react';
+import { Button, Modal, ModalBody, ModalCloseButton, ModalContent, ModalHeader, ModalOverlay, useDisclosure, FormControl, Text, FormLabel, Input, Spinner, VStack, Alert, AlertIcon, FormHelperText, FormErrorMessage } from '@chakra-ui/react';
 import { RiMailLine } from "react-icons/ri";
 
 import { ConfigContext } from "../../lib/configContext";
@@ -11,20 +12,27 @@ export default function InviteUsersModal({ numUsers, entity, updatePendingInvita
     // get the appConfig from the ConfigContext.
     const { appConfig } = useContext( ConfigContext );
     
-    // Form State
+    // Capture the email addresses to invite in a state variable, so we can update the UI.
     const [emailsToInvite, setEmailsToInvite] = useState({
         email1: '',
         email2: '',
     });
+
+    // Set the initial state of the form data using react-hook-form.
+    const {
+        handleSubmit,
+        register,
+        formState: { errors, isSubmitting },
+        } = useForm();
+
 
     // UI State
     const { isOpen, onOpen, onClose } = useDisclosure();
     const [apiState, setApiState] = useState('idle');
 
     // Handle form submission
-    async function handleSubmit(e) {
-        e.preventDefault();
-        console.log('Inviting: ', emailsToInvite);
+    async function processInvitations(values) {
+        console.log('Inviting: ', values);
 
         // Get the access token and email from the cookies.
         const accessToken = Cookies.get('EttAccessJwt');
@@ -33,11 +41,16 @@ export default function InviteUsersModal({ numUsers, entity, updatePendingInvita
 
         setApiState('loading');
 
-        const inviteResult = await inviteAuthIndFromEntityAPI( appConfig, accessToken, email, entity, emailsToInvite );
+        // Send the invitation to the API.
+        const inviteResult = await inviteAuthIndFromEntityAPI( appConfig, accessToken, email, entity, values );
         console.log(JSON.stringify(inviteResult));
 
         if (inviteResult.payload.ok) {
             console.log('Invitation successful');
+
+            // Set the email addresses that were invited so we can update the UI.
+            setEmailsToInvite(values);
+
             setApiState('success');
 
         } else {
@@ -52,11 +65,13 @@ export default function InviteUsersModal({ numUsers, entity, updatePendingInvita
             updatePendingInvitations(emailsToInvite.email1, emailsToInvite.email2);
         }
 
-        onClose();
         setEmailsToInvite({
             email1: '',
             email2: '',
         });
+
+        setApiState('idle');
+        onClose();
     }
 
     return (
@@ -77,21 +92,50 @@ export default function InviteUsersModal({ numUsers, entity, updatePendingInvita
                             </VStack>
                         }
                         <Text mb="1em">lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</Text>
-                        <FormControl as="form" onSubmit={handleSubmit} >
-                            <FormLabel>Email 1</FormLabel>
-                            <Input
-                                name="email1"
-                                type="email"
-                                value={emailsToInvite.email1}
-                                onChange={(e) => setEmailsToInvite({ ...emailsToInvite, email1: e.target.value })}
-                            />
-                            <FormLabel>Email 2</FormLabel>
-                            <Input
-                                name="email2"
-                                type="email"
-                                value={emailsToInvite.email2}
-                                onChange={(e) => setEmailsToInvite({ ...emailsToInvite, email2: e.target.value })}
-                            />
+                         
+                        <form onSubmit={handleSubmit(processInvitations)} >
+                            <FormControl mb="4" isInvalid={errors.email1}>
+                                <FormLabel>Email 1</FormLabel>
+                                <Input
+                                    id="email1"
+                                    name="email1"
+                                    type="email"
+                                    placeholder="Email Address"
+                                    {...register('email1', {
+                                        required: 'Email 1 is required',
+                                        pattern: {
+                                            value: /\S+@\S+\.\S+/,
+                                            message: 'Invalid email address'
+                                        }
+                                    })}
+                                />
+                                {!errors.email1 ? (
+                                    <FormHelperText>The email address of the first Authorized Individual</FormHelperText>
+                                ) : (
+                                    <FormErrorMessage>{errors.email1.message}</FormErrorMessage>
+                                )}
+                            </FormControl>
+                            <FormControl mb="4" isInvalid={errors.email2}>
+                                <FormLabel>Email 2</FormLabel>
+                                <Input
+                                    id="email2"
+                                    name="email2"
+                                    type="email"
+                                    placeholder="Email Address"
+                                    {...register('email2', {
+                                        required: 'Email 2 is required',
+                                        pattern: {
+                                            value: /\S+@\S+\.\S+/,
+                                            message: 'Invalid email address'
+                                        }
+                                    })}
+                                />
+                                {!errors.email2 ? (
+                                    <FormHelperText>The email address of the second Authorized Individual</FormHelperText>
+                                ) : (
+                                    <FormErrorMessage>{errors.email2.message}</FormErrorMessage>
+                                )}
+                            </FormControl>
                             {apiState !== 'success' &&
                                 <Button my="1em" type="submit">
                                     {apiState == 'loading' && <Spinner />}
@@ -102,7 +146,7 @@ export default function InviteUsersModal({ numUsers, entity, updatePendingInvita
                             {apiState == 'success' && 
                                 <Button my="4" onClick={handleClose} >Close</Button>
                             }
-                        </FormControl>
+                        </form>
                     </ModalBody>
                 </ModalContent>
             </Modal>
