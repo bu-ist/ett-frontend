@@ -148,7 +148,7 @@ export default function EntityPage() {
                     </CardBody>
                     <CardFooter>
                         <Button
-                            onClick={() => signIn( appConfig.entityAdmin.cognitoID, 'entity' )}
+                            onClick={() => signIn( appConfig.entityAdmin.cognitoID, 'entity', appConfig.cognitoDomain )}
                         >
                             Sign In as an Entity Administrator
                         </Button>
