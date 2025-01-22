@@ -1,5 +1,6 @@
 import { useState, useContext } from 'react';
 import { useForm } from 'react-hook-form';
+import { useSearchParams } from 'react-router-dom';
 import { Alert, AlertDescription, AlertIcon, AlertTitle, Box, Heading, FormControl, FormLabel, FormErrorMessage, FormHelperText, Input, Button, Spinner, Text, Card, CardHeader, CardBody, CardFooter } from "@chakra-ui/react";
 
 import { registerEntityAPI } from '../../../lib/entity/registerEntityAPI';
@@ -11,12 +12,23 @@ export default function RegisterEntityForm({ code, setStepIndex }) {
     // Get the appConfig from the ConfigContext.
     const { appConfig } = useContext( ConfigContext );
 
+    // Get the email for the invitation from the URL search params.
+    let [searchParams] = useSearchParams();
+    const invitationEmail = searchParams.get('email');
+
     // Set the initial state of the form data using react-hook-form.
     const {
         handleSubmit,
         register,
         formState: { errors, isSubmitting },
-      } = useForm();
+    } = useForm({
+        defaultValues: {
+            entity_name: '',
+            fullname: '',
+            title: '',
+            email: invitationEmail ? invitationEmail : '',
+        }
+    });
 
     // Setup state variables for the API call.
     const [apiState, setApiState] = useState('idle');
