@@ -1,4 +1,4 @@
-import { useEffect, useState, useContext } from 'react';
+import { useEffect, useState, useContext, useRef } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { Heading, Text, Spinner, Box, Checkbox, Button, Fade, VStack, Alert, AlertIcon, Card, CardBody, Code } from "@chakra-ui/react";
 
@@ -25,6 +25,8 @@ export default function SignUpAuthIndPage() {
     const [apiState, setApiState] = useState('');
     const [privacyPolicyAccepted, setPrivacyPolicyAccepted] = useState(false);
 
+    // Create a ref so we can scroll back to the header when the privacy policy is accepted.
+    const headerRef = useRef(null);
 
     const [stepIndex, setStepIndex] = useState(0);
 
@@ -85,6 +87,9 @@ export default function SignUpAuthIndPage() {
     function acceptPrivacyPolicy() {
         setApiState('acknowledged');
         setStepIndex(2);
+
+        // Scroll to the top of the form, so we can see the stepper advance.
+        headerRef.current.scrollIntoView();
     }
 
     // If there are users in the inviteInfo, get the email of the user whose role is 'RE_ADMIN'.
@@ -92,7 +97,7 @@ export default function SignUpAuthIndPage() {
 
     return (
         <>
-            <Heading as="h2" size={"xl"}>Register Authorized Individual</Heading>
+            <Heading ref={headerRef} as="h2" size={"xl"}>Register Authorized Individual</Heading>
             <SignUpAuthIndStepper currentIndex={stepIndex} />
             
             {apiState === 'no-code' &&
