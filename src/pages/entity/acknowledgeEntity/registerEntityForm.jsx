@@ -5,6 +5,7 @@ import { Alert, AlertDescription, AlertIcon, AlertTitle, Box, Heading, FormContr
 
 import { registerEntityAPI } from '../../../lib/entity/registerEntityAPI';
 import { signUp } from '../../../lib/signUp';
+import { emailRegex } from '../../../lib/formatting/emailRegex';
 
 import { ConfigContext } from '../../../lib/configContext';
 
@@ -140,7 +141,7 @@ export default function RegisterEntityForm({ code, setStepIndex }) {
                         {...register('email', {
                             required: 'Email is required',
                             pattern: {
-                                value: /\S+@\S+\.\S+/,
+                                value: emailRegex,
                                 message: 'Invalid email address',
                             },
                         })}

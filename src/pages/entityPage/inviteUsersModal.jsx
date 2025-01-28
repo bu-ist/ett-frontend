@@ -8,6 +8,8 @@ import { ConfigContext } from "../../lib/configContext";
 
 import { inviteAuthIndFromEntityAPI } from '../../lib/entity/inviteAuthIndFromEntityAPI';
 
+import { emailRegex } from "../../lib/formatting/emailRegex";
+
 export default function InviteUsersModal({ numUsers, entity, updatePendingInvitations }) {
     // get the appConfig from the ConfigContext.
     const { appConfig } = useContext( ConfigContext );
@@ -111,7 +113,7 @@ export default function InviteUsersModal({ numUsers, entity, updatePendingInvita
                                     {...register('email1', {
                                         required: 'Email 1 is required',
                                         pattern: {
-                                            value: /\S+@\S+\.\S+/,
+                                            value: emailRegex,
                                             message: 'Invalid email address'
                                         }
                                     })}
@@ -133,7 +135,7 @@ export default function InviteUsersModal({ numUsers, entity, updatePendingInvita
                                     {...register('email2', {
                                         required: 'Email 2 is required',
                                         pattern: {
-                                            value: /\S+@\S+\.\S+/,
+                                            value: emailRegex,
                                             message: 'Invalid email address'
                                         },
                                         validate: value =>

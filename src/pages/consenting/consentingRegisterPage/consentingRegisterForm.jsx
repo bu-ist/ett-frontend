@@ -8,6 +8,7 @@ import { ConfigContext } from '../../../lib/configContext';
 
 import { registerConsenterAPI } from '../../../lib/consenting/registerConsenterAPI';
 import { signUp } from '../../../lib/signUp';
+import { emailRegex } from '../../../lib/formatting/emailRegex';
 
 export default function ConsentingRegisterForm() {
     // Get the appConfig from the ConfigContext.
@@ -107,7 +108,7 @@ export default function ConsentingRegisterForm() {
                     {...register('email', {
                         required: 'Email is required',
                         pattern: {
-                            value: /\S+@\S+\.\S+/,
+                            value: emailRegex,
                             message: 'Entered value does not match email format',
                         },
                     })}

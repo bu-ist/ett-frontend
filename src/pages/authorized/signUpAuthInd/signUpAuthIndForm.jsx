@@ -8,6 +8,7 @@ import { ConfigContext } from '../../../lib/configContext';
 
 import { registerEntityAPI } from '../../../lib/entity/registerEntityAPI';
 import { signUp } from '../../../lib/signUp';
+import { emailRegex } from '../../../lib/formatting/emailRegex';
 
 export default function SignUpAuthIndForm({inviteInfo, setStepIndex, code}) {
     //const  { entity, invitation, users }  = entityInfo;
@@ -123,7 +124,7 @@ export default function SignUpAuthIndForm({inviteInfo, setStepIndex, code}) {
                         {...register('email', {
                             required: 'Email is required',
                             pattern: {
-                                value: /\S+@\S+\.\S+/,
+                                value: emailRegex,
                                 message: 'Invalid email address',
                             },
                         })}
