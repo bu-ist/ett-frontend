@@ -25,8 +25,6 @@ export default function AcknowledgeEntityPage() {
     const headerRef = useRef(null);
 
     useEffect(() => {
-        // Validation of the invite code was taken out, but might be put back in later.
-
         // Check if appConfig is loaded.
         if (!appConfig) {
             setApiState('loading');
