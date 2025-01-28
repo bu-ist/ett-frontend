@@ -92,7 +92,7 @@ export default function SignUpAuthIndPage() {
 
     return (
         <>
-            <Heading as="h2" size={"xl"}>Sign Up Authorized Individual</Heading>
+            <Heading as="h2" size={"xl"}>Register Authorized Individual</Heading>
             <SignUpAuthIndStepper currentIndex={stepIndex} />
             
             {apiState === 'no-code' &&
