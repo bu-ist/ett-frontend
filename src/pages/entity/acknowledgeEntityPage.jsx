@@ -75,7 +75,7 @@ export default function AcknowledgeEntityPage() {
 
     return (
         <div>
-            <Heading ref={headerRef} as="h2" size={"lg"} >Register Entity</Heading>
+            <Heading ref={headerRef} as="h2" size={"lg"} >Register Entity and Administrative Support Professional</Heading>
 
             <RegisterEntityStepper currentIndex={stepIndex} />
 
