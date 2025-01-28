@@ -77,11 +77,11 @@ export default function InviteUsersModal({ numUsers, entity, updatePendingInvita
 
     return (
         <>
-            <Button isDisabled={numUsers > 0} onClick={onOpen}>Add Authorized Individuals</Button>
+            <Button isDisabled={numUsers > 0} onClick={onOpen}>Invite Authorized Individuals</Button>
             <Modal size="xl" isOpen={isOpen} onClose={handleClose}>
                 <ModalOverlay />
                 <ModalContent>
-                    <ModalHeader>Add Authorized Individuals</ModalHeader>
+                    <ModalHeader>Invite Authorized Individuals</ModalHeader>
                     <ModalCloseButton />
                     <ModalBody>
                         {apiState === 'success' &&

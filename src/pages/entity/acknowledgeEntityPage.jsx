@@ -1,4 +1,4 @@
-import { useEffect, useState, useContext } from 'react';
+import { useEffect, useState, useContext, useRef } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { Heading, Text, Spinner, Button, Checkbox, Box, Card, CardBody, VStack, Alert, AlertIcon, Code } from '@chakra-ui/react';
 
@@ -21,10 +21,10 @@ export default function AcknowledgeEntityPage() {
 
     const [stepIndex, setStepIndex] = useState(0);
 
+    // Create a ref so we can scroll back to the header when the privacy policy is accepted.
+    const headerRef = useRef(null);
 
     useEffect(() => {
-        // Validation of the invite code was taken out, but might be put back in later.
-
         // Check if appConfig is loaded.
         if (!appConfig) {
             setApiState('loading');
@@ -65,6 +65,9 @@ export default function AcknowledgeEntityPage() {
     function acceptPrivacyPolicy() {
         setApiState('acknowledged');
         setStepIndex(2);
+
+        // Scroll to the top of the form, so we can see the stepper advance.
+        headerRef.current.scrollIntoView();
     }
 
     // If there are users in the entityInfo, get the email of the user whose role is 'SYS_ADMIN'.
@@ -72,7 +75,7 @@ export default function AcknowledgeEntityPage() {
 
     return (
         <div>
-            <Heading as="h2" size={"lg"} >Register Entity</Heading>
+            <Heading ref={headerRef} as="h2" size={"lg"} >Register Entity and Administrative Support Professional</Heading>
 
             <RegisterEntityStepper currentIndex={stepIndex} />
 
