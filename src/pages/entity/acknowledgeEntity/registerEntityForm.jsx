@@ -77,22 +77,27 @@ export default function RegisterEntityForm({ code, setStepIndex }) {
                 Nisi ex qui dolore irure dolor ut id velit veniam consequat. Veniam aliqua sint magna culpa proident dolore qui laborum ut mollit esse ea. Dolor pariatur aliquip non dolor nulla ipsum. Aute esse mollit commodo ad minim aute ut. Ullamco exercitation aliqua deserunt incididunt anim non aliquip.
             </Text>
             <form onSubmit={handleSubmit(processRegistration)}>
-                <FormControl mb="4" isInvalid={errors.entity_name}>
-                    <FormLabel>Entity Name</FormLabel>
-                    <Input
-                        id="entity_name"
-                        name="entity_name"
-                        placeholder="Entity Name"
-                        {...register('entity_name', {
-                            required: 'Entity name is required',
-                        })}
-                    />
-                    {!errors.entity_name ? (
-                        <FormHelperText>Enter the name of the entity.</FormHelperText>
-                    ) : (
-                        <FormErrorMessage>{errors.entity_name.message}</FormErrorMessage>
-                    )}
-                </FormControl>
+                <Box as="section" borderWidth="0.1em" borderRadius="16" borderColor="gray.100" p="4" mb="8">
+                    <Heading as="h4" size={"sm"} mb="4">Entity Information</Heading>
+                    <FormControl mb="4" isInvalid={errors.entity_name}>
+                        <FormLabel>Full Name of Entity</FormLabel>
+                        <Input
+                            id="entity_name"
+                            name="entity_name"
+                            placeholder="Entity Name"
+                            {...register('entity_name', {
+                                required: 'Entity name is required',
+                            })}
+                        />
+                        {!errors.entity_name ? (
+                            <FormHelperText>Enter the full name of the entity, no acronyms. Example: Vanderbilt University</FormHelperText>
+                        ) : (
+                            <FormErrorMessage>{errors.entity_name.message}</FormErrorMessage>
+                        )}
+                    </FormControl>
+                </Box>
+                <Box as="section" borderWidth="0.1em" borderRadius="16" borderColor="gray.100" p="4" mb="8">
+                <Heading as="h4" size={"sm"} mb="4">Administrative Support Professional Information</Heading>
                 <FormControl mb="4" isInvalid={errors.fullname}>
                     <FormLabel>Your Full Name</FormLabel>
                     <Input
@@ -146,6 +151,7 @@ export default function RegisterEntityForm({ code, setStepIndex }) {
                         <FormErrorMessage>{errors.email.message}</FormErrorMessage>
                     )}
                 </FormControl>
+                </Box>
                 <FormControl mb="4" isInvalid={errors.signature}>
                     <FormLabel>Your Signature</FormLabel>
                     <Input
