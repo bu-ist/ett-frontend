@@ -35,6 +35,7 @@ export default function SignUpAuthIndForm({inviteInfo, setStepIndex, code}) {
             fullname: '',
             title: '',
             email: invitationEmail ? invitationEmail : '',
+            signature: '',
         }
     });
 
@@ -48,7 +49,10 @@ export default function SignUpAuthIndForm({inviteInfo, setStepIndex, code}) {
 
         setApiState('loading');
 
-        const registerResult = await registerEntityAPI(appConfig, code, values);
+        // The signature field is not used in the API call, so create a new object without the signature property
+        const { signature, ...valuesWithoutSignature } = values;
+
+        const registerResult = await registerEntityAPI(appConfig, code, valuesWithoutSignature);
         console.log(registerResult);
 
          if (registerResult.payload.ok) {
@@ -149,6 +153,22 @@ export default function SignUpAuthIndForm({inviteInfo, setStepIndex, code}) {
                         </Button>
                     </Flex>
                 </Box>
+                <FormControl mb="4" isInvalid={errors.signature}>
+                    <FormLabel>Your Signature</FormLabel>
+                    <Input
+                        id="signature"
+                        name="signature"
+                        placeholder="Signature"
+                        {...register('signature', {
+                            required: 'Signature is required',
+                        })}
+                    />
+                    {!errors.signature ? (
+                        <FormHelperText>Type your name here as your digital signature.</FormHelperText>
+                    ) : (
+                        <FormErrorMessage>{errors.signature.message}</FormErrorMessage>
+                    )}
+                </FormControl>
                 <Button my="1em" type="submit" isDisabled={apiState !== 'idle'}>
                     { apiState === 'loading' && <Spinner /> }
                     { apiState === 'idle' && 'Register' }
