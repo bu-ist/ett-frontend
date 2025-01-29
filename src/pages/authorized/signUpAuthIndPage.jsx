@@ -32,8 +32,6 @@ export default function SignUpAuthIndPage() {
 
 
     useEffect(() => {
-        // Invitation lookup is being disabled because the endpoint was removed, but we may want to re-enable it later.
-        
         // Check if appConfig is loaded.
         if (!appConfig) {
             setApiState('loading');
