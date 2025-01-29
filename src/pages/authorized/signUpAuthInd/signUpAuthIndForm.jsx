@@ -1,6 +1,6 @@
 import { useState, useContext } from 'react';
 import { useForm } from 'react-hook-form';
-import { Alert, AlertDescription, AlertIcon, AlertTitle, Box, Button, Card, CardBody, CardHeader, FormControl, FormErrorMessage, FormHelperText, FormLabel, Heading, Input, Spinner, Text } from "@chakra-ui/react";
+import { Alert, AlertDescription, AlertIcon, AlertTitle, Box, Button, Card, CardBody, CardHeader, Flex, FormControl, FormErrorMessage, FormHelperText, FormLabel, Heading, Input, Spinner, Text } from "@chakra-ui/react";
 
 import SignUpCognitoButton from './signUpCognitoButton';
 
@@ -64,64 +64,80 @@ export default function SignUpAuthIndForm({inviteInfo, setStepIndex, code}) {
 
     return (
         <>
-            <Heading as="h3" my="4" size="md">Register For an Account</Heading>
+            <Heading as="h3" my="4" size="md">Register For an Authorized Individual Account</Heading>
             <Text mb="8">
                 Nisi voluptate irure culpa dolor laborum enim consectetur eu incididunt. Id culpa esse ad Lorem dolor cupidatat incididunt ipsum ipsum velit. Incididunt non velit et minim eiusmod occaecat ex consectetur voluptate cillum.
             </Text>
             <form onSubmit={handleSubmit(processRegistration)}>
-                <FormControl mb="4" isInvalid={errors.fullname}>
-                    <FormLabel>Your Full Name</FormLabel>
-                    <Input
-                        id="fullname"
-                        name="fullname"
-                        placeholder="Full Name"
-                        {...register('fullname', {
-                            required: 'Full name is required',
-                        })}
-                    />
-                    {!errors.fullname ? (
-                        <FormHelperText>The name to use for your account.</FormHelperText>
-                    ) : (
-                        <FormErrorMessage>{errors.fullname && errors.fullname.message}</FormErrorMessage>
-                    )}
-                </FormControl>
-                <FormControl mb="4" isInvalid={errors.title}>
-                    <FormLabel>Your Title</FormLabel>
-                    <Input
-                        id="title"
-                        name="title"
-                        placeholder="Title"
-                        {...register('title', {
-                            required: 'Title is required',
-                        })}
-                    />
-                    {!errors.title ? (
-                        <FormHelperText>Your current title.</FormHelperText>
-                    ) : (
-                        <FormErrorMessage>{errors.title && errors.title.message}</FormErrorMessage>
-                    )}
-                </FormControl>
-                <FormControl mb="4" isInvalid={errors.email}>
-                    <FormLabel>Your Email</FormLabel>
-                    <Input
-                        id="email"
-                        name="email"
-                        type="email"
-                        placeholder="Email"
-                        {...register('email', {
-                            required: 'Email is required',
-                            pattern: {
-                                value: emailRegex,
-                                message: 'Invalid email address',
-                            },
-                        })}
-                    />
-                    {!errors.email ? (
-                        <FormHelperText>The email address to use for this account.</FormHelperText>
-                    ) : (
-                        <FormErrorMessage>{errors.email && errors.email.message}</FormErrorMessage>
-                    )}
-                </FormControl>
+                <Box as="section" borderWidth="0.1em" borderRadius="16" borderColor="gray.100" p="4" mb="8">
+                    <Heading as="h4" size={"sm"} mb="4">Your Information</Heading>
+                    <FormControl mb="4" isInvalid={errors.fullname}>
+                        <FormLabel>Your Full Name</FormLabel>
+                        <Input
+                            id="fullname"
+                            name="fullname"
+                            placeholder="Full Name"
+                            {...register('fullname', {
+                                required: 'Full name is required',
+                            })}
+                        />
+                        {!errors.fullname ? (
+                            <FormHelperText>The name to use for your account.</FormHelperText>
+                        ) : (
+                            <FormErrorMessage>{errors.fullname && errors.fullname.message}</FormErrorMessage>
+                        )}
+                    </FormControl>
+                    <FormControl mb="4" isInvalid={errors.title}>
+                        <FormLabel>Your Title</FormLabel>
+                        <Input
+                            id="title"
+                            name="title"
+                            placeholder="Title"
+                            {...register('title', {
+                                required: 'Title is required',
+                            })}
+                        />
+                        {!errors.title ? (
+                            <FormHelperText>Your current title.</FormHelperText>
+                        ) : (
+                            <FormErrorMessage>{errors.title && errors.title.message}</FormErrorMessage>
+                        )}
+                    </FormControl>
+                    <FormControl mb="4" isInvalid={errors.email}>
+                        <FormLabel>Your Email</FormLabel>
+                        <Input
+                            id="email"
+                            name="email"
+                            type="email"
+                            placeholder="Email"
+                            {...register('email', {
+                                required: 'Email is required',
+                                pattern: {
+                                    value: emailRegex,
+                                    message: 'Invalid email address',
+                                },
+                            })}
+                        />
+                        {!errors.email ? (
+                            <FormHelperText>The email address to use for this account.</FormHelperText>
+                        ) : (
+                            <FormErrorMessage>{errors.email && errors.email.message}</FormErrorMessage>
+                        )}
+                    </FormControl>
+                </Box>
+                <Box as="section" borderWidth="0.1em" borderRadius="16" borderColor="gray.100" p="4" mb="8">
+                    <Heading as="h4" size={"sm"} mb="4">Optional Delegated Contact</Heading>
+                    <Text mb="4">
+                        If you wish to have disclosure correspendence sent to a different contact, you may add a delegated contact here.
+                    </Text>
+                    <Flex justifyContent="flex-end" width="100%">
+                        <Button
+                            onClick={() => alert('This feature is not yet implemented.')}
+                        >
+                        Add Delegated Contact
+                        </Button>
+                    </Flex>
+                </Box>
                 <Button my="1em" type="submit" isDisabled={apiState !== 'idle'}>
                     { apiState === 'loading' && <Spinner /> }
                     { apiState === 'idle' && 'Register' }
