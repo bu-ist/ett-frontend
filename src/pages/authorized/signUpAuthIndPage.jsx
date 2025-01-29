@@ -97,13 +97,16 @@ export default function SignUpAuthIndPage() {
                 <Text>Error: No code provided. Try again with a valid sign up link</Text>
             }
             {apiState == 'loading' &&
-                <Spinner
-                    thickness='4px'
-                    speed='0.65s'
-                    emptyColor='gray.200'
-                    color='blue.500'
-                    size='xl'
-                />
+                <Box>
+                    <Text>Validating invitation code...</Text>
+                    <Spinner
+                        thickness='4px'
+                        speed='0.65s'
+                        emptyColor='gray.200'
+                        color='blue.500'
+                        size='xl'
+                    />
+                </Box>
             }
             {apiState == 'error' &&
                 <Text>Error: There was an error validating the invitation code. Please try again.</Text>
