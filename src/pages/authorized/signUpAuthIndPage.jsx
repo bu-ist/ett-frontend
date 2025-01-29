@@ -38,43 +38,40 @@ export default function SignUpAuthIndPage() {
             return;
         }
         
-
+        // Declare an async function to look up the invitation.
+        // This only gets called if there is a code and an entity ID in the URL.
         async function lookupInvitation() {
-           // Get the code and the entity from the request parameters.
+            // Get the code and the entity from the request parameters.
             const code = searchParams.get('code');
             const entityId = searchParams.get('entity_id');
-
+    
             // Call the lookupInvitationAPI function with the code and entity ID.
-            const lookupResult = await lookupEntityAPI(appConfig, code);
-
-            console.log( 'lookupResult: ', lookupResult);
-
-            if (lookupResult.payload.ok) {
-                setApiState('validated');
-                setInviteInfo(lookupResult.payload);
-                setStepIndex(1);
-            } else if (lookupResult.payload.unauthorized) {
-                setApiState('unauthorized');
-                //console.error(lookupResult);
-            } else {
+            try {
+                const lookupResult = await lookupEntityAPI(appConfig, code);
+                console.log('lookupResult: ', lookupResult);
+    
+                if (lookupResult.payload.ok) {
+                    setApiState('validated');
+                    setInviteInfo(lookupResult.payload);
+                    setStepIndex(1);
+                } else if (lookupResult.payload.unauthorized) {
+                    setApiState('unauthorized');
+                    console.error('Unauthorized access: ', lookupResult);
+                } else {
+                    setApiState('error');
+                    console.error('Error during lookup: ', lookupResult);
+                }
+            } catch (error) {
                 setApiState('error');
-                console.error(lookupResult);
+                console.error('Error during API call: ', error);
             }
-
         }
-
+    
+        // If there are both a code and an entity ID, call the lookupInvitation function.
         if (searchParams.has('code') && searchParams.has('entity_id')) {
-            // If there are both a code and an entity ID, call the acknowledgeEntity function.
             // First, set the API state to loading.
             setApiState('loading');
-            
-            // We may start using an invitation lookup function again in the future, so this is here but commented out.
             lookupInvitation();
-
-            // This is a temporary workaround to skip the lookupInvitation function.
-            //setApiState('validated');
-            setStepIndex(1);
-
         } else {
             // If there is no code, display an error message.
             setApiState('no-code');
