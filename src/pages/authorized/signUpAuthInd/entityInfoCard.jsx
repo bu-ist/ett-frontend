@@ -1,4 +1,5 @@
-import { Card, CardHeader, Heading, CardBody, Text, HStack, Box, StackDivider } from "@chakra-ui/react";
+import { Card, CardHeader, Heading, CardBody, Text, HStack, Box, StackDivider, Button } from "@chakra-ui/react";
+import { AiOutlineClose } from 'react-icons/ai'; 
 
 // Display card to show entity information, with the Entity Adminstrator's information and information on any existing Authorized Individuals.
 
@@ -13,7 +14,7 @@ export default function EntityInfoCard({ inviteInfo }) {
                 <Heading as="h3" size="md">Invitation from {entity_name} </Heading>
             </CardHeader>
             <CardBody>
-                <HStack align="top" spacing={20} divider={<StackDivider borderColor="gray.200" />}>
+                <HStack align="top" spacing={16} divider={<StackDivider borderColor="gray.200" />}>
                     <Box>
                         <Heading as="h4" size="sm">Entity Administrator</Heading>
                         <Text>{adminUser.fullname}</Text>
@@ -23,7 +24,18 @@ export default function EntityInfoCard({ inviteInfo }) {
                     </Box>
                     <Box>
                         <Heading as="h4" size="sm">Authorized Individuals</Heading>
-                        <Text>No registered Authorized Individuals, you will be the first,</Text>
+                        <Text>No registered Authorized Individuals, you will be the first.</Text>
+                    </Box>
+                    <Box>
+                        <Heading as="h4" size="sm">Options</Heading>
+                        <Text>Optionally reject the entity if there is a problem with the invitation</Text>
+                        <Button
+                            my="4"
+                            leftIcon={<AiOutlineClose/>} 
+                            onClick={() => alert('Not yet implemented')}
+                        >
+                            Reject Entity
+                        </Button>
                     </Box>
                 </HStack>
             </CardBody>
