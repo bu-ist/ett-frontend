@@ -1,5 +1,6 @@
 import { useState, useContext } from 'react';
 import { useForm } from 'react-hook-form';
+import { useSearchParams } from 'react-router-dom';
 import { Alert, AlertDescription, AlertIcon, AlertTitle, Box, Button, Card, CardBody, CardHeader, Flex, FormControl, FormErrorMessage, FormHelperText, FormLabel, Heading, Input, Spinner, Text } from "@chakra-ui/react";
 
 import SignUpCognitoButton from './signUpCognitoButton';
@@ -16,6 +17,10 @@ export default function SignUpAuthIndForm({inviteInfo, setStepIndex, code}) {
     // Get the appConfig from the ConfigContext.
     const { appConfig } = useContext( ConfigContext );
 
+    // Get the email for the invitation from the URL search params.
+    let [searchParams] = useSearchParams();
+    const invitationEmail = searchParams.get('email');
+
     // Setup state variables for the API call.
     const [apiState, setApiState] = useState('idle');
     const [apiError, setApiError] = useState(null);
@@ -25,7 +30,13 @@ export default function SignUpAuthIndForm({inviteInfo, setStepIndex, code}) {
         handleSubmit,
         register,
         formState: { errors, isSubmitting },
-      } = useForm();
+    } = useForm({
+        defaultValues: {
+            fullname: '',
+            title: '',
+            email: invitationEmail ? invitationEmail : '',
+        }
+    });
 
     // Store the email from the form separately in a state variable, so the sign up redirect can use it.
     const [ signUpEmail, setSignUpEmail ] = useState('');
