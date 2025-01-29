@@ -73,10 +73,6 @@ export default function SignUpAuthIndForm({inviteInfo, setStepIndex, code}) {
         signUp( cognitoDomain, signUpEmail, cognitoID, 'auth-ind?action=post-signup')
     }
 
-    // If there are users in the inviteInfo, get the email of the user whose role is 'RE_ADMIN'.
-    const adminUser = inviteInfo?.users?.find(user => user.role === 'RE_ADMIN') || '';
-    const { entity: { entity_name } } = inviteInfo;
-
     return (
         <>
             <Heading as="h3" my="4" size="md">Register For an Authorized Individual Account</Heading>
