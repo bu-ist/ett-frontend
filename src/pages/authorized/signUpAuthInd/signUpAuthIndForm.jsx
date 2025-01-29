@@ -70,7 +70,7 @@ export default function SignUpAuthIndForm({inviteInfo, setStepIndex, code}) {
 
     function signUpRedirect() {
         const { cognitoDomain, authorizedIndividual: { cognitoID } } = appConfig;
-        signUp( cognitoDomain, signUpEmail, cognitoID, 'auth-ind?action=post-signup')
+        signUp( cognitoDomain, signUpEmail, cognitoID, 'auth-ind?action=post-signup');
     }
 
     return (
