@@ -4,8 +4,12 @@ import { AiOutlineClose } from 'react-icons/ai';
 // Display card to show entity information, with the Entity Adminstrator's information and information on any existing Authorized Individuals.
 
 export default function EntityInfoCard({ inviteInfo }) {
-    // If there are users in the inviteInfo, get the email of the user whose role is 'RE_ADMIN'.
+    // If there are users in the inviteInfo, get the user whose role is 'RE_ADMIN'.
     const adminUser = inviteInfo?.users?.find(user => user.role === 'RE_ADMIN') || '';
+    
+    // If there is already another Authorized Individual, get the email of the user whose role is 'RE_AUTHORIZED'.
+    const authUser = inviteInfo?.users?.find(user => user.role === 'RE_AUTH_IND') || '';
+
     const { entity: { entity_name } } = inviteInfo;
 
     return (
@@ -24,7 +28,16 @@ export default function EntityInfoCard({ inviteInfo }) {
                     </Box>
                     <Box>
                         <Heading as="h4" size="sm">Authorized Individuals</Heading>
-                        <Text>No registered Authorized Individuals, you will be the first.</Text>
+                        {authUser ?  (
+                            <>
+                                <Text>{authUser.fullname}</Text>
+                                <Text>{authUser.title}</Text>
+                                <Text>{authUser.email}</Text>
+                                <Text>{authUser.phone_number}</Text>
+                            </>
+                        ) : (
+                            <Text>No registered Authorized Individuals, you will be the first.</Text>
+                        )}
                     </Box>
                     <Box>
                         <Heading as="h4" size="sm">Options</Heading>
