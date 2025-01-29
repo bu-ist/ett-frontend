@@ -64,20 +64,7 @@ export default function SignUpAuthIndForm({inviteInfo, setStepIndex, code}) {
 
     return (
         <>
-            <Heading as="h3" mb="1" size="md">Register For an Account</Heading>
-            <Card my="4" variant="filled">
-                <CardHeader>
-                    <Heading as="h4" size="sm">Invitation from {entity_name} </Heading>
-                </CardHeader>
-                <CardBody>
-                    <Heading as="h5" size="xs">Entity Administrator</Heading>
-                    <Text>{adminUser.fullname}</Text>
-                    <Text>{adminUser.title}</Text>
-                    <Text>{adminUser.email}</Text>
-                    <Text>{adminUser.phone_number}</Text>
-                </CardBody>
-            </Card>
-
+            <Heading as="h3" my="4" size="md">Register For an Account</Heading>
             <Text mb="8">
                 Nisi voluptate irure culpa dolor laborum enim consectetur eu incididunt. Id culpa esse ad Lorem dolor cupidatat incididunt ipsum ipsum velit. Incididunt non velit et minim eiusmod occaecat ex consectetur voluptate cillum.
             </Text>

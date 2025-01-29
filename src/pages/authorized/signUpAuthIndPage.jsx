@@ -9,6 +9,7 @@ import { ConfigContext } from '../../lib/configContext';
 import SignUpAuthIndStepper from './signUpAuthInd/signUpAuthIndStepper';
 import SignUpAuthIndForm from './signUpAuthInd/signUpAuthIndForm';
 import AcknowledgePrivacy from './signUpAuthInd/acknowledgePrivacy';
+import EntityInfoCard from "./signUpAuthInd/entityInfoCard";
 
 
 // This may have some weakness around ensuring the appConfig is loaded before this component is rendered.
@@ -87,9 +88,6 @@ export default function SignUpAuthIndPage() {
         headerRef.current.scrollIntoView();
     }
 
-    // If there are users in the inviteInfo, get the email of the user whose role is 'RE_ADMIN'.
-    const adminUser = inviteInfo?.users?.find(user => user.role === 'RE_ADMIN') || '';
-
     return (
         <>
             <Heading ref={headerRef} as="h2" size={"xl"}>Register Authorized Individual</Heading>
@@ -121,14 +119,7 @@ export default function SignUpAuthIndPage() {
                             Invitation Code Validated
                         </Alert>
                     </VStack>
-                    <Card mt="4">
-                        <CardBody>
-                            <Text>
-                                You have been invited by <Code>{adminUser.email}</Code> to register as an Authorized Individual on behalf of 
-                                {(inviteInfo.entity) ? ` ${inviteInfo.entity.entity_name}` : ' a new entity'}.
-                            </Text>
-                        </CardBody>
-                    </Card>
+                    <EntityInfoCard inviteInfo={inviteInfo} />
                     <Text mt="6">
                         Nisi occaecat Lorem velit reprehenderit magna ea anim sint ut excepteur nostrud laborum excepteur. Quis labore quis eu mollit. Cillum anim ex elit ut eu eiusmod est adipisicing minim irure. Voluptate velit veniam elit id cupidatat officia culpa velit amet irure commodo duis. Elit veniam eu ipsum et amet qui cillum elit elit occaecat. Id est enim ut eiusmod qui velit ipsum consectetur enim.
                     </Text>
@@ -161,6 +152,7 @@ export default function SignUpAuthIndPage() {
             }
             {apiState == 'acknowledged' &&
                 <Fade in={apiState == 'acknowledged'}>
+                    <EntityInfoCard inviteInfo={inviteInfo} />
                     <SignUpAuthIndForm inviteInfo={inviteInfo} setStepIndex={setStepIndex} code={searchParams.get('code')} />
                 </Fade>
             }
