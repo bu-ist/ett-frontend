@@ -1,6 +1,6 @@
-import { useEffect, useState, useContext } from 'react';
+import { useEffect, useState, useContext, useRef } from 'react';
 import { useSearchParams } from 'react-router-dom';
-import { Heading, Text, Spinner, Box, Checkbox, Button, Fade, VStack, Alert, AlertIcon, Card, CardBody, Code } from "@chakra-ui/react";
+import { Heading, Text, Spinner, Box, Checkbox, Button, Fade, VStack, Alert, AlertIcon } from "@chakra-ui/react";
 
 import { lookupEntityAPI } from '../../lib/entity/lookupEntityAPI';
 
@@ -9,6 +9,7 @@ import { ConfigContext } from '../../lib/configContext';
 import SignUpAuthIndStepper from './signUpAuthInd/signUpAuthIndStepper';
 import SignUpAuthIndForm from './signUpAuthInd/signUpAuthIndForm';
 import AcknowledgePrivacy from './signUpAuthInd/acknowledgePrivacy';
+import EntityInfoCard from "./signUpAuthInd/entityInfoCard";
 
 
 // This may have some weakness around ensuring the appConfig is loaded before this component is rendered.
@@ -25,56 +26,53 @@ export default function SignUpAuthIndPage() {
     const [apiState, setApiState] = useState('');
     const [privacyPolicyAccepted, setPrivacyPolicyAccepted] = useState(false);
 
+    // Create a ref so we can scroll back to the header when the privacy policy is accepted.
+    const headerRef = useRef(null);
 
     const [stepIndex, setStepIndex] = useState(0);
 
 
     useEffect(() => {
-        // Invitation lookup is being disabled because the endpoint was removed, but we may want to re-enable it later.
-        
         // Check if appConfig is loaded.
         if (!appConfig) {
             setApiState('loading');
             return;
         }
         
-
+        // Declare an async function to look up the invitation.
+        // This only gets called if there is a code and an entity ID in the URL.
         async function lookupInvitation() {
-           // Get the code and the entity from the request parameters.
+            // Get the code and the entity from the request parameters.
             const code = searchParams.get('code');
             const entityId = searchParams.get('entity_id');
-
+    
             // Call the lookupInvitationAPI function with the code and entity ID.
-            const lookupResult = await lookupEntityAPI(appConfig, code);
-
-            console.log( 'lookupResult: ', lookupResult);
-
-            if (lookupResult.payload.ok) {
-                setApiState('validated');
-                setInviteInfo(lookupResult.payload);
-                setStepIndex(1);
-            } else if (lookupResult.payload.unauthorized) {
-                setApiState('unauthorized');
-                //console.error(lookupResult);
-            } else {
+            try {
+                const lookupResult = await lookupEntityAPI(appConfig, code);
+                console.log('lookupResult: ', lookupResult);
+    
+                if (lookupResult.payload.ok) {
+                    setApiState('validated');
+                    setInviteInfo(lookupResult.payload);
+                    setStepIndex(1);
+                } else if (lookupResult.payload.unauthorized) {
+                    setApiState('unauthorized');
+                    console.error('Unauthorized access: ', lookupResult);
+                } else {
+                    setApiState('error');
+                    console.error('Error during lookup: ', lookupResult);
+                }
+            } catch (error) {
                 setApiState('error');
-                console.error(lookupResult);
+                console.error('Error during API call: ', error);
             }
-
         }
-
+    
+        // If there are both a code and an entity ID, call the lookupInvitation function.
         if (searchParams.has('code') && searchParams.has('entity_id')) {
-            // If there are both a code and an entity ID, call the acknowledgeEntity function.
             // First, set the API state to loading.
             setApiState('loading');
-            
-            // We may start using an invitation lookup function again in the future, so this is here but commented out.
             lookupInvitation();
-
-            // This is a temporary workaround to skip the lookupInvitation function.
-            //setApiState('validated');
-            setStepIndex(1);
-
         } else {
             // If there is no code, display an error message.
             setApiState('no-code');
@@ -85,27 +83,30 @@ export default function SignUpAuthIndPage() {
     function acceptPrivacyPolicy() {
         setApiState('acknowledged');
         setStepIndex(2);
-    }
 
-    // If there are users in the inviteInfo, get the email of the user whose role is 'RE_ADMIN'.
-    const adminUser = inviteInfo?.users?.find(user => user.role === 'RE_ADMIN') || '';
+        // Scroll to the top of the form, so we can see the stepper advance.
+        headerRef.current.scrollIntoView();
+    }
 
     return (
         <>
-            <Heading as="h2" size={"xl"}>Sign Up Authorized Individual</Heading>
+            <Heading ref={headerRef} as="h2" size={"xl"}>Register Authorized Individual</Heading>
             <SignUpAuthIndStepper currentIndex={stepIndex} />
             
             {apiState === 'no-code' &&
                 <Text>Error: No code provided. Try again with a valid sign up link</Text>
             }
             {apiState == 'loading' &&
-                <Spinner
-                    thickness='4px'
-                    speed='0.65s'
-                    emptyColor='gray.200'
-                    color='blue.500'
-                    size='xl'
-                />
+                <Box>
+                    <Text>Validating invitation code...</Text>
+                    <Spinner
+                        thickness='4px'
+                        speed='0.65s'
+                        emptyColor='gray.200'
+                        color='blue.500'
+                        size='xl'
+                    />
+                </Box>
             }
             {apiState == 'error' &&
                 <Text>Error: There was an error validating the invitation code. Please try again.</Text>
@@ -121,14 +122,7 @@ export default function SignUpAuthIndPage() {
                             Invitation Code Validated
                         </Alert>
                     </VStack>
-                    <Card mt="4">
-                        <CardBody>
-                            <Text>
-                                You have been invited by <Code>{adminUser.email}</Code> to register as an Authorized Individual on behalf of 
-                                {(inviteInfo.entity) ? ` ${inviteInfo.entity.entity_name}` : ' a new entity'}.
-                            </Text>
-                        </CardBody>
-                    </Card>
+                    <EntityInfoCard inviteInfo={inviteInfo} />
                     <Text mt="6">
                         Nisi occaecat Lorem velit reprehenderit magna ea anim sint ut excepteur nostrud laborum excepteur. Quis labore quis eu mollit. Cillum anim ex elit ut eu eiusmod est adipisicing minim irure. Voluptate velit veniam elit id cupidatat officia culpa velit amet irure commodo duis. Elit veniam eu ipsum et amet qui cillum elit elit occaecat. Id est enim ut eiusmod qui velit ipsum consectetur enim.
                     </Text>
@@ -161,6 +155,7 @@ export default function SignUpAuthIndPage() {
             }
             {apiState == 'acknowledged' &&
                 <Fade in={apiState == 'acknowledged'}>
+                    <EntityInfoCard inviteInfo={inviteInfo} />
                     <SignUpAuthIndForm inviteInfo={inviteInfo} setStepIndex={setStepIndex} code={searchParams.get('code')} />
                 </Fade>
             }
