@@ -1,7 +1,7 @@
 import { useState, useContext } from 'react';
 import { useForm } from 'react-hook-form';
 import { useSearchParams } from 'react-router-dom';
-import { Alert, AlertDescription, AlertIcon, AlertTitle, Box, Button, Card, CardBody, CardHeader, Flex, FormControl, FormErrorMessage, FormHelperText, FormLabel, Heading, Input, Spinner, Text } from "@chakra-ui/react";
+import { Alert, AlertDescription, AlertIcon, AlertTitle, Box, Button, Flex, FormControl, FormErrorMessage, FormHelperText, FormLabel, Heading, Input, Spinner, Text } from "@chakra-ui/react";
 
 import SignUpCognitoButton from './signUpCognitoButton';
 import DelegatedContactForm from './delegatedContactForm';
@@ -163,7 +163,6 @@ export default function SignUpAuthIndForm({inviteInfo, setStepIndex, code}) {
                     { addingDelegatedContact &&
                         <DelegatedContactForm register={register} errors={errors} />
                     }
-
                     <Flex justifyContent="flex-end" width="100%">
                         <Button
                             onClick={toggleAddingDelegatedContact}

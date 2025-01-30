@@ -1,6 +1,6 @@
 import { useEffect, useState, useContext, useRef } from 'react';
 import { useSearchParams } from 'react-router-dom';
-import { Heading, Text, Spinner, Box, Checkbox, Button, Fade, VStack, Alert, AlertIcon, Card, CardBody, Code } from "@chakra-ui/react";
+import { Heading, Text, Spinner, Box, Checkbox, Button, Fade, VStack, Alert, AlertIcon } from "@chakra-ui/react";
 
 import { lookupEntityAPI } from '../../lib/entity/lookupEntityAPI';
 
