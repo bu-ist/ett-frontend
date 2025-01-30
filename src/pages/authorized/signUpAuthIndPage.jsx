@@ -122,7 +122,6 @@ export default function SignUpAuthIndPage() {
                             Invitation Code Validated
                         </Alert>
                     </VStack>
-                    <EntityInfoCard inviteInfo={inviteInfo} />
                     <Text mt="6">
                         Nisi occaecat Lorem velit reprehenderit magna ea anim sint ut excepteur nostrud laborum excepteur. Quis labore quis eu mollit. Cillum anim ex elit ut eu eiusmod est adipisicing minim irure. Voluptate velit veniam elit id cupidatat officia culpa velit amet irure commodo duis. Elit veniam eu ipsum et amet qui cillum elit elit occaecat. Id est enim ut eiusmod qui velit ipsum consectetur enim.
                     </Text>
