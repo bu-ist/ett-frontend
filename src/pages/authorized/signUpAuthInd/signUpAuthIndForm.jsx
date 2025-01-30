@@ -4,6 +4,7 @@ import { useSearchParams } from 'react-router-dom';
 import { Alert, AlertDescription, AlertIcon, AlertTitle, Box, Button, Card, CardBody, CardHeader, Flex, FormControl, FormErrorMessage, FormHelperText, FormLabel, Heading, Input, Spinner, Text } from "@chakra-ui/react";
 
 import SignUpCognitoButton from './signUpCognitoButton';
+import DelegatedContactForm from './delegatedContactForm';
 
 import { ConfigContext } from '../../../lib/configContext';
 
@@ -24,6 +25,15 @@ export default function SignUpAuthIndForm({inviteInfo, setStepIndex, code}) {
     // Setup state variables for the API call.
     const [apiState, setApiState] = useState('idle');
     const [apiError, setApiError] = useState(null);
+
+    // Setup state for the optional delegated contact; if true display the delegated contact form and add it to the API call.
+    const [ addingDelegatedContact, setAddingDelegatedContact ] = useState(false);
+
+    // Function to toggle the boolean value
+    function toggleAddingDelegatedContact() {
+        setAddingDelegatedContact(prevState => !prevState);
+    };
+
 
     // Set the initial state of the form data using react-hook-form.
     const {
@@ -52,6 +62,15 @@ export default function SignUpAuthIndForm({inviteInfo, setStepIndex, code}) {
         // The signature field is not used in the API call, so create a new object without the signature property
         const { signature, ...valuesWithoutSignature } = values;
 
+        // Remove delegate fields if addingDelegatedContact is false.
+        // By doing it here, we don't have to get involved with the react-hook-form state.
+        if (!addingDelegatedContact) {
+            delete valuesWithoutSignature.delegate_fullname;
+            delete valuesWithoutSignature.delegate_email;
+            delete valuesWithoutSignature.delegate_title;
+            delete valuesWithoutSignature.delegate_phone;
+        }
+        
         const registerResult = await registerEntityAPI(appConfig, code, valuesWithoutSignature);
         console.log(registerResult);
 
@@ -141,11 +160,15 @@ export default function SignUpAuthIndForm({inviteInfo, setStepIndex, code}) {
                     <Text mb="4">
                         If you wish to have disclosure correspendence sent to a different contact, you may add a delegated contact here.
                     </Text>
+                    { addingDelegatedContact &&
+                        <DelegatedContactForm register={register} errors={errors} />
+                    }
+
                     <Flex justifyContent="flex-end" width="100%">
                         <Button
-                            onClick={() => alert('This feature is not yet implemented.')}
+                            onClick={toggleAddingDelegatedContact}
                         >
-                        Add Delegated Contact
+                            {addingDelegatedContact ? 'Cancel' : 'Add Delegated Contact'}
                         </Button>
                     </Flex>
                 </Box>
