@@ -1,5 +1,6 @@
-import { Card, CardHeader, Heading, CardBody, Text, HStack, Box, StackDivider, Button } from "@chakra-ui/react";
-import { AiOutlineClose } from 'react-icons/ai'; 
+import { Card, CardHeader, Heading, CardBody, Text, HStack, Box, StackDivider, Button, ButtonGroup } from "@chakra-ui/react";
+import { AiOutlineClose } from 'react-icons/ai';
+import { HiOutlinePencil } from "react-icons/hi";
 
 // Display card to show entity information, with the Entity Adminstrator's information and information on any existing Authorized Individuals.
 
@@ -18,7 +19,7 @@ export default function EntityInfoCard({ inviteInfo }) {
                 <Heading as="h3" size="md">Invitation from {entity_name} </Heading>
             </CardHeader>
             <CardBody>
-                <HStack align="top" spacing={16} divider={<StackDivider borderColor="gray.200" />}>
+                <HStack align="top" spacing={14} divider={<StackDivider borderColor="gray.200" />}>
                     <Box>
                         <Heading as="h4" size="sm">Entity Administrator</Heading>
                         <Text>{adminUser.fullname}</Text>
@@ -41,14 +42,21 @@ export default function EntityInfoCard({ inviteInfo }) {
                     </Box>
                     <Box>
                         <Heading as="h4" size="sm">Options</Heading>
-                        <Text>Optionally reject the entity if there is a problem with the invitation</Text>
-                        <Button
-                            my="4"
-                            leftIcon={<AiOutlineClose/>} 
-                            onClick={() => alert('Not yet implemented')}
-                        >
-                            Reject Entity
-                        </Button>
+                        <Text>Optionally amend or reject the entity if there is a problem with the invitation.</Text>
+                        <ButtonGroup size="sm" mt="4" spacing="4">
+                            <Button
+                                leftIcon={<HiOutlinePencil/>}
+                                onClick={() => alert('Not yet implemented')}
+                            >
+                                Amend
+                            </Button>
+                            <Button
+                                leftIcon={<AiOutlineClose/>} 
+                                onClick={() => alert('Not yet implemented')}
+                            >
+                                Reject
+                            </Button>
+                        </ButtonGroup>
                     </Box>
                 </HStack>
             </CardBody>
