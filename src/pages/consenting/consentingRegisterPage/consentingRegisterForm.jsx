@@ -1,6 +1,6 @@
 import { useState, useContext } from "react";
 import { useForm } from 'react-hook-form';
-import { Alert, AlertDescription, AlertIcon, AlertTitle, Box, Button, FormControl, FormErrorMessage, FormLabel, Heading, Input, Spinner, Text } from "@chakra-ui/react";
+import { Alert, AlertDescription, AlertIcon, AlertTitle, Box, Button, FormControl, FormErrorMessage, FormHelperText, FormLabel, Heading, Input, Spinner, Text } from "@chakra-ui/react";
 
 import SignUpCognitoButton from '../../authorized/signUpAuthInd/signUpCognitoButton';
 
@@ -33,7 +33,10 @@ export default function ConsentingRegisterForm() {
 
         setApiState('loading');
 
-        const response = await registerConsenterAPI( appConfig, values );
+        // The signature field is not used in the API call, so create a new object without the signature property
+        const { signature, ...valuesWithoutSignature } = values;
+
+        const response = await registerConsenterAPI( appConfig, valuesWithoutSignature );
         console.log('register Response', response);
 
         // Use a ternary conditional to set the apiState based on the response
@@ -118,6 +121,22 @@ export default function ConsentingRegisterForm() {
                         {errors.email && errors.email.message}
                     </FormErrorMessage>
                 </Box>
+            </FormControl>
+            <FormControl mb="4" isInvalid={errors.signature}>
+                <FormLabel>Your Signature</FormLabel>
+                <Input
+                    id="signature"
+                    name="signature"
+                    placeholder="Signature"
+                    {...register('signature', {
+                        required: 'Signature is required',
+                    })}
+                />
+                {!errors.signature ? (
+                    <FormHelperText>Type your name here as your digital signature.</FormHelperText>
+                ) : (
+                    <FormErrorMessage>{errors.signature.message}</FormErrorMessage>
+                )}
             </FormControl>
             <Button my="4" type="submit" isDisabled={apiState !== 'idle'}>
                 { apiState === 'loading' && <Spinner /> }
