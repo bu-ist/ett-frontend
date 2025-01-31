@@ -17,7 +17,6 @@ export default function AcknowledgeEntityPage() {
 
     const [entityInfo, setEntityInfo] = useState({});
     const [apiState, setApiState] = useState('');
-    const [privacyPolicyAccepted, setPrivacyPolicyAccepted] = useState(false);
 
     const [stepIndex, setStepIndex] = useState(0);
 
@@ -117,20 +116,9 @@ export default function AcknowledgeEntityPage() {
                     <Text mt="6">
                         Nisi occaecat Lorem velit reprehenderit magna ea anim sint ut excepteur nostrud laborum excepteur. Quis labore quis eu mollit. Cillum anim ex elit ut eu eiusmod est adipisicing minim irure. Voluptate velit veniam elit id cupidatat officia culpa velit amet irure commodo duis. Elit veniam eu ipsum et amet qui cillum elit elit occaecat. Id est enim ut eiusmod qui velit ipsum consectetur enim.
                     </Text>
-                    <EntityPrivacyPolicy accepted={privacyPolicyAccepted} />
-                    <Box mt="4">
-                        <Checkbox
-                        size={"lg"}
-                        my="4"
-                            value={privacyPolicyAccepted}
-                            onChange={(e) => setPrivacyPolicyAccepted(e.target.checked)}
-                        >
-                            Accept Privacy Policy
-                        </Checkbox>
-                    </Box>
-
+                    <EntityPrivacyPolicy />
                     <Button
-                        isDisabled={!privacyPolicyAccepted}
+                        mt="8"
                         onClick={acceptPrivacyPolicy}
                     >
                         Accept
