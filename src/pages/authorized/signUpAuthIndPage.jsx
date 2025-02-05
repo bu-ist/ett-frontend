@@ -11,7 +11,7 @@ import SignUpAuthIndStepper from './signUpAuthInd/signUpAuthIndStepper';
 import SignUpAuthIndForm from './signUpAuthInd/signUpAuthIndForm';
 import AcknowledgePrivacy from './signUpAuthInd/acknowledgePrivacy';
 import EntityInfoCard from "./signUpAuthInd/entityInfoCard";
-import TermsOfUseBox from './signUpAuthInd/termsOfUseBox';
+import TermsOfUseBox from '../../components/sharedTexts/termsOfUseBox';
 import SignUpCognitoButton from "./signUpAuthInd/signUpCognitoButton";
 
 // This may have some weakness around ensuring the appConfig is loaded before this component is rendered.
