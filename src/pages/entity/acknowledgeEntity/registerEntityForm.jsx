@@ -192,13 +192,13 @@ export default function RegisterEntityForm({ code, setStepIndex }) {
                         <Heading as="h4" size={"sm"}>Registration successful</Heading>
                     </CardHeader>
                     <CardBody>
-                        <Text>Click Sign Up to create a password and complete registration.</Text>
+                        <Text>Click <i>Create Account</i> to create an account and password.</Text>
                     </CardBody>
                     <CardFooter>
                         <Button
                             onClick={handleRegisterClick}
                         >
-                            Sign Up
+                            Create Account
                         </Button>
                     </CardFooter>
                 </Card>
