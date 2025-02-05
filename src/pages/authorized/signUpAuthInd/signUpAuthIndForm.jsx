@@ -2,8 +2,8 @@ import { useState, useContext } from 'react';
 import { useForm } from 'react-hook-form';
 import { useSearchParams } from 'react-router-dom';
 import { Alert, AlertDescription, AlertIcon, AlertTitle, Box, Button, Flex, FormControl, FormErrorMessage, FormHelperText, FormLabel, Heading, Input, Spinner, Text } from "@chakra-ui/react";
+import { AiOutlineClose } from 'react-icons/ai';
 
-import SignUpCognitoButton from './signUpCognitoButton';
 import DelegatedContactForm from './delegatedContactForm';
 
 import { ConfigContext } from '../../../lib/configContext';
@@ -12,7 +12,7 @@ import { registerEntityAPI } from '../../../lib/entity/registerEntityAPI';
 import { signUp } from '../../../lib/signUp';
 import { emailRegex } from '../../../lib/formatting/emailRegex';
 
-export default function SignUpAuthIndForm({inviteInfo, setStepIndex, code}) {
+export default function SignUpAuthIndForm({inviteInfo, setRegistered, setSignUpEmail, code}) {
     //const  { entity, invitation, users }  = entityInfo;
 
     // Get the appConfig from the ConfigContext.
@@ -49,9 +49,6 @@ export default function SignUpAuthIndForm({inviteInfo, setStepIndex, code}) {
         }
     });
 
-    // Store the email from the form separately in a state variable, so the sign up redirect can use it.
-    const [ signUpEmail, setSignUpEmail ] = useState('');
-
     // Handle form submission
     async function processRegistration(values) {
         // Setup the signUp email value for the cognito sign up redirect.
@@ -59,25 +56,24 @@ export default function SignUpAuthIndForm({inviteInfo, setStepIndex, code}) {
 
         setApiState('loading');
 
-        // The signature field is not used in the API call, so create a new object without the signature property
-        const { signature, ...valuesWithoutSignature } = values;
-
         // Remove delegate fields if addingDelegatedContact is false.
         // By doing it here, we don't have to get involved with the react-hook-form state.
         if (!addingDelegatedContact) {
-            delete valuesWithoutSignature.delegate_fullname;
-            delete valuesWithoutSignature.delegate_email;
-            delete valuesWithoutSignature.delegate_title;
-            delete valuesWithoutSignature.delegate_phone;
+            delete values.delegate_fullname;
+            delete values.delegate_email;
+            delete values.delegate_title;
+            delete values.delegate_phone;
         }
         
-        const registerResult = await registerEntityAPI(appConfig, code, valuesWithoutSignature);
+        const registerResult = await registerEntityAPI(appConfig, code, values);
         console.log(registerResult);
 
          if (registerResult.payload.ok) {
             console.log('Registration successful');
-            setStepIndex(3);
             setApiState('success');
+
+            // Tell the parent component that the registration is complete. 
+            setRegistered();
         }
 
         if (!registerResult.payload.ok) {
@@ -87,16 +83,13 @@ export default function SignUpAuthIndForm({inviteInfo, setStepIndex, code}) {
         }
     }
 
-    function signUpRedirect() {
-        const { cognitoDomain, authorizedIndividual: { cognitoID } } = appConfig;
-        signUp( cognitoDomain, signUpEmail, cognitoID, 'auth-ind?action=post-signup');
-    }
-
     return (
         <>
             <Heading as="h3" my="4" size="md">Register For an Authorized Individual Account</Heading>
             <Text mb="8">
-                Nisi voluptate irure culpa dolor laborum enim consectetur eu incididunt. Id culpa esse ad Lorem dolor cupidatat incididunt ipsum ipsum velit. Incididunt non velit et minim eiusmod occaecat ex consectetur voluptate cillum.
+                An Authorized Individual is a person in a senior role that is accustomed to managing confidential and sensitive information, who will make Disclosure Requests and directly
+                receive the completed Disclosure Form information on behalf of the Requesting Registered Entity and will decide who at the Registered Entity needs
+                the information.
             </Text>
             <form onSubmit={handleSubmit(processRegistration)}>
                 <Box as="section" borderWidth="0.1em" borderRadius="16" borderColor="gray.100" p="4" mb="8">
@@ -166,27 +159,12 @@ export default function SignUpAuthIndForm({inviteInfo, setStepIndex, code}) {
                     <Flex justifyContent="flex-end" width="100%">
                         <Button
                             onClick={toggleAddingDelegatedContact}
+                            leftIcon={addingDelegatedContact ? <AiOutlineClose/> : null}
                         >
-                            {addingDelegatedContact ? 'Cancel' : 'Add Delegated Contact'}
+                            {addingDelegatedContact ? 'Cancel Delegated Contact' : 'Add Delegated Contact'}
                         </Button>
                     </Flex>
                 </Box>
-                <FormControl mb="4" isInvalid={errors.signature}>
-                    <FormLabel>Your Signature</FormLabel>
-                    <Input
-                        id="signature"
-                        name="signature"
-                        placeholder="Signature"
-                        {...register('signature', {
-                            required: 'Signature is required',
-                        })}
-                    />
-                    {!errors.signature ? (
-                        <FormHelperText>Type your name here as your digital signature.</FormHelperText>
-                    ) : (
-                        <FormErrorMessage>{errors.signature.message}</FormErrorMessage>
-                    )}
-                </FormControl>
                 <Button my="1em" type="submit" isDisabled={apiState !== 'idle'}>
                     { apiState === 'loading' && <Spinner /> }
                     { apiState === 'idle' && 'Register' }
@@ -203,9 +181,6 @@ export default function SignUpAuthIndForm({inviteInfo, setStepIndex, code}) {
                     </Box>
                 }
             </form>
-            {apiState === 'success' &&
-                <SignUpCognitoButton signUpRedirect={signUpRedirect} />
-            }
         </>
     );
 }
