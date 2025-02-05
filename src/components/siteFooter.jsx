@@ -14,6 +14,7 @@ export default function SiteFooter() {
                 <Box p='2'>
                     <Text fontSize="sm" color="gray.500">
                         <Link as={RouterLink} to="/privacy">Privacy Policy</Link> {" "} | {" "}
+                        <Link as={RouterLink} to="/terms">Terms of Use</Link> {" "} | {" "}
                         <Link as={RouterLink} to="/about">About</Link>
                     </Text>
                 </Box>

@@ -21,6 +21,7 @@ const NavBreadcrumb = () => {
         'logout': 'Logout', // Other
         'about': 'About',
         'privacy': 'Privacy Policy',
+        'terms': 'Terms of Use',
     };
 
 
