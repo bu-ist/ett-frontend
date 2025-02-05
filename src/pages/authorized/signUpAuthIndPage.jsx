@@ -186,7 +186,7 @@ export default function SignUpAuthIndPage() {
                         <AlertIcon />
                         Registration Successful
                     </Alert>
-                    <Heading mt="6" as="h3" size="md">Accept Terms of Use and Create Account</Heading>
+                    <Heading mt="6" as="h3" size="lg">Accept Terms of Use and Create Account</Heading>
                     <Text mt="2">
                        Before creating an account, you must accept the terms of use on behalf of the Registered Entity, <b>{inviteInfo.entity.entity_name}</b>.
                     </Text>

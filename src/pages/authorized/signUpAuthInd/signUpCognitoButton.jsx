@@ -20,7 +20,7 @@ export default function SignUpCognitoButton({ signUpRedirect}) {
     return (
         <form onSubmit={handleSubmit(handleSignUpClick)}>
             <FormControl mb="4" isInvalid={errors.signature}>
-                <FormLabel>Your Signature</FormLabel>
+                <FormLabel>Your Signature on behalf of the Registered Entity</FormLabel>
                 <Input
                     id="signature"
                     name="signature"
@@ -30,7 +30,7 @@ export default function SignUpCognitoButton({ signUpRedirect}) {
                     })}
                 />
                 {!errors.signature ? (
-                    <FormHelperText>Type your name here as your digital signature.</FormHelperText>
+                    <FormHelperText>Type your name here as your digital signature, agreeing to the terms and affirming your authority to do so.</FormHelperText>
                 ) : (
                     <FormErrorMessage>{errors.signature.message}</FormErrorMessage>
                 )}

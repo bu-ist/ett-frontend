@@ -2,6 +2,7 @@ import { useState, useContext } from 'react';
 import { useForm } from 'react-hook-form';
 import { useSearchParams } from 'react-router-dom';
 import { Alert, AlertDescription, AlertIcon, AlertTitle, Box, Button, Flex, FormControl, FormErrorMessage, FormHelperText, FormLabel, Heading, Input, Spinner, Text } from "@chakra-ui/react";
+import { AiOutlineClose } from 'react-icons/ai';
 
 import DelegatedContactForm from './delegatedContactForm';
 
@@ -86,7 +87,9 @@ export default function SignUpAuthIndForm({inviteInfo, setRegistered, setSignUpE
         <>
             <Heading as="h3" my="4" size="md">Register For an Authorized Individual Account</Heading>
             <Text mb="8">
-                Nisi voluptate irure culpa dolor laborum enim consectetur eu incididunt. Id culpa esse ad Lorem dolor cupidatat incididunt ipsum ipsum velit. Incididunt non velit et minim eiusmod occaecat ex consectetur voluptate cillum.
+                An Authorized Individual is a person in a senior role that is accustomed to managing confidential and sensitive information, who will make Disclosure Requests and directly
+                receive the completed Disclosure Form information on behalf of the Requesting Registered Entity and will decide who at the Registered Entity needs
+                the information.
             </Text>
             <form onSubmit={handleSubmit(processRegistration)}>
                 <Box as="section" borderWidth="0.1em" borderRadius="16" borderColor="gray.100" p="4" mb="8">
@@ -156,6 +159,7 @@ export default function SignUpAuthIndForm({inviteInfo, setRegistered, setSignUpE
                     <Flex justifyContent="flex-end" width="100%">
                         <Button
                             onClick={toggleAddingDelegatedContact}
+                            leftIcon={addingDelegatedContact ? <AiOutlineClose/> : null}
                         >
                             {addingDelegatedContact ? 'Cancel Delegated Contact' : 'Add Delegated Contact'}
                         </Button>
