@@ -35,7 +35,7 @@ export default function SignUpCognitoButton({ signUpRedirect}) {
                     <FormErrorMessage>{errors.signature.message}</FormErrorMessage>
                 )}
             </FormControl>
-            <Text>Click <i>Accept and Create Account</i> to accept the terms of use on behalf of the Entity, and create an account with a password.</Text>
+            <Text>Click <i>Accept and Create Account</i> to accept the terms of use on behalf of the Registered Entity, and create an account with a password.</Text>
             <Button
                 my="1em"
                 type="submit"

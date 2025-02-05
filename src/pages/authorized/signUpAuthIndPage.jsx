@@ -186,8 +186,9 @@ export default function SignUpAuthIndPage() {
                         <AlertIcon />
                         Registration Successful
                     </Alert>
-                    <Text mt="6">
-                       Before creating an account, you must accept the terms of use on behalf of <b>{inviteInfo.entity.entity_name}</b>.
+                    <Heading mt="6" as="h3" size="md">Accept Terms of Use and Create Account</Heading>
+                    <Text mt="2">
+                       Before creating an account, you must accept the terms of use on behalf of the Registered Entity, <b>{inviteInfo.entity.entity_name}</b>.
                     </Text>
                     <TermsOfUseBox />
                     <SignUpCognitoButton signUpRedirect={signUpRedirect} />
