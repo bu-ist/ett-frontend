@@ -108,60 +108,60 @@ export default function RegisterEntityForm({ code, setStepIndex }) {
                     </FormControl>
                 </Box>
                 <Box as="section" borderWidth="0.1em" borderRadius="16" borderColor="gray.100" p="4" mb="8">
-                <Heading as="h4" size={"sm"} mb="4">Administrative Support Professional Information</Heading>
-                <FormControl mb="4" isInvalid={errors.fullname}>
-                    <FormLabel>Your Full Name</FormLabel>
-                    <Input
-                        id="fullname"
-                        name="fullname"
-                        placeholder="Full Name"
-                        {...register('fullname', {
-                            required: 'Full name is required',
-                        })}
-                    />
-                    {!errors.fullname ? (
-                        <FormHelperText>The name to use for your account.</FormHelperText>
-                    ) : (
-                        <FormErrorMessage>{errors.fullname.message}</FormErrorMessage>
-                    )}
-                </FormControl>
-                <FormControl mb="4" isInvalid={errors.title}>
-                    <FormLabel>Your Title</FormLabel>
-                    <Input
-                        id="title"
-                        name="title"
-                        placeholder="Title"
-                        {...register('title', {
-                            required: 'Title is required',
-                        })}
-                    />
-                    {!errors.title ? (
-                        <FormHelperText>Your current title.</FormHelperText>
-                    ) : (
-                        <FormErrorMessage>{errors.title.message}</FormErrorMessage>
-                    )}
-                </FormControl>
-                <FormControl mb="4" isInvalid={errors.email}>
-                    <FormLabel>Your Email</FormLabel>
-                    <Input
-                        id="email"
-                        name="email"
-                        type="email"
-                        placeholder="Email"
-                        {...register('email', {
-                            required: 'Email is required',
-                            pattern: {
-                                value: emailRegex,
-                                message: 'Invalid email address',
-                            },
-                        })}
-                    />
-                    {!errors.email ? (
-                        <FormHelperText>The email address to use for this account.</FormHelperText>
-                    ) : (
-                        <FormErrorMessage>{errors.email.message}</FormErrorMessage>
-                    )}
-                </FormControl>
+                    <Heading as="h4" size={"sm"} mb="4">Administrative Support Professional Information</Heading>
+                    <FormControl mb="4" isInvalid={errors.fullname}>
+                        <FormLabel>Your Full Name</FormLabel>
+                        <Input
+                            id="fullname"
+                            name="fullname"
+                            placeholder="Full Name"
+                            {...register('fullname', {
+                                required: 'Full name is required',
+                            })}
+                        />
+                        {!errors.fullname ? (
+                            <FormHelperText>The name to use for your account.</FormHelperText>
+                        ) : (
+                            <FormErrorMessage>{errors.fullname.message}</FormErrorMessage>
+                        )}
+                    </FormControl>
+                    <FormControl mb="4" isInvalid={errors.title}>
+                        <FormLabel>Your Title</FormLabel>
+                        <Input
+                            id="title"
+                            name="title"
+                            placeholder="Title"
+                            {...register('title', {
+                                required: 'Title is required',
+                            })}
+                        />
+                        {!errors.title ? (
+                            <FormHelperText>Your current title.</FormHelperText>
+                        ) : (
+                            <FormErrorMessage>{errors.title.message}</FormErrorMessage>
+                        )}
+                    </FormControl>
+                    <FormControl mb="4" isInvalid={errors.email}>
+                        <FormLabel>Your Email</FormLabel>
+                        <Input
+                            id="email"
+                            name="email"
+                            type="email"
+                            placeholder="Email"
+                            {...register('email', {
+                                required: 'Email is required',
+                                pattern: {
+                                    value: emailRegex,
+                                    message: 'Invalid email address',
+                                },
+                            })}
+                        />
+                        {!errors.email ? (
+                            <FormHelperText>The email address to use for this account.</FormHelperText>
+                        ) : (
+                            <FormErrorMessage>{errors.email.message}</FormErrorMessage>
+                        )}
+                    </FormControl>
                 </Box>
                 <FormControl mb="4" isInvalid={errors.signature}>
                     <FormLabel>Your Signature</FormLabel>
