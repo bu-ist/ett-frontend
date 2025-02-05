@@ -30,7 +30,9 @@ export default function DelegatedContactForm({ register, errors }) {
                     id="delegate_title"
                     name="delegate_title"
                     placeholder="Title"
-                    {...register('delegate_title')}
+                    {...register('delegate_title', {
+                        required: 'Title is required',
+                    })}
                 />
                 {!errors.delegate_title ? (
                     <FormHelperText>The title of the person who will be the delegated contact.</FormHelperText>
@@ -65,7 +67,9 @@ export default function DelegatedContactForm({ register, errors }) {
                     id="delegate_phone"
                     name="delegate_phone"
                     placeholder="Phone"
-                    {...register('delegate_phone')}
+                    {...register('delegate_phone', {
+                        required: 'Phone is required',
+                    })}
                 />
                 {!errors.delegate_phone ? (
                     <FormHelperText>The phone number of the person who will be the delegated contact.</FormHelperText>
