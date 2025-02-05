@@ -17,7 +17,6 @@ export default function AcknowledgeEntityPage() {
 
     const [entityInfo, setEntityInfo] = useState({});
     const [apiState, setApiState] = useState('');
-    const [privacyPolicyAccepted, setPrivacyPolicyAccepted] = useState(false);
 
     const [stepIndex, setStepIndex] = useState(0);
 
@@ -80,36 +79,48 @@ export default function AcknowledgeEntityPage() {
             <RegisterEntityStepper currentIndex={stepIndex} />
 
             {apiState == 'no-code' &&
-                <Text>Missing invitation code or entity. Please check your email for the link to acknowledge the entity.</Text>
+                <>
+                    <Alert mb="4" status="error">
+                        <AlertIcon />
+                        Invitation Code Missing
+                    </Alert>
+                    <Text>Missing invitation code or entity. Please check your email for the link to acknowledge the entity.</Text>
+                </>
             }
             {apiState == 'unauthorized' &&
-                <Text>Code not accepted, check that the emailed link is intact. Or the invitation could have expired or been rescinded.</Text>
+                <>
+                    <Alert mb="4" status="error">
+                        <AlertIcon />
+                        Invitation Code Invalid
+                    </Alert>
+                    <Text>Code not accepted, check that the emailed link is intact. Or the invitation could have expired or been rescinded.</Text>
+                </>
             }
             {apiState == 'error' &&
                 <Text>There was an error acknowledging the entity. Please try again.</Text>
             }
             {apiState == 'loading' &&
-                <Spinner
-                    thickness='4px'
-                    speed='0.65s'
-                    emptyColor='gray.200'
-                    color='blue.500'
-                    size='xl'
-                />
+                <>
+                    <Text>Validating invitation code...</Text>
+                    <Spinner
+                        thickness='4px'
+                        speed='0.65s'
+                        emptyColor='gray.200'
+                        color='blue.500'
+                        size='xl'
+                    />
+                </>
             }
             {apiState == 'validated' &&
                 <>
-                    <VStack>
-                        <Alert status='success'>
-                            <AlertIcon />
-                            Invitation Code Validated
-                        </Alert>
-
-                    </VStack>
+                    <Alert status='success'>
+                        <AlertIcon />
+                        Invitation Code Validated
+                    </Alert>
                     <Card mt="4">
                         <CardBody>
                             <Text>
-                                You have been invited by <Code>{sysadminEmail}</Code> to register as an Administrative Support Professional on behalf of 
+                                You have been invited to register as an Administrative Support Professional on behalf of 
                                 {(entityInfo.entity) ? ` ${entityInfo.entity_name}` : ' a new entity'}.
                             </Text>
                         </CardBody>
@@ -117,20 +128,9 @@ export default function AcknowledgeEntityPage() {
                     <Text mt="6">
                         Nisi occaecat Lorem velit reprehenderit magna ea anim sint ut excepteur nostrud laborum excepteur. Quis labore quis eu mollit. Cillum anim ex elit ut eu eiusmod est adipisicing minim irure. Voluptate velit veniam elit id cupidatat officia culpa velit amet irure commodo duis. Elit veniam eu ipsum et amet qui cillum elit elit occaecat. Id est enim ut eiusmod qui velit ipsum consectetur enim.
                     </Text>
-                    <EntityPrivacyPolicy accepted={privacyPolicyAccepted} />
-                    <Box mt="4">
-                        <Checkbox
-                        size={"lg"}
-                        my="4"
-                            value={privacyPolicyAccepted}
-                            onChange={(e) => setPrivacyPolicyAccepted(e.target.checked)}
-                        >
-                            Accept Privacy Policy
-                        </Checkbox>
-                    </Box>
-
+                    <EntityPrivacyPolicy />
                     <Button
-                        isDisabled={!privacyPolicyAccepted}
+                        mt="8"
                         onClick={acceptPrivacyPolicy}
                     >
                         Accept

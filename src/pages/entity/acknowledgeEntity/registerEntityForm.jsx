@@ -1,4 +1,4 @@
-import { useState, useContext } from 'react';
+import { useState, useContext, useEffect, useRef } from 'react';
 import { useForm } from 'react-hook-form';
 import { useSearchParams } from 'react-router-dom';
 import { Alert, AlertDescription, AlertIcon, AlertTitle, Box, Heading, FormControl, FormLabel, FormErrorMessage, FormHelperText, Input, Button, Spinner, Text, Card, CardHeader, CardBody, CardFooter } from "@chakra-ui/react";
@@ -39,6 +39,9 @@ export default function RegisterEntityForm({ code, setStepIndex }) {
     // Store the email from the form separately in a state variable, so the sign up redirect can use it.
     const [ signUpEmail, setSignUpEmail ] = useState('');
 
+    // Create a ref so we can scroll to the card when the apiState is 'success'.
+    const createCardRef = useRef(null);
+
     // Handle form submission
     async function processRegistration(values) {
         // Setup the signUp email value for the cognito sign up redirect.
@@ -71,6 +74,13 @@ export default function RegisterEntityForm({ code, setStepIndex }) {
         signUp( cognitoDomain, signUpEmail, cognitoID, 'entity?action=post-signup');
     }
 
+    // Scroll to the "Create Account" card after a successful registration.
+    useEffect(() => {
+        if (apiState === 'success') {
+            createCardRef.current.scrollIntoView({ behavior: 'smooth' });
+        }
+    }, [apiState]);
+
     return (
         <>
             <Heading as="h3" size={"md"} >Register Entity</Heading>
@@ -98,60 +108,60 @@ export default function RegisterEntityForm({ code, setStepIndex }) {
                     </FormControl>
                 </Box>
                 <Box as="section" borderWidth="0.1em" borderRadius="16" borderColor="gray.100" p="4" mb="8">
-                <Heading as="h4" size={"sm"} mb="4">Administrative Support Professional Information</Heading>
-                <FormControl mb="4" isInvalid={errors.fullname}>
-                    <FormLabel>Your Full Name</FormLabel>
-                    <Input
-                        id="fullname"
-                        name="fullname"
-                        placeholder="Full Name"
-                        {...register('fullname', {
-                            required: 'Full name is required',
-                        })}
-                    />
-                    {!errors.fullname ? (
-                        <FormHelperText>The name to use for your account.</FormHelperText>
-                    ) : (
-                        <FormErrorMessage>{errors.fullname.message}</FormErrorMessage>
-                    )}
-                </FormControl>
-                <FormControl mb="4" isInvalid={errors.title}>
-                    <FormLabel>Your Title</FormLabel>
-                    <Input
-                        id="title"
-                        name="title"
-                        placeholder="Title"
-                        {...register('title', {
-                            required: 'Title is required',
-                        })}
-                    />
-                    {!errors.title ? (
-                        <FormHelperText>Your current title.</FormHelperText>
-                    ) : (
-                        <FormErrorMessage>{errors.title.message}</FormErrorMessage>
-                    )}
-                </FormControl>
-                <FormControl mb="4" isInvalid={errors.email}>
-                    <FormLabel>Your Email</FormLabel>
-                    <Input
-                        id="email"
-                        name="email"
-                        type="email"
-                        placeholder="Email"
-                        {...register('email', {
-                            required: 'Email is required',
-                            pattern: {
-                                value: emailRegex,
-                                message: 'Invalid email address',
-                            },
-                        })}
-                    />
-                    {!errors.email ? (
-                        <FormHelperText>The email address to use for this account.</FormHelperText>
-                    ) : (
-                        <FormErrorMessage>{errors.email.message}</FormErrorMessage>
-                    )}
-                </FormControl>
+                    <Heading as="h4" size={"sm"} mb="4">Administrative Support Professional Information</Heading>
+                    <FormControl mb="4" isInvalid={errors.fullname}>
+                        <FormLabel>Your Full Name</FormLabel>
+                        <Input
+                            id="fullname"
+                            name="fullname"
+                            placeholder="Full Name"
+                            {...register('fullname', {
+                                required: 'Full name is required',
+                            })}
+                        />
+                        {!errors.fullname ? (
+                            <FormHelperText>The name to use for your account.</FormHelperText>
+                        ) : (
+                            <FormErrorMessage>{errors.fullname.message}</FormErrorMessage>
+                        )}
+                    </FormControl>
+                    <FormControl mb="4" isInvalid={errors.title}>
+                        <FormLabel>Your Title</FormLabel>
+                        <Input
+                            id="title"
+                            name="title"
+                            placeholder="Title"
+                            {...register('title', {
+                                required: 'Title is required',
+                            })}
+                        />
+                        {!errors.title ? (
+                            <FormHelperText>Your current title.</FormHelperText>
+                        ) : (
+                            <FormErrorMessage>{errors.title.message}</FormErrorMessage>
+                        )}
+                    </FormControl>
+                    <FormControl mb="4" isInvalid={errors.email}>
+                        <FormLabel>Your Email</FormLabel>
+                        <Input
+                            id="email"
+                            name="email"
+                            type="email"
+                            placeholder="Email"
+                            {...register('email', {
+                                required: 'Email is required',
+                                pattern: {
+                                    value: emailRegex,
+                                    message: 'Invalid email address',
+                                },
+                            })}
+                        />
+                        {!errors.email ? (
+                            <FormHelperText>The email address to use for this account.</FormHelperText>
+                        ) : (
+                            <FormErrorMessage>{errors.email.message}</FormErrorMessage>
+                        )}
+                    </FormControl>
                 </Box>
                 <FormControl mb="4" isInvalid={errors.signature}>
                     <FormLabel>Your Signature</FormLabel>
@@ -182,17 +192,18 @@ export default function RegisterEntityForm({ code, setStepIndex }) {
                         <Heading as="h4" size={"sm"}>Registration successful</Heading>
                     </CardHeader>
                     <CardBody>
-                        <Text>Click Sign Up to create a password and complete registration.</Text>
+                        <Text>Click <i>Create Account</i> to create an account and password.</Text>
                     </CardBody>
                     <CardFooter>
                         <Button
                             onClick={handleRegisterClick}
                         >
-                            Sign Up
+                            Create Account
                         </Button>
                     </CardFooter>
                 </Card>
             }
+            <Box ref={createCardRef}></Box> {/* Invisible element for scrolling */}
             {apiState == 'error' &&
                 <Box mt="4">
                     <Alert status="error">

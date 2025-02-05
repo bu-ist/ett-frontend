@@ -4,7 +4,7 @@ const steps =[
     { title: 'Validate Invitation', description: '' },
     { title: 'Privacy Policy', description: '' },
     { title: 'Register Entity', description: '' },
-    { title: 'Sign Up', description: '' },
+    { title: 'Create Account', description: '' },
 ];
 
 export default function RegisterEntityStepper({ currentIndex }) {

@@ -1,6 +1,6 @@
 import { Box, Heading, Text, Divider } from '@chakra-ui/react';
 
-export default function EntityPrivacyPolicy({ accepted }) {
+export default function EntityPrivacyPolicy() {
     return (
         <Box
             as="section"
@@ -10,7 +10,6 @@ export default function EntityPrivacyPolicy({ accepted }) {
             borderRadius="1em"
             borderColor="gray.400"
             bg="gray.50"
-            color={ accepted ? "gray.400" : "black"}
         >
             <Heading as="h3" size="lg" mb="6">Privacy Policy</Heading>
                 <Text>
