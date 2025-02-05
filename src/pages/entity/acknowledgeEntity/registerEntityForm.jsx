@@ -1,4 +1,4 @@
-import { useState, useContext } from 'react';
+import { useState, useContext, useEffect, useRef } from 'react';
 import { useForm } from 'react-hook-form';
 import { useSearchParams } from 'react-router-dom';
 import { Alert, AlertDescription, AlertIcon, AlertTitle, Box, Heading, FormControl, FormLabel, FormErrorMessage, FormHelperText, Input, Button, Spinner, Text, Card, CardHeader, CardBody, CardFooter } from "@chakra-ui/react";
@@ -39,6 +39,9 @@ export default function RegisterEntityForm({ code, setStepIndex }) {
     // Store the email from the form separately in a state variable, so the sign up redirect can use it.
     const [ signUpEmail, setSignUpEmail ] = useState('');
 
+    // Create a ref so we can scroll to the card when the apiState is 'success'.
+    const createCardRef = useRef(null);
+
     // Handle form submission
     async function processRegistration(values) {
         // Setup the signUp email value for the cognito sign up redirect.
@@ -70,6 +73,13 @@ export default function RegisterEntityForm({ code, setStepIndex }) {
         const { cognitoDomain, entityAdmin: { cognitoID } } = appConfig;
         signUp( cognitoDomain, signUpEmail, cognitoID, 'entity?action=post-signup');
     }
+
+    // Scroll to the "Create Account" card after a successful registration.
+    useEffect(() => {
+        if (apiState === 'success') {
+            createCardRef.current.scrollIntoView({ behavior: 'smooth' });
+        }
+    }, [apiState]);
 
     return (
         <>
@@ -193,6 +203,7 @@ export default function RegisterEntityForm({ code, setStepIndex }) {
                     </CardFooter>
                 </Card>
             }
+            <Box ref={createCardRef}></Box> {/* Invisible element for scrolling */}
             {apiState == 'error' &&
                 <Box mt="4">
                     <Alert status="error">
