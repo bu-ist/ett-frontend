@@ -5,12 +5,14 @@ import { Heading, Text, Spinner, Box, Checkbox, Button, Fade, VStack, Alert, Ale
 import { lookupEntityAPI } from '../../lib/entity/lookupEntityAPI';
 
 import { ConfigContext } from '../../lib/configContext';
+import { signUp } from '../../lib/signUp';
 
 import SignUpAuthIndStepper from './signUpAuthInd/signUpAuthIndStepper';
 import SignUpAuthIndForm from './signUpAuthInd/signUpAuthIndForm';
 import AcknowledgePrivacy from './signUpAuthInd/acknowledgePrivacy';
 import EntityInfoCard from "./signUpAuthInd/entityInfoCard";
-
+import TermsOfUseBox from './signUpAuthInd/termsOfUseBox';
+import SignUpCognitoButton from "./signUpAuthInd/signUpCognitoButton";
 
 // This may have some weakness around ensuring the appConfig is loaded before this component is rendered.
 
@@ -30,6 +32,9 @@ export default function SignUpAuthIndPage() {
     const headerRef = useRef(null);
 
     const [stepIndex, setStepIndex] = useState(0);
+
+    // Store the email from the form separately in a state variable, so the sign up redirect can use it.
+    const [ signUpEmail, setSignUpEmail ] = useState('');
 
 
     useEffect(() => {
@@ -86,6 +91,18 @@ export default function SignUpAuthIndPage() {
 
         // Scroll to the top of the form, so we can see the stepper advance.
         headerRef.current.scrollIntoView();
+    }
+
+    // Advances the page state overall to 'registered'.
+    function setRegistered() {
+        setApiState('registered');
+        setStepIndex(3);
+        headerRef.current.scrollIntoView();
+    }
+
+    function signUpRedirect() {
+        const { cognitoDomain, authorizedIndividual: { cognitoID } } = appConfig;
+        signUp( cognitoDomain, signUpEmail, cognitoID, 'auth-ind?action=post-signup');
     }
 
     return (
@@ -155,10 +172,27 @@ export default function SignUpAuthIndPage() {
             {apiState == 'acknowledged' &&
                 <Fade in={apiState == 'acknowledged'}>
                     <EntityInfoCard inviteInfo={inviteInfo} />
-                    <SignUpAuthIndForm inviteInfo={inviteInfo} setStepIndex={setStepIndex} code={searchParams.get('code')} />
+                    <SignUpAuthIndForm 
+                        inviteInfo={inviteInfo} 
+                        setRegistered={setRegistered}
+                        setSignUpEmail={setSignUpEmail}
+                        code={searchParams.get('code')} 
+                    />
                 </Fade>
             }
-
+            {apiState === 'registered' &&
+                <Fade in={apiState === 'registered'}>
+                    <Alert status='success'>
+                        <AlertIcon />
+                        Registration Successful
+                    </Alert>
+                    <Text mt="6">
+                       Before creating an account, you must accept the terms of use on behalf of <b>{inviteInfo.entity.entity_name}</b>.
+                    </Text>
+                    <TermsOfUseBox />
+                    <SignUpCognitoButton signUpRedirect={signUpRedirect} />
+                </Fade>
+            }
         </>
     );
 }
