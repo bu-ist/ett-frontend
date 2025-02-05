@@ -79,36 +79,48 @@ export default function AcknowledgeEntityPage() {
             <RegisterEntityStepper currentIndex={stepIndex} />
 
             {apiState == 'no-code' &&
-                <Text>Missing invitation code or entity. Please check your email for the link to acknowledge the entity.</Text>
+                <>
+                    <Alert mb="4" status="error">
+                        <AlertIcon />
+                        Invitation Code Missing
+                    </Alert>
+                    <Text>Missing invitation code or entity. Please check your email for the link to acknowledge the entity.</Text>
+                </>
             }
             {apiState == 'unauthorized' &&
-                <Text>Code not accepted, check that the emailed link is intact. Or the invitation could have expired or been rescinded.</Text>
+                <>
+                    <Alert mb="4" status="error">
+                        <AlertIcon />
+                        Invitation Code Invalid
+                    </Alert>
+                    <Text>Code not accepted, check that the emailed link is intact. Or the invitation could have expired or been rescinded.</Text>
+                </>
             }
             {apiState == 'error' &&
                 <Text>There was an error acknowledging the entity. Please try again.</Text>
             }
             {apiState == 'loading' &&
-                <Spinner
-                    thickness='4px'
-                    speed='0.65s'
-                    emptyColor='gray.200'
-                    color='blue.500'
-                    size='xl'
-                />
+                <>
+                    <Text>Validating invitation code...</Text>
+                    <Spinner
+                        thickness='4px'
+                        speed='0.65s'
+                        emptyColor='gray.200'
+                        color='blue.500'
+                        size='xl'
+                    />
+                </>
             }
             {apiState == 'validated' &&
                 <>
-                    <VStack>
-                        <Alert status='success'>
-                            <AlertIcon />
-                            Invitation Code Validated
-                        </Alert>
-
-                    </VStack>
+                    <Alert status='success'>
+                        <AlertIcon />
+                        Invitation Code Validated
+                    </Alert>
                     <Card mt="4">
                         <CardBody>
                             <Text>
-                                You have been invited by <Code>{sysadminEmail}</Code> to register as an Administrative Support Professional on behalf of 
+                                You have been invited to register as an Administrative Support Professional on behalf of 
                                 {(entityInfo.entity) ? ` ${entityInfo.entity_name}` : ' a new entity'}.
                             </Text>
                         </CardBody>
