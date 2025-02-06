@@ -1,6 +1,9 @@
 import { Card, CardHeader, Heading, CardBody, Text, HStack, Box, StackDivider, Button, ButtonGroup } from "@chakra-ui/react";
 import { AiOutlineClose } from 'react-icons/ai';
-import { HiOutlinePencil } from "react-icons/hi";
+import { HiOutlinePencil } from 'react-icons/hi';
+
+import AmendModalButton from './entityInfoCard/amendButtonModal';
+import RejectButtonModal from './entityInfoCard/rejectButtonModal';
 
 // Display card to show entity information, with the Entity Adminstrator's information and information on any existing Authorized Individuals.
 
@@ -44,18 +47,8 @@ export default function EntityInfoCard({ inviteInfo }) {
                         <Heading as="h4" size="sm">Options</Heading>
                         <Text>Optionally amend or reject the entity if there is a problem with the invitation.</Text>
                         <ButtonGroup size="sm" mt="4" spacing="4">
-                            <Button
-                                leftIcon={<HiOutlinePencil/>}
-                                onClick={() => alert('Not yet implemented')}
-                            >
-                                Amend
-                            </Button>
-                            <Button
-                                leftIcon={<AiOutlineClose/>} 
-                                onClick={() => alert('Not yet implemented')}
-                            >
-                                Reject
-                            </Button>
+                            <AmendModalButton inviteInfo={inviteInfo} />
+                            <RejectButtonModal inviteInfo={inviteInfo} />
                         </ButtonGroup>
                     </Box>
                 </HStack>
