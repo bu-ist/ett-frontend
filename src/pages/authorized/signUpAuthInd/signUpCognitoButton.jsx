@@ -1,9 +1,12 @@
-import { useState} from 'react';
+import { useState, useRef } from 'react';
 import { useForm } from 'react-hook-form';
-import { Button, FormControl, FormErrorMessage, FormHelperText, FormLabel, Input, Spinner, Text } from "@chakra-ui/react";
+import { Button, Card, CardBody, CardFooter, Flex, FormControl, FormErrorMessage, FormHelperText, FormLabel, Input, Spacer, Spinner, Text } from "@chakra-ui/react";
 
 export default function SignUpCognitoButton({ signUpRedirect}) {
     const [apiState, setApiState] = useState('idle');
+
+    // Create a ref to store the action type of the button that was clicked.
+    const actionTypeRef = useRef(null);
 
     // Setup the digital signature form.
     const { handleSubmit, register, formState: { errors } } = useForm({
@@ -13,8 +16,18 @@ export default function SignUpCognitoButton({ signUpRedirect}) {
     });
 
     function handleSignUpClick() {
-        setApiState('loading');
-        signUpRedirect();
+        // Get the special reference value of the button that was clicked.
+        // This is so we can have two buttons for the same form that do different things, without disturbing the form validation.
+        const actionType = actionTypeRef.current;
+
+        if (actionType === 'createAccount') {
+            setApiState('loading');
+            signUpRedirect();
+        } else if (actionType === 'createAndAmend') {
+            // Here we will probably call the signUpRedirect function with a special parameter to indicate that we want to amend the entity.
+            console.log('Amend logic here');
+            alert('Amendments are not yet implemented');
+        }
     }
 
     return (
@@ -35,14 +48,41 @@ export default function SignUpCognitoButton({ signUpRedirect}) {
                     <FormErrorMessage>{errors.signature.message}</FormErrorMessage>
                 )}
             </FormControl>
-            <Text>Click <i>Accept and Create Account</i> to accept the terms of use on behalf of the Registered Entity, and create an account with a password.</Text>
-            <Button
-                my="1em"
-                type="submit"
-            >
-                {apiState === 'loading' && <>Redirecting <Spinner ml="2" /></>}
-                {apiState !== 'loading' && 'Accept and Create Account'}
-            </Button>
+            <Flex>
+                <Card width="40%">
+                    <CardBody>
+                        <Text>Click <i>Accept and Create Account</i> to accept the terms of use on behalf of the Registered Entity, and create an account with a password.</Text>
+                    </CardBody>
+                    <CardFooter>
+                        <Button
+                            my="1em"
+                            type="submit"
+                            onClick={() => actionTypeRef.current = 'createAccount'}
+                        >
+                            {apiState === 'loading' && <>Redirecting <Spinner ml="2" /></>}
+                            {apiState !== 'loading' && 'Accept & Create Account'}
+                        </Button>
+                    </CardFooter>
+                </Card>
+                <Spacer />
+                <Card width="40%">
+                    <CardBody>
+                        <Text color="gray.600"><b>Optionally</b>, click <i>Accept, Create Account & Amend</i> to accept the terms of use on behalf of the Registered Entity, create an account, and then amend the entity to change one or more of the participants.</Text>
+                    </CardBody>
+                    <CardFooter>
+                        <Button
+                            my="1em"
+                            type="submit"
+                            onClick={() => actionTypeRef.current = 'createAndAmend'}
+                            backgroundColor="#f2e7d3"
+                            _hover={{ bg: "orange.100" }}
+                        >
+                            {apiState === 'amend-loading' && <>Redirecting <Spinner ml="2" /></>}
+                            {apiState !== 'amend-loading' && 'Accept, Create Account & Amend'}
+                        </Button>
+                    </CardFooter>
+                </Card>
+            </Flex>
         </form>
     );
 }
