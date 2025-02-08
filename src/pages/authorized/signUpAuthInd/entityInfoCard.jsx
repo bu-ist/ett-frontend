@@ -45,9 +45,12 @@ export default function EntityInfoCard({ inviteInfo }) {
                     </Box>
                     <Box>
                         <Heading as="h4" size="sm">Options</Heading>
-                        <Text>Optionally amend or reject the entity if there is a problem with the invitation.</Text>
+                        <Text>Optionally reject the entity if there is a problem with the invitation.</Text>
                         <ButtonGroup size="sm" mt="4" spacing="4">
-                            <AmendModalButton inviteInfo={inviteInfo} />
+                            {   
+                                // Remove the amend button for now, we don't have the technology to support it, and may never.
+                                //<AmendModalButton inviteInfo={inviteInfo} />
+                            }
                             <RejectButtonModal inviteInfo={inviteInfo} />
                         </ButtonGroup>
                     </Box>
