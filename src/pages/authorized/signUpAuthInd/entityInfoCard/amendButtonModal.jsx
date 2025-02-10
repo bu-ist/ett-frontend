@@ -1,3 +1,5 @@
+// This component is dereferenced right now because we are not using it in the application; there is a chance it may come back but probably not.
+
 import { Button, ButtonGroup, Divider, Modal, ModalBody, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Text, useDisclosure } from "@chakra-ui/react";
 import { HiOutlinePencil } from "react-icons/hi";
 
