@@ -10,6 +10,7 @@ import { signUp } from '../../lib/signUp';
 import SignUpAuthIndStepper from './signUpAuthInd/signUpAuthIndStepper';
 import SignUpAuthIndForm from './signUpAuthInd/signUpAuthIndForm';
 import PrivacyPolicyBox from "../../components/sharedTexts/privacyPolicyBox";
+import RegisterStatementText from "../../components/sharedTexts/registerStatementText";
 import EntityInfoCard from "./signUpAuthInd/entityInfoCard";
 import TermsOfUseBox from '../../components/sharedTexts/termsOfUseBox';
 import SignUpCognitoButton from "./signUpAuthInd/signUpCognitoButton";
@@ -193,6 +194,7 @@ export default function SignUpAuthIndPage() {
                     <Text mt="2">
                        Before creating an account, you must accept the terms of use on behalf of the Registered Entity, <b>{inviteInfo.entity.entity_name}</b>.
                     </Text>
+                    <RegisterStatementText />
                     <TermsOfUseBox />
                     <SignUpCognitoButton signUpRedirect={signUpRedirect} />
                 </Fade>

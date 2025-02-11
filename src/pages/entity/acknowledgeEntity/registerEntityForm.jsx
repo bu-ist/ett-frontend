@@ -3,6 +3,8 @@ import { useForm } from 'react-hook-form';
 import { useSearchParams } from 'react-router-dom';
 import { Alert, AlertDescription, AlertIcon, AlertTitle, Box, Heading, FormControl, FormLabel, FormErrorMessage, FormHelperText, Input, Button, Spinner, Text, Card, CardHeader, CardBody, CardFooter } from "@chakra-ui/react";
 
+import RegisterStatementText from "../../../components/sharedTexts/registerStatementText";
+
 import { registerEntityAPI } from '../../../lib/entity/registerEntityAPI';
 import { signUp } from '../../../lib/signUp';
 import { emailRegex } from '../../../lib/formatting/emailRegex';
@@ -84,9 +86,7 @@ export default function RegisterEntityForm({ code, setStepIndex }) {
     return (
         <>
             <Heading as="h3" size={"md"} >Register Entity</Heading>
-            <Text my="6">
-                Nisi ex qui dolore irure dolor ut id velit veniam consequat. Veniam aliqua sint magna culpa proident dolore qui laborum ut mollit esse ea. Dolor pariatur aliquip non dolor nulla ipsum. Aute esse mollit commodo ad minim aute ut. Ullamco exercitation aliqua deserunt incididunt anim non aliquip.
-            </Text>
+            <RegisterStatementText />
             <form onSubmit={handleSubmit(processRegistration)}>
                 <Box as="section" borderWidth="0.1em" borderRadius="16" borderColor="gray.100" p="4" mb="8">
                     <Heading as="h4" size={"sm"} mb="4">Entity Information</Heading>
