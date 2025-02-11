@@ -80,7 +80,7 @@ export default function InviteUsersModal({ numUsers, entity, updatePendingInvita
     return (
         <>
             <Button isDisabled={numUsers > 0} onClick={onOpen}>Invite Authorized Individuals</Button>
-            <Modal size="xl" isOpen={isOpen} onClose={handleClose}>
+            <Modal size="2xl" isOpen={isOpen} onClose={handleClose}>
                 <ModalOverlay />
                 <ModalContent>
                     <ModalHeader>Invite Authorized Individuals</ModalHeader>
@@ -95,11 +95,15 @@ export default function InviteUsersModal({ numUsers, entity, updatePendingInvita
                             </VStack>
                         }
                         <Text mb="2">
-                            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-                            Elit deserunt labore cillum sunt qui excepteur ut. Quis nulla quis occaecat et ex eiusmod dolor est voluptate est aliquip deserunt minim quis. Id proident cupidatat aliquip ut tempor ipsum esse laborum laboris nostrud. Mollit ea labore aliqua et laborum adipisicing dolore. Laborum esse cupidatat magna exercitation.
+                            Invite two Authorized Individuals by their email addresses. These will each be a person in a senior role that 
+                            is accustomed to managing confidential and sensitive information, who will directly receive the completed Disclosure Form 
+                            information on behalf of the Requesting Registered Entity and will decide who at the Registered Entity needs the information.
                         </Text>
                         <Text mb="4">
-                            Commodo ullamco commodo tempor amet aliqua elit amet esse ut sint aliquip id laborum. Consectetur eu id pariatur cillum. Excepteur velit in enim deserunt.
+                            Each of the Authorized Individuals will receive an email invitation to register with the system.
+                            They will be able to create an account and complete the registration process, or optionally they
+                            can reject the invitation. You will be notified if either Authorized Individual rejects the invitation.
+                            You will also receive a notification when both Authorized Individuals have completed the registration process.
                         </Text>
                         <form onSubmit={handleSubmit(processInvitations)}>
                             <FormControl mb="4" isInvalid={errors.email1}>
