@@ -141,7 +141,7 @@ export default function SignUpAuthIndPage() {
                         </Alert>
                     </VStack>
                     <Text mt="6">
-                        Nisi occaecat Lorem velit reprehenderit magna ea anim sint ut excepteur nostrud laborum excepteur. Quis labore quis eu mollit. Cillum anim ex elit ut eu eiusmod est adipisicing minim irure. Voluptate velit veniam elit id cupidatat officia culpa velit amet irure commodo duis. Elit veniam eu ipsum et amet qui cillum elit elit occaecat. Id est enim ut eiusmod qui velit ipsum consectetur enim.
+                        Registering your organization to use ETT requires that in your official and personal capacities you have read and agree to the ETT Privacy Policy.
                     </Text>
                     <PrivacyPolicyBox />
                     <Button mt="12" mb="6" onClick={acceptPrivacyPolicy}>

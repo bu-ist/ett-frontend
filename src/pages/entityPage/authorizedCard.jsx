@@ -35,14 +35,21 @@ export default function AuthorizedCard({ entity, updatePendingInvitations }) {
     });
 
     return (
-        <Card>
+        <Card variant="outline">
             <CardHeader>
                 <Heading as="h3" size="lg" color="gray.600">Authorized Individuals</Heading>
             </CardHeader>
             <CardBody>
-                <Text>
-                    Lorem ipsum minim anim id do nisi aliqua. Consequat cillum sint qui ad aliqua proident nostrud. Cillum ullamco consectetur mollit eu labore amet ullamco mollit dolor veniam adipisicing veniam nulla ex. Quis irure minim id commodo dolore anim nulla aliqua reprehenderit pariatur. 
-                </Text>
+                {(entity.users.length < 2 ) &&
+                    <Text>
+                        Full Entity registration requires two Authorized Individuals.
+                    </Text>
+                }
+                {(entity.users.length === 2 ) &&
+                    <Text>
+                        Lorem ipsum minim anim id do nisi aliqua. Consequat cillum sint qui ad aliqua proident nostrud. Cillum ullamco consectetur mollit eu labore amet ullamco mollit dolor veniam adipisicing veniam nulla ex. Quis irure minim id commodo dolore anim nulla aliqua reprehenderit pariatur. 
+                    </Text>
+                }
                 {entity.users.length <= 1 && <Heading as="h4" size="sm" mt="4">Invitations</Heading>}
                 {(entity.pendingInvitations.length == 0 && entity.users.length == 0 ) &&
                     <Stack mt="4" direction="row"><Icon as={HiMinusCircle} color="gray.400" boxSize="6" /><Text>No pending invitations</Text></Stack>
