@@ -9,7 +9,7 @@ import { signUp } from '../../lib/signUp';
 
 import SignUpAuthIndStepper from './signUpAuthInd/signUpAuthIndStepper';
 import SignUpAuthIndForm from './signUpAuthInd/signUpAuthIndForm';
-import AcknowledgePrivacy from './signUpAuthInd/acknowledgePrivacy';
+import PrivacyPolicyBox from "../../components/sharedTexts/privacyPolicyBox";
 import EntityInfoCard from "./signUpAuthInd/entityInfoCard";
 import TermsOfUseBox from '../../components/sharedTexts/termsOfUseBox';
 import SignUpCognitoButton from "./signUpAuthInd/signUpCognitoButton";
@@ -142,7 +142,10 @@ export default function SignUpAuthIndPage() {
                     <Text mt="6">
                         Nisi occaecat Lorem velit reprehenderit magna ea anim sint ut excepteur nostrud laborum excepteur. Quis labore quis eu mollit. Cillum anim ex elit ut eu eiusmod est adipisicing minim irure. Voluptate velit veniam elit id cupidatat officia culpa velit amet irure commodo duis. Elit veniam eu ipsum et amet qui cillum elit elit occaecat. Id est enim ut eiusmod qui velit ipsum consectetur enim.
                     </Text>
-                    <AcknowledgePrivacy acceptPrivacyPolicy={acceptPrivacyPolicy}  />
+                    <PrivacyPolicyBox />
+                    <Button mt="12" mb="6" onClick={acceptPrivacyPolicy}>
+                        Accept
+                    </Button>
                 </>
             }
             {

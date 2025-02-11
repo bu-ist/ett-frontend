@@ -7,7 +7,7 @@ import { lookupEntityAPI } from '../../lib/entity/lookupEntityAPI';
 import { ConfigContext } from '../../lib/configContext';
 
 import RegisterEntityStepper from "./acknowledgeEntity/registerEntityStepper";
-import EntityPrivacyPolicy from './acknowledgeEntity/entityPrivacyPolicy';
+import PrivacyPolicyBox from "../../components/sharedTexts/privacyPolicyBox";
 import RegisterEntityForm from './acknowledgeEntity/registerEntityForm';
 
 export default function AcknowledgeEntityPage() {
@@ -128,7 +128,7 @@ export default function AcknowledgeEntityPage() {
                     <Text mt="6">
                         Nisi occaecat Lorem velit reprehenderit magna ea anim sint ut excepteur nostrud laborum excepteur. Quis labore quis eu mollit. Cillum anim ex elit ut eu eiusmod est adipisicing minim irure. Voluptate velit veniam elit id cupidatat officia culpa velit amet irure commodo duis. Elit veniam eu ipsum et amet qui cillum elit elit occaecat. Id est enim ut eiusmod qui velit ipsum consectetur enim.
                     </Text>
-                    <EntityPrivacyPolicy />
+                    <PrivacyPolicyBox />
                     <Button
                         mt="8"
                         onClick={acceptPrivacyPolicy}
