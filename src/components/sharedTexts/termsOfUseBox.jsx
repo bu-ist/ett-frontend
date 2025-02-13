@@ -1,6 +1,9 @@
 import { Box, Heading, Text, Divider, Popover, PopoverTrigger, PopoverContent, PopoverArrow, PopoverCloseButton, PopoverBody, Button } from '@chakra-ui/react';
 
 export default function TermsOfUseBox() {
+
+    const termsPageURI = window.location.origin + "/terms";
+
     return (
         <Box
             as="section"
@@ -13,16 +16,15 @@ export default function TermsOfUseBox() {
         >
             <Heading as="h3" size="lg" mb="2">Terms of Use</Heading>
             <Text>
-                <i>Important Terms of Use for entities registering to use ETT</i>
+                <i>Important Terms of Use for entities registering to use ETT</i> - always available at this location: {termsPageURI}
             </Text>
             <Divider my="4" />
-            <Heading as="h4" size="sm" mb="2" >ETT is a tool to help you get consents and make disclosures</Heading>
             <Text>
-                ETT is a tool that helps you get individuals&rsquo; consents to disclosures of findings of misconduct about them and to make
-                disclosures requests to the entities that may have made or adopted findings. ETT is not a policy and does not dictate or
-                guide decisions or policies, including, e.g., for which Privileges or Honors, Employment or Role(s) 4 ETT is used, how to
-                weigh findings, or who is qualified or should be selected.
-
+                <Text as="b" color="red.800"> EACH ETT-REGISTERED ENTITY MUST MAKE INDEPENDENT DECISIONS AND POLICIES.</Text> ETT is just an automation tool that any ETT-Registered Entity may use, 
+                in its discretion, to get individuals’ consents to disclosures of findings of misconduct about them and to make disclosures requests 
+                to the entities that may have made or adopted findings.  ETT does not receive any disclosures or conduct records.  It is not a policy 
+                and does not dictate or guide decisions or policies, including, e.g., for which Privileges or Honors, Employment or Roles  ETT is used, 
+                how to weigh findings, or who is qualified or should be selected.
             </Text>
             <Divider my="4" />
             <Text>
@@ -67,12 +69,11 @@ export default function TermsOfUseBox() {
                     </PopoverContent>
                 </Popover>
                 .
-
             </Text>
             <Divider my="4" />
             <Text>
-                ETT-Registered Entities must not share completed Registration, Consent, Exhibit, or Disclosure Forms that
-                they receive or access with other entities (third parties). ETT-Registered Entities may access Consent Forms on ETT, while
+                ETT-Registered Entities must not share <b>completed</b> Registration, Consent, Exhibit, or Disclosure Forms that
+                they <b>receive or access</b> with other entities (third parties). ETT-Registered Entities may access Consent Forms on ETT, while
                 a Consent is in effect.
             </Text>
             <Divider my="4" />
