@@ -132,7 +132,13 @@ export default function SignUpAuthIndPage() {
                 <Text>Error: There was an error validating the invitation code. Please try again.</Text>
             }
             {apiState == 'unauthorized' &&
-                <Text>Code not accepted, check that the emailed link is intact. Or the invitation could have expired or been rescinded.</Text>
+                <>
+                    <Alert mb="4" status="error">
+                        <AlertIcon />
+                        Invitation Code Invalid
+                    </Alert>
+                    <Text>Code not accepted, check that the emailed link is intact. Or the invitation could have expired or been rescinded.</Text>
+                </>
             }
             {apiState == 'validated' &&
                 <>
@@ -203,7 +209,7 @@ export default function SignUpAuthIndPage() {
                         Registration Successful
                     </Alert>
                     <Heading mt="6" as="h3" size="lg">Accept Terms of Use and Create Account</Heading>
-                    <Text mt="2">
+                    <Text my="4">
                        Before creating an account, you must accept the terms of use on behalf of the Registered Entity, <b>{inviteInfo.entity.entity_name}</b>.
                     </Text>
                     <RegisterStatementText />
