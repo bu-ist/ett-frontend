@@ -1,6 +1,7 @@
 import { useEffect, useState, useContext, useRef } from 'react';
 import { useSearchParams } from 'react-router-dom';
-import { Heading, Text, Spinner, Box, Checkbox, Button, Fade, VStack, Alert, AlertIcon } from "@chakra-ui/react";
+import { Heading, Text, Spinner, Box, Checkbox, Button, Fade, VStack, Alert, AlertIcon, CardBody, Card, HStack, Icon } from "@chakra-ui/react";
+import { HiOutlineArrowCircleDown } from "react-icons/hi";
 
 import { lookupEntityAPI } from '../../lib/entity/lookupEntityAPI';
 
@@ -9,6 +10,7 @@ import { signUp } from '../../lib/signUp';
 
 import SignUpAuthIndStepper from './signUpAuthInd/signUpAuthIndStepper';
 import SignUpAuthIndForm from './signUpAuthInd/signUpAuthIndForm';
+import PrivacyNoticeText from "../../components/sharedTexts/privacyNoticeText";
 import PrivacyPolicyBox from "../../components/sharedTexts/privacyPolicyBox";
 import RegisterStatementText from "../../components/sharedTexts/registerStatementText";
 import EntityInfoCard from "./signUpAuthInd/entityInfoCard";
@@ -130,7 +132,13 @@ export default function SignUpAuthIndPage() {
                 <Text>Error: There was an error validating the invitation code. Please try again.</Text>
             }
             {apiState == 'unauthorized' &&
-                <Text>Code not accepted, check that the emailed link is intact. Or the invitation could have expired or been rescinded.</Text>
+                <>
+                    <Alert mb="4" status="error">
+                        <AlertIcon />
+                        Invitation Code Invalid
+                    </Alert>
+                    <Text>Code not accepted, check that the emailed link is intact. Or the invitation could have expired or been rescinded.</Text>
+                </>
             }
             {apiState == 'validated' &&
                 <>
@@ -140,9 +148,19 @@ export default function SignUpAuthIndPage() {
                             Invitation Code Validated
                         </Alert>
                     </VStack>
-                    <Text mt="6">
-                        Registering your organization to use ETT requires that in your official and personal capacities you have read and agree to the ETT Privacy Policy.
-                    </Text>
+                     <Card mt="4">
+                        <CardBody>
+                            <Text>You have been invited to register as an Authorized Individual on behalf of <b>{inviteInfo.entity.entity_name}</b>.</Text>
+                        </CardBody>
+                     </Card>
+                     <HStack mt="4">
+                        <Icon as={HiOutlineArrowCircleDown} color="gray.400" boxSize="12" />
+                        <Text>
+                            Registering your organization to use ETT requires that in your official and personal capacities you have read and agree to the ETT Privacy Notice and Privacy Policy.
+                            <span style={{fontWeight: "500"}}> Scroll to the bottom</span> of the page to accept the Privacy Notice and Privacy Policy, and continue.
+                        </Text>
+                    </HStack>
+                    <PrivacyNoticeText />
                     <PrivacyPolicyBox />
                     <Button mt="12" mb="6" onClick={acceptPrivacyPolicy}>
                         Accept
@@ -191,7 +209,7 @@ export default function SignUpAuthIndPage() {
                         Registration Successful
                     </Alert>
                     <Heading mt="6" as="h3" size="lg">Accept Terms of Use and Create Account</Heading>
-                    <Text mt="2">
+                    <Text my="4">
                        Before creating an account, you must accept the terms of use on behalf of the Registered Entity, <b>{inviteInfo.entity.entity_name}</b>.
                     </Text>
                     <RegisterStatementText />
