@@ -1,5 +1,6 @@
-import { Card, CardHeader, Heading, CardBody, CardFooter, Text, Icon, Stack, Badge, Box } from "@chakra-ui/react";
-import { HiMinusCircle, HiCheckCircle } from "react-icons/hi";
+import { Fragment } from 'react';
+import { Card, CardHeader, Heading, CardBody, CardFooter, Text, Icon, Stack, Badge, Box, Divider } from "@chakra-ui/react";
+import { HiMinusCircle, HiCheckCircle, HiArrowSmRight } from "react-icons/hi";
 
 import InviteUsersModal from "./inviteUsersModal";
 
@@ -26,11 +27,25 @@ export default function AuthorizedCard({ entity, updatePendingInvitations }) {
     });
 
     const authIndsList = authInds.map((person, index) => {
+        // Check if the person has a delegate.
+        const hasDelegate = person.delegate && Object.keys(person.delegate).length > 0;
+
         return (
-            <Stack mb="2" key={index} direction="row">
-                <Icon as={HiCheckCircle} color="green.300" boxSize="6" />
-                <Text>{person.fullname}, <i>{person.title}</i> - {person.email} </Text>
-            </Stack>
+            <Fragment key={person.email}>
+                <Stack mb={hasDelegate ? "1" : "2"} direction="row">
+                    <Icon as={HiCheckCircle} color="green.300" boxSize="6" />
+                    <Text>{person.fullname}, <i>{person.title}</i> - {person.email} </Text>
+                </Stack>
+                {hasDelegate &&
+                    <Stack mb="2" ml="4" direction="row">
+                        <Icon as={HiArrowSmRight} color="gray.400" boxSize="6" />
+                        <Text color="gray.600">Delegated Contact: {person.delegate.fullname}, {person.delegate.email}</Text>
+                    </Stack>
+                }
+                {index === 0 &&
+                    <Divider my="2" />
+                }
+            </Fragment>
         );
     });
 
