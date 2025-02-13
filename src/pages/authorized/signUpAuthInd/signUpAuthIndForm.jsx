@@ -9,7 +9,6 @@ import DelegatedContactForm from './delegatedContactForm';
 import { ConfigContext } from '../../../lib/configContext';
 
 import { registerEntityAPI } from '../../../lib/entity/registerEntityAPI';
-import { signUp } from '../../../lib/signUp';
 import { emailRegex } from '../../../lib/formatting/emailRegex';
 
 export default function SignUpAuthIndForm({inviteInfo, setRegistered, setSignUpEmail, code}) {
