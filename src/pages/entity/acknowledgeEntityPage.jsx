@@ -131,7 +131,7 @@ export default function AcknowledgeEntityPage() {
                         <Icon as={HiOutlineArrowCircleDown} color="gray.400" boxSize="12" />
                         <Text>
                         Registering your organization to use ETT requires that in your official and personal capacities you have read and agree to the ETT Privacy Notice and Privacy Policy.
-                            <span style={{fontWeight: "500"}}> Scroll to the bottom</span> of the page to accept the Privacy Policy and continue.
+                            <span style={{fontWeight: "500"}}> Scroll to the bottom</span> of the page to accept the Privacy Notice and Privacy Policy, and continue.
                         </Text>
                     </HStack>
                     <PrivacyNoticeText />
