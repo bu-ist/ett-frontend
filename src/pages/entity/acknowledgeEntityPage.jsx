@@ -1,12 +1,14 @@
 import { useEffect, useState, useContext, useRef } from 'react';
 import { useSearchParams } from 'react-router-dom';
-import { Heading, Text, Spinner, Button, Checkbox, Box, Card, CardBody, VStack, Alert, AlertIcon, Code } from '@chakra-ui/react';
+import { Heading, Text, Spinner, Button, Checkbox, Box, Card, CardBody, VStack, Alert, AlertIcon, Code, HStack, Icon } from '@chakra-ui/react';
+import { HiOutlineArrowCircleDown } from "react-icons/hi";
 
 import { lookupEntityAPI } from '../../lib/entity/lookupEntityAPI';
 
 import { ConfigContext } from '../../lib/configContext';
 
 import RegisterEntityStepper from "./acknowledgeEntity/registerEntityStepper";
+import PrivacyNoticeText from "../../components/sharedTexts/privacyNoticeText";
 import PrivacyPolicyBox from "../../components/sharedTexts/privacyPolicyBox";
 import RegisterEntityForm from './acknowledgeEntity/registerEntityForm';
 
@@ -125,9 +127,14 @@ export default function AcknowledgeEntityPage() {
                             </Text>
                         </CardBody>
                     </Card>
-                    <Text mt="4">
-                        Registering your organization to use ETT requires that in your official and personal capacities you have read and agree to the ETT Privacy Policy.
-                    </Text>
+                    <HStack mt="4">
+                        <Icon as={HiOutlineArrowCircleDown} color="gray.400" boxSize="12" />
+                        <Text>
+                            Registering your organization to use ETT requires that in your official and personal capacities you have read and agree to the ETT Privacy Policy.
+                            <span style={{fontWeight: "500"}}> Scroll to the bottom</span> of the page to accept the Privacy Policy and continue.
+                        </Text>
+                    </HStack>
+                    <PrivacyNoticeText />
                     <PrivacyPolicyBox />
                     <Button
                         mt="8"
