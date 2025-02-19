@@ -1,8 +1,6 @@
-import { useState, useContext } from "react";
+import { useState, useContext, useEffect, useRef } from "react";
 import { useForm } from 'react-hook-form';
-import { Alert, AlertDescription, AlertIcon, AlertTitle, Box, Button, FormControl, FormErrorMessage, FormHelperText, FormLabel, Heading, Input, Spinner, Text } from "@chakra-ui/react";
-
-import SignUpCognitoButton from '../../authorized/signUpAuthInd/signUpCognitoButton';
+import { Alert, AlertDescription, AlertIcon, AlertTitle, Box, Button, Card, CardBody, CardFooter, CardHeader, FormControl, FormErrorMessage, FormHelperText, FormLabel, Heading, Input, Text } from "@chakra-ui/react";
 
 import { ConfigContext } from '../../../lib/configContext';
 
@@ -10,7 +8,7 @@ import { registerConsenterAPI } from '../../../lib/consenting/registerConsenterA
 import { signUp } from '../../../lib/signUp';
 import { emailRegex } from '../../../lib/formatting/emailRegex';
 
-export default function ConsentingRegisterForm() {
+export default function ConsentingRegisterForm({ setStepIndex }) {
     // Get the appConfig from the ConfigContext.
     const { appConfig } = useContext( ConfigContext );
 
@@ -27,6 +25,9 @@ export default function ConsentingRegisterForm() {
     const [apiState, setApiState] = useState('idle');
     const [apiError, setApiError] = useState(null);
 
+    // Create a ref so we can scroll to the register button when the apiState is 'success'.
+    const scrollBoxRef = useRef(null);
+
     async function processRegistration(values) {
         // Setup the signUp email value for the cognito sign up redirect.
         setSignUpEmail(values.email);
@@ -39,12 +40,24 @@ export default function ConsentingRegisterForm() {
         const response = await registerConsenterAPI( appConfig, valuesWithoutSignature );
         console.log('register Response', response);
 
+        // Set the stepper to the next step if the response is ok.
+        if (response.payload.ok) {
+            setStepIndex(2);
+        }
+
         // Use a ternary conditional to set the apiState based on the response
         setApiState(response.payload.ok ? 'success' : 'error');
         
         // Capture the error message if the response is not ok.
         setApiError(response.payload.ok ? null : response.message);
     }
+
+    // Scroll to the "Create Account" card after a successful registration.
+    useEffect(() => {
+        if (apiState === 'success') {
+            scrollBoxRef.current.scrollIntoView({ behavior: 'smooth' });
+        }
+    }, [apiState]);
 
     function signUpRedirect() {
         const { cognitoDomain, consentingPerson: { cognitoID } } = appConfig;
@@ -55,7 +68,10 @@ export default function ConsentingRegisterForm() {
         <form onSubmit={handleSubmit(processRegistration)}>
             <Heading as="h3" size="lg" mt="6" mb="4">Register</Heading>
             <Text mb="6">
-                Eu velit nisi esse dolor mollit. Eiusmod ex do enim sit pariatur consectetur aute voluptate do. Elit cupidatat ex irure elit voluptate anim. Ad velit pariatur elit officia tempor qui mollit ullamco cillum fugiat proident dolor nisi in. Consectetur ipsum nostrud do ullamco adipisicing pariatur.
+                Registering on ETT means that you consent to inclusion of your name and contacts on the ETT database 
+                and in ETT-related communications made in the ETT process. Once registered you will be able to grant consent
+                for disclosures, and provide Exhibit Forms. You will also be able to rescind consent at any time. Once your consent
+                is rescinded (or expires after 10 years), your registration will also end.
             </Text>
             <FormControl isInvalid={errors.firstname}>
                 <FormLabel htmlFor="firstname">First Name</FormLabel>
@@ -138,8 +154,13 @@ export default function ConsentingRegisterForm() {
                     <FormErrorMessage>{errors.signature.message}</FormErrorMessage>
                 )}
             </FormControl>
-            <Button my="4" type="submit" isDisabled={apiState !== 'idle'}>
-                { apiState === 'loading' && <Spinner /> }
+            <Button 
+                my="4" 
+                type="submit"
+                isLoading={apiState === 'loading'}
+                loadingText="Registering"
+                isDisabled={apiState !== 'idle'}
+            >
                 { apiState === 'idle' && 'Register' }
                 { apiState === 'success' && 'Registered' }
                 { apiState === 'error' && 'Error' }
@@ -156,8 +177,23 @@ export default function ConsentingRegisterForm() {
             }
 
             {apiState === 'success' &&
-                <SignUpCognitoButton signUpRedirect={signUpRedirect} />
+                <Card>
+                    <CardHeader>
+                        <Heading as="h4" size={"sm"}>Registration successful</Heading>
+                    </CardHeader>
+                    <CardBody>
+                        <Text>Click <i>Create Account</i> to create an account and password.</Text>
+                    </CardBody>
+                    <CardFooter>
+                        <Button
+                            onClick={signUpRedirect}
+                        >
+                            Create Account
+                        </Button>
+                    </CardFooter>
+                </Card>
             }
+            <Box ref={scrollBoxRef}></Box> {/* Invisible element for scrolling */}
 
         </form>
     );
