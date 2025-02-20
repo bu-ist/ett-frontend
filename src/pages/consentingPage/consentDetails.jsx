@@ -72,7 +72,7 @@ export default function ConsentDetails({ consentData, setConsentData, consenterI
                         <Card>
                             <CardBody>Email a copy of this Consent form to {email} </CardBody>
                             <CardFooter>
-                                <Button>Email</Button>
+                                <Button onClick={() => alert("Not yet implemented")}>Email</Button>
                             </CardFooter>
                         </Card>
                     </SimpleGrid>

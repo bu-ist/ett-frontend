@@ -13,13 +13,13 @@ export default function RescindModal() {
                     <ModalHeader>Rescind Consent</ModalHeader>
                     <ModalCloseButton />
                     <ModalBody>
-                        Lorem ipsum dolor sit amet consectetur adipisicing elit. Dolor libero voluptas, iusto deserunt nesciunt velit quod consequuntur eius, cupiditate ipsam, id labore quae deleniti quam perferendis neque. Nostrum, nam modi!
+                       Not yet implemented.
                     </ModalBody>
                     <ModalFooter>
                         <Button colorScheme="blue" mr={3} onClick={onClose}>
                             Cancel
                         </Button>
-                        <Button onClick={() => alert("okay really rescind now")} variant="ghost">
+                        <Button onClick={() => alert("not yet implemented")} variant="ghost">
                             Rescind
                         </Button>
                     </ModalFooter>
