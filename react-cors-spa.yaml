@@ -1,5 +1,8 @@
 AWSTemplateFormatVersion: '2010-09-09'
 
+# This is not necessary to run the application, it is just provided in case there is
+# a need to stand up a S3 bucket to host the app for development purposes.
+
 Description: >
   Creates the infrastructure to host and expose a Single Page Application:
       - An Amazon S3 bucket for hosting the application
