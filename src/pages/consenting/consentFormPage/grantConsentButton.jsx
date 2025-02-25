@@ -1,6 +1,7 @@
 import { useState, useContext, useEffect, useRef } from 'react';
 import { Link as ReactRouterLink } from 'react-router-dom';
-import { Box, Button, Card, CardBody, CardFooter, CardHeader, FormControl, FormLabel, Heading, Input, Spinner } from '@chakra-ui/react';
+import { useForm } from 'react-hook-form';
+import { Box, Button, Card, CardBody, CardFooter, CardHeader, FormControl, FormErrorMessage, FormHelperText, FormLabel, Heading, Input, Spinner, Text } from '@chakra-ui/react';
 import Cookies from 'js-cookie';
 
 import { ConfigContext } from '../../../lib/configContext';
@@ -13,18 +14,25 @@ export default function GrantConsentButton({ consentData }) {
 
     const [apiState, setApiState] = useState('idle');
 
-    const [digitalSignature, setDigitalSignature] = useState('');
+    // Setup the digital signature form.
+    const { handleSubmit, register, formState: { errors } } = useForm({
+        defaultValues: {
+            signature: '',
+        }
+    });
 
     const scrollBoxRef = useRef(null);
 
-    async function handleConsentButton() {
+    async function handleConsentButton(values) {
+        const { signature } = values;
+
         setApiState('loading');
         const accessToken = Cookies.get('EttAccessJwt');
 
         if (accessToken) {
             const { fullName: fullname, consenter } = consentData;
             const { email, phone_number } = consenter;
-            const grantRequestPayload = { digitalSignature, fullname, email, phone_number };
+            const grantRequestPayload = { signature, fullname, email, phone_number };
             
             const grantResult = await grantConsentAPI(appConfig, accessToken, grantRequestPayload);
 
@@ -43,16 +51,34 @@ export default function GrantConsentButton({ consentData }) {
 
     return (
         <>
-            <FormControl mt="2em">
-                <FormLabel>Digital Signature</FormLabel>
-                <Input value={digitalSignature} isDisabled={apiState !== "idle"} onChange={(e) => setDigitalSignature(e.target.value) } type="text" />
-            </FormControl>
-            <Button onClick={handleConsentButton} my="2em" isDisabled={apiState !== 'idle'}>
-                {apiState === 'idle' && 'Grant Consent'}
-                {apiState === 'loading' && <Spinner />}
-                {apiState === 'error' && 'Error'}
-                {apiState === 'success' && 'Consent Granted'}
-            </Button>
+            <form onSubmit={handleSubmit(handleConsentButton)}>
+                <FormControl mt="2em">
+                    <FormLabel>Digital Signature</FormLabel>
+                    <Input
+                        id="signature"
+                        name="signature"
+                        placeholder="Signature"
+                        isDisabled={apiState !== "idle"}
+                        {...register('signature', {
+                            required: 'Signature is required',
+                        })}
+                        type="text"
+                    />
+                    {!errors.signature ? (
+                        <FormHelperText>Type your name here as your digital signature.</FormHelperText>
+                    ) : (
+                        <FormErrorMessage>{errors.signature.message}</FormErrorMessage>
+                    )}
+                    {/* This extra error message shouldn't be necessary, but for some reason the one above is not rendering */}
+                    {errors.signature && <Text color="red.500" mt="2">{errors.signature.message}</Text>}
+                </FormControl>
+                <Button type="submit" my="2em" isDisabled={apiState !== 'idle'}>
+                    {apiState === 'idle' && 'Grant Consent'}
+                    {apiState === 'loading' && <Spinner />}
+                    {apiState === 'error' && 'Error'}
+                    {apiState === 'success' && 'Consent Granted'}
+                </Button>
+            </form>
             {apiState === 'success' && 
                 <Card>
                     <CardHeader>
