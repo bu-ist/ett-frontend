@@ -70,7 +70,8 @@ export default function Home() {
                         <CardBody>
                             <Heading size="md">Administrative Support Professional</Heading>
                             <Text py={"2"}>
-                                lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud 
+                                A person who assists a Registered Entity's Authorized Individuals in the use of ETT.
+                                A Registered Entity is a Society or IHE or other organization that has voluntarily joined the ETT by registering at this website.
                             </Text>
                         </CardBody>
                         <CardFooter>
@@ -93,8 +94,8 @@ export default function Home() {
                     <Stack>
                         <CardBody>
                             <Heading size="md">Authorized Individual</Heading>
-                            <Text py={"2"}>
-                                lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+                            <Text py={"2"} mb="6">
+                                A person in a senior role(s) within a Registered Entity that deals with sensitive information, and who will directly view completed Disclosure Form on behalf of the Registered Entity. Each registered entity has two Authorized Individuals.
                             </Text>
                         </CardBody>
                         <CardFooter paddingTop={"-2"}>
@@ -118,7 +119,9 @@ export default function Home() {
                         <CardBody>
                             <Heading size="md">Consenting Person</Heading>
                             <Text py={"2"}>
-                                lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+                                A candidate for employee, post-doc, volunteer, board member, etc. at a Registered Entity, who
+                                provides contact information of current/prior affiliates. 
+                                Affiliates will be asked to disclose any findings of misconduct to the authorized individual(s) of the registered entity.
                             </Text>
                         </CardBody>
                         <CardFooter paddingTop={"-2"}>
