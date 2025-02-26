@@ -57,6 +57,7 @@ export default function RegisterEntityForm({ code, setStepIndex }) {
         const registerResult = await registerEntityAPI(appConfig, code, valuesWithoutSignature);
         console.log(registerResult);
 
+        // This is the error handling code that should be replicated across the app.
         if (registerResult.payload.ok) {
             console.log('Registration successful');
             setStepIndex(3);

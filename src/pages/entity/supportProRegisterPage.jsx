@@ -1,19 +1,19 @@
 import { useEffect, useState, useContext, useRef } from 'react';
 import { useSearchParams } from 'react-router-dom';
-import { Heading, Text, Spinner, Button, Checkbox, Box, Card, CardBody, VStack, Alert, AlertIcon, Code, HStack, Icon } from '@chakra-ui/react';
+import { Heading, Text, Spinner, Button, Card, CardBody, Alert, AlertIcon, HStack, Icon } from '@chakra-ui/react';
 import { HiOutlineArrowCircleDown } from "react-icons/hi";
 
 import { lookupEntityAPI } from '../../lib/entity/lookupEntityAPI';
 
 import { ConfigContext } from '../../lib/configContext';
 
-import RegisterEntityStepper from "./acknowledgeEntity/registerEntityStepper";
-import PrivacyNoticeText from "../../components/sharedTexts/privacyNoticeText";
-import PrivacyPolicyBox from "../../components/sharedTexts/privacyPolicyBox";
-import RegisterEntityForm from './acknowledgeEntity/registerEntityForm';
+import RegisterEntityStepper from './supportProRegisterPage/registerEntityStepper';
+import PrivacyNoticeText from '../../components/sharedTexts/privacyNoticeText';
+import PrivacyPolicyBox from '../../components/sharedTexts/privacyPolicyBox';
+import RegisterEntityForm from './supportProRegisterPage/registerEntityForm';
 
-export default function AcknowledgeEntityPage() {
-    let [searchParams, setSearchParams] = useSearchParams();
+export default function SupportProRegisterPage() {
+    let [searchParams] = useSearchParams();
 
     const { appConfig } = useContext(ConfigContext);
 
@@ -72,6 +72,7 @@ export default function AcknowledgeEntityPage() {
     }
 
     // If there are users in the entityInfo, get the email of the user whose role is 'SYS_ADMIN'.
+    // This isn't used, but could be used to let the registering person know who invited them.
     const sysadminEmail = entityInfo?.users?.find(user => user.role === 'SYS_ADMIN')?.email || '';
 
     return (
@@ -123,7 +124,7 @@ export default function AcknowledgeEntityPage() {
                         <CardBody>
                             <Text>
                                 You have been invited to register as an Administrative Support Professional on behalf of 
-                                {(entityInfo.entity) ? ` ${entityInfo.entity_name}` : ' a new entity'}.
+                                {(entityInfo.entity) ? ` ${entityInfo.entity.entity_name}` : ' a new entity'}.
                             </Text>
                         </CardBody>
                     </Card>
