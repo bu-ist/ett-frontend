@@ -15,6 +15,7 @@ import { lookupAuthIndAPI } from '../lib/auth-ind/lookupAuthIndAPI';
 
 import ConsentersAutocomplete from './authorizedPage/consentersAutocomplete';
 import AuthIndDetails from './authorizedPage/authIndDetails';
+import EntityInfoCard from './authorizedPage/entityInfoCard';
 import DisclosureRequestForm from './authorizedPage/disclosureRequestForm';
 
 export default function AuthorizedPage() {
@@ -112,6 +113,7 @@ export default function AuthorizedPage() {
             {(authorizedInfo && authorizedInfo.email && apiState == 'success' && appConfig) &&
                 <>
                     <AuthIndDetails userInfo={userData} />
+                    <EntityInfoCard entityInfo={userData.entity} />
                     <SimpleGrid spacing={4} columns={2}>
                         <Card
                             overflow={"hidden"}
