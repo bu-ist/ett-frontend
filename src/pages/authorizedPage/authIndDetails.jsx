@@ -10,38 +10,23 @@ export default function AuthIndDetails({ userInfo }) {
 
     return (
         <Card my="2em">
-            <CardHeader>
-                <Heading as="h3" size="md">{userInfo.fullname}</Heading>
-                {userInfo.title && <Text>{userInfo.title}</Text>}
-                {userInfo.email && <Text>{userInfo.email}</Text>}
-                {hasDelegate && 
-                    <>
-                        <Divider my="4" />
-                        <Heading as="h4" size="sm">Delegated Contact</Heading>
-                        <Text>{userInfo.delegate.fullname}</Text>
-                        <Text>{userInfo.delegate.email}</Text>
-                    </>
-
-                }
-            </CardHeader>
             <CardBody>
-                <HStack 
-                    divider={<StackDivider borderColor="gray.200" />}
-                    spacing={10}
-                >
+                    <HStack align="top" spacing={16} divider={<StackDivider borderColor="gray.200" />}>
+                        
                     <Box>
-                        <Heading as="h4" size="sm">Entity</Heading>
-                        <Text>
-                            {userInfo.entity.entity_name}
-                        </Text>
+                        <Heading as="h3" size="md">{userInfo.fullname}</Heading>
+                        {userInfo.title && <Text>{userInfo.title}</Text>}
+                        {userInfo.email && <Text>{userInfo.email}</Text>}
+                        {userInfo.phone_number && <Text>{userInfo.phone_number}</Text>}
                     </Box>
-                    <Box>
-                        <Heading mt="2em" as="h4" size="sm">Administrator</Heading>
-                        <Text>
-                            {entityAdmin.fullname}
-                        </Text>
-                    <Text>{entityAdmin.email}</Text>
-                    </Box>
+                    {hasDelegate && 
+                        <Box>
+                            <Heading as="h4" size="sm">Delegated Contact</Heading>
+                            <Text>{userInfo.delegate.fullname}</Text>
+                            <Text>{userInfo.delegate.email}</Text>
+                            <Text>{userInfo.delegate.phone_number}</Text>
+                        </Box>
+                    }
                 </HStack>
             </CardBody>
         </Card>
