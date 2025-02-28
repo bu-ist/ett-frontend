@@ -96,7 +96,8 @@ export default function AuthorizedPage() {
         <div>
             <Heading as="h2" size={"xl"}>Authorized Individual</Heading>
             <Text>
-                Lorem ipsum minim anim id do nisi aliqua. Consequat cillum sint qui ad aliqua proident nostrud. Cillum ullamco consectetur mollit eu labore amet ullamco mollit dolor veniam adipisicing veniam nulla ex. Quis irure minim id commodo dolore anim nulla aliqua reprehenderit pariatur. Id aute mollit pariatur tempor ex aute id voluptate enim. Et excepteur dolore non non ad deserunt duis voluptate aliqua officia qui ut elit.
+                Authorized Individuals (AIs) should be in senior institutional roles, accustomed to managing sensitive
+                and confidential information, and knowledgeable about the ETT-Registered Entity.
             </Text>
             {apiState === 'loading' && <Spinner />}
             {apiState === 'not-logged-in' &&
