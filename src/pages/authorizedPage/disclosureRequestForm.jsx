@@ -55,7 +55,7 @@ export default function DisclosureRequestForm({ entityId }) {
     return (
         <Box my={"2em"}>
         <FormControl as="form" onSubmit={handleSubmit}>
-            <FormLabel>Email of the Consenting Individual</FormLabel>
+            <FormLabel>Email of the Consenting Person</FormLabel>
             <Input
                 name="consenterEmail"
                 type="email"
@@ -63,7 +63,7 @@ export default function DisclosureRequestForm({ entityId }) {
                 onChange={handleChange}
                 placeholder="email@example.com"
             />
-            <FormLabel mt="1em">Email of the affiliate to send the disclosure request to </FormLabel>
+            <FormLabel mt="1em">Email of the Affiliate to send the disclosure request to </FormLabel>
             <Input
                 name="affiliateEmail"
                 type="email"

@@ -127,7 +127,12 @@ export default function AuthorizedPage() {
                                         <Heading size="md">Make an Exhibit Form request</Heading>
                                     </Stack>
                                     <Text py={"2"} mb={"1em"}>
-                                       Minim ut velit fugiat dolore incididunt ullamco reprehenderit irure culpa. Occaecat aliquip consequat occaecat occaecat excepteur. Fugiat occaecat voluptate consectetur qui sunt est. Officia magna id aute incididunt cupidatat non ut sit in sit ea mollit minim. Nulla irure dolore occaecat Lorem amet proident duis adipisicing qui ex cillum laborum velit. Eiusmod aliquip velit nostrud elit aliqua ea reprehenderit Lorem anim minim. Ad nisi aute proident laborum proident minim Lorem velit.
+                                        Make an request via email to a consenting person. Upon receiving the request, the consenting individual enters 
+                                        their private ETT page to complete Exhibit Forms (a Full Form listing all of the Consenting Person's Affiliates, 
+                                        prior or current at the time—and Single Entity Forms, one for each Affiliate listing only it), with a contact for each. 
+                                        Exhibit Forms pair with Consent Forms to confirm individual’s Consent Recipients for authorized disclosures. A Consenting Person 
+                                        completes new Exhibit Forms, with up-to-date Affiliate listings and contacts, each time the Consenting Person is considered by any 
+                                        registered entity.
                                     </Text>
                                     <ConsentersAutocomplete entityId={userData.entity.entity_id} />
                                 </CardBody>
@@ -144,7 +149,13 @@ export default function AuthorizedPage() {
                                         <Heading size="md">Make a disclosure request</Heading>
                                     </Stack>
                                     <Text py={"2"} mb={"1em"}>
-                                        Minim ut velit fugiat dolore incididunt ullamco reprehenderit irure culpa. Occaecat aliquip consequat occaecat occaecat excepteur. Fugiat occaecat voluptate consectetur qui sunt est. Officia magna id aute incididunt cupidatat non ut sit in sit ea mollit minim. Nulla irure dolore occaecat Lorem amet proident duis adipisicing qui ex cillum laborum velit. Eiusmod aliquip velit nostrud elit aliqua ea reprehenderit Lorem anim minim. Ad nisi aute proident laborum proident minim Lorem velit.
+                                        An entity that made findings (which is the most reliable source) makes disclosures directly to an ETT-Registered Entity 
+                                        when it initiates an ETT-automated request. ETT provides an efficient “check the box” Disclosure Form Template, which 
+                                        minimizes labor for a disclosing entity to make disclosures and for a receiving entity to review disclosures. 
+                                        When completed, the Disclosure Form discloses the existence and year of a finding and the type of misconduct — or that there 
+                                        is no finding of the types covered by ETT. A person’s input and these facts can be sufficient to inform an ETT-Registered Entity’s 
+                                        independent decision-making in many situations. A disclosing entity retains sole custody of its records. ETT never receives 
+                                        disclosures or conduct records and cannot create a central repository of them.
                                     </Text>
                                     <DisclosureRequestForm entityId={userData.entity.entity_id} />
                                 </CardBody>
