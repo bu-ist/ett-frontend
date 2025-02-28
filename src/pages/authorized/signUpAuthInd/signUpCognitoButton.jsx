@@ -51,7 +51,7 @@ export default function SignUpCognitoButton({ signUpRedirect}) {
             <Flex>
                 <Card width="40%">
                     <CardBody>
-                        <Text>Click <i>Accept and Create Account</i> to accept the terms of use on behalf of the Registered Entity, and create an account with a password.</Text>
+                        <Text>Click <i>Accept & Create Account</i> to accept the terms of use on behalf of the Registered Entity, and create an account with a password.</Text>
                     </CardBody>
                     <CardFooter>
                         <Button
@@ -67,7 +67,10 @@ export default function SignUpCognitoButton({ signUpRedirect}) {
                 <Spacer />
                 <Card width="40%">
                     <CardBody>
-                        <Text color="gray.600"><b>Optionally</b>, click <i>Accept, Create Account & Amend</i> to accept the terms of use on behalf of the Registered Entity, create an account, and then amend the entity to change one or more of the participants.</Text>
+                        <Text color="gray.600">
+                            <b>Optionally</b>, click <i>Accept & Amend</i> to accept the terms of use on behalf of the Registered Entity, 
+                            create an account, and then <Text as="span" color="orange.800">amend the entity to change one or more of the participants</Text>.
+                        </Text>
                     </CardBody>
                     <CardFooter>
                         <Button
@@ -78,7 +81,7 @@ export default function SignUpCognitoButton({ signUpRedirect}) {
                             _hover={{ bg: "orange.100" }}
                         >
                             {apiState === 'amend-loading' && <>Redirecting <Spinner ml="2" /></>}
-                            {apiState !== 'amend-loading' && 'Accept, Create Account & Amend'}
+                            {apiState !== 'amend-loading' && 'Accept & Amend'}
                         </Button>
                     </CardFooter>
                 </Card>
