@@ -115,7 +115,7 @@ export default function AuthorizedPage() {
                 <>
                     <AuthIndDetails userInfo={userData} />
                     <EntityInfoCard entityInfo={userData.entity} />
-                    <SimpleGrid spacing={4} columns={2}>
+                    <SimpleGrid mt="10" spacing={4} columns={2}>
                         <Card
                             overflow={"hidden"}
                             variant={"outline"}
