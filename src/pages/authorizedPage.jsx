@@ -127,7 +127,7 @@ export default function AuthorizedPage() {
                                         <Heading size="md">Make an Exhibit Form request</Heading>
                                     </Stack>
                                     <Text py={"2"} mb={"1em"}>
-                                        Make an request via email to a consenting person. Upon receiving the request, the consenting individual enters 
+                                        Make an request via email to a Consenting Person. Upon receiving the request, the Consenting Person enters 
                                         their private ETT page to complete Exhibit Forms (a Full Form listing all of the Consenting Person's Affiliates, 
                                         prior or current at the time—and Single Entity Forms, one for each Affiliate listing only it), with a contact for each. 
                                         Exhibit Forms pair with Consent Forms to confirm individual’s Consent Recipients for authorized disclosures. A Consenting Person 
