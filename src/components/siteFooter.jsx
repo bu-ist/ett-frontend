@@ -7,7 +7,8 @@ export default function SiteFooter() {
             <Flex minWidth='max-content' alignItems='center' gap='2'>
                 <Box p='2'>
                     <Text fontSize="sm" color="gray.500">
-                        Ethical Transparency Tool is brought to you by <Link href="https://societiesconsortium.com/" isExternal>Societies Consortium</Link>.
+                        Ethical Transparency Tool is brought to you by the
+                        <br /><Link href="https://societiesconsortium.com/" isExternal>Societies Consortium to End Harassment in STEMM</Link>.
                     </Text>
                 </Box>
                 <Spacer />

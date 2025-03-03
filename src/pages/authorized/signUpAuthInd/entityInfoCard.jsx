@@ -24,7 +24,7 @@ export default function EntityInfoCard({ inviteInfo }) {
             <CardBody>
                 <HStack align="top" spacing={14} divider={<StackDivider borderColor="gray.200" />}>
                     <Box>
-                        <Heading as="h4" size="sm">Entity Administrator</Heading>
+                        <Heading as="h4" size="sm">Administrative Support Professional</Heading>
                         <Text>{adminUser.fullname}</Text>
                         <Text>{adminUser.title}</Text>
                         <Text>{adminUser.email}</Text>
@@ -45,7 +45,7 @@ export default function EntityInfoCard({ inviteInfo }) {
                     </Box>
                     <Box>
                         <Heading as="h4" size="sm">Options</Heading>
-                        <Text>Optionally reject the entity if there is a problem with the invitation.</Text>
+                        <Text>Optionally end the entity registration if it is premature or otherwise mistaken.</Text>
                         <ButtonGroup size="sm" mt="4" spacing="4">
                             {   
                                 // Remove the amend button for now, we don't have the technology to support it, and may never.
