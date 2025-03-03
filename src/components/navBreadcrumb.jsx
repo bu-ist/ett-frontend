@@ -13,7 +13,7 @@ const NavBreadcrumb = () => {
         'consent-form': 'Consent Form',
         'add-exhibit-form': 'New Contact List',
         'auth-ind': 'Authorized Individual', // Authorized Individual
-        'sign-up': 'Sign Up',
+        'sign-up': 'Registration',
         'entity': 'Administrative Support', // Entity Admin
         'acknowledge': 'Register Entity',
         'sysadmin': 'System Admin', // System Admin
