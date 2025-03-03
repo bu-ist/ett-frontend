@@ -84,7 +84,7 @@ export default function SignUpAuthIndForm({inviteInfo, setRegistered, setSignUpE
 
     return (
         <>
-            <Heading as="h3" my="4" size="md">Register For an Authorized Individual Account</Heading>
+            <Heading as="h3" my="4" size="md">Register For an Authorized Individual Account - Required for Entity Registration</Heading>
             <Text mb="8">
                 An Authorized Individual is a person in a senior role that is accustomed to managing confidential and sensitive information, who will make Disclosure Requests and directly
                 receive the completed Disclosure Form information on behalf of the Requesting Registered Entity and will decide who at the Registered Entity needs
@@ -120,7 +120,7 @@ export default function SignUpAuthIndForm({inviteInfo, setRegistered, setSignUpE
                             })}
                         />
                         {!errors.title ? (
-                            <FormHelperText>Your current title.</FormHelperText>
+                            <FormHelperText>&nbsp;</FormHelperText>
                         ) : (
                             <FormErrorMessage>{errors.title && errors.title.message}</FormErrorMessage>
                         )}
@@ -141,7 +141,7 @@ export default function SignUpAuthIndForm({inviteInfo, setRegistered, setSignUpE
                             })}
                         />
                         {!errors.email ? (
-                            <FormHelperText>The email address to use for this account.</FormHelperText>
+                            <FormHelperText>&nbsp;</FormHelperText>
                         ) : (
                             <FormErrorMessage>{errors.email && errors.email.message}</FormErrorMessage>
                         )}
@@ -150,7 +150,8 @@ export default function SignUpAuthIndForm({inviteInfo, setRegistered, setSignUpE
                 <Box as="section" borderWidth="0.1em" borderRadius="16" borderColor="gray.100" p="4" mb="8">
                     <Heading as="h4" size={"sm"} mb="4">Optional Delegated Contact</Heading>
                     <Text mb="4">
-                        If you wish to have disclosure correspendence sent to a different contact, you may add a delegated contact here.
+                        If you wish to have completed Disclosure Forms sent to a contact at the entity that you are 
+                        registering — in addition to you — you may add a delegated contact here.
                     </Text>
                     { addingDelegatedContact &&
                         <DelegatedContactForm register={register} errors={errors} />

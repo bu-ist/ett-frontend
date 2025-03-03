@@ -61,7 +61,7 @@ export default function RejectButtonModal({ inviteInfo }) {
                 leftIcon={<AiOutlineClose/>} 
                 onClick={onOpen}
             >
-                Reject
+                End Registration
             </Button>
             <Modal size="xl" isOpen={isOpen} onClose={handleClose}>
                 <ModalOverlay />
