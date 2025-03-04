@@ -1,4 +1,7 @@
-import { Box, Heading, Text, Divider, Popover, PopoverTrigger, PopoverContent, PopoverArrow, PopoverCloseButton, PopoverBody, Button } from '@chakra-ui/react';
+import { Box, Heading, Text, Divider } from '@chakra-ui/react';
+
+import { EmploymentRolesDefinition, PrivilegesDefinition } from "../sharedTexts/definitions/definitions";
+import DefinitionPopover from "../sharedTexts/definitions/definitonPopover";
 
 export default function TermsOfUseBox() {
 
@@ -49,25 +52,16 @@ export default function TermsOfUseBox() {
             </Text>
             <Divider my="4" />
             <Text>
-                Completed Consent Forms, Exhibit Forms, and Disclosure Forms must be used by an ETT-Registered Entity <b>only</b> in connection 
-                with Privilege(s) or Honor(s), Employment or Role(s)
-                <Popover>
-                    <PopoverTrigger>
-                        <Button ml="0.5" size="xs">Learn more</Button>
-                    </PopoverTrigger>
-                    <PopoverContent width="xl">
-                        <PopoverArrow />
-                        <PopoverCloseButton />
-                        <PopoverBody bg="gray.200" p="6">
-                            Examples of Privilege(s) or Honor(s) include but are not limited to: elected fellow, elected or life membership; recipient of an honor, award, or an
-                            emeritus or endowed role; elected or appointed governance, committee, officer, or leadership role. However, Privileges do not include basic
-                            membership in an academic, professional, or honorary society at an individual&rsquo;s initiative (i.e., when not elected or awarded). Examples of
-                            Employment or Roles include but are not limited to: employment; employee appointment or assignment to a supervisory, evaluative, committee, or
-                            mentoring role. Other privileges (e.g., volunteer roles) and employment-related roles and decisions that the Requesting Entity identifies as affecting
-                            climate and culture may be included.
-                        </PopoverBody>
-                    </PopoverContent>
-                </Popover>
+                Completed Consent Forms, Exhibit Forms, and Disclosure Forms must be used by an ETT-Registered Entity <b>only</b> in connection with 
+                {' '}
+                <DefinitionPopover termName="Privilege(s) or Honor(s)">
+                    <PrivilegesDefinition />
+                </DefinitionPopover>
+                , 
+                {' '}
+                <DefinitionPopover termName="Employment or Role(s)">
+                    <EmploymentRolesDefinition />
+                </DefinitionPopover>
                 .
             </Text>
             <Divider my="4" />
