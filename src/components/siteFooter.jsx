@@ -8,7 +8,7 @@ export default function SiteFooter() {
                 <Box p='2'>
                     <Text fontSize="sm" color="gray.500">
                         Ethical Transparency Tool is brought to you by the
-                        <br /><Link href="https://societiesconsortium.com/" isExternal>Societies Consortium to End Harassment in STEMM</Link>.
+                        <br /><Link href="https://societiesconsortium.com/" isExternal>Societies Consortium to End Harassment in STEMM</Link>
                     </Text>
                 </Box>
                 <Spacer />
