@@ -27,6 +27,8 @@ import SysadminPage from './pages/sysadminPage';
 import SendInvitationPage from "./pages/sysadmin/sendInvitationPage";
 import SupportProRegisterPage from './pages/entity/supportProRegisterPage';
 
+import AmendRegistrationPage from './pages/amendRegistrationPage';
+
 const router = createBrowserRouter(
   createRoutesFromElements(
     <Route path="/" element={<RootLayout />}>
@@ -42,6 +44,7 @@ const router = createBrowserRouter(
       <Route path="auth-ind/sign-up" element={<SignUpAuthIndPage />} />
       <Route path="entity" element={<EntityPage />} />
       <Route path="entity/register" element={<SupportProRegisterPage />} />
+      <Route path="amend" element={<AmendRegistrationPage />} />
       <Route path="sysadmin" element={<SysadminPage />} />
       <Route path="sysadmin/send-invitation" element={<SendInvitationPage />} />
       <Route path="logout" element={<LogoutPage />} />
