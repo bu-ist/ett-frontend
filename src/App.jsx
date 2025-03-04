@@ -27,7 +27,7 @@ import SysadminPage from './pages/sysadminPage';
 import SendInvitationPage from "./pages/sysadmin/sendInvitationPage";
 import SupportProRegisterPage from './pages/entity/supportProRegisterPage';
 
-import AmendRegistrationPage from './pages/amendRegistrationPage';
+import AmendRegistrationPage from './pages/authorized/amendRegistrationPage';
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -42,9 +42,9 @@ const router = createBrowserRouter(
       <Route path="consenting/add-exhibit-form/both" element={<NewContactListPage />} />
       <Route path="auth-ind" element={<AuthorizedPage />} />
       <Route path="auth-ind/sign-up" element={<SignUpAuthIndPage />} />
+      <Route path="auth-ind/amend" element={<AmendRegistrationPage />} />
       <Route path="entity" element={<EntityPage />} />
       <Route path="entity/register" element={<SupportProRegisterPage />} />
-      <Route path="amend" element={<AmendRegistrationPage />} />
       <Route path="sysadmin" element={<SysadminPage />} />
       <Route path="sysadmin/send-invitation" element={<SendInvitationPage />} />
       <Route path="logout" element={<LogoutPage />} />
