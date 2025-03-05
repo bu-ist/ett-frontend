@@ -46,7 +46,7 @@ export default function EntityInfoCard({ entityInfo }) {
                     </Box>
                     <Box>
                         <Heading as="h4" mb="2" size="sm">Options</Heading>
-                        <Text>Optionally amend the registration if you wish to change the participants, or terminate if you want to end the registration.</Text>
+                        <Text>Optionally amend the registration if you wish to change the entity name or representatives, or terminate if you want to end the registration.</Text>
                         <ButtonGroup size="sm" mt="4" spacing="4">
                             <AmendModalButton entityInfo={entityInfo} />
                             <TerminateButtonModal entityInfo={entityInfo} />
