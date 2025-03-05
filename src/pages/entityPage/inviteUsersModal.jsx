@@ -86,14 +86,6 @@ export default function InviteUsersModal({ numUsers, entity, updatePendingInvita
                     <ModalHeader>Invite Authorized Individuals</ModalHeader>
                     <ModalCloseButton />
                     <ModalBody>
-                        {apiState === 'success' &&
-                            <VStack mb="4">
-                                <Alert status='success'>
-                                    <AlertIcon />
-                                    Invitations sent successfully
-                                </Alert>
-                            </VStack>
-                        }
                         <Text mb="2">
                             Invite two Authorized Individuals by their email addresses. These will each be a person in a senior role that 
                             is accustomed to managing confidential and sensitive information, who will directly receive the completed Disclosure Form 
@@ -160,6 +152,14 @@ export default function InviteUsersModal({ numUsers, entity, updatePendingInvita
                                 </Button>
                             }
                         </form>
+                        {apiState === 'success' &&
+                            <VStack mb="4">
+                                <Alert status='success'>
+                                    <AlertIcon />
+                                    Invitations sent successfully
+                                </Alert>
+                            </VStack>
+                        }
                         {apiState === 'success' &&
                             <Button my="4" onClick={handleClose}>Close</Button>
                         }
