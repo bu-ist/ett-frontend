@@ -1,6 +1,6 @@
 import { useEffect, useState, useContext, useRef } from 'react';
 import { useSearchParams } from 'react-router-dom';
-import { Heading, Text, Spinner, Button, Card, CardBody, Alert, AlertIcon, HStack, Icon } from '@chakra-ui/react';
+import { Heading, Text, Spinner, Button, Card, CardBody, Alert, AlertIcon, HStack, Icon, Box } from '@chakra-ui/react';
 import { HiOutlineArrowCircleDown } from "react-icons/hi";
 
 import { lookupEntityAPI } from '../../lib/entity/lookupEntityAPI';
@@ -129,16 +129,22 @@ export default function SupportProRegisterPage() {
                         </CardBody>
                     </Card>
                     <HStack mt="4">
-                        <Icon as={HiOutlineArrowCircleDown} color="gray.400" boxSize="12" />
-                        <Text>
-                        Registering your organization to use ETT requires that in your official and personal capacities you have read and agree to the ETT Privacy Notice and Privacy Policy.
-                            <span style={{fontWeight: "500"}}> Scroll to the bottom</span> of the page to accept the Privacy Notice and Privacy Policy, and continue.
-                        </Text>
+                        <Icon as={HiOutlineArrowCircleDown} color="blue.600" boxSize="36" />
+                        <Box>
+                            <Text>
+                                Registering your organization to use ETT requires that in your official and personal capacities you have read and agree to the ETT Privacy Notice and Privacy Policy.
+                            </Text>
+                            <Text fontSize="2xl" fontWeight="black" color="blue.800">
+                                Scroll to the bottom of the page to accept the Privacy Notice and Privacy Policy, and continue.
+                            </Text>
+                        </Box>
                     </HStack>
                     <PrivacyNoticeText />
                     <PrivacyPolicyBox />
                     <Button
-                        mt="8"
+                        mt="12"
+                        size="lg"
+                        colorScheme="blue"
                         onClick={acceptPrivacyPolicy}
                     >
                         Accept

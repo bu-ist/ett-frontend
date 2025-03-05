@@ -16,6 +16,7 @@ const NavBreadcrumb = () => {
         'sign-up': 'Registration',
         'entity': 'Administrative Support', // Entity Admin
         'acknowledge': 'Register Entity',
+        'amend': 'Amend Registration',
         'sysadmin': 'System Admin', // System Admin
         'send-invitation': 'Send Invitation',
         'logout': 'Logout', // Other

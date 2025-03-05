@@ -1,8 +1,9 @@
 import { useEffect, useState, useContext } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import Cookies from 'js-cookie';
-import { Button, Card, CardBody, CardFooter, CardHeader, Heading, Icon, SimpleGrid, Spinner, Stack, Text } from '@chakra-ui/react';
+import { Box, Button, Card, CardBody, CardFooter, CardHeader, Heading, Icon, SimpleGrid, Spinner, Stack, Text } from '@chakra-ui/react';
 import { Bs1CircleFill, Bs2CircleFill, BsFileEarmarkLock2 } from "react-icons/bs";
+import { HiCheckCircle } from 'react-icons/hi';
 
 import { ConfigContext } from "../lib/configContext";
 import { UserContext } from '../lib/userContext';
@@ -28,6 +29,7 @@ export default function AuthorizedPage() {
     const [userData, setUserData] = useState({});
 
     const [apiState, setApiState] = useState('idle');
+    const [firstLogin, setFirstLogin] = useState(false);
 
     useEffect(() => {
         const fetchData = async () => {
@@ -48,10 +50,12 @@ export default function AuthorizedPage() {
                 Cookies.remove('EttAccessJwt');
                 Cookies.remove('EttIdJwt');
 
+                // Set a flag in sessionStorage to indicate first login.
+                window.localStorage.setItem('firstLogin', 'true');
+
                 // Sign in does a window.location redirect, so execution will stop here.
                 signIn( cognitoID, 'auth-ind', cognitoDomain );
             }
-
 
             if (searchParams.has('code') && Cookies.get('EttAccessJwt') === undefined) {
                 // If this exists, then there is a sign in request, so use the code to get the tokens and store them as cookies.
@@ -85,6 +89,12 @@ export default function AuthorizedPage() {
             // Also set the user context for the avatar in the header.
             setUser(authIndResponse.payload.user);
 
+            // Check if this is the first login by looking for the flag in sessionStorage.
+            if (window.localStorage.getItem('firstLogin')) {
+                setFirstLogin(true);
+                window.localStorage.removeItem('firstLogin');
+            }
+
             // Need to add error checking, but I'm not yet sure all these components will stay on the same page.
             setApiState('success');
         };
@@ -95,6 +105,15 @@ export default function AuthorizedPage() {
     return (
         <div>
             <Heading as="h2" size={"xl"}>Authorized Individual</Heading>
+            {firstLogin && (
+                <Card my={6} direction={{ base: "column", sm: "row" }} p="6">
+                    <Icon as={HiCheckCircle} boxSize="16" color="green.500" />
+                    <Box ml="4">
+                        <Heading as="h3" size="md">Welcome!</Heading>
+                        <Text>You have successfully created an account in the ETT system.</Text>
+                    </Box>
+                </Card>
+            )}
             <Text>
                 Authorized Individuals (AIs) should be in senior institutional roles, accustomed to managing sensitive
                 and confidential information, and knowledgeable about the ETT-Registered Entity.

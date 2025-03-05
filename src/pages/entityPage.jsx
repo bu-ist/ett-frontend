@@ -30,6 +30,7 @@ export default function EntityPage() {
     const [userInfo, setUserInfo] = useState({});
 
     const [apiState, setApiState] = useState('idle');
+    const [firstLogin, setFirstLogin] = useState(false);
 
     useEffect(() => {
         // Asynchronously operations need to be declared in a local function to be called in useEffect.
@@ -51,6 +52,9 @@ export default function EntityPage() {
                 // Any existing login cookies will get in the way, so clear them first.
                 Cookies.remove('EttAccessJwt');
                 Cookies.remove('EttIdJwt');
+
+                // Set a flag in sessionStorage to indicate first login.
+                window.localStorage.setItem('firstLogin', 'true');
 
                 // Sign in does a window.location redirect, so execution will stop here.
                 signIn( cognitoID, 'entity', cognitoDomain );
@@ -98,6 +102,12 @@ export default function EntityPage() {
 
             // Also set the user context for the avatar in the header.
             setUser(userInfoResponse.payload.user);
+
+            // Check if this is the first login by looking for the flag in sessionStorage.
+            if (window.localStorage.getItem('firstLogin')) {
+                setFirstLogin(true);
+                window.localStorage.removeItem('firstLogin');
+            }            
             
             // Need to add error checking, but I'm not yet sure all these components will stay on the same page.
             setApiState('success');
@@ -123,6 +133,15 @@ export default function EntityPage() {
     return (
         <div>
             <Heading as={"h2"} size={"xl"}>Administrative Support Professional</Heading>
+            {firstLogin && (
+                <Card my={6} direction={{ base: "column", sm: "row" }} p="6">
+                    <Icon as={HiCheckCircle} boxSize="16" color="green.500" />
+                    <Box ml="4">
+                        <Heading as="h3" size="md">Welcome!</Heading>
+                        <Text>You have successfully created an account in the ETT system.</Text>
+                    </Box>
+                </Card>
+            )}
             <Text>
                 The Administrative Support Professional assists and directly works with one or both of the Authorized Individuals, 
                 is accustomed to maintaining confidential and sensitive information, and can administratively support the 

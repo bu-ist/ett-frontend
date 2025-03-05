@@ -86,7 +86,7 @@ export default function RegisterEntityForm({ code, setStepIndex }) {
 
     return (
         <>
-            <Heading as="h3" size={"md"} >Register Entity</Heading>
+            <Heading as="h3" size={"md"} >Registering An Entity</Heading>
             <RegisterStatementText />
             <form onSubmit={handleSubmit(processRegistration)}>
                 <Box as="section" borderWidth="0.1em" borderRadius="16" borderColor="gray.100" p="4" mb="8">
@@ -137,7 +137,7 @@ export default function RegisterEntityForm({ code, setStepIndex }) {
                             })}
                         />
                         {!errors.title ? (
-                            <FormHelperText>Your current title.</FormHelperText>
+                            <FormHelperText>&nbsp;</FormHelperText>
                         ) : (
                             <FormErrorMessage>{errors.title.message}</FormErrorMessage>
                         )}
@@ -158,7 +158,7 @@ export default function RegisterEntityForm({ code, setStepIndex }) {
                             })}
                         />
                         {!errors.email ? (
-                            <FormHelperText>The email address to use for this account.</FormHelperText>
+                            <FormHelperText>&nbsp;</FormHelperText>
                         ) : (
                             <FormErrorMessage>{errors.email.message}</FormErrorMessage>
                         )}
