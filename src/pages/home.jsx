@@ -74,7 +74,7 @@ export default function Home() {
                     <Stack>
                         <CardBody>
                             <Heading size="md">Administrative Support Professional</Heading>
-                            <Text py={"2"}>
+                            <Text py={"2"} mb="15rem">
                                 A person who assists a Registered Entity's Authorized Individuals in the use of ETT.
                                 A Registered Entity is a Society or IHE or other organization that has voluntarily joined the ETT by registering at this website.
                             </Text>
@@ -99,8 +99,11 @@ export default function Home() {
                     <Stack>
                         <CardBody>
                             <Heading size="md">Authorized Individual</Heading>
-                            <Text py={"2"} mb="6">
-                                A person in a senior role(s) within a Registered Entity that deals with sensitive information, and who will directly view completed Disclosure Form on behalf of the Registered Entity. Each registered entity has two Authorized Individuals.
+                            <Text py="2" mb="12rem">
+                                A person in a senior role(s) within a Registered Entity that deals with sensitive information, 
+                                and who will directly receive completed Disclosure Form on behalf of the Registered Entity and 
+                                decide (or contact another official with authority to decide) who at the Entity needs to receive 
+                                the information. Each registered entity has two Authorized Individuals.
                             </Text>
                         </CardBody>
                         <CardFooter paddingTop={"-2"}>
@@ -122,11 +125,14 @@ export default function Home() {
                 >
                     <Stack>
                         <CardBody>
-                            <Heading size="md">Consenting Person</Heading>
+                            <Heading size="md">Consenting Individual</Heading>
                             <Text py={"2"}>
-                                A candidate for employee, post-doc, volunteer, board member, etc. at a Registered Entity, who
-                                provides contact information of current/prior affiliates. 
-                                Affiliates will be asked to disclose any findings of misconduct to the authorized individual(s) of the registered entity.
+                                A person (e.g., a candidate for employment, post-doc, volunteer, board member, etc.) who is being considered 
+                                (or may be considered in the future) by a Registered Entity.  Consenting Individuals also provide consent via 
+                                ETT for certain disclosures (findings but <b>not</b> allegations)  to be made about the person’s conduct.  Disclosures 
+                                are made by the person’s professional affiliated entities (employers, societies and membership organizations, 
+                                appointing and honoring organizations) <b>directly</b> to any Registered Entity(ies) that make a <b>disclosure request</b> via ETT.  
+                                But ETT <b>never</b> receives any disclosures.
                             </Text>
                         </CardBody>
                         <CardFooter paddingTop={"-2"}>
