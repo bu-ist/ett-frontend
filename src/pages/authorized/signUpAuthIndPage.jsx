@@ -154,7 +154,7 @@ export default function SignUpAuthIndPage() {
                         </CardBody>
                      </Card>
                      <HStack mt="4">
-                     <Icon as={HiOutlineArrowCircleDown} color="blue.600" boxSize="36" />
+                        <Icon as={HiOutlineArrowCircleDown} color="blue.600" boxSize="36" />
                         <Box>
                             <Text>
                                 Registering your organization to use ETT requires that in your official and personal capacities you have read and agree to the ETT Privacy Notice and Privacy Policy.
@@ -166,7 +166,7 @@ export default function SignUpAuthIndPage() {
                     </HStack>
                     <PrivacyNoticeText />
                     <PrivacyPolicyBox />
-                    <Button mt="12" mb="6" colorScheme="blue" onClick={acceptPrivacyPolicy}>
+                    <Button mt="12" size="lg" mb="6" colorScheme="blue" onClick={acceptPrivacyPolicy}>
                         Accept
                     </Button>
                 </>
