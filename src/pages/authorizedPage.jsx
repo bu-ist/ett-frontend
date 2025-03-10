@@ -50,7 +50,7 @@ export default function AuthorizedPage() {
                 Cookies.remove('EttAccessJwt');
                 Cookies.remove('EttIdJwt');
 
-                // Set a flag in sessionStorage to indicate first login.
+                // Set a flag in localStorage to indicate first login.
                 window.localStorage.setItem('firstLogin', 'true');
 
                 // Sign in does a window.location redirect, so execution will stop here.
@@ -89,7 +89,7 @@ export default function AuthorizedPage() {
             // Also set the user context for the avatar in the header.
             setUser(authIndResponse.payload.user);
 
-            // Check if this is the first login by looking for the flag in sessionStorage.
+            // Check if this is the first login by looking for the flag in localStorage.
             if (window.localStorage.getItem('firstLogin')) {
                 setFirstLogin(true);
                 window.localStorage.removeItem('firstLogin');

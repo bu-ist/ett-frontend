@@ -1,5 +1,5 @@
 import { useState, useRef } from 'react';
-import { Heading, Text, Button, HStack, Icon } from "@chakra-ui/react";
+import { Heading, Text, Button, HStack, Icon, Box } from "@chakra-ui/react";
 import { HiOutlineArrowCircleDown } from "react-icons/hi";
 
 import PrivacyNoticeText from '../../components/sharedTexts/privacyNoticeText';
@@ -32,16 +32,22 @@ export default function ConsentingRegisterPage() {
             {!privacyPolicyAccepted &&
                 <>
                     <HStack mt="4">
-                        <Icon as={HiOutlineArrowCircleDown} color="gray.400" boxSize="12" />
-                        <Text>
-                            Registering on ETT means that you have read and agree to the ETT Privacy Notice and Privacy Policy.
-                            <span style={{fontWeight: "500"}}> Scroll to the bottom</span> of the page to accept the Privacy Notice and Privacy Policy, and continue.
-                        </Text>
+                        <Icon as={HiOutlineArrowCircleDown} color="blue.600" boxSize="36" />
+                        <Box>
+                            <Text>
+                                Registering on ETT means that you have read and agree to the ETT Privacy Notice and Privacy Policy.
+                            </Text>
+                            <Text fontSize="2xl" fontWeight="black" color="blue.800">
+                                Scroll to the bottom of the page to accept the Privacy Notice and Privacy Policy, and continue.
+                            </Text>
+                        </Box>
                     </HStack>
                     <PrivacyNoticeText />
                     <PrivacyPolicyBox />
                     <Button
-                        mt="6"
+                        mt="12"
+                        size="lg"
+                        colorScheme="blue"
                         onClick={acceptPrivacyPolicy}
                         disabled={privacyPolicyAccepted}
                     >
