@@ -126,7 +126,7 @@ export default function AuthorizedPage() {
                         <Icon color="gray.500" as={BsFileEarmarkLock2} w={24} h={24} />
                     </CardBody>
                     <CardFooter>
-                        <Button onClick={() => signIn( appConfig.authorizedIndividual.cognitoID, 'auth-ind' )}>Sign In as Authorized Individual</Button>
+                        <Button onClick={() => signIn( appConfig.authorizedIndividual.cognitoID, 'auth-ind', appConfig.cognitoDomain )}>Sign In as Authorized Individual</Button>
                     </CardFooter>
                 </Card>
             }
