@@ -14,7 +14,7 @@ import { UserContext } from '../../lib/userContext';
 import { exchangeAuthorizationCode } from '../../lib/exchangeAuthorizationCode';
 import { signIn } from '../../lib/signIn';
 
-import EditEntityNameModal from "../../components/amendment/editEntityNameModal";
+import EditEntityNameModal from '../../components/amendment/editEntityNameModal';
 
 import { lookupAuthIndAPI } from '../../lib/auth-ind/lookupAuthIndAPI';
 
