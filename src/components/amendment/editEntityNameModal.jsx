@@ -4,6 +4,7 @@ import Cookies from 'js-cookie';
 import { Button, Modal, ModalBody, ModalCloseButton, ModalContent, ModalHeader, ModalFooter, ModalOverlay, useDisclosure, FormControl, Text, FormLabel, Input, Spinner, VStack, Alert, AlertIcon, FormHelperText, FormErrorMessage, ButtonGroup, Box, AlertTitle, AlertDescription } from '@chakra-ui/react';
 
 import { AiOutlineClose } from 'react-icons/ai';
+import { HiOutlinePencil } from 'react-icons/hi';
 
 import { ConfigContext } from "../../lib/configContext";
 
@@ -56,7 +57,7 @@ export default function EditEntityNameModal({ entity, fetchData }) {
         onClose();
         
         // To reflect the changes in the UI, trigger a re-fetch of the entity data.
-        if (apiState === 'success') {
+        if (apiState === 'success' || apiState === 'error') {
             fetchData();
         }
         setApiState('idle');
@@ -64,7 +65,7 @@ export default function EditEntityNameModal({ entity, fetchData }) {
 
     return (
         <>
-            <Button onClick={onOpen}>Change Entity Name</Button>
+            <Button leftIcon={<HiOutlinePencil />} onClick={onOpen}>Change Entity Name</Button>
             <Modal size="xl" isOpen={isOpen} onClose={handleClose}>
                 <ModalOverlay />
                 <ModalContent>
@@ -115,8 +116,9 @@ export default function EditEntityNameModal({ entity, fetchData }) {
                     <ModalFooter>
                         {apiState !== 'success' && apiState !== 'error' &&
                             <ButtonGroup spacing="4">
-                                <Button leftIcon={<AiOutlineClose />} onClick={handleClose}>Cancel</Button>
+                                <Button onClick={handleClose}>Cancel</Button>
                                 <Button
+                                    leftIcon={<HiOutlinePencil />}
                                     onClick={handleSubmit(processNameChange)}
                                     isLoading={apiState === 'loading'}
                                 >
