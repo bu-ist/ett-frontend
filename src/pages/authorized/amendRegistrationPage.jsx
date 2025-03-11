@@ -1,4 +1,4 @@
-import { useEffect, useState, useContext } from 'react';
+import { useEffect, useState, useContext, Fragment } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import Cookies from 'js-cookie';
 import { Heading, Text, Spinner, Card, CardHeader, CardBody, Icon, CardFooter, Button, ButtonGroup, Box } from "@chakra-ui/react";
@@ -205,12 +205,12 @@ export default function AmendRegistrationPage() {
                             <CardBody>
                                 {userData.entity.pendingInvitations.map((invitation, index) => {
                                     return (
-                                        <>
+                                        <Fragment key={index}>
                                             <Text key={index}>
                                                 { ('code' in invitation) && `Invitation code starting with ${invitation.code.substring(0,6)} sent on ${invitation.sent_timestamp}` }
                                             </Text>
                                             <Button leftIcon={<AiOutlineClose />} mt="8">Retract Invitiation</Button>
-                                        </>
+                                        </Fragment>
                                     );
                                 })}
                             </CardBody>
