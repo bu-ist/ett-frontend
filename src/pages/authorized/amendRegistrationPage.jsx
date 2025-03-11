@@ -15,6 +15,7 @@ import { exchangeAuthorizationCode } from '../../lib/exchangeAuthorizationCode';
 import { signIn } from '../../lib/signIn';
 
 import EditEntityNameModal from '../../components/amendment/editEntityNameModal';
+import RetractInvitationModal from '../../components/amendment/retractInvitationModal';
 
 import { lookupAuthIndAPI } from '../../lib/auth-ind/lookupAuthIndAPI';
 
@@ -202,8 +203,10 @@ export default function AmendRegistrationPage() {
                                 <Text>
                                     Invitation code starting with {pendingAdminInvitation.code.substring(0,6)} sent on {pendingAdminInvitation.sent_timestamp}
                                 </Text>
-                                <Button leftIcon={<AiOutlineClose />} mt="8">Retract Invitation</Button>
                             </CardBody>
+                            <CardFooter>
+                                <RetractInvitationModal inviteCode={pendingAdminInvitation.code} fetchData={fetchData} />
+                            </CardFooter>
                         </Card>
                     }
                     <Card my="6">
