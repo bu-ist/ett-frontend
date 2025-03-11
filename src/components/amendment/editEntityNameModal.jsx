@@ -53,11 +53,13 @@ export default function EditEntityNameModal({ entity, fetchData }) {
     }
 
     function handleClose() {
-        setApiState('idle');
         onClose();
-
+        
         // To reflect the changes in the UI, trigger a re-fetch of the entity data.
-        fetchData();
+        if (apiState === 'success') {
+            fetchData();
+        }
+        setApiState('idle');
     }
 
     return (
