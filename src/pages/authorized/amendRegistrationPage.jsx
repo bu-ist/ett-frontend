@@ -13,6 +13,8 @@ import { UserContext } from '../../lib/userContext';
 import { exchangeAuthorizationCode } from '../../lib/exchangeAuthorizationCode';
 import { signIn } from '../../lib/signIn';
 
+import EditEntityNameModal from "../../components/amendment/editEntityNameModal";
+
 import { lookupAuthIndAPI } from '../../lib/auth-ind/lookupAuthIndAPI';
 
 export default function AmendRegistrationPage() {
@@ -147,7 +149,7 @@ export default function AmendRegistrationPage() {
                             <Text fontSize="2xl">{userData.entity.entity_name}</Text>
                         </CardBody>
                         <CardFooter>
-                            <Button>Change Entity Name</Button>
+                            <EditEntityNameModal entity={userData.entity} fetchData={fetchData} />
                         </CardFooter>
                     </Card>
                     <Card my="6">
