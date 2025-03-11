@@ -111,7 +111,7 @@ export default function EditEntityNameModal({ entity, fetchData }) {
                         }
                     </ModalBody>
                     <ModalFooter>
-                        {apiState !== 'success' &&
+                        {apiState !== 'success' && apiState !== 'error' &&
                             <ButtonGroup spacing="4">
                                 <Button leftIcon={<AiOutlineClose />} onClick={handleClose}>Cancel</Button>
                                 <Button
@@ -124,6 +124,9 @@ export default function EditEntityNameModal({ entity, fetchData }) {
                         }
                         {apiState === 'success' &&
                             <Button onClick={handleClose}>Done</Button>
+                        }
+                        {apiState === 'error' &&
+                            <Button onClick={handleClose}>Sorry, try reloading</Button>
                         }
                     </ModalFooter>
                 </ModalContent>
