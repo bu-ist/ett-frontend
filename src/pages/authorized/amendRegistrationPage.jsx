@@ -1,6 +1,7 @@
 import { useEffect, useState, useContext } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import Cookies from 'js-cookie';
+import { Link as ReactRouterLink } from 'react-router-dom';
 import { Heading, Text, Spinner, Card, CardHeader, CardBody, Icon, CardFooter, Button, ButtonGroup, Box } from "@chakra-ui/react";
 import { BsFileEarmarkLock2 } from "react-icons/bs";
 import { AiOutlineClose } from 'react-icons/ai';
@@ -262,6 +263,9 @@ export default function AmendRegistrationPage() {
                         </Card>
                     }
                 </>
+            }
+            {apiState !== 'loading' && apiState !== 'not-logged-in' && 
+                <Button as={ReactRouterLink} to="/auth-ind" my="2em"> Return to Dashboard</Button>
             }
         </>
     );
