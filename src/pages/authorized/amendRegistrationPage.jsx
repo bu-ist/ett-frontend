@@ -1,4 +1,4 @@
-import { useEffect, useState, useContext, Fragment } from 'react';
+import { useEffect, useState, useContext } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import Cookies from 'js-cookie';
 import { Heading, Text, Spinner, Card, CardHeader, CardBody, Icon, CardFooter, Button, ButtonGroup, Box } from "@chakra-ui/react";
@@ -35,6 +35,13 @@ export default function AmendRegistrationPage() {
 
     // Get the user whose role is 'RE_AUTH_IND', which is the authorized individual.
     const authUser = userData.entity?.users?.find(user => user.role === 'RE_AUTH_IND') || '';
+
+    // Get any pending invitation to administative support professionals ( where role is 'RE_ADMIN' )
+    const pendingAdminInvitation = userData.entity?.pendingInvitations?.find(invitation => invitation.role === 'RE_ADMIN') || '';
+
+    // Get any pending invitation to authorized individuals ( where role is 'RE_AUTH_IND' )
+    const pendingAuthInvitation = userData.entity?.pendingInvitations?.find(invitation => invitation.role === 'RE_AUTH_IND') || '';
+
 
     async function fetchData() {
         // appConfig is initially loaded through an api call, which won't have been completed on the first render, so return early if it's not loaded yet.
@@ -152,23 +159,52 @@ export default function AmendRegistrationPage() {
                             <EditEntityNameModal entity={userData.entity} fetchData={fetchData} />
                         </CardFooter>
                     </Card>
-                    <Card my="6">
-                        <CardHeader>
-                            <Heading size="lg" as="h3">Administrative Support Professional</Heading>
-                        </CardHeader>
-                        <CardBody>
-                            <Text>{adminUser.fullname}</Text>
-                            <Text>{adminUser.title}</Text>
-                            <Text>{adminUser.email}</Text>
-                            <Text>{adminUser.phone_number}</Text>
-                        </CardBody>
-                        <CardFooter>
-                            <ButtonGroup spacing="6">
-                                <Button leftIcon={<AiOutlineClose/>}>Remove</Button>
-                                <Button leftIcon={<RiMailLine />} >Remove and Invite Replacement</Button>
-                            </ButtonGroup>
-                        </CardFooter>
-                    </Card>
+                    {adminUser !== '' &&
+                        <Card my="6">
+                            <CardHeader>
+                                <Heading size="lg" as="h3">Administrative Support Professional</Heading>
+                            </CardHeader>
+                            <CardBody>
+                                <Text>{adminUser.fullname}</Text>
+                                <Text>{adminUser.title}</Text>
+                                <Text>{adminUser.email}</Text>
+                                <Text>{adminUser.phone_number}</Text>
+                            </CardBody>
+                            <CardFooter>
+                                <ButtonGroup spacing="6">
+                                    <Button leftIcon={<AiOutlineClose/>}>Remove</Button>
+                                    <Button leftIcon={<RiMailLine />} >Remove and Invite Replacement</Button>
+                                </ButtonGroup>
+                            </CardFooter>
+                        </Card>
+                    }
+                    {adminUser === '' && pendingAdminInvitation === '' &&
+                        <Card my="6">
+                            <CardHeader>
+                                <Heading size="lg" as="h3">Administrative Support Professional</Heading>
+                            </CardHeader>
+                            <CardBody>
+                                <Text>There is no administrative support professional assigned to this entity.</Text>
+                            </CardBody>
+                            <CardFooter>
+                                <Button leftIcon={<RiMailLine />}>Invite</Button>
+                            </CardFooter>
+                        </Card>
+
+                    }
+                    {pendingAdminInvitation !== '' &&
+                        <Card my="6">
+                            <CardHeader>
+                                <Heading size="lg" as="h3">Pending Invitation to Administrative Support Professional</Heading>
+                            </CardHeader>
+                            <CardBody>
+                                <Text>
+                                    Invitation code starting with {pendingAdminInvitation.code.substring(0,6)} sent on {pendingAdminInvitation.sent_timestamp}
+                                </Text>
+                                <Button leftIcon={<AiOutlineClose />} mt="8">Retract Invitation</Button>
+                            </CardBody>
+                        </Card>
+                    }
                     <Card my="6">
                         <CardHeader><Heading size="lg" as="h3">My Information (Authorized Individual)</Heading></CardHeader>
                         <CardBody>
@@ -184,7 +220,7 @@ export default function AmendRegistrationPage() {
                             </ButtonGroup>
                         </CardFooter>
                     </Card>
-                    {authUser !== '' &&
+                    {authUser !== "" &&
                         <Card my="6">
                             <CardHeader><Heading size="lg" as="h3">Second Authorized Individual</Heading></CardHeader>
                             <CardBody>
@@ -201,21 +237,28 @@ export default function AmendRegistrationPage() {
                             </CardFooter>
                         </Card>
                     }
-                    {userData.entity.pendingInvitations?.length > 0 &&
+                    { pendingAuthInvitation !== "" &&
                         <Card my="6">
                             <CardHeader><Heading size="lg" as="h3">Pending Invitation to Authorized Individuals</Heading></CardHeader>
                             <CardBody>
-                                {userData.entity.pendingInvitations.map((invitation, index) => {
-                                    return (
-                                        <Fragment key={index}>
-                                            <Text key={index}>
-                                                { ('code' in invitation) && `Invitation code starting with ${invitation.code.substring(0,6)} sent on ${invitation.sent_timestamp}` }
-                                            </Text>
-                                            <Button leftIcon={<AiOutlineClose />} mt="8">Retract Invitiation</Button>
-                                        </Fragment>
-                                    );
-                                })}
+                                <Text>
+                                    Invitation code starting with {pendingAuthInvitation.code.substring(0,6)} sent on {pendingAuthInvitation.sent_timestamp}
+                                </Text>
                             </CardBody>
+                            <CardFooter>
+                                <Button leftIcon={<AiOutlineClose />} mt="8">Retract Invitiation</Button>
+                            </CardFooter>
+                        </Card>
+                    }
+                    {authUser === "" && pendingAuthInvitation === "" &&
+                        <Card my="6">
+                            <CardHeader><Heading size="lg" as="h3">No Pending Invitations</Heading></CardHeader>
+                            <CardBody>
+                                <Text>There are no pending invitations to authorized individuals.</Text>
+                            </CardBody>
+                            <CardFooter>
+                                <Button leftIcon={<RiMailLine />}>Invite</Button>
+                            </CardFooter>
                         </Card>
                     }
                 </>
