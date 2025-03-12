@@ -6,7 +6,7 @@ import { Button, Modal, ModalBody, ModalCloseButton, ModalContent, ModalHeader, 
 import { AiOutlineClose } from 'react-icons/ai';
 import { HiOutlinePencil } from 'react-icons/hi';
 
-import { ConfigContext } from "../../lib/configContext";
+import { ConfigContext } from '../../lib/configContext';
 
 import { amendEntityNameAI } from '../../lib/amendment/amendEntityNameAI';
 
