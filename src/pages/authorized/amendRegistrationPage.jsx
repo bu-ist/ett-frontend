@@ -183,10 +183,13 @@ export default function AmendRegistrationPage() {
                     {adminUser === '' && pendingAdminInvitation === '' &&
                         <Card my="6">
                             <CardHeader>
-                                <Heading size="lg" as="h3">Administrative Support Professional</Heading>
+                                <Heading size="lg" as="h3">Administrative Support Professional (No Invitation)</Heading>
                             </CardHeader>
                             <CardBody>
-                                <Text>There is no administrative support professional assigned to this entity.</Text>
+                                <Text>There is no administrative support professional assigned to this entity, and no pending invitation.</Text>
+                                <Text>
+                                    Entity registration will expire in 30 days of the removal of the last administrative support professional.
+                                </Text>
                             </CardBody>
                             <CardFooter>
                                 <Button leftIcon={<RiMailLine />}>Invite</Button>
@@ -256,9 +259,12 @@ export default function AmendRegistrationPage() {
                     }
                     {authUser === "" && pendingAuthInvitation === "" &&
                         <Card my="6">
-                            <CardHeader><Heading size="lg" as="h3">No Pending Invitations</Heading></CardHeader>
+                            <CardHeader><Heading size="lg" as="h3">Authorized Individuals (No Invitation)</Heading></CardHeader>
                             <CardBody>
                                 <Text>There are no pending invitations to authorized individuals.</Text>
+                                <Text>
+                                    Entity registration will expire in 30 days of the removal of the last authorized individual.
+                                </Text>
                             </CardBody>
                             <CardFooter>
                                 <Button leftIcon={<RiMailLine />}>Invite</Button>
