@@ -16,6 +16,7 @@ import { signIn } from '../../lib/signIn';
 
 import EditEntityNameModal from '../../components/amendment/editEntityNameModal';
 import RetractInvitationModal from '../../components/amendment/retractInvitationModal';
+import InviteUserModal from '../../components/amendment/inviteUserModal';
 
 import { lookupAuthIndAPI } from '../../lib/auth-ind/lookupAuthIndAPI';
 
@@ -192,7 +193,7 @@ export default function AmendRegistrationPage() {
                                 </Text>
                             </CardBody>
                             <CardFooter>
-                                <Button leftIcon={<RiMailLine />}>Invite</Button>
+                                <InviteUserModal entity={userData.entity} role="RE_ADMIN" fetchData={fetchData} />
                             </CardFooter>
                         </Card>
 
@@ -267,7 +268,7 @@ export default function AmendRegistrationPage() {
                                 </Text>
                             </CardBody>
                             <CardFooter>
-                                <Button leftIcon={<RiMailLine />}>Invite</Button>
+                                <InviteUserModal entity={userData.entity} role="RE_AUTH_IND" fetchData={fetchData} />
                             </CardFooter>
                         </Card>
                     }
