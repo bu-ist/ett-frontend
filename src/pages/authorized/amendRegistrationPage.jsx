@@ -17,6 +17,7 @@ import { signIn } from '../../lib/signIn';
 import EditEntityNameModal from '../../components/amendment/editEntityNameModal';
 import RetractInvitationModal from '../../components/amendment/retractInvitationModal';
 import InviteUserModal from '../../components/amendment/inviteUserModal';
+import RemoveUserModal from '../../components/amendment/removeUserModal';
 
 import { lookupAuthIndAPI } from '../../lib/auth-ind/lookupAuthIndAPI';
 
@@ -175,7 +176,7 @@ export default function AmendRegistrationPage() {
                             </CardBody>
                             <CardFooter>
                                 <ButtonGroup spacing="6">
-                                    <Button leftIcon={<AiOutlineClose/>}>Remove</Button>
+                                    <RemoveUserModal entity={userData.entity} emailToRemove={adminUser.email} emailOfRequestor={authorizedInfo.email} fetchData={fetchData} />
                                     <Button leftIcon={<RiMailLine />} >Remove and Invite Replacement</Button>
                                 </ButtonGroup>
                             </CardFooter>
@@ -223,7 +224,7 @@ export default function AmendRegistrationPage() {
                         </CardBody>
                         <CardFooter>
                             <ButtonGroup spacing="6">
-                                <Button leftIcon={<AiOutlineClose/>}>Remove</Button>
+                                <RemoveUserModal entity={userData.entity} emailToRemove={userData.email} emailOfRequestor={authorizedInfo.email} fetchData={fetchData} />                               
                                 <Button leftIcon={<RiMailLine />} >Remove and Invite Replacement</Button>
                             </ButtonGroup>
                         </CardFooter>
@@ -239,7 +240,7 @@ export default function AmendRegistrationPage() {
                             </CardBody>
                             <CardFooter>
                                 <ButtonGroup spacing="6">
-                                    <Button leftIcon={<AiOutlineClose/>}>Remove</Button>
+                                    <RemoveUserModal entity={userData.entity} emailToRemove={authUser.email} emailOfRequestor={authorizedInfo.email} fetchData={fetchData} />
                                     <Button leftIcon={<RiMailLine />} >Remove and Invite Replacement</Button>
                                 </ButtonGroup>
                             </CardFooter>
