@@ -1,3 +1,4 @@
+import { Link as ReactRouterLink } from "react-router-dom";
 import { Button, ButtonGroup, Divider, Modal, ModalBody, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Text, useDisclosure } from "@chakra-ui/react";
 import { HiOutlinePencil } from "react-icons/hi";
 
@@ -23,13 +24,13 @@ export default function AmendButtonModal({ entityInfo }) {
                         </Text>
                         <Divider my="4"/>
                         <Text>
-                            This feature is not yet implemented.
+                            Click proceed to continue to the amendment page.
                         </Text>  
                     </ModalBody>
                     <ModalFooter>
                         <ButtonGroup spacing="4">
                             <Button onClick={onClose}>Cancel</Button>
-                            <Button onClick={() => alert('Not yet implemented')} colorScheme="orange">Proceed</Button>
+                            <Button as={ReactRouterLink} to="/auth-ind/amend" colorScheme="orange">Proceed</Button>
                         </ButtonGroup>
                     </ModalFooter>
                 </ModalContent>
