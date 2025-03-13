@@ -18,6 +18,7 @@ import EditEntityNameModal from '../../components/amendment/editEntityNameModal'
 import RetractInvitationModal from '../../components/amendment/retractInvitationModal';
 import InviteUserModal from '../../components/amendment/inviteUserModal';
 import RemoveUserModal from '../../components/amendment/removeUserModal';
+import RemoveAndInviteReplacementModal from '../../components/amendment/removeAndInviteReplacementModal';
 
 import { lookupAuthIndAPI } from '../../lib/auth-ind/lookupAuthIndAPI';
 
