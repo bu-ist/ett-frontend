@@ -17,6 +17,10 @@ export default function RemoveUserModal({ entity, emailToRemove, emailOfRequesto
 
     const [apiError, setApiError] = useState(null);
 
+    // Check if the user is removing themselves.
+    const isSelfRemoval = emailToRemove === emailOfRequestor;
+
+
     async function processUserRemoval() {
 
         console.log('Removing user with email ', emailToRemove);
@@ -52,22 +56,33 @@ export default function RemoveUserModal({ entity, emailToRemove, emailOfRequesto
 
     return (
         <>
-            <Button leftIcon={<AiOutlineClose />} onClick={onOpen}>Remove</Button>
+            <Button leftIcon={<AiOutlineClose />} onClick={onOpen}>Remove {isSelfRemoval ? "Me" : ""}</Button>
             <Modal size="xl" isOpen={isOpen} onClose={handleClose}>
                 <ModalOverlay />
                 <ModalContent>
-                    <ModalHeader>Remove User</ModalHeader>
+                    <ModalHeader>Remove User {isSelfRemoval ? "(Myself)" : ""}</ModalHeader>
                     <ModalCloseButton />
                     <ModalBody>
-                        <Text>Are you sure you want to remove the user with email <Code>{emailToRemove}</Code> from this entity?</Text>
-                        <Text mb="4">
-                            You will have 30 days to send a new invitation.
+                        <Text>
+                            Are you sure you want to remove the user with email <Code>{emailToRemove}</Code> from this entity?
                         </Text>
+                        
+                        {isSelfRemoval &&
+                            <Text my="4">
+                                You will be removing yourself from the system, and will no longer have access.
+                            </Text>
+                        }
+                        {!isSelfRemoval &&
+                            <Text my="4">
+                                You will have 30 days to send a new invitation.
+                            </Text>
+                        }
                         {apiState === 'success' &&
                             <VStack mb="4">
                                 <Alert status='success'>
                                     <AlertIcon />
                                     User removal successful.
+                                    {isSelfRemoval && " You will be logged out."}
                                 </Alert>
                             </VStack>
                         }
@@ -85,11 +100,11 @@ export default function RemoveUserModal({ entity, emailToRemove, emailOfRequesto
                         {apiState !== 'success' && apiState !== 'error' &&
                             <ButtonGroup>
                                 <Button onClick={handleClose}>Cancel</Button>
-                                <Button leftIcon={<AiOutlineClose />} onClick={processUserRemoval}>Remove User</Button>
+                                <Button leftIcon={<AiOutlineClose />} onClick={processUserRemoval}>Remove {isSelfRemoval ? "Me" : " User"}</Button>
                             </ButtonGroup>
                         }
                         {apiState === 'success' &&
-                            <Button onClick={handleClose}>Done</Button>
+                            <Button onClick={handleClose}>{isSelfRemoval ? "Goodbye" : "Done"}</Button>
                         }
                         {apiState === 'error' &&
                             <Button onClick={handleClose}>Sorry, try reloading</Button>
