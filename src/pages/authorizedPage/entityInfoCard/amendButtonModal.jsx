@@ -19,7 +19,7 @@ export default function AmendButtonModal({ entityInfo }) {
                     <ModalHeader>Amend Registration for {entityInfo.entity_name}</ModalHeader>
                     <ModalBody>
                         <Text>
-                            You can amend the registration for {entityInfo.entity_name} by changing the participants.
+                            You can amend the registration for {entityInfo.entity_name} by changing the representatives.
                         </Text>
                         <Divider my="4"/>
                         <Text>
