@@ -225,7 +225,6 @@ export default function AmendRegistrationPage() {
                         <CardFooter>
                             <ButtonGroup spacing="6">
                                 <RemoveUserModal entity={userData.entity} emailToRemove={userData.email} emailOfRequestor={authorizedInfo.email} fetchData={fetchData} />                               
-                                <Button leftIcon={<RiMailLine />} >Remove and Invite Replacement</Button>
                             </ButtonGroup>
                         </CardFooter>
                     </Card>
