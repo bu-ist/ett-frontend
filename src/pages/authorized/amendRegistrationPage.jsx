@@ -1,7 +1,6 @@
 import { useEffect, useState, useContext } from 'react';
-import { useSearchParams } from 'react-router-dom';
+import { useSearchParams, Link as ReactRouterLink } from 'react-router-dom';
 import Cookies from 'js-cookie';
-import { Link as ReactRouterLink } from 'react-router-dom';
 import { Heading, Text, Spinner, Card, CardHeader, CardBody, Icon, CardFooter, Button, ButtonGroup, Box } from "@chakra-ui/react";
 import { BsFileEarmarkLock2 } from "react-icons/bs";
 import { AiOutlineClose } from 'react-icons/ai';
