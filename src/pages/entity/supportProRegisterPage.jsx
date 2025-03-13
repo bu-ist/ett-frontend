@@ -35,7 +35,7 @@ export default function SupportProRegisterPage() {
         async function lookupInvitation() {
             // This is where the API call to acknowledge the entity would go.
             const code = searchParams.get('code');
-            const entityId = searchParams.get('entity_id'); // ???
+            const entityId = searchParams.get('entity_id'); // If there is an entity_id, we are registering an ASP for an existing entity.
 
             const lookupResult = await lookupEntityAPI(appConfig, code);
 
@@ -152,7 +152,11 @@ export default function SupportProRegisterPage() {
                 </>
             }
             {apiState == 'acknowledged' &&
-               <RegisterEntityForm code={searchParams.get('code')} setStepIndex={setStepIndex} />
+               <RegisterEntityForm 
+                    code={searchParams.get('code')} 
+                    setStepIndex={setStepIndex} 
+                    entityInfo={entityInfo}
+                />
             }
         </div>
     );
