@@ -230,7 +230,7 @@ export default function AmendRegistrationPage() {
                     </Card>
                     {authUser !== "" &&
                         <Card my="6">
-                            <CardHeader><Heading size="lg" as="h3">Second Authorized Individual</Heading></CardHeader>
+                            <CardHeader><Heading size="lg" as="h3">Authorized Individual</Heading></CardHeader>
                             <CardBody>
                                 <Text>{authUser.fullname}</Text>
                                 <Text>{authUser.title}</Text>
@@ -247,7 +247,7 @@ export default function AmendRegistrationPage() {
                     }
                     { pendingAuthInvitation !== "" &&
                         <Card my="6">
-                            <CardHeader><Heading size="lg" as="h3">Pending Invitation to Authorized Individuals</Heading></CardHeader>
+                            <CardHeader><Heading size="lg" as="h3">Pending Invitation to Authorized Individual</Heading></CardHeader>
                             <CardBody>
                                 <Text>
                                     Invitation code starting with {pendingAuthInvitation.code.substring(0,6)} sent on {pendingAuthInvitation.sent_timestamp}
