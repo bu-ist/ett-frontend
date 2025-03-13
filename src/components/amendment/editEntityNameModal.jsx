@@ -3,7 +3,6 @@ import { useForm } from 'react-hook-form';
 import Cookies from 'js-cookie';
 import { Button, Modal, ModalBody, ModalCloseButton, ModalContent, ModalHeader, ModalFooter, ModalOverlay, useDisclosure, FormControl, Text, FormLabel, Input, Spinner, VStack, Alert, AlertIcon, FormHelperText, FormErrorMessage, ButtonGroup, Box, AlertTitle, AlertDescription } from '@chakra-ui/react';
 
-import { AiOutlineClose } from 'react-icons/ai';
 import { HiOutlinePencil } from 'react-icons/hi';
 
 import { ConfigContext } from '../../lib/configContext';
