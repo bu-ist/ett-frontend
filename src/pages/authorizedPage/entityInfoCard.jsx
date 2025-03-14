@@ -15,7 +15,7 @@ export default function EntityInfoCard({ entityInfo }) {
     // If there is already another Authorized Individual, get the email of the user whose role is 'RE_AUTHORIZED'.
     const authUser = entityInfo?.users?.find(user => user.role === 'RE_AUTH_IND') || '';
 
-    const { entity_name }  = entityInfo;
+    const { entity_name } = entityInfo;
 
     return (
         <Card my="4">
@@ -26,10 +26,16 @@ export default function EntityInfoCard({ entityInfo }) {
                 <HStack align="top" spacing={14} divider={<StackDivider borderColor="gray.200" />}>
                     <Box>
                         <Heading as="h4" mb="2" size="sm">Administrative Support Professional</Heading>
-                        <Text>{adminUser.fullname}</Text>
-                        <Text>{adminUser.title}</Text>
-                        <Text>{adminUser.email}</Text>
-                        <Text>{adminUser.phone_number}</Text>
+                        {adminUser !== '' ? (
+                            <>
+                                <Text>{adminUser.fullname}</Text>
+                                <Text>{adminUser.title}</Text>
+                                <Text>{adminUser.email}</Text>
+                                <Text>{adminUser.phone_number}</Text>
+                            </>
+                        ) : (
+                            <Text>Currently vacant, click &quot;Amend&quot; to send new invitation.</Text>
+                        )}
                     </Box>
                     <Box>
                         <Heading as="h4" mb="2" size="sm">Authorized Individuals</Heading>

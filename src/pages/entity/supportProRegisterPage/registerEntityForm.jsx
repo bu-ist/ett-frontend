@@ -11,7 +11,7 @@ import { emailRegex } from '../../../lib/formatting/emailRegex';
 
 import { ConfigContext } from '../../../lib/configContext';
 
-export default function RegisterEntityForm({ code, setStepIndex }) {
+export default function RegisterEntityForm({ code, setStepIndex, entityInfo }) {
     // Get the appConfig from the ConfigContext.
     const { appConfig } = useContext( ConfigContext );
 
@@ -19,19 +19,24 @@ export default function RegisterEntityForm({ code, setStepIndex }) {
     let [searchParams] = useSearchParams();
     const invitationEmail = searchParams.get('email');
 
+    // Destructure the entity info, with optional chaining and default values to handle the case where there is no existing entity.
+    const { entity_id = '', entity_name = '' } = entityInfo?.entity || {};
+
+    // Setup the initial state of the form data.
+    const defaultValues = {
+        ...(!entity_id && { entity_name: '' }), // Only include the entity_name if there is no entity_id.
+        fullname: '',
+        title: '',
+        email: invitationEmail ? invitationEmail : '',
+        signature: '',
+    };
     // Set the initial state of the form data using react-hook-form.
     const {
         handleSubmit,
         register,
         formState: { errors, isSubmitting },
     } = useForm({
-        defaultValues: {
-            entity_name: '',
-            fullname: '',
-            title: '',
-            email: invitationEmail ? invitationEmail : '',
-            signature: '',
-        }
+        defaultValues
     });
 
     // Setup state variables for the API call.
@@ -54,7 +59,10 @@ export default function RegisterEntityForm({ code, setStepIndex }) {
         // The signature field is not used in the API call, so create a new object without the signature property
         const { signature, ...valuesWithoutSignature } = values;
 
-        const registerResult = await registerEntityAPI(appConfig, code, valuesWithoutSignature);
+        // If this is an ASP signing up for an existing entity, add the entity_id to a new object.
+        const finalValues = entity_id ? { ...valuesWithoutSignature, entity_id } : valuesWithoutSignature;
+
+        const registerResult = await registerEntityAPI(appConfig, code, finalValues);
         console.log(registerResult);
 
         // This is the error handling code that should be replicated across the app.
@@ -91,22 +99,26 @@ export default function RegisterEntityForm({ code, setStepIndex }) {
             <form onSubmit={handleSubmit(processRegistration)}>
                 <Box as="section" borderWidth="0.1em" borderRadius="16" borderColor="gray.100" p="4" mb="8">
                     <Heading as="h4" size={"sm"} mb="4">Entity Information</Heading>
-                    <FormControl mb="4" isInvalid={errors.entity_name}>
-                        <FormLabel>Full Name of Entity</FormLabel>
-                        <Input
-                            id="entity_name"
-                            name="entity_name"
-                            placeholder="Entity Name"
-                            {...register('entity_name', {
-                                required: 'Entity name is required',
-                            })}
-                        />
-                        {!errors.entity_name ? (
-                            <FormHelperText>Enter the full name of the entity, no acronyms. Example: Vanderbilt University</FormHelperText>
-                        ) : (
-                            <FormErrorMessage>{errors.entity_name.message}</FormErrorMessage>
-                        )}
-                    </FormControl>
+                    {entity_id !== '' ? (
+                         <Text fontSize="2xl">{entity_name}</Text>
+                    ) : (    
+                        <FormControl mb="4" isInvalid={errors.entity_name}>
+                            <FormLabel>Full Name of Entity</FormLabel>
+                            <Input
+                                id="entity_name"
+                                name="entity_name"
+                                placeholder="Entity Name"
+                                {...register('entity_name', {
+                                    required: 'Entity name is required',
+                                })}
+                            />
+                            {!errors.entity_name ? (
+                                <FormHelperText>Enter the full name of the entity, no acronyms. Example: Vanderbilt University</FormHelperText>
+                            ) : (
+                                <FormErrorMessage>{errors.entity_name.message}</FormErrorMessage>
+                            )}
+                        </FormControl>
+                    )}
                 </Box>
                 <Box as="section" borderWidth="0.1em" borderRadius="16" borderColor="gray.100" p="4" mb="8">
                     <Heading as="h4" size={"sm"} mb="4">Administrative Support Professional Information</Heading>
