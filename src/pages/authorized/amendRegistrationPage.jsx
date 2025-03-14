@@ -69,13 +69,13 @@ export default function AmendRegistrationPage() {
             window.localStorage.setItem('firstLogin', 'true');
 
             // Sign in does a window.location redirect, so execution will stop here.
-            signIn( cognitoID, 'auth-ind', cognitoDomain );
+            signIn( cognitoID, 'auth-ind/amend', cognitoDomain );
         }
 
         if (searchParams.has('code') && Cookies.get('EttAccessJwt') === undefined) {
             // If this exists, then there is a sign in request, so use the code to get the tokens and store them as cookies.
 
-            await exchangeAuthorizationCode( cognitoDomain, cognitoID, 'auth-ind');
+            await exchangeAuthorizationCode( cognitoDomain, cognitoID, 'auth-ind/amend');
 
             // Use setSearchParams to empty the search params once exchangeAuthorizationCode is done with them.
             setSearchParams({});
@@ -110,13 +110,114 @@ export default function AmendRegistrationPage() {
             window.localStorage.removeItem('firstLogin');
         }
 
-        // Need to add error checking, but I'm not yet sure all these components will stay on the same page.
-        setApiState('success');
+        // Need to add error checking here.
+        if ( authIndResponse.payload?.ok && Object.keys( authIndResponse.payload.user ).length > 0 ) {
+            console.log('User data retrieved successfully');
+            setApiState('success');
+            
+        } else if (authIndResponse.payload?.ok && Object.keys( authIndResponse.payload.user ).length === 0) {
+            // If there is an empty user, then probably there was a session logout so maybe clear the cookies.
+            Cookies.remove('EttAccessJwt');
+            Cookies.remove('EttIdJwt');
+
+            // Set the apiState to 'not-logged-in' to provide feedback
+            setApiState('not-logged-in');
+            console.log('No user data found');
+        } else {
+            console.log('Error retrieving user data');
+            setApiState('error');
+        }
+
     };
 
 
     useEffect(() => {
-        fetchData();
+        // This code is recapitulated in the fetchData function, but it's here to handle the first render, which otherwise breaks.
+        // Don't know how or why, but having it twice at least makes it work, so we're committing to that.
+        const fetchDataFirst = async () => {
+            // appConfig is initially loaded through an api call, which won't have been completed on the first render, so return early if it's not loaded yet.
+            // Because appConfig is a dependency of this useEffect, fetchData will be called again when appConfig is loaded.
+            if (!appConfig) {
+                setApiState('loading');
+                return;
+            }
+
+            // De-structure useful values from the appConfig.
+            const { cognitoDomain, apiStage, authorizedIndividual: { cognitoID, apiHost } } = appConfig;
+
+            // Check to see if this is a first time login from the cognito redirect, and if so do a signIn.
+            // This workaround has to do with the state and code_verifier, which aren't part of the sign up flow.
+            if ( searchParams.get('action') === 'post-signup' && searchParams.has('code') ) {
+                // Any existing login cookies will get in the way, so clear them first.
+                Cookies.remove('EttAccessJwt');
+                Cookies.remove('EttIdJwt');
+
+                // Set a flag in localStorage to indicate first login.
+                window.localStorage.setItem('firstLogin', 'true');
+
+                // Sign in does a window.location redirect, so execution will stop here.
+                signIn( cognitoID, 'auth-ind/amend', cognitoDomain );
+            }
+
+            if (searchParams.has('code') && Cookies.get('EttAccessJwt') === undefined) {
+                // If this exists, then there is a sign in request, so use the code to get the tokens and store them as cookies.
+
+                await exchangeAuthorizationCode( cognitoDomain, cognitoID, 'auth-ind/amend');
+
+                // Use setSearchParams to empty the search params once exchangeAuthorizationCode is done with them.
+                setSearchParams({});
+            }
+
+            const accessToken = Cookies.get('EttAccessJwt');
+            const idToken = Cookies.get('EttIdJwt');
+
+            if (!accessToken || !idToken) {
+                // Set the apiState to 'not-logged-in' to provide feedback
+                setApiState('not-logged-in');
+                return;
+            }
+
+            // If there are login tokens, get the user data.
+            const decodedIdToken = JSON.parse(atob(idToken.split('.')[1]));
+            setAuthorizedInfo(decodedIdToken);
+
+            // Get the consenter list and user data.
+            setApiState('loading');
+
+            // Get the user data from the API and store it in local state.
+            const authIndResponse = await lookupAuthIndAPI(apiHost, apiStage, accessToken, decodedIdToken.email);
+            setUserData(authIndResponse.payload.user);
+
+            // Also set the user context for the avatar in the header.
+            setUser(authIndResponse.payload.user);
+
+            // Check if this is the first login by looking for the flag in localStorage.
+            if (window.localStorage.getItem('firstLogin')) {
+                setFirstLogin(true);
+                window.localStorage.removeItem('firstLogin');
+            }
+
+            // Need to add error checking here.
+            if ( authIndResponse.payload?.ok && Object.keys( authIndResponse.payload.user ).length > 0 ) {
+                console.log('User data retrieved successfully');
+                setApiState('success');
+                
+            } else if (authIndResponse.payload?.ok && Object.keys( authIndResponse.payload.user ).length === 0) {
+                // If there is an empty user, then probably there was a session logout so maybe clear the cookies.
+                Cookies.remove('EttAccessJwt');
+                Cookies.remove('EttIdJwt');
+
+                // Set the apiState to 'not-logged-in' to provide feedback
+                setApiState('not-logged-in');
+                console.log('No user data found');
+            } else {
+                console.log('Error retrieving user data');
+                setApiState('error');
+            }
+
+        };
+
+        fetchDataFirst();
     }, [appConfig]);
 
     return (
@@ -127,7 +228,7 @@ export default function AmendRegistrationPage() {
                     <Icon as={HiCheckCircle} boxSize="16" color="green.500" />
                     <Box ml="4">
                         <Heading as="h3" size="md">Welcome!</Heading>
-                        <Text>You have successfully created an account in the ETT system.</Text>
+                        <Text>You are amending the registration.</Text>
                     </Box>
                 </Card>
             )}
@@ -146,10 +247,11 @@ export default function AmendRegistrationPage() {
                         <Icon color="gray.500" as={BsFileEarmarkLock2} w={24} h={24} />
                     </CardBody>
                     <CardFooter>
-                        <Button onClick={() => signIn( appConfig.authorizedIndividual.cognitoID, 'auth-ind', appConfig.cognitoDomain )}>Sign In as Authorized Individual</Button>
+                        <Button onClick={() => signIn( appConfig.authorizedIndividual.cognitoID, 'auth-ind/amend', appConfig.cognitoDomain )}>Sign In as Authorized Individual</Button>
                     </CardFooter>
                 </Card>
             }
+            {apiState === 'error' && <Text my="8" fontSize="2xl">Error: Unable to retrieve user data</Text>}
             {apiState === 'success' && appConfig &&
                 <>
                     <Card my="6">
@@ -254,7 +356,7 @@ export default function AmendRegistrationPage() {
                                 </Text>
                             </CardBody>
                             <CardFooter>
-                                <Button leftIcon={<AiOutlineClose />} mt="8">Retract Invitiation</Button>
+                                <RetractInvitationModal inviteCode={pendingAuthInvitation.code} fetchData={fetchData} />
                             </CardFooter>
                         </Card>
                     }
