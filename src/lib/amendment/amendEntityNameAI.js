@@ -3,12 +3,13 @@ async function amendEntityNameAI(appConfig, accessToken, entityId, newEntityName
     // Look up if we are in local development mode.
     const { MODE } = import.meta.env;
 
-    const { apiStage, registerEntityApiHost } = appConfig;
+    // Get the API URL from appConfig.
+    const { apiStage, authorizedIndividual: { apiHost } }  = appConfig;
 
     // Set the API URL based on the environment, local dev needs a proxy to avoid CORS issues.
     const apiUrlBase = MODE === 'development'
     ? `/authorizedApi/${apiStage}`
-    : `${registerEntityApiHost}/${apiStage}`;
+    : `${apiHost}/${apiStage}`;
 
     const requestUri = `${apiUrlBase}/RE_AUTH_IND`;
 
