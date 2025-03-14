@@ -100,7 +100,13 @@ export default function RemoveUserModal({ entity, emailToRemove, emailOfRequesto
                         {apiState !== 'success' && apiState !== 'error' &&
                             <ButtonGroup>
                                 <Button onClick={handleClose}>Cancel</Button>
-                                <Button leftIcon={<AiOutlineClose />} onClick={processUserRemoval}>Remove {isSelfRemoval ? "Me" : " User"}</Button>
+                                <Button 
+                                    leftIcon={<AiOutlineClose />} 
+                                    onClick={processUserRemoval}
+                                    isLoading={apiState === 'loading'}
+                                >
+                                    Remove {isSelfRemoval ? "Me" : " User"}
+                                </Button>
                             </ButtonGroup>
                         }
                         {apiState === 'success' &&
