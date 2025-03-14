@@ -6,6 +6,7 @@ import { BsFileEarmarkLock2 } from "react-icons/bs";
 import { AiOutlineClose } from 'react-icons/ai';
 import { RiMailLine } from "react-icons/ri";
 import { HiCheckCircle } from 'react-icons/hi';
+import { HiOutlinePencil } from "react-icons/hi";
 
 import { ConfigContext } from '../../lib/configContext';
 import { UserContext } from '../../lib/userContext';
@@ -225,7 +226,7 @@ export default function AmendRegistrationPage() {
             <Heading as="h2" my={4}>Amend Registration</Heading>
             {firstLogin && (
                 <Card my={6} direction={{ base: "column", sm: "row" }} p="6">
-                    <Icon as={HiCheckCircle} boxSize="16" color="green.500" />
+                    <Icon as={HiOutlinePencil} boxSize="16" color="orange.500" />
                     <Box ml="4">
                         <Heading as="h3" size="md">Welcome!</Heading>
                         <Text>You are amending the registration.</Text>
