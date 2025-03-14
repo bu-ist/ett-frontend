@@ -2,7 +2,7 @@ import { useState, useRef } from 'react';
 import { useForm } from 'react-hook-form';
 import { Button, Card, CardBody, CardFooter, Flex, FormControl, FormErrorMessage, FormHelperText, FormLabel, Input, Spacer, Spinner, Text } from "@chakra-ui/react";
 
-export default function SignUpCognitoButton({ signUpRedirect}) {
+export default function SignUpCognitoButton({ signUpRedirect, signUpRedirectWithAmend }) {
     const [apiState, setApiState] = useState('idle');
 
     // Create a ref to store the action type of the button that was clicked.
@@ -24,9 +24,8 @@ export default function SignUpCognitoButton({ signUpRedirect}) {
             setApiState('loading');
             signUpRedirect();
         } else if (actionType === 'createAndAmend') {
-            // Here we will probably call the signUpRedirect function with a special parameter to indicate that we want to amend the entity.
-            console.log('Amend logic here');
-            alert('Amendments are not yet implemented');
+            setApiState('loading');
+            signUpRedirectWithAmend();
         }
     }
 

@@ -26,7 +26,6 @@ export default function SignUpAuthIndPage() {
     const { appConfig } = useContext( ConfigContext );
 
     const [inviteInfo, setInviteInfo] = useState({});
-    const [entityInfo, setEntityInfo] = useState({});
 
     const [apiState, setApiState] = useState('');
     const [privacyPolicyAccepted, setPrivacyPolicyAccepted] = useState(false);
@@ -106,6 +105,11 @@ export default function SignUpAuthIndPage() {
     function signUpRedirect() {
         const { cognitoDomain, authorizedIndividual: { cognitoID } } = appConfig;
         signUp( cognitoDomain, signUpEmail, cognitoID, 'auth-ind?action=post-signup');
+    }
+
+    function signUpRedirectWithAmend() {
+        const { cognitoDomain, authorizedIndividual: { cognitoID } } = appConfig;
+        signUp( cognitoDomain, signUpEmail, cognitoID, 'auth-ind/amend?action=post-signup');
     }
 
     return (
@@ -218,7 +222,7 @@ export default function SignUpAuthIndPage() {
                     </Text>
                     <RegisterStatementText />
                     <TermsOfUseBox />
-                    <SignUpCognitoButton signUpRedirect={signUpRedirect} />
+                    <SignUpCognitoButton signUpRedirect={signUpRedirect} signUpRedirectWithAmend={signUpRedirectWithAmend} />
                 </Fade>
             }
         </>
