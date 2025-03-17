@@ -4,6 +4,7 @@ import { Heading, Text, Spinner, Box, Checkbox, Button, Fade, VStack, Alert, Ale
 import { HiOutlineArrowCircleDown } from "react-icons/hi";
 
 import { lookupEntityAPI } from '../../lib/entity/lookupEntityAPI';
+import { registerEntityAPI } from '../../lib/entity/registerEntityAPI';
 
 import { ConfigContext } from '../../lib/configContext';
 import { signUp } from '../../lib/signUp';
@@ -37,6 +38,9 @@ export default function SignUpAuthIndPage() {
 
     // Store the email from the form separately in a state variable, so the sign up redirect can use it.
     const [ signUpEmail, setSignUpEmail ] = useState('');
+
+    // Actually store all the form data in a state variable here so that the sign up component can use it.
+    const [ registrationData, setRegistrationData ] = useState({});
 
 
     useEffect(() => {
@@ -107,8 +111,20 @@ export default function SignUpAuthIndPage() {
         signUp( cognitoDomain, signUpEmail, cognitoID, 'auth-ind?action=post-signup');
     }
 
-    function signUpRedirectWithAmend() {
-        const { cognitoDomain, authorizedIndividual: { cognitoID } } = appConfig;
+    async function signUpRedirectWithAmend() {
+        // If we are making an amendment, we need to register a second time with an extra 'signup_parameter=amend' in the registration URL data.
+        // This is to signal the backend that the registration is not complete, and it should not send a completed registration email.
+        // Also the signature field is not used in the API call, so create a new object without the signature property
+        const { signature, ...valuesWithoutSignature } = registrationData;
+        const newRegistrationData = { ...valuesWithoutSignature , signup_parameter: 'amend' };
+
+        // send the registration data to the backend. should add error checking here.
+        const registerResult = await registerEntityAPI(appConfig, searchParams.get('code'), newRegistrationData);
+
+        console.log('registerResult: ', registerResult);
+
+        // If the registration was successful, redirect to the sign up page.
+        const { cognitoDomain, authorizedIndividual: { cognitoID } } = appConfig;        
         signUp( cognitoDomain, signUpEmail, cognitoID, 'auth-ind/amend?action=post-signup');
     }
 
@@ -206,6 +222,7 @@ export default function SignUpAuthIndPage() {
                         inviteInfo={inviteInfo} 
                         setRegistered={setRegistered}
                         setSignUpEmail={setSignUpEmail}
+                        setRegistrationData={setRegistrationData}
                         code={searchParams.get('code')} 
                     />
                 </Fade>

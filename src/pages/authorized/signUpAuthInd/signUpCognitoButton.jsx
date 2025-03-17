@@ -15,7 +15,7 @@ export default function SignUpCognitoButton({ signUpRedirect, signUpRedirectWith
         }
     });
 
-    function handleSignUpClick() {
+    async function handleSignUpClick() {
         // Get the special reference value of the button that was clicked.
         // This is so we can have two buttons for the same form that do different things, without disturbing the form validation.
         const actionType = actionTypeRef.current;
@@ -25,7 +25,7 @@ export default function SignUpCognitoButton({ signUpRedirect, signUpRedirectWith
             signUpRedirect();
         } else if (actionType === 'createAndAmend') {
             setApiState('redirect-amend');
-            signUpRedirectWithAmend();
+            await signUpRedirectWithAmend();
         }
     }
 
