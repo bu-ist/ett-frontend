@@ -21,10 +21,10 @@ export default function SignUpCognitoButton({ signUpRedirect, signUpRedirectWith
         const actionType = actionTypeRef.current;
 
         if (actionType === 'createAccount') {
-            setApiState('loading');
+            setApiState('redirect-create');
             signUpRedirect();
         } else if (actionType === 'createAndAmend') {
-            setApiState('loading');
+            setApiState('redirect-amend');
             signUpRedirectWithAmend();
         }
     }
@@ -58,8 +58,8 @@ export default function SignUpCognitoButton({ signUpRedirect, signUpRedirectWith
                             type="submit"
                             onClick={() => actionTypeRef.current = 'createAccount'}
                         >
-                            {apiState === 'loading' && <>Redirecting <Spinner ml="2" /></>}
-                            {apiState !== 'loading' && 'Accept & Create Account'}
+                            {apiState === 'redirect-create' && <>Redirecting <Spinner ml="2" /></>}
+                            {apiState !== 'redirect-create' && 'Accept & Create Account'}
                         </Button>
                     </CardFooter>
                 </Card>
@@ -79,8 +79,8 @@ export default function SignUpCognitoButton({ signUpRedirect, signUpRedirectWith
                             backgroundColor="#f2e7d3"
                             _hover={{ bg: "orange.100" }}
                         >
-                            {apiState === 'amend-loading' && <>Redirecting <Spinner ml="2" /></>}
-                            {apiState !== 'amend-loading' && 'Accept & Amend'}
+                            {apiState === 'redirect-amend' && <>Redirecting <Spinner ml="2" /></>}
+                            {apiState !== 'redirect-amend' && 'Accept & Amend'}
                         </Button>
                     </CardFooter>
                 </Card>
