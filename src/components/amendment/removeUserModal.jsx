@@ -1,8 +1,9 @@
 import { useState, useContext } from 'react';
 import Cookies from 'js-cookie';
 import { Button, Modal, ModalBody, ModalCloseButton, ModalContent, ModalHeader, ModalFooter, ModalOverlay, useDisclosure, Text, VStack, Alert, AlertIcon, ButtonGroup, AlertTitle, AlertDescription, Code } from '@chakra-ui/react';
-
 import { AiOutlineClose } from 'react-icons/ai';
+
+import { signOut } from '../../lib/signOut';
 
 import { ConfigContext } from "../../lib/configContext";
 
@@ -52,6 +53,15 @@ export default function RemoveUserModal({ entity, emailToRemove, emailOfRequesto
             fetchData();
         }
         setApiState('idle');
+
+        // If the user is removing themselves, log them out.
+        if (isSelfRemoval && apiState === 'success') {
+            Cookies.remove('EttAccessJwt');
+            Cookies.remove('EttIdJwt');
+
+            signOut( appConfig.cognitoDomain, appConfig.authorizedIndividual.cognitoID );
+        }
+
     }
 
     return (
