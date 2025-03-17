@@ -47,7 +47,7 @@ export default function AmendRegistrationPage() {
     // Get any pending invitation to authorized individuals ( where role is 'RE_AUTH_IND' )
     const pendingAuthInvitation = userData.entity?.pendingInvitations?.find(invitation => invitation.role === 'RE_AUTH_IND') || '';
 
-// This function is recapitualted in the useEffect, in order to call it when data changes. This is really bad, but
+// This function is recapitulated in the useEffect, in order to call it when data changes. This is really bad, but
 // this is a workaround because outside of the useEffect there is some very mysterious race condition that breaks the login.
 // I don't know why, but this is a workaround
     async function fetchData() {
