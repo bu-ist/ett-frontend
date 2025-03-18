@@ -31,6 +31,10 @@ export default function AuthorizedPage() {
     const [apiState, setApiState] = useState('idle');
     const [firstLogin, setFirstLogin] = useState(false);
 
+    // Set whether the entity is registered based on the number of users in the entity.  There should be 2 users.
+    // userData may not be initialized yet, but conditionally check if there the length of the userData.entity.users array is 2.
+    const isEntityFull = userData.entity?.users?.length === 2;
+
     useEffect(() => {
         const fetchData = async () => {
             // appConfig is initially loaded through an api call, which won't have been completed on the first render, so return early if it's not loaded yet.
@@ -134,6 +138,8 @@ export default function AuthorizedPage() {
                 <>
                     <AuthIndDetails userInfo={userData} />
                     <EntityInfoCard entityInfo={userData.entity} />
+
+                    {isEntityFull &&
                     <SimpleGrid mt="10" spacing={4} columns={2}>
                         <Card
                             overflow={"hidden"}
@@ -181,6 +187,19 @@ export default function AuthorizedPage() {
                             </Stack>
                         </Card>
                     </SimpleGrid>
+                    }
+                    {!isEntityFull &&
+                        <Card>
+                            <CardHeader>
+                                <Heading as="h3" size="sm">Entity Registration</Heading>
+                            </CardHeader>
+                            <CardBody>
+                                <Text>
+                                    {userData.entity.entity_name} is not yet fully registered.
+                                </Text>
+                            </CardBody>
+                        </Card>
+                    }
                     <Button my="2em" onClick={ () => signOut( appConfig.cognitoDomain, appConfig.authorizedIndividual.cognitoID ) }>Sign Out</Button>
                 </>
             }
