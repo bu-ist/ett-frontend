@@ -48,19 +48,21 @@ export default function RemoveUserModal({ entity, emailToRemove, emailOfRequesto
     function handleClose() {
         onClose();
         
-        // To reflect the changes in the UI, trigger a re-fetch of the entity data.
-        if (apiState === 'success' || apiState === 'error') {
-            fetchData();
-        }
-        setApiState('idle');
-
         // If the user is removing themselves, log them out.
         if (isSelfRemoval && apiState === 'success') {
             Cookies.remove('EttAccessJwt');
             Cookies.remove('EttIdJwt');
 
+            // Sign out results in an immediate redirect to the logout page, so nothing else will execute past here.
             signOut( appConfig.cognitoDomain, appConfig.authorizedIndividual.cognitoID );
         }
+
+
+        // To reflect the changes in the UI, trigger a re-fetch of the entity data.
+        if (apiState === 'success' || apiState === 'error') {
+            fetchData();
+        }
+        setApiState('idle');
 
     }
 
