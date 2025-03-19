@@ -10,10 +10,10 @@ import { sendExhibitFormAPI } from '../../../lib/consenting/sendExhibitFormAPI';
 
 import ContactEditModal from './contactEditModal';
 import ContactDisplayCard from './contactDisplayCard';
-import EntityAutocomplete from './entityAutocomplete';
+import EntityAutocomplete from './entityAutocomplete'; //not sure if we are using this
 
 // Contains the full contact list form and form state.
-export default function ContactList({ consentData, formType }) {
+export default function ContactList({ consentData, formConstraint, entityId }) {
     const { appConfig } = useContext(ConfigContext);
 
     // State for the form submission result.
@@ -28,6 +28,9 @@ export default function ContactList({ consentData, formType }) {
     const [isEditOrAdd, setIsEditOrAdd] = useState('add');
 
     const { isOpen, onOpen, onClose } = useDisclosure();
+
+    // Get then name of the matching entity from the consent data.
+    const entityName = consentData.entities.find((entity) => entity.entity_id === entityId)?.entity_name;
 
     // Handle contact field change
     const handleContactChange = (id, e) => {
@@ -90,15 +93,12 @@ export default function ContactList({ consentData, formType }) {
     async function handleSubmit(e) {
         e.preventDefault();
 
-        // De-structure useful values from the appConfig.
-        const { apiStage, consentingPerson: { cognitoID, apiHost } }  = appConfig;
-
         const accessToken = Cookies.get('EttAccessJwt');
         const idToken = Cookies.get('EttIdJwt');
         const email = JSON.parse(atob(idToken.split('.')[1])).email;
 
         // Send the contact list to the API.
-        const response = await sendExhibitFormAPI(apiHost, apiStage, accessToken, contacts, entity, email);
+        const response = await sendExhibitFormAPI(appConfig, accessToken, contacts, entityId, email, formConstraint);
 
         console.log('send exhibit form response', response);
         
@@ -106,8 +106,8 @@ export default function ContactList({ consentData, formType }) {
 
     };
 
-    // The formType is either 'current', 'other', or 'both'.
-    const typeMessages = {
+    // The formConstraint is either 'current', 'other', or 'both'.
+    const constraintMessages = {
         'current': 'Current Employer(s) only',
         'other': 'Prior Employer(s) and other Affiliates',
         'both': 'All Employer(s) and Affiliates, including Prior Employers'
@@ -117,13 +117,19 @@ export default function ContactList({ consentData, formType }) {
         <Box>
             <Heading as="h2" mb="4" size="lg">New Contact List for {consentData.fullName}</Heading>
             <Text mb="4">
-                {`This is a request for ${typeMessages[formType]}.`}
+                {`This is a request for ${constraintMessages[formConstraint]}.`}
             </Text>
             <FormControl my="8" as="form" onSubmit={handleSubmit}>
                 <Heading my="4" as={"h3"} size={"md"}>Receiving Institution</Heading>
+                {/* Commented out, not sure if this is what ultimately to be used.
                 <Text mb="4">Irure esse ex ipsum elit tempor id esse in cillum id officia ipsum. Culpa labore consectetur esse excepteur incididunt ex eu aliqua laboris esse esse occaecat elit.</Text>
                 <FormLabel>Select the Receiving Institution</FormLabel>
                 <EntityAutocomplete entities={consentData.entities} entity={entity} setEntity={setEntity} />
+                */}
+                <Text mb="4" fontSize="2xl">
+                    {entityName}
+                </Text>
+                <Divider my="4" />
                 <Heading my="4" as={"h3"} size={"md"}>Contacts</Heading>      
                 {contacts.length > 0 && contacts.map((contact, index) => (
                     <ContactDisplayCard

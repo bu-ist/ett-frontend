@@ -25,7 +25,12 @@ export default function NewContactListPage() {
     const currentPath = location.pathname.substring(1); // Remove the leading slash
 
     // The form type is given by the last segment of the path, which is either 'other', 'current', or 'both'.
-    const formType = currentPath.split('/').pop();
+    const formConstraint = currentPath.split('/').pop();
+
+    // Get the entity ID from the url hash; this should be a query parameter but somehow it is a hash.
+    // So need to remove "#entity_id=" from the hash to get the entity ID.
+    const entityId = location.hash.substring(11);
+
 
     useEffect(() => {
         let accessToken = Cookies.get('EttAccessJwt');
@@ -84,10 +89,10 @@ export default function NewContactListPage() {
             {apiState === 'notSignedIn' &&
                 <Card my={6} align="center">
                     <CardHeader>
-                        <Heading as="h2" color="gray.500" >Not Signed In</Heading>
+                        <Heading as="h2" size="lg" color="gray.500" >Sign In for Exhibit Form</Heading>
                     </CardHeader>
                     <CardBody>
-                        <Text>Sign in to access this page.</Text>
+                        <Text>You have been invited to complete an exhibit form, please sign in.</Text>
                     </CardBody>
                     <CardFooter>
                         <Button onClick={() => signIn(appConfig.consentingPerson.cognitoID, currentPath, appConfig.cognitoDomain)}>Sign in as a Consenting Person</Button>
@@ -97,7 +102,7 @@ export default function NewContactListPage() {
             {apiState === 'loading' && <Spinner />}
             {apiState === 'error' && <Text>There was an error loading the new contact list page.</Text>}
             {apiState === 'success' && 
-                <ContactList consentData={consentData} formType={formType} />
+                <ContactList consentData={consentData} formConstraint={formConstraint} entityId={entityId} />
             }
         </Box>
     );

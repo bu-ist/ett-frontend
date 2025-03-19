@@ -1,7 +1,9 @@
 // Formats the payload and sends the exhibit form to the API.
-async function sendExhibitFormAPI(apiHost, apiStage, accessToken, contactList, entityId, email) {
+async function sendExhibitFormAPI(appConfig, accessToken, contactList, entityId, email, formConstraint) {
     // Look up if we are in local development mode.
     const { MODE } = import.meta.env;
+
+    const { apiStage, consentingPerson: { apiHost } }  = appConfig;
 
     // Set the API URL based on the environment, local dev needs a proxy to avoid CORS issues.
     const apiUrl = MODE === 'development'
@@ -24,6 +26,8 @@ async function sendExhibitFormAPI(apiHost, apiStage, accessToken, contactList, e
         email: email,
         exhibit_data: {
             entity_id: entityId,
+            constraint: formConstraint,
+            formType: 'full',
             affiliates: mappedContactList
         }
     };
