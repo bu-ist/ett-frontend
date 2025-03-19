@@ -60,7 +60,7 @@ export default function ConsentDetails({ consentData, setConsentData, consenterI
                         <Card>
                             <CardBody>Rescind this Consent Form</CardBody>
                             <CardFooter>
-                                <RescindModal />
+                                <RescindModal email={email} />
                             </CardFooter>
                         </Card>
                         <Card>
