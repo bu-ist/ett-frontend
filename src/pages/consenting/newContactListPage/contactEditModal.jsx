@@ -1,10 +1,35 @@
-import { Modal, ModalOverlay, ModalContent, ModalHeader, ModalCloseButton, ModalBody, ModalFooter, Button, Stack, FormLabel, Input, RadioGroup, Radio } from "@chakra-ui/react";
+import { Modal, ModalOverlay, ModalContent, ModalHeader, ModalCloseButton, ModalBody, ModalFooter, Button, Stack, FormControl, FormLabel, FormErrorMessage, FormHelperText, Input, RadioGroup, Radio } from "@chakra-ui/react";
+import { useForm } from "react-hook-form";
 
-export default function ContactEditModal( {isOpen, onClose, isEditOrAdd, contact, removeContact, handleContactChange, handleOrgTypeRadioChange} ) {
+export default function ContactEditModal({ isOpen, onClose, isEditOrAdd, contact, removeContact, handleContactChange }) {
+    // Initialize form with contact data
+    const {
+        handleSubmit,
+        register,
+        formState: { errors },
+    } = useForm({
+        defaultValues: {
+            organizationName: contact.organizationName || "",
+            organizationType: contact.organizationType || "EMPLOYER",
+            contactName: contact.contactName || "",
+            contactTitle: contact.contactTitle || "",
+            contactEmail: contact.contactEmail || "",
+            contactPhone: contact.contactPhone || "",
+        }
+    });
+
     function handleCancel() {
         removeContact(contact.id);
         onClose();
     }
+    
+// This function will update the parent state when form is submitted
+function onSubmit(data) {
+    
+    // Just pass the complete form data to the parent - no need for synthetic events
+    handleContactChange(contact.id, data);
+    onClose();
+};
     
     return (
         <Modal
@@ -15,62 +40,114 @@ export default function ContactEditModal( {isOpen, onClose, isEditOrAdd, contact
             <ModalOverlay />
             <ModalContent>
                 <ModalHeader>
-                    {isEditOrAdd == 'add' && 'Add'} {isEditOrAdd == 'edit' && 'Edit'} Contact
+                    {isEditOrAdd === 'add' && 'Add'} {isEditOrAdd === 'edit' && 'Edit'} Contact
                 </ModalHeader>
                 <ModalCloseButton />
                 <ModalBody>
-                    <FormLabel>Organiziation</FormLabel>
-                    <Input
-                        type="text"
-                        name="organizationName"
-                        value={contact.organizationName}
-                        onChange={(e) => handleContactChange(contact.id, e)}
-                    />
-                    <FormLabel>Organization Type</FormLabel>
-                    <RadioGroup
-                        my="2"
-                        name="organizationType"
-                        value={contact.organizationType}
-                        onChange={(value) => handleOrgTypeRadioChange(contact.id, value)}
-                    >
-                        <Stack spacing="1.5em" direction="row">
-                            <Radio value="EMPLOYER">Employer</Radio>
-                            <Radio value="ACADEMIC">Academic</Radio>
-                            <Radio value="OTHER">Other</Radio>
-                        </Stack>
-                    </RadioGroup>
-                    <FormLabel>Contact Name</FormLabel>
-                    <Input
-                        type="text"
-                        name="contactName"
-                        value={contact.contactName}
-                        onChange={(e) => handleContactChange(contact.id, e)}
-                    />
-                    <FormLabel>Contact Title</FormLabel>
-                    <Input
-                        type="text"
-                        name="contactTitle"
-                        value={contact.contactTitle}
-                        onChange={(e) => handleContactChange(contact.id, e)}
-                    />
-                    <FormLabel>Contact Email</FormLabel>
-                    <Input
-                        type="email"
-                        name="contactEmail"
-                        value={contact.contactEmail}
-                        onChange={(e) => handleContactChange(contact.id, e)}
-                    />
-                    <FormLabel>Contact Phone</FormLabel>
-                    <Input
-                        type="tel"
-                        name="contactPhone"
-                        value={contact.contactPhone}
-                        onChange={(e) => handleContactChange(contact.id, e)}
-                    />
+                    <form id="contact-form" onSubmit={handleSubmit(onSubmit)}>
+                        <FormControl mb="4" isInvalid={errors.organizationName}>
+                            <FormLabel>Organization</FormLabel>
+                            <Input
+                                id="organizationName"
+                                name="organizationName"
+                                placeholder="Organization Name"
+                                {...register('organizationName', {
+                                    required: 'Organization name is required',
+                                })}
+                            />
+                            {!errors.organizationName ? (
+                                <FormHelperText>Enter the full organization name</FormHelperText>
+                            ) : (
+                                <FormErrorMessage>{errors.organizationName.message}</FormErrorMessage>
+                            )}
+                        </FormControl>
+                        
+                        <FormControl mb="4" isInvalid={errors.organizationType}>
+                            <FormLabel>Organization Type</FormLabel>
+                            <RadioGroup id="organizationType" name="organizationType" my="2">
+                                <Stack spacing="1.5em" direction="row">
+                                    <Radio value="EMPLOYER" {...register('organizationType')}>Employer</Radio>
+                                    <Radio value="ACADEMIC" {...register('organizationType')}>Academic</Radio>
+                                    <Radio value="OTHER" {...register('organizationType')}>Other</Radio>
+                                </Stack>
+                            </RadioGroup>
+                            {errors.organizationType && (
+                                <FormErrorMessage>{errors.organizationType.message}</FormErrorMessage>
+                            )}
+                        </FormControl>
+                        
+                        <FormControl mb="4" isInvalid={errors.contactName}>
+                            <FormLabel>Contact Name</FormLabel>
+                            <Input
+                                id="contactName"
+                                name="contactName"
+                                placeholder="Contact Name"
+                                {...register('contactName', {
+                                    required: 'Contact name is required',
+                                })}
+                            />
+                            {!errors.contactName ? (
+                                <FormHelperText>&nbsp;</FormHelperText>
+                            ) : (
+                                <FormErrorMessage>{errors.contactName.message}</FormErrorMessage>
+                            )}
+                        </FormControl>
+                        
+                        <FormControl mb="4" isInvalid={errors.contactTitle}>
+                            <FormLabel>Contact Title</FormLabel>
+                            <Input
+                                id="contactTitle"
+                                name="contactTitle"
+                                placeholder="Contact Title"
+                                {...register('contactTitle')}
+                            />
+                            <FormHelperText>&nbsp;</FormHelperText>
+                        </FormControl>
+                        
+                        <FormControl mb="4" isInvalid={errors.contactEmail}>
+                            <FormLabel>Contact Email</FormLabel>
+                            <Input
+                                id="contactEmail"
+                                name="contactEmail"
+                                type="email"
+                                placeholder="Email"
+                                {...register('contactEmail', {
+                                    required: 'Email is required',
+                                    pattern: {
+                                        value: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
+                                        message: 'Invalid email address',
+                                    },
+                                })}
+                            />
+                            {!errors.contactEmail ? (
+                                <FormHelperText>&nbsp;</FormHelperText>
+                            ) : (
+                                <FormErrorMessage>{errors.contactEmail.message}</FormErrorMessage>
+                            )}
+                        </FormControl>
+                        
+                        <FormControl mb="4" isInvalid={errors.contactPhone}>
+                            <FormLabel>Contact Phone</FormLabel>
+                            <Input
+                                id="contactPhone"
+                                name="contactPhone"
+                                type="tel"
+                                placeholder="Phone Number"
+                                {...register('contactPhone', {
+                                    required: 'Phone number is required',
+                                })}
+                            />
+                            {!errors.contactPhone ? (
+                                <FormHelperText>&nbsp;</FormHelperText>
+                            ) : (
+                                <FormErrorMessage>{errors.contactPhone.message}</FormErrorMessage>
+                            )}  
+                        </FormControl>
+                    </form>
                 </ModalBody>
                 <ModalFooter>
-                    { isEditOrAdd != "edit" && <Button mr="4" onClick={handleCancel}>Cancel</Button>}
-                    <Button onClick={onClose}>Done</Button>
+                    {isEditOrAdd !== "edit" && <Button mr="4" onClick={handleCancel}>Cancel</Button>}
+                    <Button type="submit" form="contact-form">Done</Button>
                 </ModalFooter>
             </ModalContent>
         </Modal>
