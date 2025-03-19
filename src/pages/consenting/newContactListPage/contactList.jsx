@@ -1,5 +1,6 @@
 import { useState, useContext } from 'react';
 import { nanoid } from 'nanoid';
+import { Link as ReactRouterLink } from 'react-router-dom';
 import Cookies from 'js-cookie';
 
 import { Box, Text, Heading, Divider, Button, Spinner, useDisclosure } from '@chakra-ui/react';
@@ -20,7 +21,6 @@ export default function ContactList({ consentData, formConstraint, entityId }) {
     const [submitResult, setSubmitResult] = useState('idle');
 
     // State for the contact list form data.
-    const [entity, setEntity] = useState('');
     const [contacts, setContacts] = useState([]);
 
     // State for the contact modal.
@@ -165,8 +165,15 @@ export default function ContactList({ consentData, formConstraint, entityId }) {
                     {submitResult === 'error' && 'Error'}
                 </Button>
             </Box>
-            {submitResult === 'success' && <Text>Form submitted successfully.</Text>}
-            {submitResult === 'error' && <Text>There was an error submitting the form.</Text>}
+            {submitResult === 'success' && 
+                <>
+                    <Text>Form submitted successfully.</Text>
+                    <Button as={ReactRouterLink} to="/consenting" my="2em"> Return to Dashboard</Button>
+                </>
+            }
+            {submitResult === 'error' && 
+                <Text>There was an error submitting the form.</Text>
+            }
         </Box>
     );
 }
