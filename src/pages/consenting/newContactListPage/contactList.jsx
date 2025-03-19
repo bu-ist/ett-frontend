@@ -134,6 +134,7 @@ export default function ContactList({ consentData, formConstraint, entityId }) {
                         contact={contact}
                         handleEditContact={handleEditContact}
                         removeContact={removeContact}
+                        isDisabled={submitResult !== 'idle'}
                     />
                 ))}
                 {contacts.length == 0 && <Text>Click the Add Contact button to begin</Text>}
@@ -147,7 +148,12 @@ export default function ContactList({ consentData, formConstraint, entityId }) {
                         handleContactChange={handleContactUpdate}
                     />
                 )}
-                <Button mt="0.5em" onClick={handleAddContact}>Add Contact</Button>
+                <Button mt="0.5em" 
+                        onClick={handleAddContact}
+                        isDisabled={submitResult !== 'idle'}
+                >
+                    Add Contact
+                </Button>
                 <Divider my="1em" />
                 <Button mt="0.5em" 
                         isDisabled={submitResult !== 'idle'} 
