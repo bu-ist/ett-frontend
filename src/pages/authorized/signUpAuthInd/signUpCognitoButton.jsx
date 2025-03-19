@@ -2,7 +2,7 @@ import { useState, useRef } from 'react';
 import { useForm } from 'react-hook-form';
 import { Button, Card, CardBody, CardFooter, Flex, FormControl, FormErrorMessage, FormHelperText, FormLabel, Input, Spacer, Spinner, Text } from "@chakra-ui/react";
 
-export default function SignUpCognitoButton({ signUpRedirect}) {
+export default function SignUpCognitoButton({ signUpRedirect, signUpRedirectWithAmend }) {
     const [apiState, setApiState] = useState('idle');
 
     // Create a ref to store the action type of the button that was clicked.
@@ -15,18 +15,17 @@ export default function SignUpCognitoButton({ signUpRedirect}) {
         }
     });
 
-    function handleSignUpClick() {
+    async function handleSignUpClick() {
         // Get the special reference value of the button that was clicked.
         // This is so we can have two buttons for the same form that do different things, without disturbing the form validation.
         const actionType = actionTypeRef.current;
 
         if (actionType === 'createAccount') {
-            setApiState('loading');
+            setApiState('redirect-create');
             signUpRedirect();
         } else if (actionType === 'createAndAmend') {
-            // Here we will probably call the signUpRedirect function with a special parameter to indicate that we want to amend the entity.
-            console.log('Amend logic here');
-            alert('Amendments are not yet implemented');
+            setApiState('redirect-amend');
+            await signUpRedirectWithAmend();
         }
     }
 
@@ -59,8 +58,8 @@ export default function SignUpCognitoButton({ signUpRedirect}) {
                             type="submit"
                             onClick={() => actionTypeRef.current = 'createAccount'}
                         >
-                            {apiState === 'loading' && <>Redirecting <Spinner ml="2" /></>}
-                            {apiState !== 'loading' && 'Accept & Create Account'}
+                            {apiState === 'redirect-create' && <>Redirecting <Spinner ml="2" /></>}
+                            {apiState !== 'redirect-create' && 'Accept & Create Account'}
                         </Button>
                     </CardFooter>
                 </Card>
@@ -80,8 +79,8 @@ export default function SignUpCognitoButton({ signUpRedirect}) {
                             backgroundColor="#f2e7d3"
                             _hover={{ bg: "orange.100" }}
                         >
-                            {apiState === 'amend-loading' && <>Redirecting <Spinner ml="2" /></>}
-                            {apiState !== 'amend-loading' && 'Accept & Amend'}
+                            {apiState === 'redirect-amend' && <>Redirecting <Spinner ml="2" /></>}
+                            {apiState !== 'redirect-amend' && 'Accept & Amend'}
                         </Button>
                     </CardFooter>
                 </Card>

@@ -11,7 +11,7 @@ import { ConfigContext } from '../../../lib/configContext';
 import { registerEntityAPI } from '../../../lib/entity/registerEntityAPI';
 import { emailRegex } from '../../../lib/formatting/emailRegex';
 
-export default function SignUpAuthIndForm({inviteInfo, setRegistered, setSignUpEmail, code}) {
+export default function SignUpAuthIndForm({inviteInfo, setRegistered, setSignUpEmail, setRegistrationData, code}) {
     //const  { entity, invitation, users }  = entityInfo;
 
     // Get the appConfig from the ConfigContext.
@@ -64,6 +64,9 @@ export default function SignUpAuthIndForm({inviteInfo, setRegistered, setSignUpE
             delete values.delegate_phone;
         }
         
+        // Set the registration data for the parent component.
+        setRegistrationData(values);
+
         const registerResult = await registerEntityAPI(appConfig, code, values);
         console.log(registerResult);
 
