@@ -82,7 +82,7 @@ export default function RegisterEntityForm({ code, setStepIndex, entityInfo }) {
 
     function handleRegisterClick() {
         const { cognitoDomain, entityAdmin: { cognitoID } } = appConfig;
-        signUp( cognitoDomain, signUpEmail, cognitoID, 'entity?action=post-signup');
+        signUp( cognitoDomain, signUpEmail.toLowerCase(), cognitoID, 'entity?action=post-signup');
     }
 
     // Scroll to the "Create Account" card after a successful registration.
