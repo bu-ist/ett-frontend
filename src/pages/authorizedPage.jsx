@@ -31,9 +31,9 @@ export default function AuthorizedPage() {
     const [apiState, setApiState] = useState('idle');
     const [firstLogin, setFirstLogin] = useState(false);
 
-    // Set whether the entity is registered based on the number of users in the entity.  There should be 2 users.
-    // userData may not be initialized yet, but conditionally check if there the length of the userData.entity.users array is 2.
-    const isEntityFull = userData.entity?.users?.length === 2;
+    // Check if the entity is registered by checking if the entity has a defined property named registered_timestamp.
+    const isEntityRegistered = userData?.entity && Object.prototype.hasOwnProperty.call(userData.entity, 'registered_timestamp');
+
 
     useEffect(() => {
         const fetchData = async () => {
@@ -139,7 +139,7 @@ export default function AuthorizedPage() {
                     <AuthIndDetails userInfo={userData} />
                     <EntityInfoCard entityInfo={userData.entity} />
 
-                    {isEntityFull &&
+                    {isEntityRegistered &&
                     <SimpleGrid mt="10" spacing={4} columns={2}>
                         <Card
                             overflow={"hidden"}
@@ -188,7 +188,7 @@ export default function AuthorizedPage() {
                         </Card>
                     </SimpleGrid>
                     }
-                    {!isEntityFull &&
+                    {!isEntityRegistered &&
                         <Card>
                             <CardHeader>
                                 <Heading as="h3" size="sm">Entity Registration</Heading>
