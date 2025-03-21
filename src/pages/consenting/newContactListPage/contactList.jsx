@@ -131,7 +131,11 @@ export default function ContactList({ consentData, formConstraint, entityId }) {
                     {entityName}
                 </Text>
                 <Divider my="4" />
-                <Heading as="h4" size="lg" my="4">Employers</Heading>
+                <Heading as="h4" size="lg" my="4">
+                    {formConstraint === 'current' && 'Current Employer(s)'}
+                    {formConstraint === 'other' && 'Prior Employer(s)'}
+                    {formConstraint === 'both' && 'Current and Prior Employer(s)'}
+                </Heading>
                 {employerContacts.map((contact) => (
                     <ContactDisplayCard
                         key={contact.id}
@@ -186,6 +190,7 @@ export default function ContactList({ consentData, formConstraint, entityId }) {
                         isOpen={isOpen}
                         onClose={handleModalClose}
                         isEditOrAdd={isEditOrAdd}
+                        formConstraint={formConstraint}
                         contact={currentContact}
                         removeContact={removeContact}
                         handleContactChange={handleContactUpdate}

@@ -1,7 +1,7 @@
 import { Modal, ModalOverlay, ModalContent, ModalHeader, ModalCloseButton, ModalBody, ModalFooter, Button, Stack, FormControl, FormLabel, FormErrorMessage, FormHelperText, Input, RadioGroup, Radio } from "@chakra-ui/react";
 import { useForm } from "react-hook-form";
 
-export default function ContactEditModal({ isOpen, onClose, isEditOrAdd, contact, removeContact, handleContactChange }) {
+export default function ContactEditModal({ isOpen, onClose, isEditOrAdd, formConstraint, contact, removeContact, handleContactChange }) {
     // Initialize form with contact data
     const {
         handleSubmit,
@@ -23,6 +23,13 @@ export default function ContactEditModal({ isOpen, onClose, isEditOrAdd, contact
         EMPLOYER: 'Employer',
         ACADEMIC: 'Academic / Professional Organization',
         OTHER: 'Other Organization',
+    };
+
+    // Add a mapping for the employer constraint messages.
+    const constraintTypeLabel = {
+        'current': 'Current Employer',
+        'other': 'Prior Employer',
+        'both': 'Employer'
     };
 
     function handleCancel() {
@@ -47,7 +54,11 @@ function onSubmit(data) {
             <ModalOverlay />
             <ModalContent>
                 <ModalHeader>
-                    {isEditOrAdd === 'add' && 'Add'} {isEditOrAdd === 'edit' && 'Edit'} {orgTypeLabel[contact.organizationType]} Contact
+                    {isEditOrAdd === 'add' && 'Add'} {isEditOrAdd === 'edit' && 'Edit'} {' '}
+                    {contact.organizationType === 'EMPLOYER' 
+                        ? constraintTypeLabel[formConstraint]
+                        : orgTypeLabel[contact.organizationType]
+                    } Contact
                 </ModalHeader>
                 <ModalCloseButton />
                 <ModalBody>
