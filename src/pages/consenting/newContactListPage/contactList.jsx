@@ -122,7 +122,7 @@ export default function ContactList({ consentData, formConstraint, entityId }) {
                 {`This is a request for ${constraintMessages[formConstraint]}.`}
             </Text>
             <Box my="8">
-                <Heading my="4" as={"h3"} size={"md"}>Receiving Institution</Heading>
+                <Heading my="4" as={"h3"} size={"lg"}>Receiving Institution</Heading>
                 {/* Commented out, not sure if this is what ultimately to be used.
                 <Text mb="4">Irure esse ex ipsum elit tempor id esse in cillum id officia ipsum. Culpa labore consectetur esse excepteur incididunt ex eu aliqua laboris esse esse occaecat elit.</Text>
                 <FormLabel>Select the Receiving Institution</FormLabel>
