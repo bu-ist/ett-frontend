@@ -1,5 +1,5 @@
 import { useState, useEffect, useContext } from 'react';
-import { useSearchParams, useLocation } from 'react-router-dom';
+import { useSearchParams, useLocation, useNavigate } from 'react-router-dom';
 import Cookies from 'js-cookie';
 
 import { Text, Box, Heading, Spinner, Card, CardBody, CardHeader, Button, CardFooter } from "@chakra-ui/react";
@@ -16,8 +16,12 @@ import ContactList from "./newContactListPage/contactList";
 export default function NewContactListPage() {
     const { appConfig } = useContext(ConfigContext);
     const { setUser } = useContext(UserContext);
+    const navigate = useNavigate();
+
     const [apiState, setApiState] = useState('');
     const [consentData, setConsentData] = useState({});
+
+    const [entityId, setEntityId] = useState('');
 
     let [searchParams, setSearchParams] = useSearchParams();
 
@@ -29,15 +33,24 @@ export default function NewContactListPage() {
 
     // Get the entity ID from the url hash; this should be a query parameter but somehow it is a hash.
     // So need to remove "#entity_id=" from the hash to get the entity ID.
-    const entityId = location.hash.substring(11);
-
+    const entityIdFromHash = location.hash.substring(11);
 
     useEffect(() => {
+        // Set the entityId state variable from the hash
+        if (entityIdFromHash) {
+            setEntityId(entityIdFromHash);
+        }
+
         let accessToken = Cookies.get('EttAccessJwt');
         let idToken = Cookies.get('EttIdJwt');
 
         // If there is no access token and no code in the URL, the user is not signed in.
         if (!accessToken && ! searchParams.has('code')) {
+
+            // Store the entityId in localStorage if not signed in
+            window.localStorage.setItem('exhibitFormEntityId', entityIdFromHash);
+            setEntityId(entityIdFromHash);
+
             // Set the api response state to reflect that the user is not signed in.
             setApiState('notSignedIn');
             return;
@@ -74,6 +87,16 @@ export default function NewContactListPage() {
 
                 // Set the user context for the site header avatar.
                 setUser({email: consentResponse.consenter.email, fullname: consentResponse.fullName});
+
+                // If there's not an existing entityId, look for entityId from localStorage that would be set after a successful login.
+                const storedEntityId = window.localStorage.getItem('exhibitFormEntityId');
+                if (storedEntityId && !entityId) {
+                    setEntityId(storedEntityId);
+                    window.localStorage.removeItem('exhibitFormEntityId');
+
+                    // Add the hash value back to the URL
+                    navigate('#entity_id=' + storedEntityId);
+                }
 
                 setApiState('success');
             } else {
