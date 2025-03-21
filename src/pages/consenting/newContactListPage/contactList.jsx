@@ -4,6 +4,7 @@ import { Link as ReactRouterLink } from 'react-router-dom';
 import Cookies from 'js-cookie';
 
 import { Box, Text, Heading, Divider, Button, Spinner, useDisclosure } from '@chakra-ui/react';
+import { HiOutlinePlusSm } from "react-icons/hi";
 
 import { ConfigContext } from '../../../lib/configContext';
 
@@ -146,6 +147,7 @@ export default function ContactList({ consentData, formConstraint, entityId }) {
                     />
                 ))}
                 <Button mt="4" 
+                    leftIcon={<HiOutlinePlusSm />}
                     onClick={() => handleAddContact("EMPLOYER")}
                     isDisabled={submitResult !== 'idle'}
                 >
@@ -163,6 +165,7 @@ export default function ContactList({ consentData, formConstraint, entityId }) {
                     />
                 ))}
                 <Button mt="4" 
+                    leftIcon={<HiOutlinePlusSm />}
                     onClick={() => handleAddContact("ACADEMIC")}
                     isDisabled={submitResult !== 'idle'}
                 >
@@ -180,6 +183,7 @@ export default function ContactList({ consentData, formConstraint, entityId }) {
                     />
                 ))}
                 <Button mt="4" 
+                    leftIcon={<HiOutlinePlusSm />}
                     onClick={() => handleAddContact("OTHER")}
                     isDisabled={submitResult !== 'idle'}
                 >
