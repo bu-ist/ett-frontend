@@ -10,13 +10,20 @@ export default function ContactEditModal({ isOpen, onClose, isEditOrAdd, contact
     } = useForm({
         defaultValues: {
             organizationName: contact.organizationName || "",
-            organizationType: contact.organizationType || "EMPLOYER",
+            organizationType: contact.organizationType, // organizationType should be set by the parent, and immutable.
             contactName: contact.contactName || "",
             contactTitle: contact.contactTitle || "",
             contactEmail: contact.contactEmail || "",
             contactPhone: contact.contactPhone || "",
         }
     });
+
+    // Define label for organization type
+    const orgTypeLabel = {
+        EMPLOYER: 'Employer',
+        ACADEMIC: 'Academic / Professional Organization',
+        OTHER: 'Other Organization',
+    };
 
     function handleCancel() {
         removeContact(contact.id);
@@ -40,7 +47,7 @@ function onSubmit(data) {
             <ModalOverlay />
             <ModalContent>
                 <ModalHeader>
-                    {isEditOrAdd === 'add' && 'Add'} {isEditOrAdd === 'edit' && 'Edit'} Contact
+                    {isEditOrAdd === 'add' && 'Add'} {isEditOrAdd === 'edit' && 'Edit'} {orgTypeLabel[contact.organizationType]} Contact
                 </ModalHeader>
                 <ModalCloseButton />
                 <ModalBody>
@@ -59,20 +66,6 @@ function onSubmit(data) {
                                 <FormHelperText>Enter the full organization name</FormHelperText>
                             ) : (
                                 <FormErrorMessage>{errors.organizationName.message}</FormErrorMessage>
-                            )}
-                        </FormControl>
-                        
-                        <FormControl mb="4" isInvalid={errors.organizationType}>
-                            <FormLabel>Organization Type</FormLabel>
-                            <RadioGroup id="organizationType" name="organizationType" my="2">
-                                <Stack spacing="1.5em" direction="row">
-                                    <Radio value="EMPLOYER" {...register('organizationType')}>Employer</Radio>
-                                    <Radio value="ACADEMIC" {...register('organizationType')}>Academic</Radio>
-                                    <Radio value="OTHER" {...register('organizationType')}>Other</Radio>
-                                </Stack>
-                            </RadioGroup>
-                            {errors.organizationType && (
-                                <FormErrorMessage>{errors.organizationType.message}</FormErrorMessage>
                             )}
                         </FormControl>
                         
