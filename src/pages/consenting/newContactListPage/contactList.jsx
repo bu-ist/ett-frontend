@@ -41,7 +41,7 @@ export default function ContactList({ consentData, formConstraint, entityId }) {
     };
 
     // Add a new blank contact card to the form state data and open the editing modal.
-    function handleAddContact() {
+    function handleAddContact(orgType) {
         // Signal that the modal is for adding a new contact.
         setIsEditOrAdd('add');
 
@@ -52,7 +52,7 @@ export default function ContactList({ consentData, formConstraint, entityId }) {
         const newContact = {
             id: newId,
             organizationName: '',
-            organizationType: 'EMPLOYER', // Default value
+            organizationType: orgType,
             contactName: '',
             contactTitle: '',
             contactEmail: '',
@@ -110,6 +110,10 @@ export default function ContactList({ consentData, formConstraint, entityId }) {
         'both': 'All Employer(s) and Affiliates, including Prior Employers'
     };
 
+    const employerContacts = contacts.filter(contact => contact.organizationType === 'EMPLOYER');
+    const academicContacts = contacts.filter(contact => contact.organizationType === 'ACADEMIC');
+    const otherContacts = contacts.filter(contact => contact.organizationType === 'OTHER');
+
     return (
         <Box>
             <Heading as="h2" mb="4" size="lg">New Contact List for {consentData.fullName}</Heading>
@@ -127,8 +131,8 @@ export default function ContactList({ consentData, formConstraint, entityId }) {
                     {entityName}
                 </Text>
                 <Divider my="4" />
-                <Heading my="4" as={"h3"} size={"md"}>Contacts</Heading>      
-                {contacts.length > 0 && contacts.map((contact, index) => (
+                <Heading as="h4" size="lg" my="4">Employers</Heading>
+                {employerContacts.map((contact) => (
                     <ContactDisplayCard
                         key={contact.id}
                         contact={contact}
@@ -137,7 +141,46 @@ export default function ContactList({ consentData, formConstraint, entityId }) {
                         isDisabled={submitResult !== 'idle'}
                     />
                 ))}
-                {contacts.length == 0 && <Text>Click the Add Contact button to begin</Text>}
+                <Button mt="4" 
+                    onClick={() => handleAddContact("EMPLOYER")}
+                    isDisabled={submitResult !== 'idle'}
+                >
+                    Add Employer
+                </Button>
+                <Divider my="8" />
+                <Heading as="h4" size="lg" my="4">Academic / Professional Societies</Heading>
+                {academicContacts.map((contact) => (
+                    <ContactDisplayCard
+                        key={contact.id}
+                        contact={contact}
+                        handleEditContact={handleEditContact}
+                        removeContact={removeContact}
+                        isDisabled={submitResult !== 'idle'}
+                    />
+                ))}
+                <Button mt="4" 
+                    onClick={() => handleAddContact("ACADEMIC")}
+                    isDisabled={submitResult !== 'idle'}
+                >
+                    Add Academic
+                </Button>
+                <Divider my="8" />
+                <Heading as="h4" size="lg" my="4">Other Organizations Where You Currently or Formerly Had Appointments</Heading>
+                {otherContacts.map((contact) => (
+                    <ContactDisplayCard
+                        key={contact.id}
+                        contact={contact}
+                        handleEditContact={handleEditContact}
+                        removeContact={removeContact}
+                        isDisabled={submitResult !== 'idle'}
+                    />
+                ))}
+                <Button mt="4" 
+                    onClick={() => handleAddContact("OTHER")}
+                    isDisabled={submitResult !== 'idle'}
+                >
+                    Add Other
+                </Button>
                 {currentContact && (
                     <ContactEditModal
                         isOpen={isOpen}
@@ -148,14 +191,11 @@ export default function ContactList({ consentData, formConstraint, entityId }) {
                         handleContactChange={handleContactUpdate}
                     />
                 )}
-                <Button mt="0.5em" 
-                        onClick={handleAddContact}
-                        isDisabled={submitResult !== 'idle'}
-                >
-                    Add Contact
-                </Button>
-                <Divider my="1em" />
-                <Button mt="0.5em" 
+                <Divider my="8" />
+                <Text>
+                    When complete, click submit to send form data.
+                </Text>
+                <Button mt="2" 
                         isDisabled={submitResult !== 'idle'} 
                         onClick={handleSubmit}
                 >
