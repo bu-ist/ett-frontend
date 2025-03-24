@@ -108,7 +108,7 @@ export default function SignUpAuthIndPage() {
 
     function signUpRedirect() {
         const { cognitoDomain, authorizedIndividual: { cognitoID } } = appConfig;
-        signUp( cognitoDomain, signUpEmail, cognitoID, 'auth-ind?action=post-signup');
+        signUp( cognitoDomain, signUpEmail.toLowerCase(), cognitoID, 'auth-ind?action=post-signup');
     }
 
     async function signUpRedirectWithAmend() {
@@ -125,7 +125,7 @@ export default function SignUpAuthIndPage() {
 
         // If the registration was successful, redirect to the sign up page.
         const { cognitoDomain, authorizedIndividual: { cognitoID } } = appConfig;        
-        signUp( cognitoDomain, signUpEmail, cognitoID, 'auth-ind/amend?action=post-signup');
+        signUp( cognitoDomain, signUpEmail.toLowerCase(), cognitoID, 'auth-ind/amend?action=post-signup');
     }
 
     return (
