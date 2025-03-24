@@ -36,19 +36,30 @@ export default function ContactEditModal({ isOpen, onClose, isEditOrAdd, formCon
         removeContact(contact.id);
         onClose();
     }
-    
-// This function will update the parent state when form is submitted
-function onSubmit(data) {
-    
-    // Just pass the complete form data to the parent - no need for synthetic events
-    handleContactChange(contact.id, data);
-    onClose();
-};
-    
+
+    // Handle modal close
+    function handleModalClose() {
+        if (isEditOrAdd === 'add') {
+            // If we're adding a new contact, treat close as cancel
+            handleCancel();
+        } else {
+            // If we're editing an existing contact, just close the modal
+            onClose();
+        }
+    }
+
+    // This function will update the parent state when form is submitted
+    function onSubmit(data) {
+        
+        // Just pass the complete form data to the parent - no need for synthetic events
+        handleContactChange(contact.id, data);
+        onClose();
+    };
+        
     return (
         <Modal
             isOpen={isOpen}
-            onClose={onClose}
+            onClose={handleModalClose}
             size="4xl"
         >
             <ModalOverlay />
@@ -150,8 +161,12 @@ function onSubmit(data) {
                     </form>
                 </ModalBody>
                 <ModalFooter>
-                    {isEditOrAdd !== "edit" && <Button mr="4" onClick={handleCancel}>Cancel</Button>}
-                    <Button type="submit" form="contact-form">Done</Button>
+                    <Button mr="4" onClick={handleModalClose}>
+                        Cancel
+                    </Button>
+                    <Button type="submit" form="contact-form">
+                        Done
+                    </Button>
                 </ModalFooter>
             </ModalContent>
         </Modal>
