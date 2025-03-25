@@ -14,6 +14,14 @@ import ContactEditModal from './contactEditModal';
 import ContactDisplayCard from './contactDisplayCard';
 import EntityAutocomplete from './entityAutocomplete'; //not sure if we are using this
 
+import { 
+    BothEmployersText, 
+    BothOtherOrgsText,
+    AcademicText, 
+    PriorEmployerText,
+    PriorOtherOrgsText
+} from "./contactList/textDescriptors";
+
 // Contains the full contact list form and form state.
 export default function ContactList({ consentData, formConstraint, entityId }) {
     const { appConfig } = useContext(ConfigContext);
@@ -117,12 +125,12 @@ export default function ContactList({ consentData, formConstraint, entityId }) {
 
     return (
         <Box>
-            <Heading as="h2" mb="4" size="lg">New Contact List for {consentData.fullName}</Heading>
+            <Heading as="h2" mb="4" size="lg">New Exhibit Form for {consentData.fullName}</Heading>
             <Text mb="4">
                 {`This is a request for ${constraintMessages[formConstraint]}.`}
             </Text>
             <Box my="8">
-                <Heading my="4" as={"h3"} size={"lg"}>Receiving Institution</Heading>
+                <Heading my="4" as={"h3"} size={"lg"}>Requesting Registered Entity</Heading>
                 {/* Commented out, not sure if this is what ultimately to be used.
                 <Text mb="4">Irure esse ex ipsum elit tempor id esse in cillum id officia ipsum. Culpa labore consectetur esse excepteur incididunt ex eu aliqua laboris esse esse occaecat elit.</Text>
                 <FormLabel>Select the Receiving Institution</FormLabel>
@@ -132,11 +140,13 @@ export default function ContactList({ consentData, formConstraint, entityId }) {
                     {entityName}
                 </Text>
                 <Divider my="4" />
-                <Heading as="h4" size="lg" my="4">
+                <Heading as="h4" size="lg" my="4" color="blue.600">
                     {formConstraint === 'current' && 'Current Employer(s)'}
                     {formConstraint === 'other' && 'Prior Employer(s)'}
                     {formConstraint === 'both' && 'Current and Prior Employer(s)'}
                 </Heading>
+                {formConstraint === 'both' && <BothEmployersText />}
+                {formConstraint === 'other' && <PriorEmployerText />}
                 {employerContacts.map((contact) => (
                     <ContactDisplayCard
                         key={contact.id}
@@ -154,7 +164,8 @@ export default function ContactList({ consentData, formConstraint, entityId }) {
                     Add Employer
                 </Button>
                 <Divider my="8" />
-                <Heading as="h4" size="lg" my="4">Academic / Professional Societies</Heading>
+                <Heading as="h4" size="lg" my="4" color="blue.600">Current and Prior Academic / Professional Societies</Heading>
+                {(formConstraint === 'both' || formConstraint === 'other') && <AcademicText />}
                 {academicContacts.map((contact) => (
                     <ContactDisplayCard
                         key={contact.id}
@@ -172,7 +183,11 @@ export default function ContactList({ consentData, formConstraint, entityId }) {
                     Add Academic
                 </Button>
                 <Divider my="8" />
-                <Heading as="h4" size="lg" my="4">Other Organizations Where You Currently or Formerly Had Appointments</Heading>
+                <Heading as="h4" size="lg" my="4" color="blue.600">
+                    Other Organizations Where You {formConstraint === 'both' ? 'Currently or Formerly Had' : 'Formerly Had'} Appointments
+                </Heading>
+                {formConstraint === 'both' && <BothOtherOrgsText />}
+                {formConstraint === 'other' && <PriorOtherOrgsText />}
                 {otherContacts.map((contact) => (
                     <ContactDisplayCard
                         key={contact.id}
