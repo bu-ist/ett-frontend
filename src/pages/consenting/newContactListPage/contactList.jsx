@@ -164,46 +164,52 @@ export default function ContactList({ consentData, formConstraint, entityId }) {
                     Add Employer
                 </Button>
                 <Divider my="8" />
-                <Heading as="h4" size="lg" my="4" color="blue.600">Current and Prior Academic / Professional Societies</Heading>
-                {(formConstraint === 'both' || formConstraint === 'other') && <AcademicText />}
-                {academicContacts.map((contact) => (
-                    <ContactDisplayCard
-                        key={contact.id}
-                        contact={contact}
-                        handleEditContact={handleEditContact}
-                        removeContact={removeContact}
-                        isDisabled={submitResult !== 'idle'}
-                    />
-                ))}
-                <Button mt="4" 
-                    leftIcon={<HiOutlinePlusSm />}
-                    onClick={() => handleAddContact("ACADEMIC")}
-                    isDisabled={submitResult !== 'idle'}
-                >
-                    Add Academic
-                </Button>
-                <Divider my="8" />
-                <Heading as="h4" size="lg" my="4" color="blue.600">
-                    Other Organizations Where You {formConstraint === 'both' ? 'Currently or Formerly Had' : 'Formerly Had'} Appointments
-                </Heading>
-                {formConstraint === 'both' && <BothOtherOrgsText />}
-                {formConstraint === 'other' && <PriorOtherOrgsText />}
-                {otherContacts.map((contact) => (
-                    <ContactDisplayCard
-                        key={contact.id}
-                        contact={contact}
-                        handleEditContact={handleEditContact}
-                        removeContact={removeContact}
-                        isDisabled={submitResult !== 'idle'}
-                    />
-                ))}
-                <Button mt="4" 
-                    leftIcon={<HiOutlinePlusSm />}
-                    onClick={() => handleAddContact("OTHER")}
-                    isDisabled={submitResult !== 'idle'}
-                >
-                    Add Other
-                </Button>
+
+                {/* Academic and other orgs are not included in 'current' mode, so only conditionally render them. */}
+                {formConstraint !== 'current' && (
+                    <>
+                        <Heading as="h4" size="lg" my="4" color="blue.600">Current and Prior Academic / Professional Societies</Heading>
+                        {(formConstraint === 'both' || formConstraint === 'other') && <AcademicText />}
+                        {academicContacts.map((contact) => (
+                            <ContactDisplayCard
+                                key={contact.id}
+                                contact={contact}
+                                handleEditContact={handleEditContact}
+                                removeContact={removeContact}
+                                isDisabled={submitResult !== 'idle'}
+                            />
+                        ))}
+                        <Button mt="4"
+                            leftIcon={<HiOutlinePlusSm />}
+                            onClick={() => handleAddContact("ACADEMIC")}
+                            isDisabled={submitResult !== 'idle'}
+                        >
+                            Add Academic
+                        </Button>
+                        <Divider my="8" />
+                        <Heading as="h4" size="lg" my="4" color="blue.600">
+                            Other Organizations Where You {formConstraint === 'both' ? 'Currently or Formerly Had' : 'Formerly Had'} Appointments
+                        </Heading>
+                        {formConstraint === 'both' && <BothOtherOrgsText />}
+                        {formConstraint === 'other' && <PriorOtherOrgsText />}
+                        {otherContacts.map((contact) => (
+                            <ContactDisplayCard
+                                key={contact.id}
+                                contact={contact}
+                                handleEditContact={handleEditContact}
+                                removeContact={removeContact}
+                                isDisabled={submitResult !== 'idle'}
+                            />
+                        ))}
+                        <Button mt="4"
+                            leftIcon={<HiOutlinePlusSm />}
+                            onClick={() => handleAddContact("OTHER")}
+                            isDisabled={submitResult !== 'idle'}
+                        >
+                            Add Other
+                        </Button>
+                    </>
+                )}
                 {currentContact && (
                     <ContactEditModal
                         isOpen={isOpen}
