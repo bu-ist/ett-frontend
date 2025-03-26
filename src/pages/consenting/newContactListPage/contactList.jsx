@@ -3,7 +3,7 @@ import { nanoid } from 'nanoid';
 import { Link as ReactRouterLink } from 'react-router-dom';
 import Cookies from 'js-cookie';
 
-import { Box, Text, Heading, Divider, Button, Spinner, useDisclosure } from '@chakra-ui/react';
+import { Box, Text, Heading, Divider, Button, Spinner, useDisclosure, ButtonGroup } from '@chakra-ui/react';
 import { HiOutlinePlusSm } from "react-icons/hi";
 
 import { ConfigContext } from '../../../lib/configContext';
@@ -123,6 +123,12 @@ export default function ContactList({ consentData, formConstraint, entityId }) {
     const academicContacts = contacts.filter(contact => contact.organizationType === 'ACADEMIC');
     const otherContacts = contacts.filter(contact => contact.organizationType === 'OTHER');
 
+    // Special case of primary employer for 'current' mode.
+    const primaryEmployer = contacts.find(contact => contact.organizationType === 'EMPLOYER_PRIMARY');
+
+    // Make an array with both primary and secondary employers for 'current' mode.
+    const employerContactsForDisplay = primaryEmployer ? [primaryEmployer, ...employerContacts] : employerContacts;
+
     return (
         <Box>
             <Heading as="h2" mb="4" size="lg">New Exhibit Form for {consentData.fullName}</Heading>
@@ -147,7 +153,7 @@ export default function ContactList({ consentData, formConstraint, entityId }) {
                 </Heading>
                 {formConstraint === 'both' && <BothEmployersText />}
                 {formConstraint === 'other' && <PriorEmployerText />}
-                {employerContacts.map((contact) => (
+                {employerContactsForDisplay.map((contact) => (
                     <ContactDisplayCard
                         key={contact.id}
                         contact={contact}
@@ -156,14 +162,35 @@ export default function ContactList({ consentData, formConstraint, entityId }) {
                         isDisabled={submitResult !== 'idle'}
                     />
                 ))}
-                <Button mt="4" 
-                    leftIcon={<HiOutlinePlusSm />}
-                    onClick={() => handleAddContact("EMPLOYER")}
-                    isDisabled={submitResult !== 'idle'}
-                >
+                {formConstraint === 'current' ? (
+                    <ButtonGroup mt="4" spacing={4}>
+                        {/* Special case for primary employer in 'current' mode */}
+                        <Button
+                            leftIcon={<HiOutlinePlusSm />}
+                            onClick={() => handleAddContact("EMPLOYER_PRIMARY")}
+                            isDisabled={submitResult !== 'idle' || primaryEmployer}
+                        >
+                            Add Primary Employer
+                        </Button>
+                        <Button
+                            leftIcon={<HiOutlinePlusSm />}
+                            onClick={() => handleAddContact("EMPLOYER")}
+                            isDisabled={submitResult !== 'idle'}
+                        >
+                            Add Secondary Employer
+                        </Button>
+                    </ButtonGroup>
+                ) : (
+                    <Button mt="4"
+                        leftIcon={<HiOutlinePlusSm />}
+                        onClick={() => handleAddContact("EMPLOYER")}
+                        isDisabled={submitResult !== 'idle'}
+                    >
                     Add Employer
                 </Button>
+                )}
                 <Divider my="8" />
+                
 
                 {/* Academic and other orgs are not included in 'current' mode, so only conditionally render them. */}
                 {formConstraint !== 'current' && (
