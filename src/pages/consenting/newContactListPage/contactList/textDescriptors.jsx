@@ -50,3 +50,22 @@ export function PriorOtherOrgsText() {
         </Text>
     );
 }
+
+export function CurrentEmployerText() {
+    return (
+        <>
+            <Text mb="2">
+                List your <b>current employers.</b>
+            </Text>
+            <Text mb="2">
+                Also list organizations where you currently hold emeritus/emerita, visiting, or other teaching, research, or administrative appointments.
+            </Text>
+            <Text mb="2">
+                For each one, list up to date contacts of the type (e.g., HR, supervisor, department head) specified by the ETT-Registered Entity (“Registered Entity”) that is considering you for a Privilege or Honor, Employment or Role at this time.  
+            </Text>
+            <Text fontSize="xl" fontWeight="semibold" mb="6">
+                Do <u>not</u> list your <u>prior</u> employer(s) or appointing organization(s) on this form.
+            </Text>
+        </>
+    );
+}

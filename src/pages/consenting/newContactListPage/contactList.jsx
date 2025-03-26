@@ -19,7 +19,8 @@ import {
     BothOtherOrgsText,
     AcademicText, 
     PriorEmployerText,
-    PriorOtherOrgsText
+    PriorOtherOrgsText,
+    CurrentEmployerText
 } from "./contactList/textDescriptors";
 
 // Contains the full contact list form and form state.
@@ -147,12 +148,13 @@ export default function ContactList({ consentData, formConstraint, entityId }) {
                 </Text>
                 <Divider my="4" />
                 <Heading as="h4" size="lg" my="4" color="blue.600">
-                    {formConstraint === 'current' && 'Current Employer(s)'}
+                    {formConstraint === 'current' && 'Current Employer(s) and Appointing Organizations'}
                     {formConstraint === 'other' && 'Prior Employer(s)'}
                     {formConstraint === 'both' && 'Current and Prior Employer(s)'}
                 </Heading>
                 {formConstraint === 'both' && <BothEmployersText />}
                 {formConstraint === 'other' && <PriorEmployerText />}
+                {formConstraint === 'current' && <CurrentEmployerText />}
                 {employerContactsForDisplay.map((contact) => (
                     <ContactDisplayCard
                         key={contact.id}
@@ -177,7 +179,7 @@ export default function ContactList({ consentData, formConstraint, entityId }) {
                             onClick={() => handleAddContact("EMPLOYER")}
                             isDisabled={submitResult !== 'idle'}
                         >
-                            Add Secondary Employer
+                            Add Other Employer
                         </Button>
                     </ButtonGroup>
                 ) : (
