@@ -75,7 +75,7 @@ export default function ContactEditModal({ isOpen, onClose, isEditOrAdd, formCon
                 <ModalBody>
                     <form id="contact-form" onSubmit={handleSubmit(onSubmit)}>
                         <FormControl mb="4" isInvalid={errors.organizationName}>
-                            <FormLabel>Organization</FormLabel>
+                            <FormLabel>Organization Name (No Acronyms)</FormLabel>
                             <Input
                                 id="organizationName"
                                 name="organizationName"
@@ -85,7 +85,7 @@ export default function ContactEditModal({ isOpen, onClose, isEditOrAdd, formCon
                                 })}
                             />
                             {!errors.organizationName ? (
-                                <FormHelperText>Enter the full organization name</FormHelperText>
+                                <FormHelperText>Enter the full organization name without acronyms</FormHelperText>
                             ) : (
                                 <FormErrorMessage>{errors.organizationName.message}</FormErrorMessage>
                             )}
