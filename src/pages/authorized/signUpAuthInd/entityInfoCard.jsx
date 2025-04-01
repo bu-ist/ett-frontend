@@ -1,8 +1,5 @@
-import { Card, CardHeader, Heading, CardBody, Text, HStack, Box, StackDivider, Button, ButtonGroup } from "@chakra-ui/react";
-import { AiOutlineClose } from 'react-icons/ai';
-import { HiOutlinePencil } from 'react-icons/hi';
+import { Card, CardHeader, Heading, CardBody, Text, HStack, Box, StackDivider, ButtonGroup } from "@chakra-ui/react";
 
-import AmendModalButton from './entityInfoCard/amendButtonModal';
 import RejectButtonModal from './entityInfoCard/rejectButtonModal';
 
 // Display card to show entity information, with the Entity Adminstrator's information and information on any existing Authorized Individuals.
@@ -25,10 +22,16 @@ export default function EntityInfoCard({ inviteInfo }) {
                 <HStack align="top" spacing={14} divider={<StackDivider borderColor="gray.200" />}>
                     <Box>
                         <Heading as="h4" size="sm">Administrative Support Professional</Heading>
-                        <Text>{adminUser.fullname}</Text>
-                        <Text>{adminUser.title}</Text>
-                        <Text>{adminUser.email}</Text>
-                        <Text>{adminUser.phone_number}</Text>
+                        {adminUser !== "" ? (
+                            <>
+                                <Text>{adminUser.fullname}</Text>
+                                <Text>{adminUser.title}</Text>
+                                <Text>{adminUser.email}</Text>
+                                <Text>{adminUser.phone_number}</Text>
+                            </>
+                        ) : (
+                            <Text>No current Administrative Support Professional.</Text>
+                        )}
                     </Box>
                     <Box>
                         <Heading as="h4" size="sm">Authorized Individuals</Heading>
