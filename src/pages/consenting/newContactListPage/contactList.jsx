@@ -15,6 +15,7 @@ import ContactDisplayCard from './contactDisplayCard';
 import EntityAutocomplete from './entityAutocomplete'; //not sure if we are using this
 
 import { OtherFormPrefaceText, CurrentFormPrefaceText, BothFormPrefaceText } from './contactList/formPrefaceText';
+import FormInstructionsText from './contactList/formInstructionsText';
 
 import { 
     BothEmployersText, 
@@ -256,6 +257,8 @@ export default function ContactList({ consentData, formConstraint, entityId }) {
                         handleContactChange={handleContactUpdate}
                     />
                 )}
+                <Divider my="8" />
+                <FormInstructionsText entityName={entityName} />
                 <Divider my="8" />
                 <Text>
                     When complete, click submit to send form data.
