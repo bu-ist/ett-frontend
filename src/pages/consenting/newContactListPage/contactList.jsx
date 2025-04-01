@@ -14,6 +14,9 @@ import ContactEditModal from './contactEditModal';
 import ContactDisplayCard from './contactDisplayCard';
 import EntityAutocomplete from './entityAutocomplete'; //not sure if we are using this
 
+import { OtherFormPrefaceText, CurrentFormPrefaceText, BothFormPrefaceText } from './contactList/formPrefaceText';
+import FormInstructionsText from './contactList/formInstructionsText';
+
 import { 
     BothEmployersText, 
     BothOtherOrgsText,
@@ -147,6 +150,10 @@ export default function ContactList({ consentData, formConstraint, entityId }) {
                     {entityName}
                 </Text>
                 <Divider my="4" />
+                {formConstraint === 'other' && <OtherFormPrefaceText /> }
+                {formConstraint === 'current' && <CurrentFormPrefaceText /> }
+                {formConstraint === 'both' && <BothFormPrefaceText />}
+                <Divider my="4" />
                 <Heading as="h4" size="lg" my="4" color="blue.600">
                     {formConstraint === 'current' && 'Current Employer(s) and Appointing Organizations'}
                     {formConstraint === 'other' && 'Prior Employer(s)'}
@@ -250,6 +257,8 @@ export default function ContactList({ consentData, formConstraint, entityId }) {
                         handleContactChange={handleContactUpdate}
                     />
                 )}
+                <Divider my="8" />
+                <FormInstructionsText entityName={entityName} />
                 <Divider my="8" />
                 <Text>
                     When complete, click submit to send form data.
