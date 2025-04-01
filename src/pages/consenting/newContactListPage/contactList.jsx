@@ -14,6 +14,8 @@ import ContactEditModal from './contactEditModal';
 import ContactDisplayCard from './contactDisplayCard';
 import EntityAutocomplete from './entityAutocomplete'; //not sure if we are using this
 
+import { OtherFormPrefaceText, CurrentFormPrefaceText, BothFormPrefaceText } from './contactList/formPrefaceText';
+
 import { 
     BothEmployersText, 
     BothOtherOrgsText,
@@ -146,6 +148,10 @@ export default function ContactList({ consentData, formConstraint, entityId }) {
                 <Text mb="4" fontSize="2xl">
                     {entityName}
                 </Text>
+                <Divider my="4" />
+                {formConstraint === 'other' && <OtherFormPrefaceText /> }
+                {formConstraint === 'current' && <CurrentFormPrefaceText /> }
+                {formConstraint === 'both' && <BothFormPrefaceText />}
                 <Divider my="4" />
                 <Heading as="h4" size="lg" my="4" color="blue.600">
                     {formConstraint === 'current' && 'Current Employer(s) and Appointing Organizations'}
