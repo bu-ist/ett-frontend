@@ -42,7 +42,9 @@ export function EmploymentRolesDefinition() {
         <>
             <Heading as="h3" size="sm">Employment or Role(s)</Heading>
             <Text mb="6">
-            Examples include but are not limited to: employment; employee appointment or assignment to a supervisory, evaluative, committee, or mentoring role. May include other employment roles and decisions that an ETT-Registered Entity identifies as affecting climate, culture, or enterprise risk.
+                Examples include but are not limited to: employment; employee appointment or assignment to a supervisory, evaluative, 
+                committee, or mentoring role. May include other employment roles and decisions that an ETT-Registered Entity identifies 
+                as affecting climate, culture, or enterprise risk.
             </Text>
         </>
     );
