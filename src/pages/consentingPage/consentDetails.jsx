@@ -58,12 +58,6 @@ export default function ConsentDetails({ consentData, setConsentData, consenterI
                     <Heading as="h3" size="md">Consent Actions</Heading>
                     <SimpleGrid spacing={4} mt="2em" templateColumns='repeat(auto-fill, minmax(200px, 1fr))'>
                         <Card>
-                            <CardBody>Rescind this Consent Form</CardBody>
-                            <CardFooter>
-                                <RescindModal email={email} />
-                            </CardFooter>
-                        </Card>
-                        <Card>
                             <CardBody>Renew this Consent Form for 10 years</CardBody>
                             <CardFooter>
                                 <RenewModal setConsentData={setConsentData} consentData={consentData} />
@@ -73,6 +67,12 @@ export default function ConsentDetails({ consentData, setConsentData, consenterI
                             <CardBody>Email a copy of this Consent form to {email} </CardBody>
                             <CardFooter>
                                 <Button onClick={() => alert("Not yet implemented")}>Email</Button>
+                            </CardFooter>
+                        </Card>
+                        <Card>
+                            <CardBody>Rescind this Consent Form</CardBody>
+                            <CardFooter>
+                                <RescindModal email={email} />
                             </CardFooter>
                         </Card>
                     </SimpleGrid>
