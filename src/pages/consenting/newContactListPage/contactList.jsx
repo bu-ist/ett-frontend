@@ -13,6 +13,7 @@ import { sendExhibitFormAPI } from '../../../lib/consenting/sendExhibitFormAPI';
 import ContactEditModal from './contactEditModal';
 import ContactDisplayCard from './contactDisplayCard';
 import EntityAutocomplete from './entityAutocomplete'; //not sure if we are using this
+import SingleEntityModal from './contactList/singleEntityModal';
 
 import { OtherFormPrefaceText, CurrentFormPrefaceText, BothFormPrefaceText } from './contactList/formPrefaceText';
 import FormInstructionsText from './contactList/formInstructionsText';
@@ -259,6 +260,8 @@ export default function ContactList({ consentData, formConstraint, entityId }) {
                 )}
                 <Divider my="8" />
                 <FormInstructionsText entityName={entityName} />
+                <Divider my="8" />
+                <SingleEntityModal contacts={contacts} />
                 <Divider my="8" />
                 <Text>
                     When complete, click submit to send form data.
