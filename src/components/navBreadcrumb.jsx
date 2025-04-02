@@ -11,7 +11,7 @@ const NavBreadcrumb = () => {
         'consenting': 'Consenting Person', // Consenting Person
         'register': 'Register',
         'consent-form': 'Consent Form',
-        'add-exhibit-form': 'New Contact List',
+        'add-exhibit-form': 'Add Exhibit Form',
         'auth-ind': 'Authorized Individual', // Authorized Individual
         'sign-up': 'Registration',
         'entity': 'Administrative Support', // Entity Admin
