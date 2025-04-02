@@ -4,6 +4,8 @@ import { Button, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, 
 import { HiOutlineChevronLeft } from "react-icons/hi";
 import { AiOutlineClose } from 'react-icons/ai';
 
+import ContactSummaryCard from './singleEntityModal/contactSummaryCard'
+
 export default function SingleEntityModal({ contacts, setSingleEntityFormsSigned }) {
     // UI State
     const { isOpen, onOpen, onClose } = useDisclosure();
@@ -50,24 +52,7 @@ export default function SingleEntityModal({ contacts, setSingleEntityFormsSigned
                                 <Text fontSize="lg" fontWeight="bold" mb="4">
                                     Contact {currentIndex + 1} of {contacts.length}
                                 </Text>
-                                <Text>
-                                    Organization Name: {currentContact.organizationName}
-                                </Text>
-                                <Text mt="2">
-                                    Organization Type: {currentContact.organizationType}
-                                </Text>
-                                <Text mt="2">
-                                    Contact Name: {currentContact.contactName}
-                                </Text>
-                                <Text mt="2">
-                                    Contact Title: {currentContact.contactTitle}
-                                </Text>
-                                <Text mt="2">
-                                    Contact Email: {currentContact.contactEmail}
-                                </Text>
-                                <Text mt="2">
-                                    Contact Phone: {currentContact.contactPhone}
-                                </Text>
+                                <ContactSummaryCard contact={currentContact} />
                             </>
                         )}
                     </ModalBody>
