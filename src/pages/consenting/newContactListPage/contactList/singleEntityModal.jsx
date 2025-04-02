@@ -1,5 +1,6 @@
 import { useState } from 'react';
-import { Button, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Text, useDisclosure, ButtonGroup } from "@chakra-ui/react";
+import { useForm } from 'react-hook-form';
+import { Button, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Text, useDisclosure, ButtonGroup, FormControl, FormErrorMessage, FormHelperText, FormLabel, Input } from "@chakra-ui/react";
 
 import { HiOutlineChevronLeft } from "react-icons/hi";
 import { AiOutlineClose } from 'react-icons/ai';
@@ -13,24 +14,38 @@ export default function SingleEntityModal({ contacts, setSingleEntityFormsSigned
     // Navigation state
     const [currentIndex, setCurrentIndex] = useState(0);
 
+    // Setup the digital signature form
+    const { handleSubmit, register, formState: { errors }, reset } = useForm({
+        defaultValues: {
+            signature: '',
+        }
+    });
+
     // Navigation handlers
-    const handleNext = () => {
+    function handleNext(values) {
         if (currentIndex < contacts.length - 1) {
             setCurrentIndex(currentIndex + 1);
+            reset(); // Reset the form for the next contact
+        } else {
+            // If this is the last contact, mark all forms as signed
+            setSingleEntityFormsSigned(true);
+            handleClose();
         }
-    };
+    }
 
-    const handleBack = () => {
+    function handleBack() {
         if (currentIndex > 0) {
             setCurrentIndex(currentIndex - 1);
+            reset(); // Reset the form when going back
         }
-    };
+    }
 
     // Reset index when modal closes
-    const handleClose = () => {
+    function handleClose() {
         setCurrentIndex(0);
+        reset();
         onClose();
-    };
+    }
 
     const currentContact = contacts[currentIndex];
 
@@ -53,6 +68,27 @@ export default function SingleEntityModal({ contacts, setSingleEntityFormsSigned
                                     Contact {currentIndex + 1} of {contacts.length}
                                 </Text>
                                 <ContactSummaryCard contact={currentContact} />
+                                <form onSubmit={handleSubmit(handleNext)}>
+                                    <FormControl mt="4">
+                                        <FormLabel>Digital Signature</FormLabel>
+                                        <Input
+                                            id="signature"
+                                            name="signature"
+                                            placeholder="Type your name as your digital signature"
+                                            {...register('signature', {
+                                                required: 'Signature is required',
+                                            })}
+                                            type="text"
+                                        />
+                                        {!errors.signature ? (
+                                            <FormHelperText>Type your name here as your digital signature.</FormHelperText>
+                                        ) : (
+                                            <FormErrorMessage>{errors.signature.message}</FormErrorMessage>
+                                        )}
+                                        {/* This extra error message shouldn't be necessary, but for some reason the one above is not rendering */}
+                                        {errors.signature && <Text color="red.500" mt="2">{errors.signature.message}</Text>}
+                                    </FormControl>
+                                </form>
                             </>
                         )}
                     </ModalBody>
@@ -73,10 +109,10 @@ export default function SingleEntityModal({ contacts, setSingleEntityFormsSigned
                                 Back
                             </Button>
                             <Button 
-                                onClick={handleNext}
-                                isDisabled={currentIndex === contacts.length - 1}
+                                onClick={handleSubmit(handleNext)}
+                                isDisabled={currentIndex === contacts.length - 1 && Object.keys(errors).length > 0}
                             >
-                                Next
+                                {currentIndex === contacts.length - 1 ? 'Finish' : 'Next'}
                             </Button>
                         </ButtonGroup>
                     </ModalFooter>

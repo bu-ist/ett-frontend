@@ -265,6 +265,7 @@ export default function ContactList({ consentData, formConstraint, entityId }) {
                 <FormInstructionsText entityName={entityName} />
                 <Divider my="8" />
                 <SingleEntityModal contacts={contacts} setSingleEntityFormsSigned={setSingleEntityFormsSigned} />
+                {singleEntityFormsSigned && <Text>All single entity forms have been signed.</Text>}
                 <Divider my="8" />
                 <Text>
                     When complete, click submit to send form data.
