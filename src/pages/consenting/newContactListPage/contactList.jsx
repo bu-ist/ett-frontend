@@ -43,6 +43,9 @@ export default function ContactList({ consentData, formConstraint, entityId }) {
 
     const { isOpen, onOpen, onClose } = useDisclosure();
 
+    // State for whether or not the user has signed the single entity forms.
+    const [singleEntityFormsSigned, setSingleEntityFormsSigned] = useState(false);
+
     // Get then name of the matching entity from the consent data.
     const entityName = consentData.entities.find((entity) => entity.entity_id === entityId)?.entity_name;
 
@@ -261,7 +264,7 @@ export default function ContactList({ consentData, formConstraint, entityId }) {
                 <Divider my="8" />
                 <FormInstructionsText entityName={entityName} />
                 <Divider my="8" />
-                <SingleEntityModal contacts={contacts} />
+                <SingleEntityModal contacts={contacts} setSingleEntityFormsSigned={setSingleEntityFormsSigned} />
                 <Divider my="8" />
                 <Text>
                     When complete, click submit to send form data.

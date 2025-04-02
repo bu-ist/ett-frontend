@@ -4,7 +4,7 @@ import { Button, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, 
 import { HiOutlineChevronLeft } from "react-icons/hi";
 import { AiOutlineClose } from 'react-icons/ai';
 
-export default function SingleEntityModal({ contacts }) {
+export default function SingleEntityModal({ contacts, setSingleEntityFormsSigned }) {
     // UI State
     const { isOpen, onOpen, onClose } = useDisclosure();
     
