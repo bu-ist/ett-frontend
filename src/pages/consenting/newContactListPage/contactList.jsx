@@ -104,8 +104,8 @@ export default function ContactList({ consentData, formConstraint, entityId }) {
         setCurrentContact(null);
     }
 
-    // Handle form submission
-    async function handleSubmit() {
+    // Handle submission of final exhibit form data.
+    async function handleFinalSubmit() {
 
         const accessToken = Cookies.get('EttAccessJwt');
         const idToken = Cookies.get('EttIdJwt');
@@ -272,7 +272,7 @@ export default function ContactList({ consentData, formConstraint, entityId }) {
                 </Text>
                 <Button mt="2" 
                         isDisabled={submitResult !== 'idle'} 
-                        onClick={handleSubmit}
+                        onClick={handleFinalSubmit}
                 >
                     {submitResult === 'idle' && 'Submit'}
                     {submitResult === 'loading' && <Spinner />}
