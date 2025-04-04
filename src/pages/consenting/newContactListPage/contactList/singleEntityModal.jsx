@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { Button, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Text, useDisclosure, ButtonGroup, FormControl, FormErrorMessage, FormHelperText, FormLabel, Input } from "@chakra-ui/react";
+import { Button, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Text, useDisclosure, ButtonGroup, FormControl, FormErrorMessage, FormHelperText, FormLabel, Input, Link } from "@chakra-ui/react";
+import { Link as ReactRouterLink } from 'react-router-dom';
 
 import { HiOutlineChevronLeft } from "react-icons/hi";
 import { AiOutlineClose } from 'react-icons/ai';
@@ -59,18 +60,32 @@ export default function SingleEntityModal({ contacts, setSingleEntityFormsSigned
             <Modal size="4xl" isOpen={isOpen} onClose={handleClose}>
                 <ModalOverlay />
                 <ModalContent>
-                    <ModalHeader>Contact Information</ModalHeader>
+                    <ModalHeader>Single-Entity Exhibit Form</ModalHeader>
                     <ModalCloseButton />
                     <ModalBody>
                         {currentContact && (
                             <>
                                 <Text fontSize="lg" fontWeight="bold" mb="4">
-                                    Contact {currentIndex + 1} of {contacts.length}
+                                    Form {currentIndex + 1} of {contacts.length}
+                                </Text>
+                                <Text mb="4" fontWeight="semibold">
+                                    This <u>“Single-Entity Exhibit Form”</u> is incorporated into my Consent Form, <Link as={ReactRouterLink} to="/consenting" textDecoration="underline">at link</Link>.  
+                                    <u>I agree that my ETT Registration Form and Consent Form will remain in effect to 
+                                    authorize the Disclosure Form that the following entity completes and provides in response 
+                                    to the Disclosure Request sent with this Form. </u> The definitions in the Consent Form also apply 
+                                    to this Single Entity Exhibit Form.  The following entity is one of my Consent Recipients (Affiliates) 
+                                    referenced in and covered by my Consent Form:
                                 </Text>
                                 <ContactSummaryCard contact={currentContact} />
+                                <Text mb="4">
+                                    I agree that this electronic Single-Entity Exhibit Form and my electronic (digital) signature, and any copy will have the 
+                                    same effect as originals for all purposes. <b>I have had the time to consider and consult anyone I wish on whether to provide 
+                                    this Single Entity Exhibit Form.  I am at least 18 years old and it is my knowing and voluntary decision to sign and deliver 
+                                    this Single Entity Exhibit Form.</b>
+                                </Text>
                                 <form onSubmit={handleSubmit(handleNext)}>
-                                    <FormControl mt="4">
-                                        <FormLabel>Digital Signature</FormLabel>
+                                    <FormControl mt="8">
+                                        <FormLabel>Please type your full name (First Middle Last) to digitally sign this full Exhibit Form: </FormLabel>
                                         <Input
                                             id="signature"
                                             name="signature"
@@ -81,7 +96,7 @@ export default function SingleEntityModal({ contacts, setSingleEntityFormsSigned
                                             type="text"
                                         />
                                         {!errors.signature ? (
-                                            <FormHelperText>Type your name here as your digital signature.</FormHelperText>
+                                            <FormHelperText>&nbsp;</FormHelperText>
                                         ) : (
                                             <FormErrorMessage>{errors.signature.message}</FormErrorMessage>
                                         )}
@@ -89,6 +104,10 @@ export default function SingleEntityModal({ contacts, setSingleEntityFormsSigned
                                         {errors.signature && <Text color="red.500" mt="2">{errors.signature.message}</Text>}
                                     </FormControl>
                                 </form>
+                                <Text mb="4">
+                                    Click the Next button to create, review, date, and digitally sign a Single-Entity Exhibit Form for each of your listed Consent Recipients. 
+                                    You will not be able to submit any of your Exhibit Forms until you digitally sign all of them. 
+                                </Text>
                             </>
                         )}
                     </ModalBody>
@@ -112,7 +131,7 @@ export default function SingleEntityModal({ contacts, setSingleEntityFormsSigned
                                 onClick={handleSubmit(handleNext)}
                                 isDisabled={currentIndex === contacts.length - 1 && Object.keys(errors).length > 0}
                             >
-                                {currentIndex === contacts.length - 1 ? 'Finish' : 'Next'}
+                                {currentIndex === contacts.length - 1 ? 'Next' : 'Next'}
                             </Button>
                         </ButtonGroup>
                     </ModalFooter>
