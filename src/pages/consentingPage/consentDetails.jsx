@@ -14,8 +14,10 @@ import RenewModal from './consentDetails/renewModal';
 export default function ConsentDetails({ consentData, setConsentData, consenterInfo }) {
     const { appConfig } = useContext(ConfigContext);
 
-    const { consenter, fullName, activeConsent, entities } = consentData;
+    const { consenter, fullName, consentStatus, entities } = consentData;
     const { email } = consenterInfo;
+
+    const activeConsent = consentStatus === 'active';
 
     function handleSignOut() {
         const { cognitoDomain, consentingPerson: { cognitoID } } = appConfig;
