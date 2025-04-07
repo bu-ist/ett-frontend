@@ -8,10 +8,7 @@ import { AiOutlineClose } from 'react-icons/ai';
 
 import ContactSummaryCard from './singleEntityModal/contactSummaryCard'
 
-export default function SingleEntityModal({ contacts, setSingleEntityFormsSigned }) {
-    // UI State
-    const { isOpen, onOpen, onClose } = useDisclosure();
-    
+export default function SingleEntityModal({ contacts, setSingleEntityFormsSigned, isOpen, onOpen, onClose }) {
     // Navigation state
     const [currentIndex, setCurrentIndex] = useState(0);
 
@@ -52,11 +49,6 @@ export default function SingleEntityModal({ contacts, setSingleEntityFormsSigned
 
     return (
         <>
-            <Button
-                onClick={onOpen}
-            >
-                Sign Single-Entity Forms
-            </Button>
             <Modal size="4xl" isOpen={isOpen} onClose={handleClose}>
                 <ModalOverlay />
                 <ModalContent>
@@ -69,7 +61,7 @@ export default function SingleEntityModal({ contacts, setSingleEntityFormsSigned
                                     Form {currentIndex + 1} of {contacts.length}
                                 </Text>
                                 <Text mb="4" fontWeight="semibold">
-                                    This <u>“Single-Entity Exhibit Form”</u> is incorporated into my Consent Form, <Link as={ReactRouterLink} to="/consenting" textDecoration="underline">at link</Link>.  
+                                    This <u>&quot;Single-Entity Exhibit Form&quot;</u> is incorporated into my Consent Form, <Link as={ReactRouterLink} to="/consenting" textDecoration="underline">at link</Link>.  
                                     <u>I agree that my ETT Registration Form and Consent Form will remain in effect to 
                                     authorize the Disclosure Form that the following entity completes and provides in response 
                                     to the Disclosure Request sent with this Form. </u> The definitions in the Consent Form also apply 
