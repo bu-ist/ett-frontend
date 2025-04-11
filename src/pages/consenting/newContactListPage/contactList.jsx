@@ -1,9 +1,10 @@
 import { useState, useContext } from 'react';
 import { nanoid } from 'nanoid';
+import { useForm } from 'react-hook-form';
 import { Link as ReactRouterLink } from 'react-router-dom';
 import Cookies from 'js-cookie';
 
-import { Box, Text, Heading, Divider, Button, Spinner, useDisclosure, ButtonGroup } from '@chakra-ui/react';
+import { Box, Text, Heading, Divider, Button, Spinner, useDisclosure, ButtonGroup, FormControl, FormLabel, Input, FormHelperText, FormErrorMessage, UnorderedList, ListItem, Alert, AlertIcon } from '@chakra-ui/react';
 import { HiOutlinePlusSm } from "react-icons/hi";
 
 import { ConfigContext } from '../../../lib/configContext';
@@ -13,6 +14,7 @@ import { sendExhibitFormAPI } from '../../../lib/consenting/sendExhibitFormAPI';
 import ContactEditModal from './contactEditModal';
 import ContactDisplayCard from './contactDisplayCard';
 import EntityAutocomplete from './entityAutocomplete'; //not sure if we are using this
+import SingleEntityModal from './contactList/singleEntityModal';
 
 import { OtherFormPrefaceText, CurrentFormPrefaceText, BothFormPrefaceText } from './contactList/formPrefaceText';
 import FormInstructionsText from './contactList/formInstructionsText';
@@ -41,6 +43,29 @@ export default function ContactList({ consentData, formConstraint, entityId }) {
     const [isEditOrAdd, setIsEditOrAdd] = useState('add');
 
     const { isOpen, onOpen, onClose } = useDisclosure();
+
+    // Setup the digital signature form
+    const { handleSubmit, register, formState: { errors }, reset } = useForm({
+        defaultValues: {
+            signature: '',
+        }
+    });
+
+    // State for the single entity modal
+    const { isOpen: isSingleEntityModalOpen, onOpen: onSingleEntityModalOpen, onClose: onSingleEntityModalClose } = useDisclosure();
+
+    function handleNext() {
+        // Validate the signature form
+        if (errors.signature) {
+            return; // Don't proceed if there are signature errors
+        }
+        
+        // If signature is valid, open the single entity modal
+        onSingleEntityModalOpen();
+    }
+
+    // State for whether or not the user has signed the single entity forms.
+    const [singleEntityFormsSigned, setSingleEntityFormsSigned] = useState(false);
 
     // Get then name of the matching entity from the consent data.
     const entityName = consentData.entities.find((entity) => entity.entity_id === entityId)?.entity_name;
@@ -100,8 +125,8 @@ export default function ContactList({ consentData, formConstraint, entityId }) {
         setCurrentContact(null);
     }
 
-    // Handle form submission
-    async function handleSubmit() {
+    // Handle submission of final exhibit form data.
+    async function handleFinalSubmit() {
 
         const accessToken = Cookies.get('EttAccessJwt');
         const idToken = Cookies.get('EttIdJwt');
@@ -260,18 +285,78 @@ export default function ContactList({ consentData, formConstraint, entityId }) {
                 <Divider my="8" />
                 <FormInstructionsText entityName={entityName} />
                 <Divider my="8" />
-                <Text>
-                    When complete, click submit to send form data.
-                </Text>
-                <Button mt="2" 
-                        isDisabled={submitResult !== 'idle'} 
-                        onClick={handleSubmit}
-                >
-                    {submitResult === 'idle' && 'Submit'}
-                    {submitResult === 'loading' && <Spinner />}
-                    {submitResult === 'success' && 'Submitted'}
-                    {submitResult === 'error' && 'Error'}
-                </Button>
+                <form onSubmit={handleSubmit(handleNext)}>
+                    <FormControl mt="8">
+                        <FormLabel>Please type your full name (First Middle Last) to digitally sign this full Exhibit Form: </FormLabel>
+                        <Input
+                            id="signature"
+                            name="signature"
+                            placeholder="Type your name as your digital signature"
+                            {...register('signature', {
+                                required: 'Signature is required',
+                            })}
+                            type="text"
+                            isDisabled={submitResult !== 'idle' || singleEntityFormsSigned}
+                        />
+                        {!errors.signature ? (
+                            <FormHelperText>&nbsp;</FormHelperText>
+                        ) : (
+                            <FormErrorMessage>{errors.signature.message}</FormErrorMessage>
+                        )}
+                        {/* This extra error message shouldn't be necessary, but for some reason the one above is not rendering */}
+                        {errors.signature && <Text color="red.500" mt="2">{errors.signature.message}</Text>}
+                    </FormControl>
+                    <Text my="6">
+                        Click the Next button to create, review, date, and sign a Single-Entity Exhibit Form for each of your listed Consent Recipients. 
+                        You will not be able to submit any of your Exhibit Forms until you digitally sign all of them. 
+                    </Text>
+                    <Button 
+                        type='submit'
+                        isDisabled={submitResult !== 'idle' || singleEntityFormsSigned}
+                    >
+                        Next
+                    </Button>
+                </form>
+                <Divider my="8" />
+                    <SingleEntityModal 
+                        contacts={contacts} 
+                        setSingleEntityFormsSigned={setSingleEntityFormsSigned} 
+                        isOpen={isSingleEntityModalOpen}
+                        onOpen={onSingleEntityModalOpen}
+                        onClose={onSingleEntityModalClose}
+                    />
+                {singleEntityFormsSigned && (
+                    <>
+                        <Alert mb="6" status="success">
+                            <AlertIcon />
+                            You have digitally signed your Full Exhibit Form and each of your Single-Entity Exhibit Forms. Next, submit the form.
+                        </Alert>
+                        <Text>
+                            When you click &quot;Submit&quot;:
+                        </Text>
+                        <UnorderedList>
+                            <ListItem>
+                                Your ETT Registration Form and Consent Form will not expire and you will not be able to rescind them or 
+                                your Full or Single Entity Exhibit Forms in connection with the Privilege or Honor, Employment or Role 
+                                for which the listed Registered Entity is considering you at this time.  Your Consent Recipients will be 
+                                relying on these forms to make disclosures to the Registered Entity.  Contact the Registered Entity directly 
+                                if you want to withdraw from their consideration.  
+                            </ListItem>
+                            <ListItem>
+                                You may still rescind your ETT Registration Form and Consent Form to prevent their other use in the future
+                            </ListItem>
+                        </UnorderedList>
+                        <Button mt="4" 
+                            isDisabled={submitResult !== 'idle' || !singleEntityFormsSigned || contacts.length === 0} 
+                            onClick={handleFinalSubmit}
+                        >
+                            {submitResult === 'idle' && 'Submit'}
+                            {submitResult === 'loading' && <Spinner />}
+                            {submitResult === 'success' && 'Submitted'}
+                            {submitResult === 'error' && 'Error'}
+                        </Button>
+                    </>
+                )}
             </Box>
             {submitResult === 'success' && 
                 <>
