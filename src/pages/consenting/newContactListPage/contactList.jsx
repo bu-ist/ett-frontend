@@ -132,9 +132,21 @@ export default function ContactList({ consentData, formConstraint, entityId }) {
         const idToken = Cookies.get('EttIdJwt');
         const email = JSON.parse(atob(idToken.split('.')[1])).email;
 
+        // Create a copy of contacts to avoid mutating the original state
+        let contactsToSubmit = [...contacts];
+        
+        // If formConstraint is "other", then the organizationType must change from EMPLOYER to EMPLOYER_PRIOR
+        if (formConstraint === 'other') {
+            contactsToSubmit = contactsToSubmit.map(contact => 
+                contact.organizationType === 'EMPLOYER' 
+                    ? { ...contact, organizationType: 'EMPLOYER_PRIOR' }
+                    : contact
+            );
+        }
+
         // Send the contact list to the API.
         setSubmitResult('loading');
-        const response = await sendExhibitFormAPI(appConfig, accessToken, contacts, entityId, email, formConstraint);
+        const response = await sendExhibitFormAPI(appConfig, accessToken, contactsToSubmit, entityId, email, formConstraint);
 
         console.log('send exhibit form response', response);
         
