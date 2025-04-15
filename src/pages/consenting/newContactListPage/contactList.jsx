@@ -4,7 +4,7 @@ import { useForm } from 'react-hook-form';
 import { Link as ReactRouterLink } from 'react-router-dom';
 import Cookies from 'js-cookie';
 
-import { Box, Text, Heading, Divider, Button, Spinner, useDisclosure, ButtonGroup, FormControl, FormLabel, Input, FormHelperText, FormErrorMessage, UnorderedList, ListItem, Alert, AlertIcon } from '@chakra-ui/react';
+import { Box, Text, Heading, Divider, Button, Spinner, useDisclosure, ButtonGroup, FormControl, FormLabel, Input, FormHelperText, FormErrorMessage, UnorderedList, ListItem, Alert, AlertIcon, Flex, Card, CardBody, CardFooter, Spacer } from '@chakra-ui/react';
 import { HiOutlinePlusSm } from "react-icons/hi";
 
 import { ConfigContext } from '../../../lib/configContext';
@@ -28,6 +28,8 @@ import {
     CurrentEmployerText
 } from "./contactList/textDescriptors";
 
+import SaveButton from './contactList/saveButton';
+
 // Contains the full contact list form and form state.
 export default function ContactList({ consentData, formConstraint, entityId }) {
     const { appConfig } = useContext(ConfigContext);
@@ -35,8 +37,31 @@ export default function ContactList({ consentData, formConstraint, entityId }) {
     // State for the form submission result.
     const [submitResult, setSubmitResult] = useState('idle');
 
+    // Check for existing saved form data from the consentData, 
+    const matchingSavedForm = consentData.consenter.exhibit_forms.find((form) => (
+        form.entity_id === entityId && form.constraint === formConstraint
+    ));
+
+    // Set a state to tell if we are working with existing saved form data.
+    const [isSavedForm, setIsSavedForm] = useState(!!matchingSavedForm);
+
+    // Set the initial contacts state based on the saved form data.
+    // Otherwise, set the initial contacts state to an empty array.
+    const initialAffiliates = matchingSavedForm?.affiliates || [];
+
+    // Map the initial affiliates to the format expected by the contact list.
+    const initialContacts = initialAffiliates.map((affiliate) => ({
+        id: affiliate.id || nanoid(), // Use the existing ID or generate a new one
+        organizationName: affiliate.org || '',
+        organizationType: affiliate.affiliateType === 'EMPLOYER_PRIOR' ? 'EMPLOYER' : affiliate.affiliateType || '',
+        contactName: affiliate.fullname || '',
+        contactTitle: affiliate.title || '',
+        contactEmail: affiliate.email || '',
+        contactPhone: affiliate.phone_number || ''
+    }));
+
     // State for the contact list form data.
-    const [contacts, setContacts] = useState([]);
+    const [contacts, setContacts] = useState(initialContacts);
 
     // State for the contact modal.
     const [currentContact, setCurrentContact] = useState(null);
@@ -177,6 +202,12 @@ export default function ContactList({ consentData, formConstraint, entityId }) {
                 {`This is a request for ${constraintMessages[formConstraint]}.`}
             </Text>
             <Box my="8">
+                {isSavedForm && (
+                    <Alert mb="6" status="info">
+                        <AlertIcon />
+                        Form data has been pre-filled from a previous saved form. Please review and update as necessary.
+                    </Alert>
+                )}
                 <Heading my="4" as={"h3"} size={"lg"}>Requesting Registered Entity</Heading>
                 {/* Commented out, not sure if this is what ultimately to be used.
                 <Text mb="4">Irure esse ex ipsum elit tempor id esse in cillum id officia ipsum. Culpa labore consectetur esse excepteur incididunt ex eu aliqua laboris esse esse occaecat elit.</Text>
@@ -318,16 +349,41 @@ export default function ContactList({ consentData, formConstraint, entityId }) {
                         {/* This extra error message shouldn't be necessary, but for some reason the one above is not rendering */}
                         {errors.signature && <Text color="red.500" mt="2">{errors.signature.message}</Text>}
                     </FormControl>
-                    <Text my="6">
-                        Click the Next button to create, review, date, and sign a Single-Entity Exhibit Form for each of your listed Consent Recipients. 
-                        You will not be able to submit any of your Exhibit Forms until you digitally sign all of them. 
-                    </Text>
-                    <Button 
-                        type='submit'
-                        isDisabled={submitResult !== 'idle' || singleEntityFormsSigned}
-                    >
-                        Next
-                    </Button>
+                    <Flex mt="4">
+                        <Card width="40%">
+                            <CardBody>
+                                <Text>Click the Next button to create, review, date, and sign a Full Exhibit Form.
+                                    You will not be able to submit your Full Exhibit Form until you digitally sign it.
+                                </Text>
+                            </CardBody>
+                            <CardFooter>
+                                <Button
+                                    type='submit'
+                                    isDisabled={submitResult !== 'idle' || singleEntityFormsSigned || contacts.length === 0}
+                                >
+                                    Next
+                                </Button>
+                            </CardFooter>
+                        </Card>
+                        <Spacer />
+                        <Card width="40%">
+                            <CardBody>
+                                Optionally, click the Save button to file your entries temporarily to the ETT system if you 
+                                wish to return later to complete your work. NOTE: Any such work saved for the first time will 
+                                not be retained by our system any longer than 1 week (7 days). You can save again any number 
+                                of times within this 7 day window, but doing so will not extend the initial 7 day limit.
+                            </CardBody>
+                            <CardFooter>
+                                <SaveButton 
+                                    contacts={contacts} 
+                                    formConstraint={formConstraint} 
+                                    entityId={entityId} 
+                                />
+                            </CardFooter>
+                        </Card>
+                    </Flex>
+
+                    {/* add a save button here */}
                 </form>
                 <Divider my="8" />
                     <SingleEntityModal 
