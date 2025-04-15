@@ -402,7 +402,7 @@ export default function ContactList({ consentData, formConstraint, entityId }) {
                         <Text>
                             When you click &quot;Submit&quot;:
                         </Text>
-                        <UnorderedList>
+                        <UnorderedList fontSize="xl" fontWeight="semibold" my="4" spacing="2">
                             <ListItem>
                                 Your ETT Registration Form and Consent Form will not expire and you will not be able to rescind them or 
                                 your Full or Single Entity Exhibit Forms in connection with the Privilege or Honor, Employment or Role 
@@ -428,7 +428,7 @@ export default function ContactList({ consentData, formConstraint, entityId }) {
             </Box>
             {submitResult === 'success' && 
                 <>
-                    <Text>Form submitted successfully.</Text>
+                    <Text>Form submitted successfully, you will receive an emailed copy.</Text>
                     <Button as={ReactRouterLink} to="/consenting" my="2em"> Return to Dashboard</Button>
                 </>
             }
