@@ -13,6 +13,10 @@ export default function SaveButton({ contacts, formConstraint, entityId, singleE
     const [apiState, setApiState] = useState('idle');
     const [saveResult, setSaveResult] = useState(null);
 
+    const matchingSavedForm = saveResult?.consenter?.exhibit_forms.find( (form) => (
+        form.entity_id === entityId && form.constraint === formConstraint
+    ));
+
     async function handleSave() {
         setApiState('loading');
         
@@ -80,7 +84,7 @@ export default function SaveButton({ contacts, formConstraint, entityId, singleE
                                     Form data saved successfully.
                                 </Alert>
                                 <Text mt="4">
-                                    Your work will be retained until 7 days after the initial save. You can return to complete your form at any time during this period.
+                                    Your work will be retained until {new Date(new Date(matchingSavedForm.create_timestamp).getTime() + 7 * 24 * 60 * 60 * 1000).toLocaleDateString()} (7 days after the initial save). You can return to complete your form at any time during this period.
                                 </Text>
                                 {saveResult?.savedAt && (
                                     <Text mt="2" fontSize="sm" color="gray.500">
@@ -100,8 +104,7 @@ export default function SaveButton({ contacts, formConstraint, entityId, singleE
                             Close
                         </Button>
                     </ModalFooter>
-                </ModalContent>
             </Modal>
         </>
     );
-} 
+}
