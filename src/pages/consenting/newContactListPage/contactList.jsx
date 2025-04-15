@@ -377,7 +377,8 @@ export default function ContactList({ consentData, formConstraint, entityId }) {
                                 <SaveButton 
                                     contacts={contacts} 
                                     formConstraint={formConstraint} 
-                                    entityId={entityId} 
+                                    entityId={entityId}
+                                    singleEntityFormsSigned={singleEntityFormsSigned}
                                 />
                             </CardFooter>
                         </Card>

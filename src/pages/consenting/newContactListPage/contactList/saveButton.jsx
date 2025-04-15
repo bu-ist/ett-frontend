@@ -7,7 +7,7 @@ import { ConfigContext } from '../../../../lib/configContext';
 import { useContext } from 'react';
 import Cookies from 'js-cookie';
 
-export default function SaveButton({ contacts, formConstraint, entityId }) {
+export default function SaveButton({ contacts, formConstraint, entityId, singleEntityFormsSigned }) {
     const { appConfig } = useContext(ConfigContext);
     const { isOpen, onOpen, onClose } = useDisclosure();
     const [apiState, setApiState] = useState('idle');
@@ -63,7 +63,7 @@ export default function SaveButton({ contacts, formConstraint, entityId }) {
                 isLoading={apiState === 'loading'}
                 backgroundColor="#f2e7d3"
                 _hover={{ bg: "orange.100" }}
-                isDisabled={apiState === 'loading' || contacts.length === 0}
+                isDisabled={apiState === 'loading' || singleEntityFormsSigned || contacts.length === 0}
             >
                 Save
             </Button>
