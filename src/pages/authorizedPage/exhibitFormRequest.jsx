@@ -4,7 +4,8 @@ import Cookies from 'js-cookie';
 
 import { Box, Button, Center, Heading, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, 
     ModalHeader, ModalOverlay, Stack, Radio, RadioGroup, Spinner, useDisclosure, 
-    FormControl, FormLabel, FormErrorMessage } from "@chakra-ui/react";
+    FormControl, FormLabel, FormErrorMessage, NumberInput, NumberInputField, 
+    NumberInputStepper, NumberIncrementStepper, NumberDecrementStepper, HStack, Text } from "@chakra-ui/react";
 import {
     AutoComplete,
     AutoCompleteInput,
@@ -32,13 +33,16 @@ export default function ExhibitFormRequest({ entityId }) {
         defaultValues: {
             consenter: null,
             constraint: 'both',
-            searchInput: ''
+            searchInput: '',
+            lookbackType: 'unlimited',
+            lookbackYears: 1
         }
     });
 
     // Watch values
     const searchValue = watch('searchInput');
     const selectedConsenter = watch('consenter');
+    const lookbackType = watch('lookbackType');
 
     // Update search input display when consenter is selected
     useEffect(() => {
@@ -81,13 +85,17 @@ export default function ExhibitFormRequest({ entityId }) {
         setApiState('loading');
 
         const accessToken = Cookies.get('EttAccessJwt');
+        // Process the lookback period - either "unlimited" or a number
+        const lookbackPeriod = data.lookbackType === 'unlimited' ? 'unlimited' : data.lookbackYears;
+        
         const sendResult = await sendExhibitRequestAPI(
             apiHost, 
             apiStage, 
             accessToken, 
-            data.consenter?.email, // Send just the email to the API
+            data.consenter?.email,
             entityId, 
-            data.constraint
+            data.constraint,
+            lookbackPeriod
         );
 
         if (sendResult.payload.ok) {
@@ -107,12 +115,16 @@ export default function ExhibitFormRequest({ entityId }) {
         setValue('consenter', null);
         setValue('searchInput', '');
         setValue('constraint', 'both');
+        setValue('lookbackType', 'unlimited');
+        setValue('lookbackYears', 1);
         
         // Then reset the form state
         reset({
             consenter: null,
             constraint: 'both',
-            searchInput: ''
+            searchInput: '',
+            lookbackType: 'unlimited',
+            lookbackYears: 1
         });
         
         // Clear autocomplete options
@@ -127,7 +139,7 @@ export default function ExhibitFormRequest({ entityId }) {
     return (
         <Box>
             <form onSubmit={handleSubmit(onSubmit)}>
-            <Heading as="h3" my="4" size="sm">Select the consenting person</Heading>
+                <Heading as="h3" my="4" size="sm">Select the consenting person</Heading>
                 <FormControl isInvalid={errors.consenter}>
                     <FormLabel>Search for a consenter</FormLabel>
                     <Controller
@@ -209,6 +221,60 @@ export default function ExhibitFormRequest({ entityId }) {
                     />
                     <FormErrorMessage>{errors.constraint?.message}</FormErrorMessage>
                 </FormControl>
+
+                <Heading as="h3" my="4" size="sm">Specify lookback period</Heading>
+                <Text mb="2" fontSize="sm" fontStyle="italic">How many years back should the consenting person limit affiliates to?</Text>
+                <FormControl>
+                    <Controller
+                        name="lookbackType"
+                        control={control}
+                        rules={{ required: 'Please select a lookback period type' }}
+                        render={({ field }) => (
+                            <RadioGroup {...field}>
+                                <Stack mb="4">
+                                    <Radio value="unlimited">Unlimited lookback period</Radio>
+                                    <Radio value="specific">Specific number of years</Radio>
+                                </Stack>
+                            </RadioGroup>
+                        )}
+                    />
+                </FormControl>
+
+                {lookbackType === 'specific' && (
+                    <FormControl isInvalid={errors.lookbackYears} ml="6">
+                        <HStack spacing="4" align="flex-start">
+                            <FormLabel htmlFor="lookbackYears" pt="2">Number of years:</FormLabel>
+                            <Controller
+                                name="lookbackYears"
+                                control={control}
+                                rules={{
+                                    required: 'Please enter number of years',
+                                    min: { value: 1, message: 'Minimum 1 year' },
+                                    max: { value: 50, message: 'Maximum 50 years' }
+                                }}
+                                render={({ field: { ref, ...restField } }) => (
+                                    <NumberInput
+                                        {...restField}
+                                        min={1}
+                                        max={50}
+                                        width="100px"
+                                        onChange={(value) => {
+                                            // Ensure we're setting a number
+                                            setValue('lookbackYears', parseInt(value) || '');
+                                        }}
+                                    >
+                                        <NumberInputField ref={ref} />
+                                        <NumberInputStepper>
+                                            <NumberIncrementStepper />
+                                            <NumberDecrementStepper />
+                                        </NumberInputStepper>
+                                    </NumberInput>
+                                )}
+                            />
+                        </HStack>
+                        <FormErrorMessage>{errors.lookbackYears?.message}</FormErrorMessage>
+                    </FormControl>
+                )}
 
                 <Button type="submit" my="2em" isLoading={apiState === 'loading'}>
                     {apiState === 'idle' && 

@@ -1,4 +1,4 @@
-async function sendExhibitRequestAPI(apiHost, apiStage, accessToken, email, entityId, constraint) {
+async function sendExhibitRequestAPI(apiHost, apiStage, accessToken, email, entityId, constraint, lookbackPeriod) {
     // Look up if we are in local development mode.
     const { MODE } = import.meta.env;
 
@@ -23,6 +23,7 @@ async function sendExhibitRequestAPI(apiHost, apiStage, accessToken, email, enti
                     consenterEmail: email,
                     entity_id: entityId,
                     constraint: constraint,
+                    lookback: lookbackPeriod
                 }
             })
         }
