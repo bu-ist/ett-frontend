@@ -127,26 +127,7 @@ export default function ExhibitFormRequest({ entityId }) {
     return (
         <Box>
             <form onSubmit={handleSubmit(onSubmit)}>
-                <Heading as="h3" my="4" size="sm">Select type of contact information</Heading>
-                <FormControl isInvalid={errors.constraint}>
-                    <Controller
-                        name="constraint"
-                        control={control}
-                        rules={{ required: 'Please select a constraint type' }}
-                        render={({ field }) => (
-                            <RadioGroup {...field}>
-                                <Stack mb="8">
-                                    <Radio value="current">Current Employer(s) only</Radio>
-                                    <Radio value="other">Prior Employer(s) and other Affiliates</Radio>
-                                    <Radio value="both">All</Radio>
-                                </Stack>
-                            </RadioGroup>
-                        )}
-                    />
-                    <FormErrorMessage>{errors.constraint?.message}</FormErrorMessage>
-                </FormControl>
-
-                <Heading as="h3" my="4" size="sm">Select the consenting person</Heading>
+            <Heading as="h3" my="4" size="sm">Select the consenting person</Heading>
                 <FormControl isInvalid={errors.consenter}>
                     <FormLabel>Search for a consenter</FormLabel>
                     <Controller
@@ -200,6 +181,24 @@ export default function ExhibitFormRequest({ entityId }) {
                         )}
                     />
                     <FormErrorMessage>{errors.consenter?.message}</FormErrorMessage>
+                </FormControl>
+                <Heading as="h3" my="4" size="sm">Select type of contact information</Heading>
+                <FormControl isInvalid={errors.constraint}>
+                    <Controller
+                        name="constraint"
+                        control={control}
+                        rules={{ required: 'Please select a constraint type' }}
+                        render={({ field }) => (
+                            <RadioGroup {...field}>
+                                <Stack mb="8">
+                                    <Radio value="current">Current Employer(s) only</Radio>
+                                    <Radio value="other">Prior Employer(s) and other Affiliates</Radio>
+                                    <Radio value="both">All</Radio>
+                                </Stack>
+                            </RadioGroup>
+                        )}
+                    />
+                    <FormErrorMessage>{errors.constraint?.message}</FormErrorMessage>
                 </FormControl>
 
                 <Button type="submit" my="2em" isLoading={apiState === 'loading'}>
