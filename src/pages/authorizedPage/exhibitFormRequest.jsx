@@ -153,9 +153,11 @@ export default function ExhibitFormRequest({ entityId }) {
                                 <Controller
                                     name="searchInput"
                                     control={control}
-                                    render={({ field }) => (
+                                    render={({ field: { onChange, value, ref } }) => (
                                         <AutoCompleteInput
-                                            {...field}
+                                            onChange={onChange}
+                                            value={value}
+                                            ref={ref}
                                             placeholder="Search for a consenter"
                                             loadingIcon={<Spinner />}
                                             onFocus={() => {
@@ -163,6 +165,13 @@ export default function ExhibitFormRequest({ entityId }) {
                                                     setValue('searchInput', '');
                                                 }
                                             }}
+                                            // Prevent browser autofill
+                                            autoComplete="off"
+                                            aria-autocomplete="list"
+                                            role="combobox"
+                                            aria-expanded="true"
+                                            // Use a consistent name but still prevent autofill
+                                            name="search-input-no-autofill"
                                         />
                                     )}
                                 />
