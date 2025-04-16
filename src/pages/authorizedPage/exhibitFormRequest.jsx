@@ -128,23 +128,23 @@ export default function ExhibitFormRequest({ entityId }) {
         <Box>
             <form onSubmit={handleSubmit(onSubmit)}>
                 <Heading as="h3" my="4" size="sm">Select type of contact information</Heading>
-                <Controller
-                    name="constraint"
-                    control={control}
-                    rules={{ required: 'Please select a constraint type' }}
-                    render={({ field: { onChange, value } }) => (
-                        <FormControl isInvalid={errors.constraint}>
-                            <RadioGroup onChange={onChange} value={value}>
+                <FormControl isInvalid={errors.constraint}>
+                    <Controller
+                        name="constraint"
+                        control={control}
+                        rules={{ required: 'Please select a constraint type' }}
+                        render={({ field }) => (
+                            <RadioGroup {...field}>
                                 <Stack mb="8">
                                     <Radio value="current">Current Employer(s) only</Radio>
                                     <Radio value="other">Prior Employer(s) and other Affiliates</Radio>
                                     <Radio value="both">All</Radio>
                                 </Stack>
                             </RadioGroup>
-                            <FormErrorMessage>{errors.constraint?.message}</FormErrorMessage>
-                        </FormControl>
-                    )}
-                />
+                        )}
+                    />
+                    <FormErrorMessage>{errors.constraint?.message}</FormErrorMessage>
+                </FormControl>
 
                 <Heading as="h3" my="4" size="sm">Select the consenting person</Heading>
                 <FormControl isInvalid={errors.consenter}>
