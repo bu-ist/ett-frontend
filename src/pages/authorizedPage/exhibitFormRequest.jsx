@@ -16,7 +16,7 @@ import { searchConsentersAPI } from '../../lib/auth-ind/searchConsentersAPI';
 
 import ExhibitSuccessModalBody from "./consentersAutocomplete/exhibitSuccessModalBody";
 
-export default function ConsentersAutocomplete({ entityId }) {
+export default function ExhibitFormRequest({ entityId }) {
     const { appConfig } = useContext( ConfigContext );
 
     // Destructure useful values from the appConfig.

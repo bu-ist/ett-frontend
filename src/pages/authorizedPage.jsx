@@ -14,7 +14,7 @@ import { signOut } from '../lib/signOut';
 
 import { lookupAuthIndAPI } from '../lib/auth-ind/lookupAuthIndAPI';
 
-import ConsentersAutocomplete from './authorizedPage/consentersAutocomplete';
+import ExhibitFormRequest from './authorizedPage/exhibitFormRequest';
 import AuthIndDetails from './authorizedPage/authIndDetails';
 import EntityInfoCard from './authorizedPage/entityInfoCard';
 import DisclosureRequestForm from './authorizedPage/disclosureRequestForm';
@@ -175,7 +175,7 @@ export default function AuthorizedPage() {
                                         completes new Exhibit Forms, with up-to-date Affiliate listings and contacts, each time the Consenting Person is considered by any 
                                         registered entity.
                                     </Text>
-                                    <ConsentersAutocomplete entityId={userData.entity.entity_id} />
+                                    <ExhibitFormRequest entityId={userData.entity.entity_id} />
                                 </CardBody>
                             </Stack>
                         </Card>
