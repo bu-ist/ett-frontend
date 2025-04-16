@@ -28,7 +28,7 @@ export default function ExhibitFormRequest({ entityId }) {
     const [apiState, setApiState] = useState('idle');
 
     // Setup react-hook-form
-    const { handleSubmit, control, watch, setValue, formState: { errors } } = useForm({
+    const { handleSubmit, control, watch, setValue, reset, formState: { errors } } = useForm({
         defaultValues: {
             consenter: null,
             constraint: 'both',
@@ -36,8 +36,19 @@ export default function ExhibitFormRequest({ entityId }) {
         }
     });
 
-    // Watch the searchInput value for autocomplete
+    // Watch values
     const searchValue = watch('searchInput');
+    const selectedConsenter = watch('consenter');
+
+    // Update search input display when consenter is selected
+    useEffect(() => {
+        if (selectedConsenter) {
+            // Small delay to ensure proper state update
+            setTimeout(() => {
+                setValue('searchInput', `${selectedConsenter.fullname} (${selectedConsenter.email})`);
+            }, 0);
+        }
+    }, [selectedConsenter, setValue]);
 
     async function fetchConsenters(query) {
         const accessToken = Cookies.get('EttAccessJwt');
@@ -74,7 +85,7 @@ export default function ExhibitFormRequest({ entityId }) {
             apiHost, 
             apiStage, 
             accessToken, 
-            data.consenter, 
+            data.consenter?.email, // Send just the email to the API
             entityId, 
             data.constraint
         );
@@ -89,10 +100,25 @@ export default function ExhibitFormRequest({ entityId }) {
     }
 
     function handleModalClose() {
+        // Reset API state
         setApiState('idle');
+        
+        // First clear the form values
         setValue('consenter', null);
         setValue('searchInput', '');
+        setValue('constraint', 'both');
+        
+        // Then reset the form state
+        reset({
+            consenter: null,
+            constraint: 'both',
+            searchInput: ''
+        });
+        
+        // Clear autocomplete options
         setOptions([]);
+        
+        // Close the modal
         onClose();
     }
 
@@ -131,10 +157,16 @@ export default function ExhibitFormRequest({ entityId }) {
                             <AutoComplete
                                 openOnFocus
                                 isLoading={isLoading}
-                                onChange={(val) => {
-                                    onChange(val);
+                                onChange={(val, item) => {
+                                    const newConsenter = {
+                                        email: val,
+                                        fullname: item.label
+                                    };
+                                    onChange(newConsenter);
+                                    // Immediately update the search input
+                                    setValue('searchInput', `${item.label} (${val})`);
                                 }}
-                                value={value}
+                                value={selectedConsenter?.email || ''}
                                 emptyState={emptyState}
                             >
                                 <Controller
@@ -145,6 +177,11 @@ export default function ExhibitFormRequest({ entityId }) {
                                             {...field}
                                             placeholder="Search for a consenter"
                                             loadingIcon={<Spinner />}
+                                            onFocus={() => {
+                                                if (selectedConsenter) {
+                                                    setValue('searchInput', '');
+                                                }
+                                            }}
                                         />
                                     )}
                                 />
@@ -167,7 +204,7 @@ export default function ExhibitFormRequest({ entityId }) {
 
                 <Button type="submit" my="2em" isLoading={apiState === 'loading'}>
                     {apiState === 'idle' && 
-                        <>Send{watch('consenter') ? ` to ${watch('consenter')}` : '' }</>
+                        <>Send{selectedConsenter ? ` to ${selectedConsenter.email}` : '' }</>
                     }
                     {apiState === 'error' && 'Error'}
                     {apiState === 'success' && 'Sent'}
@@ -184,7 +221,7 @@ export default function ExhibitFormRequest({ entityId }) {
                     <ModalCloseButton />
                     <ModalBody>
                         {apiState === 'error' && 'There was an error sending the request.'}
-                        {apiState === 'success' && <ExhibitSuccessModalBody selectedConsenter={watch('consenter')} />}
+                        {apiState === 'success' && <ExhibitSuccessModalBody selectedConsenter={selectedConsenter?.email} />}
                     </ModalBody>
                     <ModalFooter>
                         <Button onClick={handleModalClose}>Close</Button>
