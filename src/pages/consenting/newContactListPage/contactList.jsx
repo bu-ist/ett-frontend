@@ -236,7 +236,7 @@ export default function ContactList({ consentData, formConstraint, entityId }) {
                         contact={contact}
                         handleEditContact={handleEditContact}
                         removeContact={removeContact}
-                        isDisabled={submitResult !== 'idle'}
+                        isDisabled={submitResult !== 'idle' || singleEntityFormsSigned }
                     />
                 ))}
                 {formConstraint === 'current' ? (
@@ -245,14 +245,14 @@ export default function ContactList({ consentData, formConstraint, entityId }) {
                         <Button
                             leftIcon={<HiOutlinePlusSm />}
                             onClick={() => handleAddContact("EMPLOYER_PRIMARY")}
-                            isDisabled={submitResult !== 'idle' || primaryEmployer}
+                            isDisabled={submitResult !== 'idle' || primaryEmployer || singleEntityFormsSigned}
                         >
                             Add Primary Employer
                         </Button>
                         <Button
                             leftIcon={<HiOutlinePlusSm />}
                             onClick={() => handleAddContact("EMPLOYER")}
-                            isDisabled={submitResult !== 'idle'}
+                            isDisabled={submitResult !== 'idle' || singleEntityFormsSigned }
                         >
                             Add Other Employer
                         </Button>
@@ -261,7 +261,7 @@ export default function ContactList({ consentData, formConstraint, entityId }) {
                     <Button mt="4"
                         leftIcon={<HiOutlinePlusSm />}
                         onClick={() => handleAddContact("EMPLOYER")}
-                        isDisabled={submitResult !== 'idle'}
+                        isDisabled={submitResult !== 'idle' || singleEntityFormsSigned }
                     >
                     Add Employer
                 </Button>
@@ -280,13 +280,13 @@ export default function ContactList({ consentData, formConstraint, entityId }) {
                                 contact={contact}
                                 handleEditContact={handleEditContact}
                                 removeContact={removeContact}
-                                isDisabled={submitResult !== 'idle'}
+                                isDisabled={submitResult !== 'idle' || singleEntityFormsSigned }
                             />
                         ))}
                         <Button mt="4"
                             leftIcon={<HiOutlinePlusSm />}
                             onClick={() => handleAddContact("ACADEMIC")}
-                            isDisabled={submitResult !== 'idle'}
+                            isDisabled={submitResult !== 'idle' || singleEntityFormsSigned }
                         >
                             Add Academic
                         </Button>
@@ -302,13 +302,13 @@ export default function ContactList({ consentData, formConstraint, entityId }) {
                                 contact={contact}
                                 handleEditContact={handleEditContact}
                                 removeContact={removeContact}
-                                isDisabled={submitResult !== 'idle'}
+                                isDisabled={submitResult !== 'idle' || singleEntityFormsSigned }
                             />
                         ))}
                         <Button mt="4"
                             leftIcon={<HiOutlinePlusSm />}
                             onClick={() => handleAddContact("OTHER")}
-                            isDisabled={submitResult !== 'idle'}
+                            isDisabled={submitResult !== 'idle' || singleEntityFormsSigned }
                         >
                             Add Other
                         </Button>
