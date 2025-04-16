@@ -1,68 +1,43 @@
 import { useEffect, useState, useContext } from 'react';
+import { useForm, Controller } from 'react-hook-form';
 import Cookies from 'js-cookie';
 
-import { Box, Button, Center, Heading, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Stack, Radio, RadioGroup, Spinner, useDisclosure } from "@chakra-ui/react";
+import { Box, Button, Center, Heading, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, 
+    ModalHeader, ModalOverlay, Stack, Radio, RadioGroup, Spinner, useDisclosure, 
+    FormControl, FormLabel, FormErrorMessage } from "@chakra-ui/react";
 import {
     AutoComplete,
     AutoCompleteInput,
     AutoCompleteItem,
     AutoCompleteList,
-  } from "@choc-ui/chakra-autocomplete";
+} from "@choc-ui/chakra-autocomplete";
 
 import { ConfigContext } from '../../lib/configContext';
-
 import { sendExhibitRequestAPI } from '../../lib/auth-ind/sendExhibitRequestAPI';
 import { searchConsentersAPI } from '../../lib/auth-ind/searchConsentersAPI';
-
 import ExhibitSuccessModalBody from "./consentersAutocomplete/exhibitSuccessModalBody";
 
 export default function ExhibitFormRequest({ entityId }) {
-    const { appConfig } = useContext( ConfigContext );
-
-    // Destructure useful values from the appConfig.
+    const { appConfig } = useContext(ConfigContext);
     const { apiStage, authorizedIndividual: { apiHost } } = appConfig;
-
     const { isOpen, onOpen, onClose } = useDisclosure();
 
-    const [selectedConsenter, setSelectedConsenter] = useState(null);
-    
-    const [apiState, setApiState] = useState('idle');
-    
-    const [value, setValue] = useState(null);
+    // State for autocomplete
     const [options, setOptions] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
+    const [apiState, setApiState] = useState('idle');
 
-    // State for the type radio group.
-    const [constraint, setConstraint] = useState('both');
-
-    async function handleSendButton() {
-        // Send the request to the API
-        console.log('selectedConsenter send', selectedConsenter);
-        setApiState('loading');
-
-        const accessToken = Cookies.get('EttAccessJwt');
-        const sendResult = await sendExhibitRequestAPI(apiHost, apiStage, accessToken, selectedConsenter, entityId, constraint);
-
-        console.log('sendResult', sendResult);
-
-        if (sendResult.payload.ok) {
-            setApiState('success');
-        } else {
-            setApiState('error');
+    // Setup react-hook-form
+    const { handleSubmit, control, watch, setValue, formState: { errors } } = useForm({
+        defaultValues: {
+            consenter: null,
+            constraint: 'both',
+            searchInput: ''
         }
+    });
 
-        onOpen();
-    }
-    
-    function handleModalClose() {
-        // Reset the state and close the modal
-        setApiState('idle');
-        setSelectedConsenter(null);
-        setValue(null);
-        // This doesn't fully work yet as the autocomplete doesn't reset the value.
-        setOptions([]);
-        onClose();
-    }
+    // Watch the searchInput value for autocomplete
+    const searchValue = watch('searchInput');
 
     async function fetchConsenters(query) {
         const accessToken = Cookies.get('EttAccessJwt');
@@ -75,72 +50,131 @@ export default function ExhibitFormRequest({ entityId }) {
         }
     }
 
-    function onChangeInputHandler(event) {
-        const { target: { value } } = event;
-        setValue(value);
-    };
-
-    // Use a useEffect to call the API when the value changes.
+    // Use useEffect to handle autocomplete search
     useEffect(() => {
-        if (value) {
+        if (searchValue) {
             setIsLoading(true);
-            // Use a timeout to debounce the search API call.
             const timer = setTimeout(async () => {
                 try {
-                    await fetchConsenters(value);
+                    await fetchConsenters(searchValue);
                 } finally {
                     setIsLoading(false);
                 }
             }, 300);
-    
-            // Cleanup function to clear the timeout
+
             return () => clearTimeout(timer);
         }
-    }, [value, setOptions, setIsLoading]);
+    }, [searchValue]);
 
-    const emptyState = <Center>{value ? 'No results found' : 'Start typing to search'}</Center>;
+    async function onSubmit(data) {
+        setApiState('loading');
+
+        const accessToken = Cookies.get('EttAccessJwt');
+        const sendResult = await sendExhibitRequestAPI(
+            apiHost, 
+            apiStage, 
+            accessToken, 
+            data.consenter, 
+            entityId, 
+            data.constraint
+        );
+
+        if (sendResult.payload.ok) {
+            setApiState('success');
+        } else {
+            setApiState('error');
+        }
+
+        onOpen();
+    }
+
+    function handleModalClose() {
+        setApiState('idle');
+        setValue('consenter', null);
+        setValue('searchInput', '');
+        setOptions([]);
+        onClose();
+    }
+
+    const emptyState = <Center>{searchValue ? 'No results found' : 'Start typing to search'}</Center>;
 
     return (
         <Box>
-            <Heading as="h3" my="4" size="sm">Select type of contact information</Heading>
-            <RadioGroup onChange={setConstraint} value={constraint}>
-                <Stack mb="8">
-                    <Radio value="current">Current Employer(s) only</Radio>
-                    <Radio value="other">Prior Employer(s) and other Affiliates</Radio>
-                    <Radio value="both">All</Radio>
-                </Stack>
-            </RadioGroup>
-            <Heading as="h3" my="4" size="sm">Select the consenting person</Heading>
-            <AutoComplete
-                openOnFocus
-                isLoading={isLoading}
-                onChange={setSelectedConsenter}
-                emptyState={emptyState}
-            >
-                <AutoCompleteInput
-                    onChange={onChangeInputHandler} 
-                    placeholder="Search for a consenter"
-                    loadingIcon={<Spinner />}
+            <form onSubmit={handleSubmit(onSubmit)}>
+                <Heading as="h3" my="4" size="sm">Select type of contact information</Heading>
+                <Controller
+                    name="constraint"
+                    control={control}
+                    rules={{ required: 'Please select a constraint type' }}
+                    render={({ field: { onChange, value } }) => (
+                        <FormControl isInvalid={errors.constraint}>
+                            <RadioGroup onChange={onChange} value={value}>
+                                <Stack mb="8">
+                                    <Radio value="current">Current Employer(s) only</Radio>
+                                    <Radio value="other">Prior Employer(s) and other Affiliates</Radio>
+                                    <Radio value="both">All</Radio>
+                                </Stack>
+                            </RadioGroup>
+                            <FormErrorMessage>{errors.constraint?.message}</FormErrorMessage>
+                        </FormControl>
+                    )}
                 />
-                <AutoCompleteList>
-                    {options.map((consenter) => {
-                        return (
-                            <AutoCompleteItem key={consenter.email} value={consenter.email} label={consenter.fullname}>
-                                {consenter.fullname} {consenter.email}
-                            </AutoCompleteItem>
-                        );
-                    })}
-                </AutoCompleteList>
-            </AutoComplete>
-            <Button onClick={handleSendButton} my="2em">
-                {apiState === 'idle' && 
-                    <>Send{selectedConsenter ? ` to ${selectedConsenter}` : '' }</>
-                }
-                {apiState === 'loading' && <Spinner />}
-                {apiState === 'error' && 'Error'}
-                {apiState === 'success' && 'Sent'}
-            </Button>
-            <Modal isOpen={isOpen} onClose={handleModalClose} size="lg" >
+
+                <Heading as="h3" my="4" size="sm">Select the consenting person</Heading>
+                <FormControl isInvalid={errors.consenter}>
+                    <FormLabel>Search for a consenter</FormLabel>
+                    <Controller
+                        name="consenter"
+                        control={control}
+                        rules={{ required: 'Please select a consenter' }}
+                        render={({ field: { onChange, value } }) => (
+                            <AutoComplete
+                                openOnFocus
+                                isLoading={isLoading}
+                                onChange={(val) => {
+                                    onChange(val);
+                                }}
+                                value={value}
+                                emptyState={emptyState}
+                            >
+                                <Controller
+                                    name="searchInput"
+                                    control={control}
+                                    render={({ field }) => (
+                                        <AutoCompleteInput
+                                            {...field}
+                                            placeholder="Search for a consenter"
+                                            loadingIcon={<Spinner />}
+                                        />
+                                    )}
+                                />
+                                <AutoCompleteList>
+                                    {options.map((consenter) => (
+                                        <AutoCompleteItem 
+                                            key={consenter.email} 
+                                            value={consenter.email} 
+                                            label={consenter.fullname}
+                                        >
+                                            {consenter.fullname} {consenter.email}
+                                        </AutoCompleteItem>
+                                    ))}
+                                </AutoCompleteList>
+                            </AutoComplete>
+                        )}
+                    />
+                    <FormErrorMessage>{errors.consenter?.message}</FormErrorMessage>
+                </FormControl>
+
+                <Button type="submit" my="2em" isLoading={apiState === 'loading'}>
+                    {apiState === 'idle' && 
+                        <>Send{watch('consenter') ? ` to ${watch('consenter')}` : '' }</>
+                    }
+                    {apiState === 'error' && 'Error'}
+                    {apiState === 'success' && 'Sent'}
+                </Button>
+            </form>
+
+            <Modal isOpen={isOpen} onClose={handleModalClose} size="lg">
                 <ModalOverlay />
                 <ModalContent>
                     <ModalHeader>
@@ -150,10 +184,10 @@ export default function ExhibitFormRequest({ entityId }) {
                     <ModalCloseButton />
                     <ModalBody>
                         {apiState === 'error' && 'There was an error sending the request.'}
-                        {apiState === 'success' && <ExhibitSuccessModalBody selectedConsenter={selectedConsenter} />}
+                        {apiState === 'success' && <ExhibitSuccessModalBody selectedConsenter={watch('consenter')} />}
                     </ModalBody>
                     <ModalFooter>
-                        <Button onClick={onClose}>Close</Button>
+                        <Button onClick={handleModalClose}>Close</Button>
                     </ModalFooter>
                 </ModalContent>
             </Modal>
