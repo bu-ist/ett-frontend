@@ -86,11 +86,16 @@ export default function ConsentingPage() {
     return (
         <div>
             <Heading as="h2" size={"lg"} >Consenting Person</Heading>
-            <Text>
-                Lorem ipsum minim anim id do nisi aliqua. Consequat cillum sint qui ad aliqua proident nostrud. Cillum ullamco consectetur mollit eu labore amet ullamco mollit dolor veniam adipisicing veniam nulla ex. Quis irure minim id commodo dolore anim nulla aliqua reprehenderit pariatur. Id aute mollit pariatur tempor ex aute id voluptate enim. Et excepteur dolore non non ad deserunt duis voluptate aliqua officia qui ut elit.
+            <Text mt="4" mb="8">
+                A person (e.g., a candidate for employment, post-doc, volunteer, board member, etc.) who is being considered 
+                (or may be considered in the future) by a Registered Entity.  Consenting Individuals also provide consent via 
+                ETT for certain disclosures (findings but <b>not</b> allegations)  to be made about the person’s conduct.  Disclosures 
+                are made by the person’s professional affiliated entities (employers, societies and membership organizations, 
+                appointing and honoring organizations) <b>directly</b> to any Registered Entity(ies) that make a <b>disclosure request</b> via ETT.  
+                But ETT <b>never</b> receives any disclosures.
             </Text>
             {consenterInfo.login === false &&
-                <Card my={6} align="center">
+                <Card align="center">
                     <CardHeader>
                         <Heading as="h2" color="gray.500" >Not logged in</Heading>
                     </CardHeader>
