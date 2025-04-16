@@ -99,8 +99,24 @@ export default function AuthorizedPage() {
                 window.localStorage.removeItem('firstLogin');
             }
 
-            // Need to add error checking, but I'm not yet sure all these components will stay on the same page.
-            setApiState('success');
+            // Need to add error checking here.
+            if ( authIndResponse.payload?.ok && Object.keys( authIndResponse.payload.user ).length > 0 ) {
+                console.log('User data retrieved successfully');
+                setApiState('success');
+                
+            } else if (authIndResponse.payload?.ok && Object.keys( authIndResponse.payload.user ).length === 0) {
+                // If there is an empty user, then probably there was a session logout so maybe clear the cookies.
+                Cookies.remove('EttAccessJwt');
+                Cookies.remove('EttIdJwt');
+
+                // Set the apiState to 'not-logged-in' to provide feedback
+                setApiState('not-logged-in');
+                console.log('No user data found');
+            } else {
+                console.log('Error retrieving user data');
+                setApiState('error');
+            }
+
         };
 
         fetchData();
