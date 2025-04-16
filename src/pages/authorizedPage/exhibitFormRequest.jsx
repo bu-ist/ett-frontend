@@ -47,12 +47,15 @@ export default function ExhibitFormRequest({ entityId }) {
     // Update search input display when consenter is selected
     useEffect(() => {
         if (selectedConsenter) {
-            // Small delay to ensure proper state update
-            setTimeout(() => {
-                setValue('searchInput', `${selectedConsenter.fullname} (${selectedConsenter.email})`);
-            }, 0);
+            setValue('searchInput', `${selectedConsenter.fullname} (${selectedConsenter.email})`);
+        } else {
+            // Only clear the search input if it contains a formatted consenter string
+            const currentSearchValue = watch('searchInput');
+            if (currentSearchValue && currentSearchValue.includes(' (') && currentSearchValue.endsWith(')')) {
+                setValue('searchInput', '');
+            }
         }
-    }, [selectedConsenter, setValue]);
+    }, [selectedConsenter, setValue, watch]);
 
     async function fetchConsenters(query) {
         const accessToken = Cookies.get('EttAccessJwt');
@@ -111,24 +114,27 @@ export default function ExhibitFormRequest({ entityId }) {
         // Reset API state
         setApiState('idle');
         
-        // First clear the form values
+        // Clear the form values in a specific order
         setValue('consenter', null);
         setValue('searchInput', '');
         setValue('constraint', 'both');
         setValue('lookbackType', 'unlimited');
         setValue('lookbackYears', 1);
         
-        // Then reset the form state
+        // Clear autocomplete options
+        setOptions([]);
+        
+        // Reset the entire form state at once to ensure consistency
         reset({
             consenter: null,
             constraint: 'both',
             searchInput: '',
             lookbackType: 'unlimited',
             lookbackYears: 1
+        }, {
+            keepDirty: false,
+            keepErrors: false
         });
-        
-        // Clear autocomplete options
-        setOptions([]);
         
         // Close the modal
         onClose();
@@ -151,13 +157,22 @@ export default function ExhibitFormRequest({ entityId }) {
                                 openOnFocus
                                 isLoading={isLoading}
                                 onChange={(val, item) => {
-                                    const newConsenter = {
-                                        email: val,
-                                        fullname: item.label
-                                    };
-                                    onChange(newConsenter);
-                                    // Immediately update the search input
-                                    setValue('searchInput', `${item.label} (${val})`);
+                                    if (item) {
+                                        // When an item is selected from the dropdown
+                                        const newConsenter = {
+                                            email: val,
+                                            fullname: item.label
+                                        };
+                                        onChange(newConsenter);
+                                        setValue('searchInput', `${item.label} (${val})`);
+                                    } else {
+                                        // When typing in the search box
+                                        setValue('searchInput', val);
+                                        // Clear the selected consenter if we're actually searching
+                                        if (selectedConsenter && val !== `${selectedConsenter.fullname} (${selectedConsenter.email})`) {
+                                            onChange(null);
+                                        }
+                                    }
                                 }}
                                 value={selectedConsenter?.email || ''}
                                 emptyState={emptyState}
@@ -172,17 +187,10 @@ export default function ExhibitFormRequest({ entityId }) {
                                             ref={ref}
                                             placeholder="Search for a consenter"
                                             loadingIcon={<Spinner />}
-                                            onFocus={() => {
-                                                if (selectedConsenter) {
-                                                    setValue('searchInput', '');
-                                                }
-                                            }}
-                                            // Prevent browser autofill
                                             autoComplete="off"
                                             aria-autocomplete="list"
                                             role="combobox"
                                             aria-expanded="true"
-                                            // Use a consistent name but still prevent autofill
                                             name="search-input-no-autofill"
                                         />
                                     )}
@@ -194,7 +202,7 @@ export default function ExhibitFormRequest({ entityId }) {
                                             value={consenter.email} 
                                             label={consenter.fullname}
                                         >
-                                            {consenter.fullname} {consenter.email}
+                                            {consenter.fullname} ({consenter.email})
                                         </AutoCompleteItem>
                                     ))}
                                 </AutoCompleteList>
