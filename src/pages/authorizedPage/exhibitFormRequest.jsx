@@ -408,9 +408,9 @@ export default function ExhibitFormRequest({ entityId }) {
                                 }
                             })}
                         >
-                            <option value="ex">Executive/Officer</option>
-                            <option value="bm">Board Member</option>
-                            <option value="em">Employee</option>
+                            <option value="hr">HR Professional</option>
+                            <option value="mg">Manager / Direct Report</option>
+                            <option value="em">Colleague / Co-worker</option>
                             <option value="other">Other</option>
                         </Select>
                         <FormErrorMessage>{errors.employerPosition?.message}</FormErrorMessage>
@@ -450,9 +450,14 @@ export default function ExhibitFormRequest({ entityId }) {
                                 }
                             })}
                         >
-                            <option value="pr">Professor/Researcher</option>
-                            <option value="ad">Administrator</option>
-                            <option value="st">Staff</option>
+                            <option value="ao">Academic Officer</option>
+                            <option value="vp">Vice Provost / Associate Provost for Academic Affairs</option>
+                            <option value="df">Dean of Faculty / Associate Dean</option>
+                            <option value="dc">Department Chair / Head</option>
+                            <option value="fc">Faculty Affairs Coordinator</option>
+                            <option value="ro">Institutional Research Officer</option>
+                            <option value="gs">Graduate Studies Coordinator</option>
+                            <option value="at">Affiliations or Titles Administrator</option>
                             <option value="other">Other</option>
                         </Select>
                         <FormErrorMessage>{errors.academicPosition?.message}</FormErrorMessage>
@@ -492,9 +497,15 @@ export default function ExhibitFormRequest({ entityId }) {
                                 }
                             })}
                         >
-                            <option value="di">Director</option>
-                            <option value="tr">Trustee</option>
-                            <option value="vo">Volunteer</option>
+                            <option value="pr">President / Vice President</option>
+                            <option value="ed">Executive Director</option>
+                            <option value="bm">Board Member / Chair</option>
+                            <option value="sb">Secretary of the Board</option>
+                            <option value="sc">Steering Committee Member</option>
+                            <option value="mc">Membership Chair / Officer</option>
+                            <option value="nc">Nominations Committee Member / Chair</option>
+                            <option value="cc">Fellowship Committee Chair</option>
+                            <option value="ac">Advisory Council Member</option>
                             <option value="other">Other</option>
                         </Select>
                         <FormErrorMessage>{errors.otherOrgPosition?.message}</FormErrorMessage>
