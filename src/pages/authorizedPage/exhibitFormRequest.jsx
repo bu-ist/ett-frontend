@@ -5,7 +5,7 @@ import Cookies from 'js-cookie';
 import { Box, Button, Center, Heading, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, 
     ModalHeader, ModalOverlay, Stack, Radio, RadioGroup, Spinner, useDisclosure, 
     FormControl, FormLabel, FormErrorMessage, NumberInput, NumberInputField, 
-    NumberInputStepper, NumberIncrementStepper, NumberDecrementStepper, HStack, Text } from "@chakra-ui/react";
+    NumberInputStepper, NumberIncrementStepper, NumberDecrementStepper, HStack, Text, Select, Input } from "@chakra-ui/react";
 import {
     AutoComplete,
     AutoCompleteInput,
@@ -48,13 +48,15 @@ export default function ExhibitFormRequest({ entityId }) {
     const [apiState, setApiState] = useState('idle');
 
     // Setup react-hook-form
-    const { handleSubmit, control, watch, setValue, reset, formState: { errors } } = useForm({
+    const { handleSubmit, control, watch, setValue, reset, formState: { errors }, register } = useForm({
         defaultValues: {
             consenter: null,
             constraint: 'both',
             searchInput: '',
             lookbackType: 'unlimited',
-            lookbackYears: 1
+            lookbackYears: 1,
+            position: '',
+            otherPosition: ''
         }
     });
 
@@ -62,6 +64,7 @@ export default function ExhibitFormRequest({ entityId }) {
     const searchValue = watch('searchInput');
     const selectedConsenter = watch('consenter');
     const lookbackType = watch('lookbackType');
+    const position = watch('position');
 
     // Update search input display when consenter is selected
     useEffect(() => {
@@ -124,6 +127,9 @@ export default function ExhibitFormRequest({ entityId }) {
         // Process the lookback period - either "unlimited" or a number
         const lookbackPeriod = data.lookbackType === 'unlimited' ? 'unlimited' : data.lookbackYears;
         
+        // Process the position - use otherPosition if position is "other"
+        const finalPosition = data.position === 'other' ? data.otherPosition : data.position;
+
         const sendResult = await sendExhibitRequestAPI(
             apiHost, 
             apiStage, 
@@ -131,7 +137,8 @@ export default function ExhibitFormRequest({ entityId }) {
             data.consenter?.email,
             entityId, 
             data.constraint,
-            lookbackPeriod
+            lookbackPeriod,
+            finalPosition
         );
 
         if (sendResult.payload.ok) {
@@ -158,6 +165,8 @@ export default function ExhibitFormRequest({ entityId }) {
         setValue('constraint', 'both');
         setValue('lookbackType', 'unlimited');
         setValue('lookbackYears', 1);
+        setValue('position', '');
+        setValue('otherPosition', '');
         
         // Clear autocomplete options
         setOptions([]);
@@ -168,7 +177,9 @@ export default function ExhibitFormRequest({ entityId }) {
             constraint: 'both',
             searchInput: '',
             lookbackType: 'unlimited',
-            lookbackYears: 1
+            lookbackYears: 1,
+            position: '',
+            otherPosition: ''
         }, {
             keepDirty: false,
             keepErrors: false
@@ -319,6 +330,46 @@ export default function ExhibitFormRequest({ entityId }) {
                             />
                         </HStack>
                         <FormErrorMessage>{errors.lookbackYears?.message}</FormErrorMessage>
+                    </FormControl>
+                )}
+                <Heading as="h3" mt="8" mb="4" size="sm">Specify Positions of Affiliates</Heading>
+                <Text mb="2" fontSize="sm" fontStyle="italic">What position(s) should be included in the search?</Text>
+                <FormControl isInvalid={errors.position}>
+                    <Select 
+                        placeholder="Select position"
+                        {...register('position', { 
+                            required: 'Please select a position',
+                            onChange: (e) => {
+                                // Clear other position when switching away from 'other'
+                                if (e.target.value !== 'other') {
+                                    setValue('otherPosition', '');
+                                }
+                            }
+                        })}
+                    >
+                        <option value="ex">Executive/Officer</option>
+                        <option value="bm">Board Member</option>
+                        <option value="em">Employee</option>
+                        <option value="other">Other</option>
+                    </Select>
+                    <FormErrorMessage>{errors.position?.message}</FormErrorMessage>
+                </FormControl>
+
+                {position === 'other' && (
+                    <FormControl mt="3" isInvalid={errors.otherPosition}>
+                        <Input
+                            placeholder="Please specify the position"
+                            {...register('otherPosition', {
+                                required: 'Please specify the position',
+                                validate: (value) => {
+                                    if (position === 'other' && !value) {
+                                        return 'Please specify the position';
+                                    }
+                                    return true;
+                                }
+                            })}
+                        />
+                        <FormErrorMessage>{errors.otherPosition?.message}</FormErrorMessage>
                     </FormControl>
                 )}
 
