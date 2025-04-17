@@ -55,8 +55,12 @@ export default function ExhibitFormRequest({ entityId }) {
             searchInput: '',
             lookbackType: 'unlimited',
             lookbackYears: 1,
-            position: '',
-            otherPosition: ''
+            employerPosition: '',
+            employerOtherPosition: '',
+            academicPosition: '',
+            academicOtherPosition: '',
+            otherOrgPosition: '',
+            otherOrgOtherPosition: ''
         }
     });
 
@@ -64,7 +68,9 @@ export default function ExhibitFormRequest({ entityId }) {
     const searchValue = watch('searchInput');
     const selectedConsenter = watch('consenter');
     const lookbackType = watch('lookbackType');
-    const position = watch('position');
+    const employerPosition = watch('employerPosition');
+    const academicPosition = watch('academicPosition');
+    const otherOrgPosition = watch('otherOrgPosition');
 
     // Update search input display when consenter is selected
     useEffect(() => {
@@ -127,8 +133,12 @@ export default function ExhibitFormRequest({ entityId }) {
         // Process the lookback period - either "unlimited" or a number
         const lookbackPeriod = data.lookbackType === 'unlimited' ? 'unlimited' : data.lookbackYears;
         
-        // Process the position - use otherPosition if position is "other"
-        const finalPosition = data.position === 'other' ? data.otherPosition : data.position;
+        // Process the positions - use otherPosition if position is "other"
+        const positions = {
+            employer: data.employerPosition === 'other' ? data.employerOtherPosition : data.employerPosition,
+            academic: data.academicPosition === 'other' ? data.academicOtherPosition : data.academicPosition,
+            otherOrg: data.otherOrgPosition === 'other' ? data.otherOrgOtherPosition : data.otherOrgPosition
+        };
 
         const sendResult = await sendExhibitRequestAPI(
             apiHost, 
@@ -138,7 +148,7 @@ export default function ExhibitFormRequest({ entityId }) {
             entityId, 
             data.constraint,
             lookbackPeriod,
-            finalPosition
+            positions
         );
 
         if (sendResult.payload.ok) {
@@ -165,8 +175,12 @@ export default function ExhibitFormRequest({ entityId }) {
         setValue('constraint', 'both');
         setValue('lookbackType', 'unlimited');
         setValue('lookbackYears', 1);
-        setValue('position', '');
-        setValue('otherPosition', '');
+        setValue('employerPosition', '');
+        setValue('employerOtherPosition', '');
+        setValue('academicPosition', '');
+        setValue('academicOtherPosition', '');
+        setValue('otherOrgPosition', '');
+        setValue('otherOrgOtherPosition', '');
         
         // Clear autocomplete options
         setOptions([]);
@@ -178,8 +192,12 @@ export default function ExhibitFormRequest({ entityId }) {
             searchInput: '',
             lookbackType: 'unlimited',
             lookbackYears: 1,
-            position: '',
-            otherPosition: ''
+            employerPosition: '',
+            employerOtherPosition: '',
+            academicPosition: '',
+            academicOtherPosition: '',
+            otherOrgPosition: '',
+            otherOrgOtherPosition: ''
         }, {
             keepDirty: false,
             keepErrors: false
@@ -334,44 +352,132 @@ export default function ExhibitFormRequest({ entityId }) {
                 )}
                 <Heading as="h3" mt="8" mb="4" size="sm">Specify Positions of Affiliates</Heading>
                 <Text mb="2" fontSize="sm" fontStyle="italic">What position(s) should be included in the search?</Text>
-                <FormControl isInvalid={errors.position}>
-                    <Select 
-                        placeholder="Select position"
-                        {...register('position', { 
-                            required: 'Please select a position',
-                            onChange: (e) => {
-                                // Clear other position when switching away from 'other'
-                                if (e.target.value !== 'other') {
-                                    setValue('otherPosition', '');
-                                }
-                            }
-                        })}
-                    >
-                        <option value="ex">Executive/Officer</option>
-                        <option value="bm">Board Member</option>
-                        <option value="em">Employee</option>
-                        <option value="other">Other</option>
-                    </Select>
-                    <FormErrorMessage>{errors.position?.message}</FormErrorMessage>
-                </FormControl>
-
-                {position === 'other' && (
-                    <FormControl mt="3" isInvalid={errors.otherPosition}>
-                        <Input
-                            placeholder="Please specify the position"
-                            {...register('otherPosition', {
-                                required: 'Please specify the position',
-                                validate: (value) => {
-                                    if (position === 'other' && !value) {
-                                        return 'Please specify the position';
+                
+                {/* Employer Positions */}
+                <Box mb="6">
+                    <Text fontWeight="medium" mb="2">Employer Organizations</Text>
+                    <FormControl isInvalid={errors.employerPosition}>
+                        <Select 
+                            placeholder="Select position"
+                            {...register('employerPosition', { 
+                                required: 'Please select a position',
+                                onChange: (e) => {
+                                    if (e.target.value !== 'other') {
+                                        setValue('employerOtherPosition', '');
                                     }
-                                    return true;
                                 }
                             })}
-                        />
-                        <FormErrorMessage>{errors.otherPosition?.message}</FormErrorMessage>
+                        >
+                            <option value="ex">Executive/Officer</option>
+                            <option value="bm">Board Member</option>
+                            <option value="em">Employee</option>
+                            <option value="other">Other</option>
+                        </Select>
+                        <FormErrorMessage>{errors.employerPosition?.message}</FormErrorMessage>
                     </FormControl>
-                )}
+
+                    {employerPosition === 'other' && (
+                        <FormControl mt="3" isInvalid={errors.employerOtherPosition}>
+                            <Input
+                                placeholder="Please specify the position"
+                                {...register('employerOtherPosition', {
+                                    required: 'Please specify the position',
+                                    validate: (value) => {
+                                        if (employerPosition === 'other' && !value) {
+                                            return 'Please specify the position';
+                                        }
+                                        return true;
+                                    }
+                                })}
+                            />
+                            <FormErrorMessage>{errors.employerOtherPosition?.message}</FormErrorMessage>
+                        </FormControl>
+                    )}
+                </Box>
+
+                {/* Academic Positions */}
+                <Box mb="6">
+                    <Text fontWeight="medium" mb="2">Academic Organizations</Text>
+                    <FormControl isInvalid={errors.academicPosition}>
+                        <Select 
+                            placeholder="Select position"
+                            {...register('academicPosition', { 
+                                required: 'Please select a position',
+                                onChange: (e) => {
+                                    if (e.target.value !== 'other') {
+                                        setValue('academicOtherPosition', '');
+                                    }
+                                }
+                            })}
+                        >
+                            <option value="pr">Professor/Researcher</option>
+                            <option value="ad">Administrator</option>
+                            <option value="st">Staff</option>
+                            <option value="other">Other</option>
+                        </Select>
+                        <FormErrorMessage>{errors.academicPosition?.message}</FormErrorMessage>
+                    </FormControl>
+
+                    {academicPosition === 'other' && (
+                        <FormControl mt="3" isInvalid={errors.academicOtherPosition}>
+                            <Input
+                                placeholder="Please specify the position"
+                                {...register('academicOtherPosition', {
+                                    required: 'Please specify the position',
+                                    validate: (value) => {
+                                        if (academicPosition === 'other' && !value) {
+                                            return 'Please specify the position';
+                                        }
+                                        return true;
+                                    }
+                                })}
+                            />
+                            <FormErrorMessage>{errors.academicOtherPosition?.message}</FormErrorMessage>
+                        </FormControl>
+                    )}
+                </Box>
+
+                {/* Other Organization Positions */}
+                <Box mb="6">
+                    <Text fontWeight="medium" mb="2">Other Organizations</Text>
+                    <FormControl isInvalid={errors.otherOrgPosition}>
+                        <Select 
+                            placeholder="Select position"
+                            {...register('otherOrgPosition', { 
+                                required: 'Please select a position',
+                                onChange: (e) => {
+                                    if (e.target.value !== 'other') {
+                                        setValue('otherOrgOtherPosition', '');
+                                    }
+                                }
+                            })}
+                        >
+                            <option value="di">Director</option>
+                            <option value="tr">Trustee</option>
+                            <option value="vo">Volunteer</option>
+                            <option value="other">Other</option>
+                        </Select>
+                        <FormErrorMessage>{errors.otherOrgPosition?.message}</FormErrorMessage>
+                    </FormControl>
+
+                    {otherOrgPosition === 'other' && (
+                        <FormControl mt="3" isInvalid={errors.otherOrgOtherPosition}>
+                            <Input
+                                placeholder="Please specify the position"
+                                {...register('otherOrgOtherPosition', {
+                                    required: 'Please specify the position',
+                                    validate: (value) => {
+                                        if (otherOrgPosition === 'other' && !value) {
+                                            return 'Please specify the position';
+                                        }
+                                        return true;
+                                    }
+                                })}
+                            />
+                            <FormErrorMessage>{errors.otherOrgOtherPosition?.message}</FormErrorMessage>
+                        </FormControl>
+                    )}
+                </Box>
 
                 <Button type="submit" my="2em" isLoading={apiState === 'loading'}>
                     {apiState === 'idle' && 
