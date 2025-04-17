@@ -18,6 +18,25 @@ import { sendExhibitRequestAPI } from '../../lib/auth-ind/sendExhibitRequestAPI'
 import { searchConsentersAPI } from '../../lib/auth-ind/searchConsentersAPI';
 import ExhibitSuccessModalBody from "./consentersAutocomplete/exhibitSuccessModalBody";
 
+/**
+ * ExhibitFormRequest Component
+ * 
+ * Renders a form that allows authorized individuals to request exhibit information
+ * for a specific entity. The form includes:
+ * - Consenter search and selection via autocomplete
+ * - Contact information constraint selection
+ * - Lookback period specification
+ * 
+ * The component handles:
+ * - Real-time consenter search
+ * - Form validation
+ * - API submission
+ * - Success/error feedback via modal
+ * 
+ * @param {Object} props
+ * @param {string} props.entityId - The ID of the entity for which the exhibit is being requested
+ * @returns {JSX.Element}
+ */
 export default function ExhibitFormRequest({ entityId }) {
     const { appConfig } = useContext(ConfigContext);
     const { apiStage, authorizedIndividual: { apiHost } } = appConfig;
@@ -57,6 +76,13 @@ export default function ExhibitFormRequest({ entityId }) {
         }
     }, [selectedConsenter, setValue, watch]);
 
+    /**
+     * Fetches consenter information based on search query
+     * Implements debounced search with error handling
+     * 
+     * @param {string} query - The search string to find consenters
+     * @returns {Promise<void>}
+     */
     async function fetchConsenters(query) {
         const accessToken = Cookies.get('EttAccessJwt');
         const result = await searchConsentersAPI(apiHost, apiStage, accessToken, query);
@@ -84,6 +110,13 @@ export default function ExhibitFormRequest({ entityId }) {
         }
     }, [searchValue]);
 
+    /**
+     * Handles form submission
+     * Processes form data and sends exhibit request to the API
+     * 
+     * @param {FormValues} data - The form values to be submitted
+     * @returns {Promise<void>}
+     */
     async function onSubmit(data) {
         setApiState('loading');
 
@@ -110,6 +143,11 @@ export default function ExhibitFormRequest({ entityId }) {
         onOpen();
     }
 
+    /**
+     * Handles modal close and form reset
+     * Resets all form fields, clears autocomplete options,
+     * and resets API state to initial values
+     */
     function handleModalClose() {
         // Reset API state
         setApiState('idle');
