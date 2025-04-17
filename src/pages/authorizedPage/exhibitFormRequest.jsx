@@ -189,7 +189,7 @@ export default function ExhibitFormRequest({ entityId }) {
             positions
         );
 
-        if (sendResult.payload.ok) {
+        if (sendResult.payload?.ok) {
             setApiState('success');
         } else {
             setApiState('error');
@@ -389,11 +389,13 @@ export default function ExhibitFormRequest({ entityId }) {
                     </FormControl>
                 )}
                 <Heading as="h3" mt="8" mb="4" size="sm">Specify Positions of Affiliates</Heading>
-                <Text mb="2" fontSize="sm" fontStyle="italic">What position(s) should be included in the search?</Text>
+                <Text mb="2" fontSize="sm" fontStyle="italic">
+                    What are the positions of the affiliates that you are requesting?
+                </Text>
                 
                 {/* Employer Positions */}
                 <Box mb="6">
-                    <Text fontWeight="medium" mb="2">Employer Organizations</Text>
+                    <Text fontWeight="semibold" color="blue.600" mb="2">Employer Organizations</Text>
                     <FormControl isInvalid={errors.employerPosition}>
                         <Select 
                             placeholder="Select position"
@@ -417,7 +419,7 @@ export default function ExhibitFormRequest({ entityId }) {
                     {employerPosition === 'other' && (
                         <FormControl mt="3" isInvalid={errors.employerOtherPosition}>
                             <Input
-                                placeholder="Please specify the position"
+                                placeholder="Type a custom the position name"
                                 {...register('employerOtherPosition', {
                                     required: 'Please specify the position',
                                     validate: (value) => {
@@ -435,7 +437,7 @@ export default function ExhibitFormRequest({ entityId }) {
 
                 {/* Academic Positions */}
                 <Box mb="6">
-                    <Text fontWeight="medium" mb="2">Academic Organizations</Text>
+                    <Text fontWeight="semibold" color="blue.600" mb="2">Academic Organizations</Text>
                     <FormControl isInvalid={errors.academicPosition}>
                         <Select 
                             placeholder="Select position"
@@ -459,7 +461,7 @@ export default function ExhibitFormRequest({ entityId }) {
                     {academicPosition === 'other' && (
                         <FormControl mt="3" isInvalid={errors.academicOtherPosition}>
                             <Input
-                                placeholder="Please specify the position"
+                                placeholder="Type a custom the position name"
                                 {...register('academicOtherPosition', {
                                     required: 'Please specify the position',
                                     validate: (value) => {
@@ -477,7 +479,7 @@ export default function ExhibitFormRequest({ entityId }) {
 
                 {/* Other Organization Positions */}
                 <Box mb="6">
-                    <Text fontWeight="medium" mb="2">Other Organizations</Text>
+                    <Text fontWeight="semibold" color="blue.600" mb="2">Other Organizations</Text>
                     <FormControl isInvalid={errors.otherOrgPosition}>
                         <Select 
                             placeholder="Select position"
@@ -501,7 +503,7 @@ export default function ExhibitFormRequest({ entityId }) {
                     {otherOrgPosition === 'other' && (
                         <FormControl mt="3" isInvalid={errors.otherOrgOtherPosition}>
                             <Input
-                                placeholder="Please specify the position"
+                                placeholder="Type a custom the position name"
                                 {...register('otherOrgOtherPosition', {
                                     required: 'Please specify the position',
                                     validate: (value) => {
