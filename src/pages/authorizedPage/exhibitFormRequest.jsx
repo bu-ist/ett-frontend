@@ -246,6 +246,7 @@ export default function ExhibitFormRequest({ entityId }) {
                         rules={{ required: 'Please select a consenter' }}
                         render={({ field: { onChange, value } }) => (
                             <AutoComplete
+                                key={selectedConsenter?.email || 'empty'}
                                 openOnFocus
                                 isLoading={isLoading}
                                 onChange={(val, item) => {
