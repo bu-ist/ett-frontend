@@ -5,7 +5,7 @@ import Cookies from 'js-cookie';
 import { Box, Button, Center, Heading, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, 
     ModalHeader, ModalOverlay, Stack, Radio, RadioGroup, Spinner, useDisclosure, 
     FormControl, FormLabel, FormErrorMessage, NumberInput, NumberInputField, 
-    NumberInputStepper, NumberIncrementStepper, NumberDecrementStepper, HStack, Text } from "@chakra-ui/react";
+    NumberInputStepper, NumberIncrementStepper, NumberDecrementStepper, HStack, Text, Select, Input } from "@chakra-ui/react";
 import {
     AutoComplete,
     AutoCompleteInput,
@@ -48,20 +48,30 @@ export default function ExhibitFormRequest({ entityId }) {
     const [apiState, setApiState] = useState('idle');
 
     // Setup react-hook-form
-    const { handleSubmit, control, watch, setValue, reset, formState: { errors } } = useForm({
+    const { handleSubmit, control, watch, setValue, reset, formState: { errors }, register } = useForm({
         defaultValues: {
             consenter: null,
             constraint: 'both',
             searchInput: '',
             lookbackType: 'unlimited',
-            lookbackYears: 1
+            lookbackYears: 1,
+            employerPosition: '',
+            employerOtherPosition: '',
+            academicPosition: '',
+            academicOtherPosition: '',
+            otherOrgPosition: '',
+            otherOrgOtherPosition: ''
         }
     });
 
-    // Watch values
+    // Watch values for dynamic form behavior
     const searchValue = watch('searchInput');
     const selectedConsenter = watch('consenter');
     const lookbackType = watch('lookbackType');
+    const employerPosition = watch('employerPosition');
+    const academicPosition = watch('academicPosition');
+    const otherOrgPosition = watch('otherOrgPosition');
+    const constraint = watch('constraint');
 
     // Update search input display when consenter is selected
     useEffect(() => {
@@ -124,6 +134,51 @@ export default function ExhibitFormRequest({ entityId }) {
         // Process the lookback period - either "unlimited" or a number
         const lookbackPeriod = data.lookbackType === 'unlimited' ? 'unlimited' : data.lookbackYears;
         
+        // Process the positions into an array format matching the API expectation
+        const positions = [];
+
+        // Add employer position if selected
+        if (data.employerPosition) {
+            if (data.employerPosition === 'other') {
+                positions.push({
+                    id: 'custom-employer',
+                    value: data.employerOtherPosition
+                });
+            } else {
+                positions.push({
+                    id: data.employerPosition
+                });
+            }
+        }
+
+        // Add academic position if selected
+        if (data.academicPosition) {
+            if (data.academicPosition === 'other') {
+                positions.push({
+                    id: 'custom-academic',
+                    value: data.academicOtherPosition
+                });
+            } else {
+                positions.push({
+                    id: data.academicPosition
+                });
+            }
+        }
+
+        // Add other org position if selected
+        if (data.otherOrgPosition) {
+            if (data.otherOrgPosition === 'other') {
+                positions.push({
+                    id: 'custom-other',
+                    value: data.otherOrgOtherPosition
+                });
+            } else {
+                positions.push({
+                    id: data.otherOrgPosition
+                });
+            }
+        }
+
         const sendResult = await sendExhibitRequestAPI(
             apiHost, 
             apiStage, 
@@ -131,10 +186,11 @@ export default function ExhibitFormRequest({ entityId }) {
             data.consenter?.email,
             entityId, 
             data.constraint,
-            lookbackPeriod
+            lookbackPeriod,
+            positions
         );
 
-        if (sendResult.payload.ok) {
+        if (sendResult.payload?.ok) {
             setApiState('success');
         } else {
             setApiState('error');
@@ -147,29 +203,30 @@ export default function ExhibitFormRequest({ entityId }) {
      * Handles modal close and form reset
      * Resets all form fields, clears autocomplete options,
      * and resets API state to initial values
+     * 
+     * Note: Reset logic is consolidated into a single atomic operation
+     * to prevent race conditions and ensure consistent state reset
      */
     function handleModalClose() {
-        // Reset API state
-        setApiState('idle');
-        
-        // Clear the form values in a specific order
-        setValue('consenter', null);
-        setValue('searchInput', '');
-        setValue('constraint', 'both');
-        setValue('lookbackType', 'unlimited');
-        setValue('lookbackYears', 1);
-        
-        // Clear autocomplete options
-        setOptions([]);
-        
-        // Reset the entire form state at once to ensure consistency
-        reset({
+        // Define all reset values in a single object
+        const resetData = {
             consenter: null,
             constraint: 'both',
             searchInput: '',
             lookbackType: 'unlimited',
-            lookbackYears: 1
-        }, {
+            lookbackYears: 1,
+            employerPosition: '',
+            employerOtherPosition: '',
+            academicPosition: '',
+            academicOtherPosition: '',
+            otherOrgPosition: '',
+            otherOrgOtherPosition: ''
+        };
+
+        // Reset everything in one atomic operation to prevent race conditions
+        setApiState('idle');
+        setOptions([]);
+        reset(resetData, {
             keepDirty: false,
             keepErrors: false
         });
@@ -192,6 +249,9 @@ export default function ExhibitFormRequest({ entityId }) {
                         rules={{ required: 'Please select a consenter' }}
                         render={({ field: { onChange, value } }) => (
                             <AutoComplete
+                                // Key prop forces complete re-render when consenter changes
+                                // This ensures proper reset of internal component state
+                                key={selectedConsenter?.email || 'empty'}
                                 openOnFocus
                                 isLoading={isLoading}
                                 onChange={(val, item) => {
@@ -212,7 +272,9 @@ export default function ExhibitFormRequest({ entityId }) {
                                         }
                                     }
                                 }}
-                                value={selectedConsenter?.email || ''}
+                                // Use consistent display format (fullname + email) for both selected state
+                                // and search state to maintain proper display across focus/blur events
+                                value={selectedConsenter ? `${selectedConsenter.fullname} (${selectedConsenter.email})` : watch('searchInput') || ''}
                                 emptyState={emptyState}
                             >
                                 <Controller
@@ -320,6 +382,152 @@ export default function ExhibitFormRequest({ entityId }) {
                         </HStack>
                         <FormErrorMessage>{errors.lookbackYears?.message}</FormErrorMessage>
                     </FormControl>
+                )}
+                <Heading as="h3" mt="8" mb="4" size="sm">Specify Positions of Affiliates</Heading>
+                <Text mb="2" fontSize="sm" fontStyle="italic">
+                    What are the positions of the affiliates that you are requesting?
+                </Text>
+                
+                {/* Employer Positions - always shown regardless of constraint */}
+                <Box mb="6">
+                    <Text fontWeight="semibold" color="blue.600" mb="2">Employer Organizations</Text>
+                    <FormControl isInvalid={errors.employerPosition}>
+                        <Select 
+                            placeholder="Select position"
+                            {...register('employerPosition', { 
+                                required: 'Please select a position',
+                                onChange: (e) => {
+                                    if (e.target.value !== 'other') {
+                                        setValue('employerOtherPosition', '');
+                                    }
+                                }
+                            })}
+                        >
+                            <option value="hr">HR Professional</option>
+                            <option value="mg">Manager / Direct Report</option>
+                            <option value="em">Colleague / Co-worker</option>
+                            <option value="other">Other</option>
+                        </Select>
+                        <FormErrorMessage>{errors.employerPosition?.message}</FormErrorMessage>
+                    </FormControl>
+
+                    {employerPosition === 'other' && (
+                        <FormControl mt="3" isInvalid={errors.employerOtherPosition}>
+                            <Input
+                                placeholder="Type the custom position name"
+                                {...register('employerOtherPosition', {
+                                    required: 'Please specify the position',
+                                    validate: (value) => {
+                                        if (employerPosition === 'other' && !value) {
+                                            return 'Please specify the position';
+                                        }
+                                        return true;
+                                    }
+                                })}
+                            />
+                            <FormErrorMessage>{errors.employerOtherPosition?.message}</FormErrorMessage>
+                        </FormControl>
+                    )}
+                </Box>
+
+                {/* Academic and Other Organization fields are only shown if the constraint is not 'current' */}
+                {constraint !== 'current' && (
+                    <>
+                        {/* Academic Positions */}
+                        <Box mb="6">
+                            <Text fontWeight="semibold" color="blue.600" mb="2">Academic Organizations</Text>
+                            <FormControl isInvalid={errors.academicPosition}>
+                                <Select 
+                                    placeholder="Select position"
+                                    {...register('academicPosition', { 
+                                        required: 'Please select a position',
+                                        onChange: (e) => {
+                                            if (e.target.value !== 'other') {
+                                                setValue('academicOtherPosition', '');
+                                            }
+                                        }
+                                    })}
+                                >
+                                    <option value="ao">Academic Officer</option>
+                                    <option value="vp">Vice Provost / Associate Provost for Academic Affairs</option>
+                                    <option value="df">Dean of Faculty / Associate Dean</option>
+                                    <option value="dc">Department Chair / Head</option>
+                                    <option value="fc">Faculty Affairs Coordinator</option>
+                                    <option value="ro">Institutional Research Officer</option>
+                                    <option value="gs">Graduate Studies Coordinator</option>
+                                    <option value="at">Affiliations or Titles Administrator</option>
+                                    <option value="other">Other</option>
+                                </Select>
+                                <FormErrorMessage>{errors.academicPosition?.message}</FormErrorMessage>
+                            </FormControl>
+
+                            {academicPosition === 'other' && (
+                                <FormControl mt="3" isInvalid={errors.academicOtherPosition}>
+                                    <Input
+                                        placeholder="Type the custom position name"
+                                        {...register('academicOtherPosition', {
+                                            required: 'Please specify the position',
+                                            validate: (value) => {
+                                                if (academicPosition === 'other' && !value) {
+                                                    return 'Please specify the position';
+                                                }
+                                                return true;
+                                            }
+                                        })}
+                                    />
+                                    <FormErrorMessage>{errors.academicOtherPosition?.message}</FormErrorMessage>
+                                </FormControl>
+                            )}
+                        </Box>
+
+                        {/* Other Organization Positions */}
+                        <Box mb="6">
+                            <Text fontWeight="semibold" color="blue.600" mb="2">Other Organizations</Text>
+                            <FormControl isInvalid={errors.otherOrgPosition}>
+                                <Select 
+                                    placeholder="Select position"
+                                    {...register('otherOrgPosition', { 
+                                        required: 'Please select a position',
+                                        onChange: (e) => {
+                                            if (e.target.value !== 'other') {
+                                                setValue('otherOrgOtherPosition', '');
+                                            }
+                                        }
+                                    })}
+                                >
+                                    <option value="pr">President / Vice President</option>
+                                    <option value="ed">Executive Director</option>
+                                    <option value="bm">Board Member / Chair</option>
+                                    <option value="sb">Secretary of the Board</option>
+                                    <option value="sc">Steering Committee Member</option>
+                                    <option value="mc">Membership Chair / Officer</option>
+                                    <option value="nc">Nominations Committee Member / Chair</option>
+                                    <option value="cc">Fellowship Committee Chair</option>
+                                    <option value="ac">Advisory Council Member</option>
+                                    <option value="other">Other</option>
+                                </Select>
+                                <FormErrorMessage>{errors.otherOrgPosition?.message}</FormErrorMessage>
+                            </FormControl>
+
+                            {otherOrgPosition === 'other' && (
+                                <FormControl mt="3" isInvalid={errors.otherOrgOtherPosition}>
+                                    <Input
+                                        placeholder="Type the custom position name"
+                                        {...register('otherOrgOtherPosition', {
+                                            required: 'Please specify the position',
+                                            validate: (value) => {
+                                                if (otherOrgPosition === 'other' && !value) {
+                                                    return 'Please specify the position';
+                                                }
+                                                return true;
+                                            }
+                                        })}
+                                    />
+                                    <FormErrorMessage>{errors.otherOrgOtherPosition?.message}</FormErrorMessage>
+                                </FormControl>
+                            )}
+                        </Box>
+                    </>
                 )}
 
                 <Button type="submit" my="2em" isLoading={apiState === 'loading'}>
