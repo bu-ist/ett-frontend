@@ -205,27 +205,8 @@ export default function ExhibitFormRequest({ entityId }) {
      * and resets API state to initial values
      */
     function handleModalClose() {
-        // Reset API state
-        setApiState('idle');
-        
-        // Clear the form values in a specific order
-        setValue('consenter', null);
-        setValue('searchInput', '');
-        setValue('constraint', 'both');
-        setValue('lookbackType', 'unlimited');
-        setValue('lookbackYears', 1);
-        setValue('employerPosition', '');
-        setValue('employerOtherPosition', '');
-        setValue('academicPosition', '');
-        setValue('academicOtherPosition', '');
-        setValue('otherOrgPosition', '');
-        setValue('otherOrgOtherPosition', '');
-        
-        // Clear autocomplete options
-        setOptions([]);
-        
-        // Reset the entire form state at once to ensure consistency
-        reset({
+        // Define all reset values in a single object
+        const resetData = {
             consenter: null,
             constraint: 'both',
             searchInput: '',
@@ -237,7 +218,12 @@ export default function ExhibitFormRequest({ entityId }) {
             academicOtherPosition: '',
             otherOrgPosition: '',
             otherOrgOtherPosition: ''
-        }, {
+        };
+
+        // Reset everything in one atomic operation
+        setApiState('idle');
+        setOptions([]);
+        reset(resetData, {
             keepDirty: false,
             keepErrors: false
         });
