@@ -267,7 +267,7 @@ export default function ExhibitFormRequest({ entityId }) {
                                         }
                                     }
                                 }}
-                                value={selectedConsenter?.email || ''}
+                                value={selectedConsenter ? `${selectedConsenter.fullname} (${selectedConsenter.email})` : watch('searchInput') || ''}
                                 emptyState={emptyState}
                             >
                                 <Controller
