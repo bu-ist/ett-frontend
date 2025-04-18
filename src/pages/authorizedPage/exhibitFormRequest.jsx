@@ -414,7 +414,7 @@ export default function ExhibitFormRequest({ entityId }) {
                     {employerPosition === 'other' && (
                         <FormControl mt="3" isInvalid={errors.employerOtherPosition}>
                             <Input
-                                placeholder="Type a custom the position name"
+                                placeholder="Type the custom position name"
                                 {...register('employerOtherPosition', {
                                     required: 'Please specify the position',
                                     validate: (value) => {
@@ -464,7 +464,7 @@ export default function ExhibitFormRequest({ entityId }) {
                             {academicPosition === 'other' && (
                                 <FormControl mt="3" isInvalid={errors.academicOtherPosition}>
                                     <Input
-                                        placeholder="Type a custom the position name"
+                                        placeholder="Type the custom position name"
                                         {...register('academicOtherPosition', {
                                             required: 'Please specify the position',
                                             validate: (value) => {
@@ -512,7 +512,7 @@ export default function ExhibitFormRequest({ entityId }) {
                             {otherOrgPosition === 'other' && (
                                 <FormControl mt="3" isInvalid={errors.otherOrgOtherPosition}>
                                     <Input
-                                        placeholder="Type a custom the position name"
+                                        placeholder="Type the custom position name"
                                         {...register('otherOrgOtherPosition', {
                                             required: 'Please specify the position',
                                             validate: (value) => {
