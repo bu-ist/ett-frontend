@@ -64,13 +64,14 @@ export default function ExhibitFormRequest({ entityId }) {
         }
     });
 
-    // Watch values
+    // Watch values for dynamic form behavior
     const searchValue = watch('searchInput');
     const selectedConsenter = watch('consenter');
     const lookbackType = watch('lookbackType');
     const employerPosition = watch('employerPosition');
     const academicPosition = watch('academicPosition');
     const otherOrgPosition = watch('otherOrgPosition');
+    const constraint = watch('constraint');
 
     // Update search input display when consenter is selected
     useEffect(() => {
@@ -393,7 +394,7 @@ export default function ExhibitFormRequest({ entityId }) {
                     What are the positions of the affiliates that you are requesting?
                 </Text>
                 
-                {/* Employer Positions */}
+                {/* Employer Positions - always shown regardless of constraint */}
                 <Box mb="6">
                     <Text fontWeight="semibold" color="blue.600" mb="2">Employer Organizations</Text>
                     <FormControl isInvalid={errors.employerPosition}>
@@ -435,100 +436,105 @@ export default function ExhibitFormRequest({ entityId }) {
                     )}
                 </Box>
 
-                {/* Academic Positions */}
-                <Box mb="6">
-                    <Text fontWeight="semibold" color="blue.600" mb="2">Academic Organizations</Text>
-                    <FormControl isInvalid={errors.academicPosition}>
-                        <Select 
-                            placeholder="Select position"
-                            {...register('academicPosition', { 
-                                required: 'Please select a position',
-                                onChange: (e) => {
-                                    if (e.target.value !== 'other') {
-                                        setValue('academicOtherPosition', '');
-                                    }
-                                }
-                            })}
-                        >
-                            <option value="ao">Academic Officer</option>
-                            <option value="vp">Vice Provost / Associate Provost for Academic Affairs</option>
-                            <option value="df">Dean of Faculty / Associate Dean</option>
-                            <option value="dc">Department Chair / Head</option>
-                            <option value="fc">Faculty Affairs Coordinator</option>
-                            <option value="ro">Institutional Research Officer</option>
-                            <option value="gs">Graduate Studies Coordinator</option>
-                            <option value="at">Affiliations or Titles Administrator</option>
-                            <option value="other">Other</option>
-                        </Select>
-                        <FormErrorMessage>{errors.academicPosition?.message}</FormErrorMessage>
-                    </FormControl>
-
-                    {academicPosition === 'other' && (
-                        <FormControl mt="3" isInvalid={errors.academicOtherPosition}>
-                            <Input
-                                placeholder="Type a custom the position name"
-                                {...register('academicOtherPosition', {
-                                    required: 'Please specify the position',
-                                    validate: (value) => {
-                                        if (academicPosition === 'other' && !value) {
-                                            return 'Please specify the position';
+                {/* Academic and Other Organization fields are only shown if the constraint is not 'current' */}
+                {constraint !== 'current' && (
+                    <>
+                        {/* Academic Positions */}
+                        <Box mb="6">
+                            <Text fontWeight="semibold" color="blue.600" mb="2">Academic Organizations</Text>
+                            <FormControl isInvalid={errors.academicPosition}>
+                                <Select 
+                                    placeholder="Select position"
+                                    {...register('academicPosition', { 
+                                        required: 'Please select a position',
+                                        onChange: (e) => {
+                                            if (e.target.value !== 'other') {
+                                                setValue('academicOtherPosition', '');
+                                            }
                                         }
-                                        return true;
-                                    }
-                                })}
-                            />
-                            <FormErrorMessage>{errors.academicOtherPosition?.message}</FormErrorMessage>
-                        </FormControl>
-                    )}
-                </Box>
+                                    })}
+                                >
+                                    <option value="ao">Academic Officer</option>
+                                    <option value="vp">Vice Provost / Associate Provost for Academic Affairs</option>
+                                    <option value="df">Dean of Faculty / Associate Dean</option>
+                                    <option value="dc">Department Chair / Head</option>
+                                    <option value="fc">Faculty Affairs Coordinator</option>
+                                    <option value="ro">Institutional Research Officer</option>
+                                    <option value="gs">Graduate Studies Coordinator</option>
+                                    <option value="at">Affiliations or Titles Administrator</option>
+                                    <option value="other">Other</option>
+                                </Select>
+                                <FormErrorMessage>{errors.academicPosition?.message}</FormErrorMessage>
+                            </FormControl>
 
-                {/* Other Organization Positions */}
-                <Box mb="6">
-                    <Text fontWeight="semibold" color="blue.600" mb="2">Other Organizations</Text>
-                    <FormControl isInvalid={errors.otherOrgPosition}>
-                        <Select 
-                            placeholder="Select position"
-                            {...register('otherOrgPosition', { 
-                                required: 'Please select a position',
-                                onChange: (e) => {
-                                    if (e.target.value !== 'other') {
-                                        setValue('otherOrgOtherPosition', '');
-                                    }
-                                }
-                            })}
-                        >
-                            <option value="pr">President / Vice President</option>
-                            <option value="ed">Executive Director</option>
-                            <option value="bm">Board Member / Chair</option>
-                            <option value="sb">Secretary of the Board</option>
-                            <option value="sc">Steering Committee Member</option>
-                            <option value="mc">Membership Chair / Officer</option>
-                            <option value="nc">Nominations Committee Member / Chair</option>
-                            <option value="cc">Fellowship Committee Chair</option>
-                            <option value="ac">Advisory Council Member</option>
-                            <option value="other">Other</option>
-                        </Select>
-                        <FormErrorMessage>{errors.otherOrgPosition?.message}</FormErrorMessage>
-                    </FormControl>
+                            {academicPosition === 'other' && (
+                                <FormControl mt="3" isInvalid={errors.academicOtherPosition}>
+                                    <Input
+                                        placeholder="Type a custom the position name"
+                                        {...register('academicOtherPosition', {
+                                            required: 'Please specify the position',
+                                            validate: (value) => {
+                                                if (academicPosition === 'other' && !value) {
+                                                    return 'Please specify the position';
+                                                }
+                                                return true;
+                                            }
+                                        })}
+                                    />
+                                    <FormErrorMessage>{errors.academicOtherPosition?.message}</FormErrorMessage>
+                                </FormControl>
+                            )}
+                        </Box>
 
-                    {otherOrgPosition === 'other' && (
-                        <FormControl mt="3" isInvalid={errors.otherOrgOtherPosition}>
-                            <Input
-                                placeholder="Type a custom the position name"
-                                {...register('otherOrgOtherPosition', {
-                                    required: 'Please specify the position',
-                                    validate: (value) => {
-                                        if (otherOrgPosition === 'other' && !value) {
-                                            return 'Please specify the position';
+                        {/* Other Organization Positions */}
+                        <Box mb="6">
+                            <Text fontWeight="semibold" color="blue.600" mb="2">Other Organizations</Text>
+                            <FormControl isInvalid={errors.otherOrgPosition}>
+                                <Select 
+                                    placeholder="Select position"
+                                    {...register('otherOrgPosition', { 
+                                        required: 'Please select a position',
+                                        onChange: (e) => {
+                                            if (e.target.value !== 'other') {
+                                                setValue('otherOrgOtherPosition', '');
+                                            }
                                         }
-                                        return true;
-                                    }
-                                })}
-                            />
-                            <FormErrorMessage>{errors.otherOrgOtherPosition?.message}</FormErrorMessage>
-                        </FormControl>
-                    )}
-                </Box>
+                                    })}
+                                >
+                                    <option value="pr">President / Vice President</option>
+                                    <option value="ed">Executive Director</option>
+                                    <option value="bm">Board Member / Chair</option>
+                                    <option value="sb">Secretary of the Board</option>
+                                    <option value="sc">Steering Committee Member</option>
+                                    <option value="mc">Membership Chair / Officer</option>
+                                    <option value="nc">Nominations Committee Member / Chair</option>
+                                    <option value="cc">Fellowship Committee Chair</option>
+                                    <option value="ac">Advisory Council Member</option>
+                                    <option value="other">Other</option>
+                                </Select>
+                                <FormErrorMessage>{errors.otherOrgPosition?.message}</FormErrorMessage>
+                            </FormControl>
+
+                            {otherOrgPosition === 'other' && (
+                                <FormControl mt="3" isInvalid={errors.otherOrgOtherPosition}>
+                                    <Input
+                                        placeholder="Type a custom the position name"
+                                        {...register('otherOrgOtherPosition', {
+                                            required: 'Please specify the position',
+                                            validate: (value) => {
+                                                if (otherOrgPosition === 'other' && !value) {
+                                                    return 'Please specify the position';
+                                                }
+                                                return true;
+                                            }
+                                        })}
+                                    />
+                                    <FormErrorMessage>{errors.otherOrgOtherPosition?.message}</FormErrorMessage>
+                                </FormControl>
+                            )}
+                        </Box>
+                    </>
+                )}
 
                 <Button type="submit" my="2em" isLoading={apiState === 'loading'}>
                     {apiState === 'idle' && 
