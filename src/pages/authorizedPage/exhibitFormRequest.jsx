@@ -203,6 +203,9 @@ export default function ExhibitFormRequest({ entityId }) {
      * Handles modal close and form reset
      * Resets all form fields, clears autocomplete options,
      * and resets API state to initial values
+     * 
+     * Note: Reset logic is consolidated into a single atomic operation
+     * to prevent race conditions and ensure consistent state reset
      */
     function handleModalClose() {
         // Define all reset values in a single object
@@ -220,7 +223,7 @@ export default function ExhibitFormRequest({ entityId }) {
             otherOrgOtherPosition: ''
         };
 
-        // Reset everything in one atomic operation
+        // Reset everything in one atomic operation to prevent race conditions
         setApiState('idle');
         setOptions([]);
         reset(resetData, {
@@ -246,6 +249,8 @@ export default function ExhibitFormRequest({ entityId }) {
                         rules={{ required: 'Please select a consenter' }}
                         render={({ field: { onChange, value } }) => (
                             <AutoComplete
+                                // Key prop forces complete re-render when consenter changes
+                                // This ensures proper reset of internal component state
                                 key={selectedConsenter?.email || 'empty'}
                                 openOnFocus
                                 isLoading={isLoading}
@@ -267,6 +272,8 @@ export default function ExhibitFormRequest({ entityId }) {
                                         }
                                     }
                                 }}
+                                // Use consistent display format (fullname + email) for both selected state
+                                // and search state to maintain proper display across focus/blur events
                                 value={selectedConsenter ? `${selectedConsenter.fullname} (${selectedConsenter.email})` : watch('searchInput') || ''}
                                 emptyState={emptyState}
                             >
