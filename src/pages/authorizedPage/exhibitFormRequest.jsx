@@ -5,7 +5,7 @@ import Cookies from 'js-cookie';
 import { Box, Button, Center, Heading, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, 
     ModalHeader, ModalOverlay, Stack, Radio, RadioGroup, Spinner, useDisclosure, 
     FormControl, FormLabel, FormErrorMessage, NumberInput, NumberInputField, 
-    NumberInputStepper, NumberIncrementStepper, NumberDecrementStepper, HStack, Text, Select, Input } from "@chakra-ui/react";
+    NumberInputStepper, NumberIncrementStepper, NumberDecrementStepper, HStack, Text, Select, Input, Alert, AlertIcon, AlertTitle, AlertDescription, ButtonGroup } from "@chakra-ui/react";
 import {
     AutoComplete,
     AutoCompleteInput,
@@ -79,6 +79,7 @@ export default function ExhibitFormRequest({ entityId }) {
     const [options, setOptions] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
     const [apiState, setApiState] = useState('idle');
+    const [apiError, setApiError] = useState(null);
 
     // Setup react-hook-form
     const { handleSubmit, control, watch, setValue, reset, formState: { errors }, register } = useForm({
@@ -162,6 +163,7 @@ export default function ExhibitFormRequest({ entityId }) {
      */
     async function onSubmit(data) {
         setApiState('loading');
+        setApiError(null);
 
         const accessToken = Cookies.get('EttAccessJwt');
         // Process the lookback period - either "unlimited" or a number
@@ -227,6 +229,7 @@ export default function ExhibitFormRequest({ entityId }) {
             setApiState('success');
         } else {
             setApiState('error');
+            setApiError(sendResult.message || 'An error occurred while sending the exhibit request');
         }
 
         onOpen();
@@ -562,12 +565,27 @@ export default function ExhibitFormRequest({ entityId }) {
                 <ModalOverlay />
                 <ModalContent>
                     <ModalHeader>
-                        {apiState === 'error' && 'Error'}
-                        {apiState === 'success' && 'Request Sent'}
+                        {apiState === 'error' && 'Error Sending Request'}
+                        {apiState === 'success' && 'Request Sent Successfully'}
                     </ModalHeader>
                     <ModalCloseButton />
                     <ModalBody>
-                        {apiState === 'error' && 'There was an error sending the request.'}
+                        {apiState === 'error' && (
+                            <>
+                                <Alert status="error">
+                                    <AlertIcon />
+                                    <Box>
+                                        <AlertTitle>Error</AlertTitle>
+                                        <AlertDescription>
+                                            {apiError || 'There was an error sending the request. Please try again.'}
+                                        </AlertDescription>
+                                    </Box>
+                                </Alert>
+                                <Text my="4">
+                                    There was an error with the request.
+                                </Text>
+                            </>
+                        )}
                         {apiState === 'success' && <ExhibitSuccessModalBody selectedConsenter={selectedConsenter?.email} />}
                     </ModalBody>
                     <ModalFooter>
