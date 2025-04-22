@@ -12,15 +12,10 @@ export default function AuthIndDetails({ userInfo }) {
     // Check if userInfo.delegate exists and is not empty
     const hasDelegate = userInfo.delegate && Object.keys(userInfo.delegate).length > 0;
 
-    const handleSave = async (data, hasDelegate) => {
-        // TODO: Implement API call to update user info
-        console.log('Form data to submit:', data);
-        console.log('Has delegate:', hasDelegate);
-        
-        // For now just simulate API call
-        return new Promise((resolve) => {
-            setTimeout(resolve, 1000);
-        });
+    const handleSaveSuccess = (updatedData) => {
+        // TODO: Update local state or trigger a refresh of user data
+        console.log('Save successful:', updatedData);
+        onClose();
     };
 
     return (
@@ -56,7 +51,7 @@ export default function AuthIndDetails({ userInfo }) {
                     isOpen={isOpen}
                     onClose={onClose}
                     userInfo={userInfo}
-                    onSave={handleSave}
+                    onSaveSuccess={handleSaveSuccess}
                 />
             </CardBody>
         </Card>

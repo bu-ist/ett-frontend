@@ -7,11 +7,15 @@ import {
 import { AiOutlineClose } from 'react-icons/ai';
 import PropTypes from 'prop-types';
 import { useForm } from 'react-hook-form';
-import { useState } from 'react';
+import { useState, useContext } from 'react';
 import { emailRegex } from '../../../lib/formatting/emailRegex';
+import Cookies from 'js-cookie';
+import { ConfigContext } from '../../../lib/configContext';
 
-export default function EditExistingAuthIndModal({ isOpen, onClose, userInfo, onSave }) {
+export default function EditExistingAuthIndModal({ isOpen, onClose, userInfo, onSaveSuccess }) {
+    const { appConfig } = useContext(ConfigContext);
     const [apiStatus, setApiStatus] = useState('idle');
+    const [apiError, setApiError] = useState(null);
     const [showDelegateFields, setShowDelegateFields] = useState(
         userInfo.delegate && Object.keys(userInfo.delegate).length > 0
     );
@@ -48,21 +52,42 @@ export default function EditExistingAuthIndModal({ isOpen, onClose, userInfo, on
 
     const onSubmit = async (data) => {
         setApiStatus('loading');
+        setApiError(null);
+
         try {
-            await onSave(data, showDelegateFields);
-            setApiStatus('success');
-            setTimeout(() => {
-                onClose();
-                setApiStatus('idle');
-            }, 1000);
+            const accessToken = Cookies.get('EttAccessJwt');
+            
+            // Remove delegate fields if not showing delegate section
+            const submitData = { ...data };
+            if (!showDelegateFields) {
+                delete submitData.delegate_fullname;
+                delete submitData.delegate_title;
+                delete submitData.delegate_email;
+                delete submitData.delegate_phone;
+            }
+
+            // TODO: Replace with actual API call
+            // const response = await updateAuthIndAPI(appConfig.authorizedIndividual.apiHost, appConfig.apiStage, accessToken, submitData);
+            
+            // Simulate API call for now
+            await new Promise(resolve => setTimeout(resolve, 1000));
+            const response = { ok: true };
+
+            if (response.ok) {
+                setApiStatus('success');
+                onSaveSuccess(submitData);
+            } else {
+                throw new Error('Failed to update user information');
+            }
         } catch (error) {
             console.error('Error saving changes:', error);
             setApiStatus('error');
+            setApiError(error.message || 'An error occurred while saving changes');
         }
     };
 
     return (
-        <Modal isOpen={isOpen} onClose={onClose} size="lg">
+        <Modal isOpen={isOpen} onClose={onClose} size="xl">
             <ModalOverlay />
             <ModalContent>
                 <form onSubmit={handleSubmit(onSubmit)}>
@@ -168,7 +193,7 @@ export default function EditExistingAuthIndModal({ isOpen, onClose, userInfo, on
                         {apiStatus === 'error' && (
                             <Alert status="error" mt="4">
                                 <AlertIcon />
-                                There was an error saving your changes
+                                {apiError || 'There was an error saving your changes'}
                             </Alert>
                         )}
                     </ModalBody>
@@ -205,5 +230,5 @@ EditExistingAuthIndModal.propTypes = {
             phone_number: PropTypes.string
         })
     }).isRequired,
-    onSave: PropTypes.func.isRequired
+    onSaveSuccess: PropTypes.func.isRequired
 };
