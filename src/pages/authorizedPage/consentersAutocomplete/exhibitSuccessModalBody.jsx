@@ -9,7 +9,7 @@ export default function ExhibitSuccessModalBody( { selectedConsenter } ) {
             </Alert>
             <Text>
                 Your request has been sent to the selected Consenting Person. They will receive an email 
-                with a link to the exhibit form, and custom instructions for completing the form.
+                with a link to the corresponding exhibit form, and custom instructions for completing the form.
                 You will receive an email when the consenter has completed the form. ETT does not 
                 track the request further than this.
             </Text>
