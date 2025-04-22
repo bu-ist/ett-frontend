@@ -16,7 +16,7 @@ import {
 import { ConfigContext } from '../../lib/configContext';
 import { sendExhibitRequestAPI } from '../../lib/auth-ind/sendExhibitRequestAPI';
 import { searchConsentersAPI } from '../../lib/auth-ind/searchConsentersAPI';
-import ExhibitSuccessModalBody from "./consentersAutocomplete/exhibitSuccessModalBody";
+import ExhibitSuccessModalBody from "./exhibitFormRequest/exhibitSuccessModalBody";
 
 // Position options for different organization types
 const EMPLOYER_POSITIONS = [
