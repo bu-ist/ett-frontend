@@ -121,23 +121,24 @@ export default function ExhibitFormRequest({ entityId }) {
     }, [selectedConsenter, setValue, watch]);
 
     /**
-     * Reset position fields when constraint changes to 'current'
+     * Reset all position fields when constraint changes
      * 
-     * When the constraint is set to 'current', only current employer information is relevant,
-     * so we clear the academic and other organization fields.
+     * When the constraint changes, we want to reset all position fields to ensure
+     * users explicitly select positions appropriate for the new constraint type.
      * 
      * Fields cleared:
+     * - employerPosition & employerOtherPosition (employer roles)
      * - academicPosition & academicOtherPosition (academic institution roles)
      * - otherOrgPosition & otherOrgOtherPosition (other organization roles)
      */
     useEffect(() => {
-        // If constraint is 'current', reset academic and other org positions
-        if (constraint === 'current') {
-            setValue('academicPosition', '');
-            setValue('academicOtherPosition', '');
-            setValue('otherOrgPosition', '');
-            setValue('otherOrgOtherPosition', '');
-        }
+        // Reset all position fields when constraint changes
+        setValue('employerPosition', '');
+        setValue('employerOtherPosition', '');
+        setValue('academicPosition', '');
+        setValue('academicOtherPosition', '');
+        setValue('otherOrgPosition', '');
+        setValue('otherOrgOtherPosition', '');
     }, [constraint, setValue]);
 
     /**
