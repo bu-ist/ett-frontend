@@ -18,6 +18,39 @@ import { sendExhibitRequestAPI } from '../../lib/auth-ind/sendExhibitRequestAPI'
 import { searchConsentersAPI } from '../../lib/auth-ind/searchConsentersAPI';
 import ExhibitSuccessModalBody from "./consentersAutocomplete/exhibitSuccessModalBody";
 
+// Position options for different organization types
+const EMPLOYER_POSITIONS = [
+    { value: 'hr', label: 'HR Professional' },
+    { value: 'mg', label: 'Manager / Direct Report' },
+    { value: 'co', label: 'Colleague / Co-worker' },
+    { value: 'other', label: 'Other' }
+];
+
+const ACADEMIC_POSITIONS = [
+    { value: 'ao', label: 'Academic Officer' },
+    { value: 'vp', label: 'Vice Provost / Associate Provost for Academic Affairs' },
+    { value: 'df', label: 'Dean of Faculty / Associate Dean' },
+    { value: 'dc', label: 'Department Chair / Head' },
+    { value: 'fc', label: 'Faculty Affairs Coordinator' },
+    { value: 'ro', label: 'Institutional Research Officer' },
+    { value: 'gs', label: 'Graduate Studies Coordinator' },
+    { value: 'at', label: 'Affiliations or Titles Administrator' },
+    { value: 'other', label: 'Other' }
+];
+
+const OTHER_ORG_POSITIONS = [
+    { value: 'pr', label: 'President / Vice President' },
+    { value: 'ed', label: 'Executive Director' },
+    { value: 'bm', label: 'Board Member / Chair' },
+    { value: 'sb', label: 'Secretary of the Board' },
+    { value: 'sc', label: 'Steering Committee Member' },
+    { value: 'mc', label: 'Membership Chair / Officer' },
+    { value: 'nc', label: 'Nominations Committee Member / Chair' },
+    { value: 'cc', label: 'Fellowship Committee Chair' },
+    { value: 'ac', label: 'Advisory Council Member' },
+    { value: 'other', label: 'Other' }
+];
+
 /**
  * ExhibitFormRequest Component
  * 
@@ -403,10 +436,9 @@ export default function ExhibitFormRequest({ entityId }) {
                                 }
                             })}
                         >
-                            <option value="hr">HR Professional</option>
-                            <option value="mg">Manager / Direct Report</option>
-                            <option value="co">Colleague / Co-worker</option>
-                            <option value="other">Other</option>
+                            {EMPLOYER_POSITIONS.map((position) => (
+                                <option key={position.value} value={position.value}>{position.label}</option>
+                            ))}
                         </Select>
                         <FormErrorMessage>{errors.employerPosition?.message}</FormErrorMessage>
                     </FormControl>
@@ -448,15 +480,9 @@ export default function ExhibitFormRequest({ entityId }) {
                                         }
                                     })}
                                 >
-                                    <option value="ao">Academic Officer</option>
-                                    <option value="vp">Vice Provost / Associate Provost for Academic Affairs</option>
-                                    <option value="df">Dean of Faculty / Associate Dean</option>
-                                    <option value="dc">Department Chair / Head</option>
-                                    <option value="fc">Faculty Affairs Coordinator</option>
-                                    <option value="ro">Institutional Research Officer</option>
-                                    <option value="gs">Graduate Studies Coordinator</option>
-                                    <option value="at">Affiliations or Titles Administrator</option>
-                                    <option value="other">Other</option>
+                                    {ACADEMIC_POSITIONS.map((position) => (
+                                        <option key={position.value} value={position.value}>{position.label}</option>
+                                    ))}
                                 </Select>
                                 <FormErrorMessage>{errors.academicPosition?.message}</FormErrorMessage>
                             </FormControl>
@@ -495,16 +521,9 @@ export default function ExhibitFormRequest({ entityId }) {
                                         }
                                     })}
                                 >
-                                    <option value="pr">President / Vice President</option>
-                                    <option value="ed">Executive Director</option>
-                                    <option value="bm">Board Member / Chair</option>
-                                    <option value="sb">Secretary of the Board</option>
-                                    <option value="sc">Steering Committee Member</option>
-                                    <option value="mc">Membership Chair / Officer</option>
-                                    <option value="nc">Nominations Committee Member / Chair</option>
-                                    <option value="cc">Fellowship Committee Chair</option>
-                                    <option value="ac">Advisory Council Member</option>
-                                    <option value="other">Other</option>
+                                    {OTHER_ORG_POSITIONS.map((position) => (
+                                        <option key={position.value} value={position.value}>{position.label}</option>
+                                    ))}
                                 </Select>
                                 <FormErrorMessage>{errors.otherOrgPosition?.message}</FormErrorMessage>
                             </FormControl>
