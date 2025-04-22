@@ -104,6 +104,7 @@ export default function SaveButton({ contacts, formConstraint, entityId, singleE
                             Close
                         </Button>
                     </ModalFooter>
+                </ModalContent>
             </Modal>
         </>
     );
