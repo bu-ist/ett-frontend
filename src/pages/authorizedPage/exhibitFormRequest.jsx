@@ -405,7 +405,7 @@ export default function ExhibitFormRequest({ entityId }) {
                         >
                             <option value="hr">HR Professional</option>
                             <option value="mg">Manager / Direct Report</option>
-                            <option value="em">Colleague / Co-worker</option>
+                            <option value="co">Colleague / Co-worker</option>
                             <option value="other">Other</option>
                         </Select>
                         <FormErrorMessage>{errors.employerPosition?.message}</FormErrorMessage>
