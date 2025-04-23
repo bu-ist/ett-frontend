@@ -1,8 +1,26 @@
+/**
+ * Modal component for editing Authorized Individual and optional delegate contact information
+ * 
+ * Data Flow:
+ * 1. Form displays current AI info and optional delegate contact
+ * 2. User can toggle delegate contact section
+ * 3. Form validation ensures:
+ *    - Required fields are filled
+ *    - Email format is valid
+ *    - Delegate fields are required only when delegate section is enabled
+ * 4. On submit:
+ *    - Delegate fields are removed if section is disabled
+ *    - Data is sent to updateAuthIndAPI
+ *    - Parent component is notified on success via onSaveSuccess
+ *    - Loading/error states are managed internally
+ * 
+ * Note: Email field is disabled as email changes require a different workflow
+ */
 import { 
     Modal, ModalOverlay, ModalContent, ModalHeader, 
     ModalFooter, ModalBody, Button, FormControl,
     FormLabel, Input, Box, Heading, Alert, AlertIcon,
-    Divider, HStack, FormErrorMessage
+    Divider, HStack, FormErrorMessage, Text
 } from "@chakra-ui/react";
 import { AiOutlineClose } from 'react-icons/ai';
 import PropTypes from 'prop-types';
@@ -11,6 +29,7 @@ import { useState, useContext } from 'react';
 import { emailRegex } from '../../../lib/formatting/emailRegex';
 import Cookies from 'js-cookie';
 import { ConfigContext } from '../../../lib/configContext';
+import { updateAuthIndAPI } from '../../../lib/auth-ind/updateAuthIndAPI';
 
 export default function EditExistingAuthIndModal({ isOpen, onClose, userInfo, onSaveSuccess }) {
     const { appConfig } = useContext(ConfigContext);
@@ -57,27 +76,35 @@ export default function EditExistingAuthIndModal({ isOpen, onClose, userInfo, on
         try {
             const accessToken = Cookies.get('EttAccessJwt');
             
-            // Remove delegate fields if not showing delegate section
-            const submitData = { ...data };
-            if (!showDelegateFields) {
-                delete submitData.delegate_fullname;
-                delete submitData.delegate_title;
-                delete submitData.delegate_email;
-                delete submitData.delegate_phone;
+            // Structure the data to match the API expectations
+            const submitData = {
+                email: data.email,
+                new_email: data.email, // Since email changes aren't allowed in this form
+                entity_id: userInfo.entity.entity_id,
+                fullname: data.fullname,
+                title: data.title,
+                phone_number: data.phone_number,
+                role: 'RE_AUTH_IND'
+            };
+
+            // Add delegate object if delegate fields are shown
+            if (showDelegateFields) {
+                submitData.delegate = {
+                    fullname: data.delegate_fullname,
+                    title: data.delegate_title,
+                    email: data.delegate_email,
+                    phone_number: data.delegate_phone
+                };
             }
 
-            // TODO: Replace with actual API call
-            // const response = await updateAuthIndAPI(appConfig.authorizedIndividual.apiHost, appConfig.apiStage, accessToken, submitData);
-            
-            // Simulate API call for now
-            await new Promise(resolve => setTimeout(resolve, 1000));
-            const response = { ok: true };
+            // Send the data to the API.
+            const response = await updateAuthIndAPI(appConfig, accessToken, submitData);
 
-            if (response.ok) {
+            if (response.payload.ok) {
                 setApiStatus('success');
                 onSaveSuccess(submitData);
             } else {
-                throw new Error('Failed to update user information');
+                throw new Error(response.message || 'Failed to update user information');
             }
         } catch (error) {
             console.error('Error saving changes:', error);
@@ -193,18 +220,34 @@ export default function EditExistingAuthIndModal({ isOpen, onClose, userInfo, on
                         {apiStatus === 'error' && (
                             <Alert status="error" mt="4">
                                 <AlertIcon />
-                                {apiError || 'There was an error saving your changes'}
+                                <Box>
+                                    <Text fontWeight="bold">Unable to save changes</Text>
+                                    {apiError && (
+                                        <Text mt="1" fontStyle="italic">
+                                            {apiError}
+                                        </Text>
+                                    )}
+                                    <Text mt="1">
+                                        Please close this form and try again. If the problem persists,
+                                        contact support.
+                                    </Text>
+                                </Box>
                             </Alert>
                         )}
                     </ModalBody>
                     <ModalFooter>
-                        <Button variant="ghost" mr={3} onClick={onClose}>
-                            Cancel
+                        <Button 
+                            variant="ghost" 
+                            mr={3} 
+                            onClick={onClose}
+                        >
+                            {apiStatus === 'error' ? 'Close' : 'Cancel'}
                         </Button>
                         <Button 
-                            colorScheme="blue" 
+                            colorScheme="blue"
                             type="submit"
                             isLoading={apiStatus === 'loading'}
+                            isDisabled={apiStatus === 'error'}
                         >
                             Save Changes
                         </Button>
