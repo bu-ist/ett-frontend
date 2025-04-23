@@ -20,7 +20,7 @@ import {
     Modal, ModalOverlay, ModalContent, ModalHeader, 
     ModalFooter, ModalBody, Button, FormControl,
     FormLabel, Input, Box, Heading, Alert, AlertIcon,
-    Divider, HStack, FormErrorMessage, Text
+    Divider, HStack, FormErrorMessage, Text, VStack
 } from "@chakra-ui/react";
 import { AiOutlineClose } from 'react-icons/ai';
 import PropTypes from 'prop-types';
@@ -33,7 +33,7 @@ import { updateAuthIndAPI } from '../../../lib/auth-ind/updateAuthIndAPI';
 
 export default function EditExistingAuthIndModal({ isOpen, onClose, userInfo, onSaveSuccess }) {
     const { appConfig } = useContext(ConfigContext);
-    const [apiStatus, setApiStatus] = useState('idle');
+    const [apiState, setApiState] = useState('idle');
     const [apiError, setApiError] = useState(null);
     const [showDelegateFields, setShowDelegateFields] = useState(
         userInfo.delegate && Object.keys(userInfo.delegate).length > 0
@@ -70,7 +70,7 @@ export default function EditExistingAuthIndModal({ isOpen, onClose, userInfo, on
     };
 
     const onSubmit = async (data) => {
-        setApiStatus('loading');
+        setApiState('loading');
         setApiError(null);
 
         try {
@@ -101,20 +101,27 @@ export default function EditExistingAuthIndModal({ isOpen, onClose, userInfo, on
             const response = await updateAuthIndAPI(appConfig, accessToken, submitData);
 
             if (response.payload.ok) {
-                setApiStatus('success');
+                setApiState('success');
                 onSaveSuccess(submitData);
             } else {
                 throw new Error(response.message || 'Failed to update user information');
             }
         } catch (error) {
             console.error('Error saving changes:', error);
-            setApiStatus('error');
+            setApiState('error');
             setApiError(error.message || 'An error occurred while saving changes');
         }
     };
 
+    function handleClose() {
+        onClose();
+        // Reset API state when modal is closed
+        setApiState('idle');
+        setApiError(null);
+    }
+
     return (
-        <Modal isOpen={isOpen} onClose={onClose} size="xl">
+        <Modal isOpen={isOpen} onClose={handleClose} size="xl">
             <ModalOverlay />
             <ModalContent>
                 <form onSubmit={handleSubmit(onSubmit)}>
@@ -128,6 +135,7 @@ export default function EditExistingAuthIndModal({ isOpen, onClose, userInfo, on
                                     {...register('fullname', {
                                         required: 'Full name is required'
                                     })}
+                                    isDisabled={apiState === 'success'}
                                 />
                                 <FormErrorMessage>{errors.fullname?.message}</FormErrorMessage>
                             </FormControl>
@@ -137,6 +145,7 @@ export default function EditExistingAuthIndModal({ isOpen, onClose, userInfo, on
                                     {...register('title', {
                                         required: 'Title is required'
                                     })}
+                                    isDisabled={apiState === 'success'}
                                 />
                                 <FormErrorMessage>{errors.title?.message}</FormErrorMessage>
                             </FormControl>
@@ -152,6 +161,7 @@ export default function EditExistingAuthIndModal({ isOpen, onClose, userInfo, on
                                     {...register('phone_number', {
                                         required: 'Phone number is required'
                                     })}
+                                    isDisabled={apiState === 'success'}
                                 />
                                 <FormErrorMessage>{errors.phone_number?.message}</FormErrorMessage>
                             </FormControl>
@@ -166,6 +176,7 @@ export default function EditExistingAuthIndModal({ isOpen, onClose, userInfo, on
                                     onClick={toggleDelegateFields}
                                     leftIcon={showDelegateFields ? <AiOutlineClose/> : null}
                                     size="sm"
+                                    isDisabled={apiState === 'success'}
                                 >
                                     {showDelegateFields ? 'Remove Delegated Contact' : 'Add Delegated Contact'}
                                 </Button>
@@ -179,6 +190,7 @@ export default function EditExistingAuthIndModal({ isOpen, onClose, userInfo, on
                                             {...register('delegate_fullname', {
                                                 required: showDelegateFields ? 'Delegate full name is required' : false
                                             })}
+                                            isDisabled={apiState === 'success'}
                                         />
                                         <FormErrorMessage>{errors.delegate_fullname?.message}</FormErrorMessage>
                                     </FormControl>
@@ -188,6 +200,7 @@ export default function EditExistingAuthIndModal({ isOpen, onClose, userInfo, on
                                             {...register('delegate_title', {
                                                 required: showDelegateFields ? 'Delegate title is required' : false
                                             })}
+                                            isDisabled={apiState === 'success'}
                                         />
                                         <FormErrorMessage>{errors.delegate_title?.message}</FormErrorMessage>
                                     </FormControl>
@@ -201,6 +214,7 @@ export default function EditExistingAuthIndModal({ isOpen, onClose, userInfo, on
                                                     message: 'Invalid email address'
                                                 }
                                             })}
+                                            isDisabled={apiState === 'success'}
                                         />
                                         <FormErrorMessage>{errors.delegate_email?.message}</FormErrorMessage>
                                     </FormControl>
@@ -210,6 +224,7 @@ export default function EditExistingAuthIndModal({ isOpen, onClose, userInfo, on
                                             {...register('delegate_phone', {
                                                 required: showDelegateFields ? 'Delegate phone number is required' : false
                                             })}
+                                            isDisabled={apiState === 'success'}
                                         />
                                         <FormErrorMessage>{errors.delegate_phone?.message}</FormErrorMessage>
                                     </FormControl>
@@ -217,7 +232,16 @@ export default function EditExistingAuthIndModal({ isOpen, onClose, userInfo, on
                             )}
                         </Box>
 
-                        {apiStatus === 'error' && (
+                        {apiState === 'success' &&
+                            <VStack mb="4">
+                                <Alert status='success'>
+                                    <AlertIcon />
+                                    Changes saved successfully
+                                </Alert>
+                            </VStack>
+                        }
+
+                        {apiState === 'error' && (
                             <Alert status="error" mt="4">
                                 <AlertIcon />
                                 <Box>
@@ -228,7 +252,7 @@ export default function EditExistingAuthIndModal({ isOpen, onClose, userInfo, on
                                         </Text>
                                     )}
                                     <Text mt="1">
-                                        Please close this form and try again. If the problem persists,
+                                        Please try again. If the problem persists,
                                         contact support.
                                     </Text>
                                 </Box>
@@ -239,18 +263,20 @@ export default function EditExistingAuthIndModal({ isOpen, onClose, userInfo, on
                         <Button 
                             variant="ghost" 
                             mr={3} 
-                            onClick={onClose}
+                            onClick={handleClose}
                         >
-                            {apiStatus === 'error' ? 'Close' : 'Cancel'}
+                            {apiState === 'success' ? 'Close' : 'Cancel'}
                         </Button>
-                        <Button 
-                            colorScheme="blue"
-                            type="submit"
-                            isLoading={apiStatus === 'loading'}
-                            isDisabled={apiStatus === 'error'}
-                        >
-                            Save Changes
-                        </Button>
+                        {apiState !== 'success' && (
+                            <Button 
+                                colorScheme="blue"
+                                type="submit"
+                                isLoading={apiState === 'loading'}
+                                isDisabled={apiState === 'error'}
+                            >
+                                Save Changes
+                            </Button>
+                        )}
                     </ModalFooter>
                 </form>
             </ModalContent>
@@ -266,6 +292,9 @@ EditExistingAuthIndModal.propTypes = {
         title: PropTypes.string,
         email: PropTypes.string,
         phone_number: PropTypes.string,
+        entity: PropTypes.shape({
+            entity_id: PropTypes.string
+        }),
         delegate: PropTypes.shape({
             fullname: PropTypes.string,
             title: PropTypes.string,
