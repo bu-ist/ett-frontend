@@ -6,16 +6,34 @@ import { HiPencil } from "react-icons/hi";
 import PropTypes from 'prop-types';
 import EditExistingAuthIndModal from './authIndDetails/editExistingAuthIndModal';
 
-export default function AuthIndDetails({ userInfo }) {
+export default function AuthIndDetails({ userInfo, setUserInfo }) {
     const { isOpen, onOpen, onClose } = useDisclosure();
 
     // Check if userInfo.delegate exists and is not empty
     const hasDelegate = userInfo.delegate && Object.keys(userInfo.delegate).length > 0;
 
     const handleSaveSuccess = (updatedData) => {
-        // TODO: Update local state or trigger a refresh of user data
-        console.log('Save successful:', updatedData);
-        onClose();
+        // Create a new user info object that preserves existing data
+        // but updates with the new values from the API response
+        const newUserInfo = {
+            ...userInfo,
+            fullname: updatedData.fullname,
+            title: updatedData.title,
+            email: updatedData.email,
+            phone_number: updatedData.phone_number,
+        };
+
+        // Only include delegate if it exists in the updated data
+        // This ensures delegate is removed if it was removed in the form
+        if (updatedData.delegate) {
+            newUserInfo.delegate = updatedData.delegate;
+        } else {
+            // Explicitly remove delegate if it's not in the updated data
+            delete newUserInfo.delegate;
+        }
+
+        // Update the parent component's state
+        setUserInfo(newUserInfo);
     };
 
     return (

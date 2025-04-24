@@ -152,7 +152,7 @@ export default function AuthorizedPage() {
             }
             {(authorizedInfo && authorizedInfo.email && apiState == 'success' && appConfig) &&
                 <>
-                    <AuthIndDetails userInfo={userData} />
+                    <AuthIndDetails userInfo={userData} setUserInfo={setUserData} />
                     <EntityInfoCard entityInfo={userData.entity} />
 
                     {isEntityRegistered &&
