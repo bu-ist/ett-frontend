@@ -25,7 +25,7 @@ import {
 import { AiOutlineClose } from 'react-icons/ai';
 import PropTypes from 'prop-types';
 import { useForm } from 'react-hook-form';
-import { useState, useContext } from 'react';
+import { useState, useContext, useEffect } from 'react';
 import { emailRegex } from '../../../lib/formatting/emailRegex';
 import Cookies from 'js-cookie';
 import { ConfigContext } from '../../../lib/configContext';
@@ -39,7 +39,7 @@ export default function EditExistingAuthIndModal({ isOpen, onClose, userInfo, on
         userInfo.delegate && Object.keys(userInfo.delegate).length > 0
     );
 
-    const { register, handleSubmit, setValue, formState: { errors } } = useForm({
+    const { register, handleSubmit, setValue, reset, formState: { errors } } = useForm({
         defaultValues: {
             fullname: userInfo.fullname || '',
             title: userInfo.title || '',
@@ -51,6 +51,21 @@ export default function EditExistingAuthIndModal({ isOpen, onClose, userInfo, on
             delegate_phone: userInfo.delegate?.phone_number || ''
         }
     });
+
+    // Reset form when userInfo changes (e.g. after successful submission)
+    useEffect(() => {
+        reset({
+            fullname: userInfo.fullname || '',
+            title: userInfo.title || '',
+            email: userInfo.email || '',
+            phone_number: userInfo.phone_number || '',
+            delegate_fullname: userInfo.delegate?.fullname || '',
+            delegate_title: userInfo.delegate?.title || '',
+            delegate_email: userInfo.delegate?.email || '',
+            delegate_phone: userInfo.delegate?.phone_number || ''
+        });
+        setShowDelegateFields(userInfo.delegate && Object.keys(userInfo.delegate).length > 0);
+    }, [userInfo, reset]);
 
     const toggleDelegateFields = () => {
         setShowDelegateFields(!showDelegateFields);
@@ -115,7 +130,18 @@ export default function EditExistingAuthIndModal({ isOpen, onClose, userInfo, on
 
     function handleClose() {
         onClose();
-        // Reset API state when modal is closed
+        // Reset form state when modal is closed
+        reset({
+            fullname: userInfo.fullname || '',
+            title: userInfo.title || '',
+            email: userInfo.email || '',
+            phone_number: userInfo.phone_number || '',
+            delegate_fullname: userInfo.delegate?.fullname || '',
+            delegate_title: userInfo.delegate?.title || '',
+            delegate_email: userInfo.delegate?.email || '',
+            delegate_phone: userInfo.delegate?.phone_number || ''
+        });
+        setShowDelegateFields(userInfo.delegate && Object.keys(userInfo.delegate).length > 0);
         setApiState('idle');
         setApiError(null);
     }
