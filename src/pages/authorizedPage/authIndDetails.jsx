@@ -40,29 +40,28 @@ export default function AuthIndDetails({ userInfo, setUserInfo }) {
         <Card my="2em">
             <CardBody>
                 <HStack align="top" spacing={16} divider={<StackDivider borderColor="gray.200" />}>
-                    <Box>
-                        <HStack justify="space-between" w="100%" mb="4">
-                            <Heading as="h3" size="md">{userInfo.fullname}</Heading>
-                            <Button
-                                leftIcon={<HiPencil />}
-                                size="sm"
-                                onClick={onOpen}
-                            >
-                                Edit
-                            </Button>
-                        </HStack>
+                    <Box flex="1">
+                        <Heading as="h3" size="md" mb="4">{userInfo.fullname}</Heading>
                         {userInfo.title && <Text>{userInfo.title}</Text>}
                         {userInfo.email && <Text>{userInfo.email}</Text>}
                         {userInfo.phone_number && <Text>{userInfo.phone_number}</Text>}
                     </Box>
                     {hasDelegate && 
-                        <Box>
-                            <Heading as="h4" size="sm">Delegated Contact</Heading>
+                        <Box flex="1">
+                            <Heading as="h4" size="sm" mb="4">Delegated Contact</Heading>
                             <Text>{userInfo.delegate.fullname}</Text>
                             <Text>{userInfo.delegate.email}</Text>
                             <Text>{userInfo.delegate.phone_number}</Text>
                         </Box>
                     }
+                    <Box>
+                        <Button
+                            leftIcon={<HiPencil />}
+                            onClick={onOpen}
+                        >
+                            Edit
+                        </Button>
+                    </Box>
                 </HStack>
 
                 <EditExistingAuthIndModal
