@@ -20,16 +20,20 @@ import {
     Modal, ModalOverlay, ModalContent, ModalHeader, 
     ModalFooter, ModalBody, Button, FormControl,
     FormLabel, Input, Box, Heading, Alert, AlertIcon,
-    Divider, HStack, FormErrorMessage, Text, VStack
+    Divider, HStack, FormErrorMessage, Text, VStack, 
+    UnorderedList, ListItem, AlertDialog, AlertDialogBody, 
+    AlertDialogContent, AlertDialogHeader, AlertDialogFooter, 
+    AlertDialogOverlay, useDisclosure
 } from "@chakra-ui/react";
 import { AiOutlineClose } from 'react-icons/ai';
 import PropTypes from 'prop-types';
 import { useForm } from 'react-hook-form';
-import { useState, useContext, useEffect } from 'react';
+import { useState, useContext, useRef, useEffect } from 'react';
 import { emailRegex } from '../../../lib/formatting/emailRegex';
 import Cookies from 'js-cookie';
 import { ConfigContext } from '../../../lib/configContext';
 import { updateAuthIndAPI } from '../../../lib/auth-ind/updateAuthIndAPI';
+import { signOut } from '../../../lib/signOut';
 
 export default function EditExistingAuthIndModal({ isOpen, onClose, userInfo, onSaveSuccess }) {
     const { appConfig } = useContext(ConfigContext);
@@ -39,7 +43,16 @@ export default function EditExistingAuthIndModal({ isOpen, onClose, userInfo, on
         userInfo.delegate && Object.keys(userInfo.delegate).length > 0
     );
 
-    const { register, handleSubmit, setValue, reset, formState: { errors } } = useForm({
+    // State and refs for email change confirmation
+    const { 
+        isOpen: isConfirmOpen, 
+        onOpen: onConfirmOpen, 
+        onClose: onConfirmClose 
+    } = useDisclosure();
+    const cancelRef = useRef();
+    const [formDataForConfirmation, setFormDataForConfirmation] = useState(null);
+
+    const { register, handleSubmit, setValue, reset, watch, formState: { errors } } = useForm({
         defaultValues: {
             fullname: userInfo.fullname || '',
             title: userInfo.title || '',
@@ -51,6 +64,10 @@ export default function EditExistingAuthIndModal({ isOpen, onClose, userInfo, on
             delegate_phone: userInfo.delegate?.phone_number || ''
         }
     });
+
+    // Watch the email field to detect changes
+    const watchEmail = watch("email");
+    const isEmailChanged = watchEmail !== userInfo.email;
 
     // Reset form when userInfo changes (e.g. after successful submission)
     useEffect(() => {
@@ -84,7 +101,18 @@ export default function EditExistingAuthIndModal({ isOpen, onClose, userInfo, on
         }
     };
 
+    // Initial form submission - shows confirmation if email changed
     const onSubmit = async (data) => {
+        if (data.email !== userInfo.email) {
+            setFormDataForConfirmation(data);
+            onConfirmOpen();
+        } else {
+            await processSubmission(data);
+        }
+    };
+
+    // Actual submission after confirmation if needed
+    const processSubmission = async (data) => {
         setApiState('loading');
         setApiError(null);
 
@@ -93,8 +121,8 @@ export default function EditExistingAuthIndModal({ isOpen, onClose, userInfo, on
             
             // Structure the data to match the API expectations
             const submitData = {
-                email: data.email,
-                new_email: data.email, // Since email changes aren't allowed in this form
+                email: userInfo.email, // Use original email for identification
+                new_email: data.email, // Use form email as new_email
                 entity_id: userInfo.entity.entity_id,
                 fullname: data.fullname,
                 title: data.title,
@@ -118,6 +146,13 @@ export default function EditExistingAuthIndModal({ isOpen, onClose, userInfo, on
             if (response.payload.ok) {
                 setApiState('success');
                 onSaveSuccess(submitData);
+                
+                // If email was changed, initiate logout after a brief delay
+                if (data.email !== userInfo.email) {
+                    setTimeout(() => {
+                        signOut(appConfig.cognitoDomain, appConfig.authorizedIndividual.cognitoID);
+                    }, 5000);
+                }
             } else {
                 throw new Error(response.message || 'Failed to update user information');
             }
@@ -147,166 +182,237 @@ export default function EditExistingAuthIndModal({ isOpen, onClose, userInfo, on
     }
 
     return (
-        <Modal isOpen={isOpen} onClose={handleClose} size="xl">
-            <ModalOverlay />
-            <ModalContent>
-                <form onSubmit={handleSubmit(onSubmit)}>
-                    <ModalHeader>Edit Contact Information</ModalHeader>
-                    <ModalBody>
-                        <Box mb="6">
-                            <Heading as="h4" size="sm" mb="4">Your Information</Heading>
-                            <FormControl mb="4" isInvalid={errors.fullname}>
-                                <FormLabel>Full Name</FormLabel>
-                                <Input
-                                    {...register('fullname', {
-                                        required: 'Full name is required'
-                                    })}
-                                    isDisabled={apiState === 'success'}
-                                />
-                                <FormErrorMessage>{errors.fullname?.message}</FormErrorMessage>
-                            </FormControl>
-                            <FormControl mb="4" isInvalid={errors.title}>
-                                <FormLabel>Title</FormLabel>
-                                <Input
-                                    {...register('title', {
-                                        required: 'Title is required'
-                                    })}
-                                    isDisabled={apiState === 'success'}
-                                />
-                                <FormErrorMessage>{errors.title?.message}</FormErrorMessage>
-                            </FormControl>
-                            <FormControl mb="4" isDisabled>
-                                <FormLabel>Email</FormLabel>
-                                <Input
-                                    {...register('email')}
-                                />
-                            </FormControl>
-                            <FormControl mb="4" isInvalid={errors.phone_number}>
-                                <FormLabel>Phone Number</FormLabel>
-                                <Input
-                                    {...register('phone_number', {
-                                        required: 'Phone number is required'
-                                    })}
-                                    isDisabled={apiState === 'success'}
-                                />
-                                <FormErrorMessage>{errors.phone_number?.message}</FormErrorMessage>
-                            </FormControl>
-                        </Box>
-
-                        <Divider my="4" />
-
-                        <Box>
-                            <HStack justify="space-between" mb="4">
-                                <Heading as="h4" size="sm">Delegated Contact</Heading>
-                                <Button
-                                    onClick={toggleDelegateFields}
-                                    leftIcon={showDelegateFields ? <AiOutlineClose/> : null}
-                                    size="sm"
-                                    isDisabled={apiState === 'success'}
-                                >
-                                    {showDelegateFields ? 'Remove Delegated Contact' : 'Add Delegated Contact'}
-                                </Button>
-                            </HStack>
-
-                            {showDelegateFields && (
-                                <>
-                                    <FormControl mb="4" isInvalid={errors.delegate_fullname}>
-                                        <FormLabel>Full Name</FormLabel>
-                                        <Input
-                                            {...register('delegate_fullname', {
-                                                required: showDelegateFields ? 'Delegate full name is required' : false
-                                            })}
-                                            isDisabled={apiState === 'success'}
-                                        />
-                                        <FormErrorMessage>{errors.delegate_fullname?.message}</FormErrorMessage>
-                                    </FormControl>
-                                    <FormControl mb="4" isInvalid={errors.delegate_title}>
-                                        <FormLabel>Title</FormLabel>
-                                        <Input
-                                            {...register('delegate_title', {
-                                                required: showDelegateFields ? 'Delegate title is required' : false
-                                            })}
-                                            isDisabled={apiState === 'success'}
-                                        />
-                                        <FormErrorMessage>{errors.delegate_title?.message}</FormErrorMessage>
-                                    </FormControl>
-                                    <FormControl mb="4" isInvalid={errors.delegate_email}>
-                                        <FormLabel>Email</FormLabel>
-                                        <Input
-                                            {...register('delegate_email', {
-                                                required: showDelegateFields ? 'Delegate email is required' : false,
-                                                pattern: {
-                                                    value: emailRegex,
-                                                    message: 'Invalid email address'
-                                                }
-                                            })}
-                                            isDisabled={apiState === 'success'}
-                                        />
-                                        <FormErrorMessage>{errors.delegate_email?.message}</FormErrorMessage>
-                                    </FormControl>
-                                    <FormControl mb="4" isInvalid={errors.delegate_phone}>
-                                        <FormLabel>Phone Number</FormLabel>
-                                        <Input
-                                            {...register('delegate_phone', {
-                                                required: showDelegateFields ? 'Delegate phone number is required' : false
-                                            })}
-                                            isDisabled={apiState === 'success'}
-                                        />
-                                        <FormErrorMessage>{errors.delegate_phone?.message}</FormErrorMessage>
-                                    </FormControl>
-                                </>
-                            )}
-                        </Box>
-
-                        {apiState === 'success' &&
-                            <VStack mb="4">
-                                <Alert status='success'>
-                                    <AlertIcon />
-                                    Changes saved successfully
-                                </Alert>
-                            </VStack>
-                        }
-
-                        {apiState === 'error' && (
-                            <Alert status="error" mt="4">
-                                <AlertIcon />
-                                <Box>
-                                    <Text fontWeight="bold">Unable to save changes</Text>
-                                    {apiError && (
-                                        <Text mt="1" fontStyle="italic">
-                                            {apiError}
-                                        </Text>
+        <>
+            <Modal isOpen={isOpen} onClose={handleClose} size="xl">
+                <ModalOverlay />
+                <ModalContent>
+                    <form onSubmit={handleSubmit(onSubmit)}>
+                        <ModalHeader>Edit Contact Information</ModalHeader>
+                        <ModalBody>
+                            <Box mb="6">
+                                <Heading as="h4" size="sm" mb="4">Your Information</Heading>
+                                <FormControl mb="4" isInvalid={errors.fullname}>
+                                    <FormLabel>Full Name</FormLabel>
+                                    <Input
+                                        {...register('fullname', {
+                                            required: 'Full name is required'
+                                        })}
+                                        isDisabled={apiState === 'success'}
+                                    />
+                                    <FormErrorMessage>{errors.fullname?.message}</FormErrorMessage>
+                                </FormControl>
+                                <FormControl mb="4" isInvalid={errors.title}>
+                                    <FormLabel>Title</FormLabel>
+                                    <Input
+                                        {...register('title', {
+                                            required: 'Title is required'
+                                        })}
+                                        isDisabled={apiState === 'success'}
+                                    />
+                                    <FormErrorMessage>{errors.title?.message}</FormErrorMessage>
+                                </FormControl>
+                                <FormControl mb="4" isInvalid={errors.email}>
+                                    <FormLabel>Email</FormLabel>
+                                    <Input
+                                        {...register('email', {
+                                            required: 'Email is required',
+                                            pattern: {
+                                                value: emailRegex,
+                                                message: 'Invalid email address'
+                                            }
+                                        })}
+                                        isDisabled={apiState === 'success'}
+                                    />
+                                    {isEmailChanged && !errors.email && (
+                                        <Alert status="warning" mt="2" size="sm">
+                                            <AlertIcon />
+                                            Changing your email will require creating a new account
+                                        </Alert>
                                     )}
-                                    <Text mt="1">
-                                        Please try again. If the problem persists,
-                                        contact support.
-                                    </Text>
-                                </Box>
-                            </Alert>
-                        )}
-                    </ModalBody>
-                    <ModalFooter>
-                        <Button 
-                            variant="ghost" 
-                            mr={3} 
-                            onClick={handleClose}
-                        >
-                            {apiState === 'success' ? 'Close' : 'Cancel'}
-                        </Button>
-                        {apiState !== 'success' && (
+                                    <FormErrorMessage>{errors.email?.message}</FormErrorMessage>
+                                </FormControl>
+                                <FormControl mb="4" isInvalid={errors.phone_number}>
+                                    <FormLabel>Phone Number</FormLabel>
+                                    <Input
+                                        {...register('phone_number', {
+                                            required: 'Phone number is required'
+                                        })}
+                                        isDisabled={apiState === 'success'}
+                                    />
+                                    <FormErrorMessage>{errors.phone_number?.message}</FormErrorMessage>
+                                </FormControl>
+                            </Box>
+
+                            <Divider my="4" />
+
+                            <Box>
+                                <HStack justify="space-between" mb="4">
+                                    <Heading as="h4" size="sm">Delegated Contact</Heading>
+                                    <Button
+                                        onClick={toggleDelegateFields}
+                                        leftIcon={showDelegateFields ? <AiOutlineClose/> : null}
+                                        size="sm"
+                                        isDisabled={apiState === 'success'}
+                                    >
+                                        {showDelegateFields ? 'Remove Delegated Contact' : 'Add Delegated Contact'}
+                                    </Button>
+                                </HStack>
+
+                                {showDelegateFields && (
+                                    <>
+                                        <FormControl mb="4" isInvalid={errors.delegate_fullname}>
+                                            <FormLabel>Full Name</FormLabel>
+                                            <Input
+                                                {...register('delegate_fullname', {
+                                                    required: showDelegateFields ? 'Delegate full name is required' : false
+                                                })}
+                                                isDisabled={apiState === 'success'}
+                                            />
+                                            <FormErrorMessage>{errors.delegate_fullname?.message}</FormErrorMessage>
+                                        </FormControl>
+                                        <FormControl mb="4" isInvalid={errors.delegate_title}>
+                                            <FormLabel>Title</FormLabel>
+                                            <Input
+                                                {...register('delegate_title', {
+                                                    required: showDelegateFields ? 'Delegate title is required' : false
+                                                })}
+                                                isDisabled={apiState === 'success'}
+                                            />
+                                            <FormErrorMessage>{errors.delegate_title?.message}</FormErrorMessage>
+                                        </FormControl>
+                                        <FormControl mb="4" isInvalid={errors.delegate_email}>
+                                            <FormLabel>Email</FormLabel>
+                                            <Input
+                                                {...register('delegate_email', {
+                                                    required: showDelegateFields ? 'Delegate email is required' : false,
+                                                    pattern: {
+                                                        value: emailRegex,
+                                                        message: 'Invalid email address'
+                                                    }
+                                                })}
+                                                isDisabled={apiState === 'success'}
+                                            />
+                                            <FormErrorMessage>{errors.delegate_email?.message}</FormErrorMessage>
+                                        </FormControl>
+                                        <FormControl mb="4" isInvalid={errors.delegate_phone}>
+                                            <FormLabel>Phone Number</FormLabel>
+                                            <Input
+                                                {...register('delegate_phone', {
+                                                    required: showDelegateFields ? 'Delegate phone number is required' : false
+                                                })}
+                                                isDisabled={apiState === 'success'}
+                                            />
+                                            <FormErrorMessage>{errors.delegate_phone?.message}</FormErrorMessage>
+                                        </FormControl>
+                                    </>
+                                )}
+                            </Box>
+
+                            {apiState === 'success' && isEmailChanged &&
+                                <VStack mb="4">
+                                    <Alert status='success'>
+                                        <AlertIcon />
+                                        <Box>
+                                            <Text>Changes saved successfully. Because you changed your email:</Text>
+                                            <Text mt="2">1. Your current account will be logged out</Text>
+                                            <Text>2. Check your new email for temporary password</Text>
+                                            <Text>3. You'll need to login with your new credentials</Text>
+                                        </Box>
+                                    </Alert>
+                                </VStack>
+                            }
+
+                            {apiState === 'success' && !isEmailChanged &&
+                                <VStack mb="4">
+                                    <Alert status='success'>
+                                        <AlertIcon />
+                                        Changes saved successfully
+                                    </Alert>
+                                </VStack>
+                            }
+
+                            {apiState === 'error' && (
+                                <Alert status="error" mt="4">
+                                    <AlertIcon />
+                                    <Box>
+                                        <Text fontWeight="bold">Unable to save changes</Text>
+                                        {apiError && (
+                                            <Text mt="1" fontStyle="italic">
+                                                {apiError}
+                                            </Text>
+                                        )}
+                                        <Text mt="1">
+                                            Please try again. If the problem persists,
+                                            contact support.
+                                        </Text>
+                                    </Box>
+                                </Alert>
+                            )}
+                        </ModalBody>
+                        <ModalFooter>
                             <Button 
-                                colorScheme="blue"
-                                type="submit"
-                                isLoading={apiState === 'loading'}
-                                isDisabled={apiState === 'error'}
+                                variant="ghost" 
+                                mr={3} 
+                                onClick={handleClose}
                             >
-                                Save Changes
+                                {apiState === 'success' ? 'Close' : 'Cancel'}
                             </Button>
-                        )}
-                    </ModalFooter>
-                </form>
-            </ModalContent>
-        </Modal>
+                            {apiState !== 'success' && (
+                                <Button 
+                                    colorScheme="blue"
+                                    type="submit"
+                                    isLoading={apiState === 'loading'}
+                                    isDisabled={apiState === 'error'}
+                                >
+                                    {apiState !== 'error' ? 'Save Changes' : 'Sorry'}
+                                </Button>
+                            )}
+                        </ModalFooter>
+                    </form>
+                </ModalContent>
+            </Modal>
+
+            <AlertDialog
+                isOpen={isConfirmOpen}
+                leastDestructiveRef={cancelRef}
+                onClose={onConfirmClose}
+            >
+                <AlertDialogOverlay>
+                    <AlertDialogContent>
+                        <AlertDialogHeader fontSize='lg' fontWeight='bold'>
+                            Confirm Email Change
+                        </AlertDialogHeader>
+
+                        <AlertDialogBody>
+                            <Text mb="4">
+                                Changing your email address will:
+                            </Text>
+                            <UnorderedList spacing={2}>
+                                <ListItem>Create a new account with your new email</ListItem>
+                                <ListItem>Send temporary password to your new email</ListItem>
+                                <ListItem>Log you out of your current account</ListItem>
+                                <ListItem>Require you to log in with your new credentials</ListItem>
+                            </UnorderedList>
+                            <Text mt="4">
+                                Are you sure you want to proceed?
+                            </Text>
+                        </AlertDialogBody>
+
+                        <AlertDialogFooter>
+                            <Button ref={cancelRef} onClick={onConfirmClose}>
+                                Cancel
+                            </Button>
+                            <Button colorScheme='blue' onClick={() => {
+                                onConfirmClose();
+                                processSubmission(formDataForConfirmation);
+                            }} ml={3}>
+                                Continue
+                            </Button>
+                        </AlertDialogFooter>
+                    </AlertDialogContent>
+                </AlertDialogOverlay>
+            </AlertDialog>
+        </>
     );
 }
 
