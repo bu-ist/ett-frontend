@@ -65,24 +65,33 @@ export default function EditExistingAuthIndModal({ isOpen, onClose, userInfo, on
         }
     });
 
+    // Store submitted data to accurately detect email changes after submission
+    const [submittedData, setSubmittedData] = useState(null);
+
     // Watch the email field to detect changes
     const watchEmail = watch("email");
-    const isEmailChanged = watchEmail !== userInfo.email;
+    
+    // Compare against submitted data if available, otherwise use original userInfo
+    const isEmailChanged = submittedData 
+        ? watchEmail !== userInfo.email 
+        : watchEmail !== userInfo.email;
 
-    // Reset form when userInfo changes (e.g. after successful submission)
+    // Only reset form when modal is first opened
     useEffect(() => {
-        reset({
-            fullname: userInfo.fullname || '',
-            title: userInfo.title || '',
-            email: userInfo.email || '',
-            phone_number: userInfo.phone_number || '',
-            delegate_fullname: userInfo.delegate?.fullname || '',
-            delegate_title: userInfo.delegate?.title || '',
-            delegate_email: userInfo.delegate?.email || '',
-            delegate_phone: userInfo.delegate?.phone_number || ''
-        });
-        setShowDelegateFields(userInfo.delegate && Object.keys(userInfo.delegate).length > 0);
-    }, [userInfo, reset]);
+        if (isOpen) {
+            reset({
+                fullname: userInfo.fullname || '',
+                title: userInfo.title || '',
+                email: userInfo.email || '',
+                phone_number: userInfo.phone_number || '',
+                delegate_fullname: userInfo.delegate?.fullname || '',
+                delegate_title: userInfo.delegate?.title || '',
+                delegate_email: userInfo.delegate?.email || '',
+                delegate_phone: userInfo.delegate?.phone_number || ''
+            });
+            setShowDelegateFields(userInfo.delegate && Object.keys(userInfo.delegate).length > 0);
+        }
+    }, [isOpen]); // Only depend on isOpen, not userInfo
 
     const toggleDelegateFields = () => {
         setShowDelegateFields(!showDelegateFields);
@@ -104,6 +113,7 @@ export default function EditExistingAuthIndModal({ isOpen, onClose, userInfo, on
     // Initial form submission - shows confirmation if email changed
     const onSubmit = async (data) => {
         if (data.email !== userInfo.email) {
+            console.log('Email changed, opening confirmation');
             setFormDataForConfirmation(data);
             onConfirmOpen();
         } else {
@@ -140,19 +150,12 @@ export default function EditExistingAuthIndModal({ isOpen, onClose, userInfo, on
                 };
             }
 
-            // Send the data to the API.
             const response = await updateAuthIndAPI(appConfig, accessToken, submitData);
 
             if (response.payload.ok) {
+                setSubmittedData(submitData);
                 setApiState('success');
                 onSaveSuccess(submitData);
-                
-                // If email was changed, initiate logout after a brief delay
-                if (data.email !== userInfo.email) {
-                    setTimeout(() => {
-                        signOut(appConfig.cognitoDomain, appConfig.authorizedIndividual.cognitoID);
-                    }, 5000);
-                }
             } else {
                 throw new Error(response.message || 'Failed to update user information');
             }
@@ -164,8 +167,16 @@ export default function EditExistingAuthIndModal({ isOpen, onClose, userInfo, on
     };
 
     function handleClose() {
+        // If email was changed and update was successful, sign out when modal is closed
+        if (apiState === 'success' && submittedData && submittedData.new_email !== userInfo.email) {
+            signOut(appConfig.cognitoDomain, appConfig.authorizedIndividual.cognitoID);
+            return;
+        }
+
+        // Reset all state only after modal is actually closed
         onClose();
-        // Reset form state when modal is closed
+        
+        // Reset form and state after checking for email change
         reset({
             fullname: userInfo.fullname || '',
             title: userInfo.title || '',
@@ -177,6 +188,7 @@ export default function EditExistingAuthIndModal({ isOpen, onClose, userInfo, on
             delegate_phone: userInfo.delegate?.phone_number || ''
         });
         setShowDelegateFields(userInfo.delegate && Object.keys(userInfo.delegate).length > 0);
+        setSubmittedData(null);
         setApiState('idle');
         setApiError(null);
     }
