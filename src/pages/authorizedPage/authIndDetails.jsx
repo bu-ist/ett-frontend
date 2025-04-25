@@ -87,5 +87,6 @@ AuthIndDetails.propTypes = {
             phone_number: PropTypes.string,
             title: PropTypes.string
         })
-    }).isRequired
+    }).isRequired,
+    setUserInfo: PropTypes.func.isRequired
 };
