@@ -22,6 +22,7 @@ export default function DisclosureRequestForm({ entityId }) {
     const {
         handleSubmit,
         register,
+        reset,
         formState: { errors }
     } = useForm({
         defaultValues: {
@@ -48,6 +49,17 @@ export default function DisclosureRequestForm({ entityId }) {
         }
 
         onOpen();
+    }
+
+    // Handle modal close
+    function handleModalClose() {
+        // Reset form and state when modal is closed
+        if (apiState === 'success') {
+            reset();
+            setSubmittedEmails(null);
+        }
+        setApiState('idle');
+        onClose();
     }
 
     return (
@@ -105,7 +117,7 @@ export default function DisclosureRequestForm({ entityId }) {
                 </Button>
             </form>
 
-            <Modal isOpen={isOpen} onClose={onClose}>
+            <Modal isOpen={isOpen} onClose={handleModalClose}>
                 <ModalOverlay />
                 <ModalContent>
                     <ModalHeader>
