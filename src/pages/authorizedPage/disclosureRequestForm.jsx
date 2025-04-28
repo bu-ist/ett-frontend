@@ -3,7 +3,7 @@ import { useForm } from 'react-hook-form';
 import PropTypes from 'prop-types';
 import Cookies from 'js-cookie';
 
-import { Box, FormControl, Button, FormLabel, Input, Spinner, useDisclosure, Modal, ModalOverlay, ModalContent, ModalHeader, ModalCloseButton, ModalBody, FormErrorMessage, FormHelperText } from "@chakra-ui/react";
+import { Box, FormControl, Button, FormLabel, Input, Spinner, useDisclosure, Modal, ModalOverlay, ModalContent, ModalHeader, ModalCloseButton, ModalBody, FormErrorMessage, FormHelperText, Alert, AlertIcon, Stack, Text } from "@chakra-ui/react";
 
 import { sendDisclosureRequestAPI } from '../../lib/auth-ind/sendDisclosureRequestAPI';
 import { emailRegex } from '../../lib/formatting/emailRegex';
@@ -117,17 +117,40 @@ export default function DisclosureRequestForm({ entityId }) {
                 </Button>
             </form>
 
-            <Modal isOpen={isOpen} onClose={handleModalClose}>
+            <Modal size="lg" isOpen={isOpen} onClose={handleModalClose}>
                 <ModalOverlay />
                 <ModalContent>
                     <ModalHeader>
-                        {apiState === 'error' && 'Error'}
-                        {apiState === 'success' && 'Request Sent'}
+                        {apiState === 'error' ? 'Error Sending Request' : 'Request Sent'}
                     </ModalHeader>
                     <ModalCloseButton />
                     <ModalBody>
-                        {apiState === 'error' && 'There was an error sending the request'}
-                        {apiState === 'success' && submittedEmails && `Request sent successfully to ${submittedEmails.affiliateEmail}.`}
+                        <Stack spacing={3}>
+                            {apiState === 'success' && submittedEmails && (
+                                <>
+                                    <Alert status='success'>
+                                        <AlertIcon />
+                                        Request sent successfully to {submittedEmails.affiliateEmail}
+                                    </Alert>
+                                    <Text my="8">
+                                        The affiliate will receive an email with instructions for completing the disclosure request.
+                                        You will receive a notification when the affiliate has responded. ETT does not track the
+                                        request further than this.
+                                    </Text>
+                                </>
+                            )}
+                            {apiState === 'error' && (
+                                <>
+                                    <Alert status='error'>
+                                        <AlertIcon />
+                                        There was an error sending the request. Please try again or contact support if the problem persists.
+                                    </Alert>
+                                    <Text my="8">
+                                        Please check the email addresses you provided and ensure they are valid. If the problem persists, please contact support.
+                                    </Text>
+                                </>
+                            )}
+                        </Stack>
                     </ModalBody>
                 </ModalContent>
             </Modal>
