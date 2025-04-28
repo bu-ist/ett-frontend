@@ -573,7 +573,7 @@ export default function ExhibitFormRequest({ entityId }) {
                     </>
                 )}
 
-                <Button type="submit" my="2em" isLoading={apiState === 'loading'}>
+                <Button colorScheme='blue' type="submit" my="2em" isLoading={apiState === 'loading'}>
                     {apiState === 'idle' && 
                         <>Send{selectedConsenter ? ` to ${selectedConsenter.email}` : '' }</>
                     }

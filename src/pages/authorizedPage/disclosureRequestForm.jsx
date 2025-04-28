@@ -71,7 +71,7 @@ export default function DisclosureRequestForm({ entityId }) {
                 onChange={handleChange}
                 placeholder="email@example.com"
             />
-            <Button my="2em" type="submit">
+            <Button colorScheme='blue' my="2em" type="submit">
                 {apiState === 'idle' && 'Send'}
                 {apiState === 'loading' && <Spinner />}
                 {apiState === 'success' && 'Sent'}
