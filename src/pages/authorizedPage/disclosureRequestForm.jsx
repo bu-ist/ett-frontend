@@ -80,7 +80,7 @@ export default function DisclosureRequestForm({ entityId }) {
                         })}
                     />
                     {!errors.consenterEmail ? (
-                        <FormHelperText>Enter the email address of the person who needs to consent</FormHelperText>
+                        <FormHelperText>Enter the email address of the consenting person for whom disclosures are being requested</FormHelperText>
                     ) : (
                         <FormErrorMessage>{errors.consenterEmail.message}</FormErrorMessage>
                     )}
@@ -107,12 +107,11 @@ export default function DisclosureRequestForm({ entityId }) {
                                 <>
                                     <Alert status='success'>
                                         <AlertIcon />
-                                        Request sent successfully to {submittedEmails.affiliateEmail}
+                                        Requests sent successfully for {submittedEmail}
                                     </Alert>
                                     <Text my="8">
-                                        The affiliate will receive an email with instructions for completing the disclosure request.
-                                        You will receive a notification when the affiliate has responded. ETT does not track the
-                                        request further than this.
+                                        Each listed affiliate will receive an email with instructions for completing the disclosure request.
+                                        ETT does not track the request further than this.
                                     </Text>
                                 </>
                             )}
@@ -123,7 +122,7 @@ export default function DisclosureRequestForm({ entityId }) {
                                         There was an error sending the request. Please try again or contact support if the problem persists.
                                     </Alert>
                                     <Text my="8">
-                                        Please check the email addresses you provided and ensure they are valid. If the problem persists, please contact support.
+                                        Please check the email address you provided and ensure it is valid. If the problem persists, please contact support.
                                     </Text>
                                 </>
                             )}
