@@ -3,7 +3,7 @@ import { useForm } from 'react-hook-form';
 import PropTypes from 'prop-types';
 import Cookies from 'js-cookie';
 
-import { Box, FormControl, Button, FormLabel, Input, Spinner, useDisclosure, Modal, ModalOverlay, ModalContent, ModalHeader, ModalCloseButton, ModalBody, FormErrorMessage, FormHelperText, Alert, AlertIcon, Stack, Text } from "@chakra-ui/react";
+import { Box, FormControl, Button, FormLabel, Input, Spinner, useDisclosure, Modal, ModalOverlay, ModalContent, ModalHeader, ModalCloseButton, ModalBody, FormErrorMessage, FormHelperText, Alert, AlertIcon, Stack, Text, ModalFooter } from "@chakra-ui/react";
 
 import { sendDisclosureRequestAPI } from '../../lib/auth-ind/sendDisclosureRequestAPI';
 import { emailRegex } from '../../lib/formatting/emailRegex';
@@ -152,6 +152,11 @@ export default function DisclosureRequestForm({ entityId }) {
                             )}
                         </Stack>
                     </ModalBody>
+                    <ModalFooter>
+                        <Button onClick={handleModalClose}>
+                            {apiState === 'success' ? 'Done' : 'Close'}
+                        </Button>
+                    </ModalFooter>
                 </ModalContent>
             </Modal>
         </Box>
