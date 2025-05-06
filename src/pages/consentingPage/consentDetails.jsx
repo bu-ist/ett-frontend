@@ -1,5 +1,6 @@
 import { useContext } from 'react';
 import { Link as ReactRouterLink } from 'react-router-dom';
+import PropTypes from 'prop-types';
 
 import { Icon, Text, Button, Card, CardBody, SimpleGrid, CardFooter, Heading, Divider, Stack } from '@chakra-ui/react';
 import { HiCheckCircle, HiMinusCircle } from 'react-icons/hi';
@@ -10,6 +11,7 @@ import { signOut } from '../../lib/signOut';
 
 import RescindModal from './consentDetails/rescindModal';
 import RenewModal from './consentDetails/renewModal';
+import EmailConsentModal from './consentDetails/emailConsentModal';
 
 export default function ConsentDetails({ consentData, setConsentData, consenterInfo }) {
     const { appConfig } = useContext(ConfigContext);
@@ -66,9 +68,9 @@ export default function ConsentDetails({ consentData, setConsentData, consenterI
                             </CardFooter>
                         </Card>
                         <Card>
-                            <CardBody>Email a copy of this Consent form to {email} </CardBody>
+                            <CardBody>Email a copy of this Consent form to {email}</CardBody>
                             <CardFooter>
-                                <Button onClick={() => alert("Not yet implemented")}>Email</Button>
+                                <EmailConsentModal email={email} variant="button" />
                             </CardFooter>
                         </Card>
                         <Card>
@@ -78,9 +80,24 @@ export default function ConsentDetails({ consentData, setConsentData, consenterI
                             </CardFooter>
                         </Card>
                     </SimpleGrid>
-                    </>
-                )}
-                <Button my="2em" onClick={handleSignOut}>Sign Out</Button>
+                </>
+            )}
+            <Button my="2em" onClick={handleSignOut}>Sign Out</Button>
         </div>
     );
 }
+
+ConsentDetails.propTypes = {
+    consentData: PropTypes.shape({
+        consenter: PropTypes.shape({
+            consented_timestamp: PropTypes.string,
+            renewed_timestamp: PropTypes.arrayOf(PropTypes.string),
+        }).isRequired,
+        fullName: PropTypes.string.isRequired,
+        consentStatus: PropTypes.string.isRequired,
+    }).isRequired,
+    setConsentData: PropTypes.func.isRequired,
+    consenterInfo: PropTypes.shape({
+        email: PropTypes.string.isRequired
+    }).isRequired
+};
