@@ -1,12 +1,12 @@
 import { useState, useContext } from 'react';
 import Cookies from 'js-cookie';
-import { useDisclosure, Button, Modal, ModalOverlay, ModalHeader, ModalContent, ModalCloseButton, ModalBody, ModalFooter, Spinner, Text, Alert, AlertIcon } from '@chakra-ui/react';
+import { useDisclosure, Button, Modal, ModalOverlay, ModalHeader, ModalContent, ModalCloseButton, ModalBody, ModalFooter, Spinner, Text, Alert, AlertIcon, Link } from '@chakra-ui/react';
 import PropTypes from 'prop-types';
 
 import { ConfigContext } from "../../../lib/configContext";
 import { emailConsentAPI } from "../../../lib/consenting/emailConsentAPI";
 
-export default function EmailConsentModal({ email }) {
+export default function EmailConsentModal({ email, variant = 'button' }) {
     const { isOpen, onOpen, onClose } = useDisclosure();
     const { appConfig } = useContext(ConfigContext);
     const [apiState, setApiState] = useState('idle');
@@ -46,9 +46,15 @@ export default function EmailConsentModal({ email }) {
         onClose();
     }
 
+    const trigger = variant === 'button' ? (
+        <Button onClick={onOpen}>Email</Button>
+    ) : (
+        <Link textDecoration="underline" onClick={onOpen}>available here</Link>
+    );
+
     return (
         <>
-            <Button onClick={onOpen}>Email</Button>
+            {trigger}
             <Modal isOpen={isOpen} onClose={handleClose}>
                 <ModalOverlay />
                 <ModalContent>
@@ -97,5 +103,6 @@ export default function EmailConsentModal({ email }) {
 }
 
 EmailConsentModal.propTypes = {
-    email: PropTypes.string.isRequired
+    email: PropTypes.string.isRequired,
+    variant: PropTypes.oneOf(['button', 'link'])
 };

@@ -70,7 +70,7 @@ export default function ConsentDetails({ consentData, setConsentData, consenterI
                         <Card>
                             <CardBody>Email a copy of this Consent form to {email}</CardBody>
                             <CardFooter>
-                                <EmailConsentModal email={email} />
+                                <EmailConsentModal email={email} variant="button" />
                             </CardFooter>
                         </Card>
                         <Card>
