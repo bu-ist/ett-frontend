@@ -59,7 +59,7 @@ export default function RenewModal({setConsentData, consentData}) {
                     <ModalBody>
                         {(apiState == 'idle' || apiState == 'loading') && 
                             <Text>
-                                Lorem ipsum dolor sit amet consectetur adipisicing elit. Dolor libero voluptas, iusto deserunt nesciunt velit quod consequuntur eius, cupiditate ipsam, id labore quae deleniti quam perferendis neque. Nostrum, nam modi!
+                                Renew this consent form for another 10 years?
                             </Text>
                         }
                         {apiState == 'success' && 
