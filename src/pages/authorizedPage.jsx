@@ -216,7 +216,7 @@ export default function AuthorizedPage() {
                             </CardBody>
                         </Card>
                     }
-                    <Button my="2em" onClick={ () => signOut( appConfig.cognitoDomain, appConfig.authorizedIndividual.cognitoID ) }>Sign Out</Button>
+                    <Button mt="24" onClick={ () => signOut( appConfig.cognitoDomain, appConfig.authorizedIndividual.cognitoID ) }>Sign Out</Button>
                 </>
             }
         </div>
