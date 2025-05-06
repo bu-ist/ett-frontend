@@ -85,11 +85,11 @@ export default function EmailConsentModal({ email, variant = 'button' }) {
                     </ModalBody>
                     <ModalFooter>
                         {apiState === 'idle' &&
-                            <Button colorScheme="blue" mr={3} onClick={handleClose}>
+                            <Button mr={3} onClick={handleClose}>
                                 Cancel
                             </Button>
                         }
-                        <Button onClick={handleEmailConsent}>
+                        <Button colorScheme="blue" onClick={handleEmailConsent}>
                             {apiState === 'idle' && 'Send Email'}
                             {apiState === 'loading' && <Spinner />}
                             {apiState === 'error' && 'Error'}
