@@ -1,22 +1,44 @@
-import { useState } from 'react';
+import { useState, useContext } from 'react';
+import Cookies from 'js-cookie';
 import { useDisclosure, Button, Modal, ModalOverlay, ModalHeader, ModalContent, ModalCloseButton, ModalBody, ModalFooter, Spinner, Text, Alert, AlertIcon } from '@chakra-ui/react';
 import PropTypes from 'prop-types';
 
+import { ConfigContext } from "../../../lib/configContext";
+import { emailConsentAPI } from "../../../lib/consenting/emailConsentAPI";
+
 export default function EmailConsentModal({ email }) {
     const { isOpen, onOpen, onClose } = useDisclosure();
+    const { appConfig } = useContext(ConfigContext);
     const [apiState, setApiState] = useState('idle');
 
-    // Handler for sending email - to be implemented when API is ready
+    // Handler for sending email
     function handleEmailConsent() {
+        // Use same button to acknowledge success and close modal
         if (apiState === 'success') {
             setApiState('idle');
             onClose();
             return;
         }
 
-        // Temporarily just show success state since API isn't implemented
-        setApiState('loading');
-        setTimeout(() => setApiState('success'), 1000);
+        // Need to declare an async function to handle the API call
+        async function sendEmail() {
+            setApiState('loading');
+
+            // Get the access token from cookies
+            const accessToken = Cookies.get('EttAccessJwt');
+
+            // Call the emailConsentAPI function
+            const emailResult = await emailConsentAPI(appConfig, accessToken, email);
+
+            // Set the UI state based on the result
+            if (emailResult.message === 'Ok') {
+                setApiState('success');
+            } else {
+                setApiState('error');
+                console.error(emailResult);
+            }
+        }
+        sendEmail();
     }
 
     function handleClose() {
