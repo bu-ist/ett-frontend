@@ -17,7 +17,7 @@ export default function DisclosureRequestForm({ entityId }) {
     const { appConfig } = useContext( ConfigContext );
 
     const [apiState, setApiState] = useState('idle');
-    const [submittedEmails, setSubmittedEmails] = useState(null);
+    const [submittedEmail, setSubmittedEmail] = useState(null);
 
     const {
         handleSubmit,
@@ -26,21 +26,20 @@ export default function DisclosureRequestForm({ entityId }) {
         formState: { errors }
     } = useForm({
         defaultValues: {
-            consenterEmail: '',
-            affiliateEmail: ''
+            consenterEmail: ''
         }
     });
 
     // Handle form submission
     async function onSubmit(values) {
-        const { consenterEmail, affiliateEmail } = values;
+        const { consenterEmail } = values;
         setApiState('loading');
-        setSubmittedEmails(values);
+        setSubmittedEmail(consenterEmail);
 
         const { apiStage, authorizedIndividual: { apiHost } } = appConfig;
         const accessToken = Cookies.get('EttAccessJwt');
         
-        const sendResult = await sendDisclosureRequestAPI(apiHost, apiStage, accessToken, consenterEmail, affiliateEmail, entityId);
+        const sendResult = await sendDisclosureRequestAPI(apiHost, apiStage, accessToken, consenterEmail, entityId);
         
         if (sendResult.payload.ok) {
             setApiState('success');
@@ -56,7 +55,7 @@ export default function DisclosureRequestForm({ entityId }) {
         // Reset form and state when modal is closed
         if (apiState === 'success') {
             reset();
-            setSubmittedEmails(null);
+            setSubmittedEmail(null);
         }
         setApiState('idle');
         onClose();
@@ -81,31 +80,9 @@ export default function DisclosureRequestForm({ entityId }) {
                         })}
                     />
                     {!errors.consenterEmail ? (
-                        <FormHelperText>Enter the email address of the Consenting Person</FormHelperText>
+                        <FormHelperText>Enter the email address of the consenting person for whom disclosures are being requested</FormHelperText>
                     ) : (
                         <FormErrorMessage>{errors.consenterEmail.message}</FormErrorMessage>
-                    )}
-                </FormControl>
-
-                <FormControl mb="4" isInvalid={errors.affiliateEmail}>
-                    <FormLabel>Email of the Affiliate to send the disclosure request to</FormLabel>
-                    <Input
-                        id="affiliateEmail"
-                        name="affiliateEmail"
-                        type="email"
-                        placeholder="email@example.com"
-                        {...register('affiliateEmail', {
-                            required: 'Email is required',
-                            pattern: {
-                                value: emailRegex,
-                                message: 'Invalid email address'
-                            }
-                        })}
-                    />
-                    {!errors.affiliateEmail ? (
-                        <FormHelperText>Enter the email address of the affiliate who will receive the disclosure request</FormHelperText>
-                    ) : (
-                        <FormErrorMessage>{errors.affiliateEmail.message}</FormErrorMessage>
                     )}
                 </FormControl>
 
@@ -126,16 +103,15 @@ export default function DisclosureRequestForm({ entityId }) {
                     <ModalCloseButton />
                     <ModalBody>
                         <Stack spacing={3}>
-                            {apiState === 'success' && submittedEmails && (
+                            {apiState === 'success' && submittedEmail && (
                                 <>
                                     <Alert status='success'>
                                         <AlertIcon />
-                                        Request sent successfully to {submittedEmails.affiliateEmail}
+                                        Requests sent successfully for {submittedEmail}
                                     </Alert>
                                     <Text my="8">
-                                        The affiliate will receive an email with instructions for completing the disclosure request.
-                                        You will receive a notification when the affiliate has responded. ETT does not track the
-                                        request further than this.
+                                        Each listed affiliate will receive an email with instructions for completing the disclosure request.
+                                        ETT does not track the request further than this.
                                     </Text>
                                 </>
                             )}
@@ -146,7 +122,7 @@ export default function DisclosureRequestForm({ entityId }) {
                                         There was an error sending the request. Please try again or contact support if the problem persists.
                                     </Alert>
                                     <Text my="8">
-                                        Please check the email addresses you provided and ensure they are valid. If the problem persists, please contact support.
+                                        Please check the email address you provided and ensure it is valid. If the problem persists, please contact support.
                                     </Text>
                                 </>
                             )}

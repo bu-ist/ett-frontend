@@ -1,4 +1,4 @@
-async function sendDisclosureRequestAPI(apiHost, apiStage, accessToken, consenterEmail, affiliateEmail, entityId) {
+async function sendDisclosureRequestAPI(apiHost, apiStage, accessToken, consenterEmail, entityId) {
     // Look up if we are in local development mode.
     const { MODE } = import.meta.env;
 
@@ -19,7 +19,7 @@ async function sendDisclosureRequestAPI(apiHost, apiStage, accessToken, consente
             'Content-Type': 'application/json',
             'ettPayload': JSON.stringify({ 
                 task: 'send-disclosure-request',
-                parameters: { consenterEmail: consenterEmail, entity_id: entityId, affiliateEmail: affiliateEmail }
+                parameters: { consenterEmail: consenterEmail, entity_id: entityId }
             })
         }
     });
