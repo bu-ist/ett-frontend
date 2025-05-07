@@ -5,7 +5,7 @@ import {
     FormErrorMessage, Text, VStack,
     AlertDialog, AlertDialogBody, AlertDialogContent,
     AlertDialogHeader, AlertDialogFooter, AlertDialogOverlay,
-    useDisclosure
+    useDisclosure, UnorderedList, ListItem
 } from "@chakra-ui/react";
 import PropTypes from 'prop-types';
 import { useForm } from 'react-hook-form';
@@ -262,25 +262,34 @@ export default function EditConsentDetailsModal({ isOpen, onClose, consenter, on
             >
                 <AlertDialogOverlay>
                     <AlertDialogContent>
-                        <AlertDialogHeader fontSize="lg" fontWeight="bold">
+                        <AlertDialogHeader fontSize='lg' fontWeight='bold'>
                             Confirm Email Change
                         </AlertDialogHeader>
+
                         <AlertDialogBody>
-                            Changing your email will require creating a new account. Are you sure you want to proceed?
+                            <Text mb="4">
+                                Changing your email address will:
+                            </Text>
+                            <UnorderedList spacing={2}>
+                                <ListItem>Create a new account with your new email</ListItem>
+                                <ListItem>Send temporary password to your new email</ListItem>
+                                <ListItem>Log you out of your current account</ListItem>
+                                <ListItem>Require you to log in with your new credentials</ListItem>
+                            </UnorderedList>
+                            <Text mt="4">
+                                Are you sure you want to proceed?
+                            </Text>
                         </AlertDialogBody>
+
                         <AlertDialogFooter>
                             <Button ref={cancelRef} onClick={onConfirmClose}>
                                 Cancel
                             </Button>
-                            <Button 
-                                colorScheme="red" 
-                                onClick={async () => {
-                                    onConfirmClose();
-                                    await processSubmission(formDataForConfirmation);
-                                }} 
-                                ml={3}
-                            >
-                                Confirm
+                            <Button colorScheme='blue' onClick={() => {
+                                onConfirmClose();
+                                processSubmission(formDataForConfirmation);
+                            }} ml={3}>
+                                Continue
                             </Button>
                         </AlertDialogFooter>
                     </AlertDialogContent>
