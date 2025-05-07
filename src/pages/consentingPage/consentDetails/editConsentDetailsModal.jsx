@@ -43,7 +43,10 @@ export default function EditConsentDetailsModal({ isOpen, onClose, consenter, on
 
     // Watch the email field to detect changes
     const watchEmail = watch("email");
-    const isEmailChanged = watchEmail !== consenter.email;
+    // Compare against submitted data if available, otherwise use original consenter data
+    const isEmailChanged = submittedData 
+        ? submittedData.new_email !== consenter.email
+        : watchEmail !== consenter.email;
 
     // Only reset form when modal is first opened
     useEffect(() => {
