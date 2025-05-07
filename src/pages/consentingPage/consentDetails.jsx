@@ -29,8 +29,18 @@ export default function ConsentDetails({ consentData, setConsentData, consenterI
     }
 
     const handleSaveSuccess = (updatedData) => {
-        // Will implement in next step
-        console.log('Save success:', updatedData);
+        // Update consentData with new values
+        const updatedConsentData = {
+            ...consentData,
+            fullName: `${updatedData.firstname} ${updatedData.middlename ? updatedData.middlename + ' ' : ''}${updatedData.lastname}`,
+            consenter: {
+                ...consentData.consenter,
+                ...updatedData
+            }
+        };
+
+        // Update the parent state
+        setConsentData(updatedConsentData);
     };
 
     return (
