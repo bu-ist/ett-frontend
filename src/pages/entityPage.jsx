@@ -197,21 +197,20 @@ export default function EntityPage() {
                         <Flex direction="row" gap="4" mb="6">
                             <Card flex="1">
                                 <CardHeader>
-                                    <HStack justify="space-between">
+                                    <HStack justify="space-between" align="flex-start">
                                         <Box>
                                             <Heading as="h3" size="lg">{userInfo.user.fullname}</Heading>
                                             {userInfo.user.title && <Text>{userInfo.user.title}</Text>}
                                             {entityAdminInfo.email && <Text>{entityAdminInfo.email}</Text>}
                                         </Box>
-                                        <Box>
-                                            <Button
-                                                leftIcon={<HiPencil />}
-                                                size="sm"
-                                                onClick={onOpen}
-                                            >
-                                                Edit
-                                            </Button>
-                                        </Box>
+                                        <Button
+                                            leftIcon={<HiPencil />}
+                                            size="sm"
+                                            onClick={onOpen}
+                                            mt="1"
+                                        >
+                                            Edit
+                                        </Button>
                                     </HStack>
                                 </CardHeader>
                                 <CardBody>
