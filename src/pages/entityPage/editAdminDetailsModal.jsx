@@ -14,6 +14,7 @@ import { emailRegex } from '../../lib/formatting/emailRegex';
 import { ConfigContext } from '../../lib/configContext';
 import { signOut } from '../../lib/signOut';
 import Cookies from 'js-cookie';
+import { updateAdminAPI } from '../../lib/entity/updateAdminAPI';
 
 export default function EditAdminDetailsModal({ isOpen, onClose, adminInfo, onSaveSuccess }) {
     const { appConfig } = useContext(ConfigContext);
@@ -68,8 +69,37 @@ export default function EditAdminDetailsModal({ isOpen, onClose, adminInfo, onSa
     };
 
     const processSubmission = async (data) => {
-        // Will implement API call in next step
-        console.log('Form submitted:', data);
+        setApiState('loading');
+        setApiError(null);
+
+        try {
+            const accessToken = Cookies.get('EttAccessJwt');
+            
+            // Structure the data to match the API expectations
+            const submitData = {
+                email: adminInfo.email, // Use original email for identification
+                new_email: data.email, // Use form email as new_email
+                entity_id: adminInfo.entity.entity_id,
+                fullname: data.fullname,
+                title: data.title,
+                phone_number: data.phone_number,
+                role: 'RE_ADMIN'
+            };
+
+            const response = await updateAdminAPI(appConfig, accessToken, submitData);
+
+            if (response.payload.ok) {
+                setApiState('success');
+                setSubmittedData(submitData);
+                onSaveSuccess(submitData);
+            } else {
+                throw new Error(response.message || 'Failed to update user information');
+            }
+        } catch (error) {
+            console.error('Error saving changes:', error);
+            setApiState('error');
+            setApiError(error.message || 'An error occurred while saving changes');
+        }
     };
 
     function handleClose() {
@@ -265,7 +295,10 @@ EditAdminDetailsModal.propTypes = {
         fullname: PropTypes.string,
         title: PropTypes.string,
         email: PropTypes.string,
-        phone_number: PropTypes.string
+        phone_number: PropTypes.string,
+        entity: PropTypes.shape({
+            entity_id: PropTypes.string.isRequired
+        }).isRequired
     }).isRequired,
     onSaveSuccess: PropTypes.func.isRequired
 };
