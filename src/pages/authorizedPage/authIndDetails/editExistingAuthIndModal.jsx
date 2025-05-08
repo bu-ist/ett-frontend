@@ -14,7 +14,6 @@
  *    - Parent component is notified on success via onSaveSuccess
  *    - Loading/error states are managed internally
  * 
- * Note: Email field is disabled as email changes require a different workflow
  */
 import { 
     Modal, ModalOverlay, ModalContent, ModalHeader, 
@@ -23,7 +22,8 @@ import {
     Divider, HStack, FormErrorMessage, Text, VStack, 
     UnorderedList, ListItem, AlertDialog, AlertDialogBody, 
     AlertDialogContent, AlertDialogHeader, AlertDialogFooter, 
-    AlertDialogOverlay, useDisclosure
+    AlertDialogOverlay, useDisclosure,
+    ModalCloseButton
 } from "@chakra-ui/react";
 import { AiOutlineClose } from 'react-icons/ai';
 import PropTypes from 'prop-types';
@@ -200,6 +200,7 @@ export default function EditExistingAuthIndModal({ isOpen, onClose, userInfo, on
                 <ModalContent>
                     <form onSubmit={handleSubmit(onSubmit)}>
                         <ModalHeader>Edit Contact Information</ModalHeader>
+                        <ModalCloseButton />
                         <ModalBody>
                             <Box mb="6">
                                 <Heading as="h4" size="sm" mb="4">Your Information</Heading>
@@ -363,7 +364,6 @@ export default function EditExistingAuthIndModal({ isOpen, onClose, userInfo, on
                         </ModalBody>
                         <ModalFooter>
                             <Button 
-                                variant="ghost" 
                                 mr={3} 
                                 onClick={handleClose}
                             >

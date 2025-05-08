@@ -5,7 +5,8 @@ import {
     FormErrorMessage, Text, VStack,
     AlertDialog, AlertDialogBody, AlertDialogContent,
     AlertDialogHeader, AlertDialogFooter, AlertDialogOverlay,
-    useDisclosure, UnorderedList, ListItem
+    useDisclosure, UnorderedList, ListItem,
+    ModalCloseButton
 } from "@chakra-ui/react";
 import PropTypes from 'prop-types';
 import { useForm } from 'react-hook-form';
@@ -125,6 +126,7 @@ export default function EditConsentDetailsModal({ isOpen, onClose, consenter, on
                 <ModalContent>
                     <form onSubmit={handleSubmit(onSubmit)}>
                         <ModalHeader>Edit Personal details</ModalHeader>
+                        <ModalCloseButton />
                         <ModalBody>
                             <Box mb="6">
                                 <FormControl mb="4" isInvalid={errors.firstname}>
@@ -233,8 +235,7 @@ export default function EditConsentDetailsModal({ isOpen, onClose, consenter, on
                             )}
                         </ModalBody>
                         <ModalFooter>
-                            <Button 
-                                variant="ghost" 
+                            <Button
                                 mr={3} 
                                 onClick={handleClose}
                             >
