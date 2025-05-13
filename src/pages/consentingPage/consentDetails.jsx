@@ -2,8 +2,8 @@ import { useContext } from 'react';
 import { Link as ReactRouterLink } from 'react-router-dom';
 import PropTypes from 'prop-types';
 
-import { Icon, Text, Button, Card, CardBody, SimpleGrid, CardFooter, Heading, Divider, Stack } from '@chakra-ui/react';
-import { HiCheckCircle, HiMinusCircle } from 'react-icons/hi';
+import { Icon, Text, Button, Card, CardBody, SimpleGrid, CardFooter, Heading, Divider, Stack, HStack, Box, useDisclosure } from '@chakra-ui/react';
+import { HiCheckCircle, HiMinusCircle, HiPencil } from 'react-icons/hi';
 
 import { ConfigContext } from '../../lib/configContext';
 
@@ -12,9 +12,11 @@ import { signOut } from '../../lib/signOut';
 import RescindModal from './consentDetails/rescindModal';
 import RenewModal from './consentDetails/renewModal';
 import EmailConsentModal from './consentDetails/emailConsentModal';
+import EditConsentDetailsModal from './consentDetails/editConsentDetailsModal';
 
 export default function ConsentDetails({ consentData, setConsentData, consenterInfo }) {
     const { appConfig } = useContext(ConfigContext);
+    const { isOpen, onOpen, onClose } = useDisclosure();
 
     const { consenter, fullName, consentStatus } = consentData;
     const { email } = consenterInfo;
@@ -23,8 +25,23 @@ export default function ConsentDetails({ consentData, setConsentData, consenterI
 
     function handleSignOut() {
         const { cognitoDomain, consentingPerson: { cognitoID } } = appConfig;
-        signOut( cognitoDomain, cognitoID );
+        signOut(cognitoDomain, cognitoID);
     }
+
+    const handleSaveSuccess = (updatedData) => {
+        // Update consentData with new values
+        const updatedConsentData = {
+            ...consentData,
+            fullName: `${updatedData.firstname} ${updatedData.middlename ? updatedData.middlename + ' ' : ''}${updatedData.lastname}`,
+            consenter: {
+                ...consentData.consenter,
+                ...updatedData
+            }
+        };
+
+        // Update the parent state
+        setConsentData(updatedConsentData);
+    };
 
     return (
         <div>
@@ -40,14 +57,27 @@ export default function ConsentDetails({ consentData, setConsentData, consenterI
                     color={activeConsent ? "green.500" : "yellow.300"} 
                     boxSize="32"
                 />
-                <Stack>
+                <Stack flex="1">
                     <CardBody>
-                        <Heading size="md">
-                            Consent for {fullName}
-                        </Heading>
-                        <Text>{email}</Text>
-                        <Text>{activeConsent ? `Consent granted on ${consenter.consented_timestamp}` : "Consent not active"}</Text>
-                        {activeConsent && consenter?.renewed_timestamp && <Text>Renewed on {consenter.renewed_timestamp.reverse()[0]}</Text>}
+                        <HStack justify="space-between">
+                            <Box>
+                                <Heading size="md">
+                                    Consent for {fullName}
+                                </Heading>
+                                <Text>{email}</Text>
+                                <Text>{activeConsent ? `Consent granted on ${consenter.consented_timestamp}` : "Consent not active"}</Text>
+                                {activeConsent && consenter?.renewed_timestamp && <Text>Renewed on {consenter.renewed_timestamp.reverse()[0]}</Text>}
+                            </Box>
+                            <Box>
+                                <Button
+                                    leftIcon={<HiPencil />}
+                                    size="sm"
+                                    onClick={onOpen}
+                                >
+                                    Edit
+                                </Button>
+                            </Box>
+                        </HStack>
                     </CardBody>
                     {!activeConsent && (
                         <CardFooter>
@@ -83,6 +113,13 @@ export default function ConsentDetails({ consentData, setConsentData, consenterI
                 </>
             )}
             <Button my="2em" onClick={handleSignOut}>Sign Out</Button>
+
+            <EditConsentDetailsModal 
+                isOpen={isOpen}
+                onClose={onClose}
+                consenter={consenter}
+                onSaveSuccess={handleSaveSuccess}
+            />
         </div>
     );
 }

@@ -1,9 +1,9 @@
 import { useEffect, useState, useContext } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import Cookies from 'js-cookie';
-import { Heading, Button, Text, Spinner, Box, Card, CardHeader, CardBody, Flex, Icon, CardFooter, VStack, Stack } from '@chakra-ui/react';
+import { Heading, Button, Text, Spinner, Box, Card, CardHeader, CardBody, Flex, Icon, CardFooter, VStack, Stack, HStack, useDisclosure } from '@chakra-ui/react';
 import { BsFileEarmarkLock2, BsExclamationTriangle } from 'react-icons/bs';
-import { HiMinusCircle, HiCheckCircle } from "react-icons/hi";
+import { HiMinusCircle, HiCheckCircle, HiPencil } from "react-icons/hi";
 
 import { exchangeAuthorizationCode } from '../lib/exchangeAuthorizationCode';
 import { lookupUserContextAPI } from '../lib/entity/lookupUserContextAPI';
@@ -14,6 +14,7 @@ import { ConfigContext } from '../lib/configContext';
 import { UserContext } from '../lib/userContext';
 
 import AuthorizedCard from './entityPage/authorizedCard';
+import EditAdminDetailsModal from './entityPage/editAdminDetailsModal';
 
 import { formatTimestamp } from '../lib/formatting/formatTimestamp';
 
@@ -31,6 +32,19 @@ export default function EntityPage() {
 
     const [apiState, setApiState] = useState('idle');
     const [firstLogin, setFirstLogin] = useState(false);
+
+    const { isOpen, onOpen, onClose } = useDisclosure();
+
+    const handleSaveSuccess = (updatedData) => {
+        // Update userInfo with new values
+        setUserInfo({
+            ...userInfo,
+            user: {
+                ...userInfo.user,
+                ...updatedData
+            }
+        });
+    };
 
     useEffect(() => {
         // Asynchronously operations need to be declared in a local function to be called in useEffect.
@@ -115,7 +129,7 @@ export default function EntityPage() {
 
         // Run the async wrapper function.
         fetchData();
-    }, [appConfig]);
+    }, [appConfig, searchParams, setSearchParams, setUser]);
 
     // Function to update the pending invitations in the userInfo object, passed down to the AuthorizedCard component.
     function updatePendingInvitations(email1, email2) {
@@ -183,9 +197,21 @@ export default function EntityPage() {
                         <Flex direction="row" gap="4" mb="6">
                             <Card flex="1">
                                 <CardHeader>
-                                    <Heading as="h3" size="lg">{userInfo.user.fullname}</Heading>
-                                    {userInfo.user.title && <Text>{userInfo.user.title}</Text>}
-                                    {entityAdminInfo.email && <Text>{entityAdminInfo.email}</Text>}
+                                    <HStack justify="space-between" align="flex-start">
+                                        <Box>
+                                            <Heading as="h3" size="lg">{userInfo.user.fullname}</Heading>
+                                            {userInfo.user.title && <Text>{userInfo.user.title}</Text>}
+                                            {entityAdminInfo.email && <Text>{entityAdminInfo.email}</Text>}
+                                        </Box>
+                                        <Button
+                                            leftIcon={<HiPencil />}
+                                            size="sm"
+                                            onClick={onOpen}
+                                            mt="1"
+                                        >
+                                            Edit
+                                        </Button>
+                                    </HStack>
                                 </CardHeader>
                                 <CardBody>
                                     <Text>
@@ -219,6 +245,14 @@ export default function EntityPage() {
                         </Flex>
                         <AuthorizedCard entity={userInfo.user.entity} updatePendingInvitations={updatePendingInvitations}  />
                     </Box>
+
+                    <EditAdminDetailsModal 
+                        isOpen={isOpen}
+                        onClose={onClose}
+                        adminInfo={userInfo.user}
+                        onSaveSuccess={handleSaveSuccess}
+                    />
+
                     <Button my="2em" onClick={() => signOut(appConfig.cognitoDomain, appConfig.entityAdmin.cognitoID)}>Sign Out</Button>
                 </>
             }
