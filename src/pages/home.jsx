@@ -12,6 +12,20 @@ export default function Home() {
 
     const { appConfig } = useContext(ConfigContext);
 
+    // Mapping for friendlier form labels
+    const formLabelMap = {
+        "registration-form-entity": "Entity Registration Form",
+        "registration-form-individual": "Individual Registration Form",
+        "consent-form": "Consent Form",
+        "exhibit-form-current-full": "Exhibit Form (Current, Full)",
+        "exhibit-form-current-single": "Exhibit Form (Current, Single)",
+        "exhibit-form-other-full": "Exhibit Form (Other, Full)",
+        "exhibit-form-other-single": "Exhibit Form (Other, Single)",
+        "exhibit-form-both-full": "Exhibit Form (Both, Full)",
+        "exhibit-form-both-single": "Exhibit Form (Both, Single)",
+        "disclosure-form": "Disclosure Form"
+    };
+
     const navigate = useNavigate();
 
     const idToken = Cookies.get('EttIdJwt');
@@ -182,6 +196,25 @@ export default function Home() {
                     (their employers, appointing and honoring organizations, and societies) and organization requests for disclosures are deleted as soon as ETT sends 
                     them and two reminders. (A limited archival record of the transmission is kept behind a firewall.)  ETT is a conduit, not a records repository. 
                 </Text>
+                {/* Conditionally render the blank forms section only if appConfig and publicBlankFormURIs are available */}
+                {appConfig?.publicBlankFormURIs && (
+                  <Box my="8">
+                      <Heading size="md" mb="2">Download Blank Example Forms</Heading>
+                      <UnorderedList>
+                          {appConfig.publicBlankFormURIs.map((uri) => {
+                              const key = uri.split('/').pop();
+                              const label = formLabelMap[key] || key.replace(/-/g, ' ').replace('.pdf', '');
+                              return (
+                                  <ListItem key={uri}>
+                                      <a href={uri} target="_blank" rel="noopener noreferrer">
+                                          {label}
+                                      </a>
+                                  </ListItem>
+                              );
+                          })}
+                      </UnorderedList>
+                  </Box>
+                )}
             </Box>
         </>
     );
