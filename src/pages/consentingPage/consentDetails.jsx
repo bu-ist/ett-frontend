@@ -23,6 +23,14 @@ export default function ConsentDetails({ consentData, setConsentData, consenterI
 
     const activeConsent = consentStatus === 'active';
 
+    // Helper function for extracting and formatting the last date in an array
+    function getLastDateString(arr) {
+        if (!Array.isArray(arr) || arr.length === 0) return '';
+        const date = arr.at(-1);
+        if (!date) return '';
+        return new Date(date).toLocaleString();
+    }
+
     function handleSignOut() {
         const { cognitoDomain, consentingPerson: { cognitoID } } = appConfig;
         signOut(cognitoDomain, cognitoID);
@@ -65,8 +73,16 @@ export default function ConsentDetails({ consentData, setConsentData, consenterI
                                     Consent for {fullName}
                                 </Heading>
                                 <Text>{email}</Text>
-                                <Text>{activeConsent ? `Consent granted on ${consenter.consented_timestamp}` : "Consent not active"}</Text>
-                                {activeConsent && consenter?.renewed_timestamp && <Text>Renewed on {consenter.renewed_timestamp.reverse()[0]}</Text>}
+                                <Text>{consenter.phone_number}</Text>
+                                <Text>
+                                    {activeConsent
+                                        ? `Consent granted on ${getLastDateString(consenter.consented_timestamp)}`
+                                        : "Consent not active"
+                                    }
+                                </Text>
+                                {activeConsent && consenter?.renewed_timestamp?.length > 0 && (
+                                    <Text>Renewed on {getLastDateString(consenter.renewed_timestamp)}</Text>
+                                )}
                             </Box>
                             <Box>
                                 <Button
@@ -112,7 +128,7 @@ export default function ConsentDetails({ consentData, setConsentData, consenterI
                     </SimpleGrid>
                 </>
             )}
-            <Button my="2em" onClick={handleSignOut}>Sign Out</Button>
+            <Button my="16" onClick={handleSignOut}>Sign Out</Button>
 
             <EditConsentDetailsModal 
                 isOpen={isOpen}
@@ -126,12 +142,13 @@ export default function ConsentDetails({ consentData, setConsentData, consenterI
 
 ConsentDetails.propTypes = {
     consentData: PropTypes.shape({
-        consenter: PropTypes.shape({
-            consented_timestamp: PropTypes.string,
-            renewed_timestamp: PropTypes.arrayOf(PropTypes.string),
-        }).isRequired,
         fullName: PropTypes.string.isRequired,
         consentStatus: PropTypes.string.isRequired,
+        consenter: PropTypes.shape({
+            phone_number: PropTypes.string,
+            consented_timestamp: PropTypes.arrayOf(PropTypes.string),
+            renewed_timestamp: PropTypes.arrayOf(PropTypes.string),
+        }).isRequired,
     }).isRequired,
     setConsentData: PropTypes.func.isRequired,
     consenterInfo: PropTypes.shape({
