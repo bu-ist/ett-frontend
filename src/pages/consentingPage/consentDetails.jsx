@@ -25,9 +25,13 @@ export default function ConsentDetails({ consentData, setConsentData, consenterI
 
     // Helper function for extracting and formatting the last date in an array
     function getLastDateString(arr) {
+        // Check if the array is valid and has at least one element
         if (!Array.isArray(arr) || arr.length === 0) return '';
+        // Get the last element of the array
         const date = arr.at(-1);
+        // Check if the last element is a valid date string
         if (!date) return '';
+        // Convert the date string to a Date object and format it
         return new Date(date).toLocaleString();
     }
 
