@@ -1,7 +1,7 @@
 import { useEffect, useState, useContext } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import Cookies from 'js-cookie';
-import { Heading, Button, Text, Spinner, Box, Card, CardHeader, CardBody, Flex, Icon, CardFooter, VStack, Stack, HStack, useDisclosure } from '@chakra-ui/react';
+import { Heading, Button, Text, Spinner, Box, Card, CardHeader, CardBody, Flex, Icon, CardFooter, VStack, Stack, HStack, useDisclosure, Accordion, AccordionItem, AccordionButton, AccordionIcon, AccordionPanel } from '@chakra-ui/react';
 import { BsFileEarmarkLock2, BsExclamationTriangle } from 'react-icons/bs';
 import { HiMinusCircle, HiCheckCircle, HiPencil } from "react-icons/hi";
 
@@ -245,7 +245,24 @@ export default function EntityPage() {
                         </Flex>
                         <AuthorizedCard entity={userInfo.user.entity} updatePendingInvitations={updatePendingInvitations}  />
                     </Box>
-
+                    <Box my="4em">
+                        <Accordion allowToggle>
+                            <AccordionItem p="4" border="1px" borderColor="gray.200" borderRadius="md">
+                                <h2>
+                                    <AccordionButton>
+                                        <Box as="span" flex='1' textAlign='left'>
+                                            <Heading size="md">Optional Disclosure Request Form</Heading>
+                                        </Box>
+                                        <AccordionIcon />
+                                    </AccordionButton>
+                                </h2>
+                                <AccordionPanel pb={4}>
+                                    {/* Form content will go here */}
+                                    <Text>Form content placeholder</Text>
+                                </AccordionPanel>
+                            </AccordionItem>
+                        </Accordion>
+                    </Box>
                     <EditAdminDetailsModal 
                         isOpen={isOpen}
                         onClose={onClose}
