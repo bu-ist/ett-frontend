@@ -1,0 +1,32 @@
+async function sendAdminDisclosureRequestAPI(apiHost, apiStage, accessToken, consenterEmail, entityId) {
+    // Look up if we are in local development mode.
+    const { MODE } = import.meta.env;
+
+    // Set the API URL based on the environment, local dev needs a proxy to avoid CORS issues.
+    const apiUrlBase = MODE === 'development'
+    ? `/entityApi/${apiStage}`
+    : `${apiHost}/${apiStage}`;
+
+    const requestUri = `${apiUrlBase}/RE_ADMIN`;
+
+    // Send a request to the API to send disclosure request.
+    const response = await fetch(requestUri, {
+        method: 'GET',
+        mode: 'cors',
+        credentials: 'include',
+        headers: {
+            'Authorization': `Bearer ${accessToken}`,
+            'Content-Type': 'application/json',
+            'ettPayload': JSON.stringify({ 
+                task: 'send-disclosure-request',
+                parameters: { consenterEmail: consenterEmail, entity_id: entityId }
+            })
+        }
+    });
+
+    // Extract and return the payload from the response.
+    const data = await response.json();
+    return data;
+}
+
+export { sendAdminDisclosureRequestAPI };

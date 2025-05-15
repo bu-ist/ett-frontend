@@ -5,12 +5,22 @@ import Cookies from 'js-cookie';
 
 import { Box, FormControl, Button, FormLabel, Input, Spinner, useDisclosure, Modal, ModalOverlay, ModalContent, ModalHeader, ModalCloseButton, ModalBody, FormErrorMessage, FormHelperText, Alert, AlertIcon, Stack, Text, ModalFooter } from "@chakra-ui/react";
 
-import { sendDisclosureRequestAPI } from '../../lib/auth-ind/sendDisclosureRequestAPI';
 import { emailRegex } from '../../lib/formatting/emailRegex';
 
 import { ConfigContext } from '../../lib/configContext';
 
-export default function DisclosureRequestForm({ entityId }) {
+const ROLE_CONFIG = {
+    RE_AUTH_IND: {
+        apiHostKey: 'authorizedIndividual',
+        configKey: 'authorizedIndividual'
+    },
+    RE_ADMIN: {
+        apiHostKey: 'entityAdmin',
+        configKey: 'entityAdmin'
+    }
+};
+
+export default function DisclosureRequestForm({ entityId, apiFunction, role }) {
     const { isOpen, onOpen, onClose } = useDisclosure();
 
     // Get the appConfig from the ConfigContext.
@@ -36,12 +46,23 @@ export default function DisclosureRequestForm({ entityId }) {
         setApiState('loading');
         setSubmittedEmail(consenterEmail);
 
-        const { apiStage, authorizedIndividual: { apiHost } } = appConfig;
+        const { apiStage } = appConfig;
+        
+        // Get the correct API host configuration based on role
+        const roleConfig = ROLE_CONFIG[role];
+        if (!roleConfig) {
+            console.error(`Invalid role: ${role}`);
+            setApiState('error');
+            onOpen();
+            return;
+        }
+
+        const apiHost = appConfig[roleConfig.configKey].apiHost;
         const accessToken = Cookies.get('EttAccessJwt');
         
-        const sendResult = await sendDisclosureRequestAPI(apiHost, apiStage, accessToken, consenterEmail, entityId);
+        const sendResult = await apiFunction(apiHost, apiStage, accessToken, consenterEmail, entityId);
         
-        if (sendResult.payload.ok) {
+        if (sendResult.payload?.ok) {
             setApiState('success');
         } else {
             setApiState('error');
@@ -140,5 +161,7 @@ export default function DisclosureRequestForm({ entityId }) {
 }
 
 DisclosureRequestForm.propTypes = {
-    entityId: PropTypes.string.isRequired
+    entityId: PropTypes.string.isRequired,
+    apiFunction: PropTypes.func.isRequired,
+    role: PropTypes.oneOf(['RE_AUTH_IND', 'RE_ADMIN']).isRequired
 };

@@ -18,6 +18,7 @@ import ExhibitFormRequest from './authorizedPage/exhibitFormRequest';
 import AuthIndDetails from './authorizedPage/authIndDetails';
 import EntityInfoCard from './authorizedPage/entityInfoCard';
 import DisclosureRequestForm from './authorizedPage/disclosureRequestForm';
+import { sendDisclosureRequestAPI } from '../lib/auth-ind/sendDisclosureRequestAPI';
 
 export default function AuthorizedPage() {
     let [searchParams, setSearchParams] = useSearchParams();
@@ -198,7 +199,11 @@ export default function AuthorizedPage() {
                                         independent decision-making in many situations. A disclosing entity retains sole custody of its records. ETT never receives 
                                         disclosures or conduct records and cannot create a central repository of them.
                                     </Text>
-                                    <DisclosureRequestForm entityId={userData.entity.entity_id} />
+                                    <DisclosureRequestForm 
+                                        entityId={userData.entity.entity_id} 
+                                        apiFunction={sendDisclosureRequestAPI}
+                                        role="RE_AUTH_IND"
+                                    />
                                 </CardBody>
                             </Stack>
                         </Card>
