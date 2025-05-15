@@ -23,6 +23,34 @@ export default function ConsentDetails({ consentData, setConsentData, consenterI
 
     const activeConsent = consentStatus === 'active';
 
+    // Helper function for extracting and formatting the last date in an array
+    function getLastDateString(arr) {
+        // Check if the array is valid and has at least one element
+        if (!Array.isArray(arr) || arr.length === 0) return '';
+        // Get the last element of the array
+        const date = arr.at(-1);
+        // Check if the last element is a valid date string
+        if (!date) return '';
+        // Convert the date string to a Date object and format it
+        return new Date(date).toLocaleString();
+    }
+
+    // Only show renewal if it is after the last consent grant.
+    // This is to deal with the case were consent is granted and renewed, then rescinded, and then granted again; the back end doesn't remove the renewed timestamp.
+    // In this case, the consented timestamp more recent than the renewed timestamp, so we don't want to show the renewal date.
+    function shouldShowRenewal(consentedArr, renewedArr) {
+        // Check if the arrays are valid and have at least one element
+        if (!Array.isArray(consentedArr) || !Array.isArray(renewedArr)) return false;
+        if (renewedArr.length === 0 || consentedArr.length === 0) return false;
+
+        // Convert the last elements of both arrays to Date objects and compare them
+        const lastConsent = new Date(consentedArr.at(-1));
+        const lastRenewal = new Date(renewedArr.at(-1));
+
+        // Check if the last renewal date is greater than the last consent date
+        return lastRenewal > lastConsent;
+    }
+
     function handleSignOut() {
         const { cognitoDomain, consentingPerson: { cognitoID } } = appConfig;
         signOut(cognitoDomain, cognitoID);
@@ -65,8 +93,16 @@ export default function ConsentDetails({ consentData, setConsentData, consenterI
                                     Consent for {fullName}
                                 </Heading>
                                 <Text>{email}</Text>
-                                <Text>{activeConsent ? `Consent granted on ${consenter.consented_timestamp}` : "Consent not active"}</Text>
-                                {activeConsent && consenter?.renewed_timestamp && <Text>Renewed on {consenter.renewed_timestamp.reverse()[0]}</Text>}
+                                <Text>{consenter.phone_number}</Text>
+                                <Text>
+                                    {activeConsent
+                                        ? `Consent granted on ${getLastDateString(consenter.consented_timestamp)}`
+                                        : "Consent not active"
+                                    }
+                                </Text>
+                                {activeConsent && shouldShowRenewal(consenter.consented_timestamp, consenter.renewed_timestamp) && (
+                                    <Text>Renewed on {getLastDateString(consenter.renewed_timestamp)}</Text>
+                                )}
                             </Box>
                             <Box>
                                 <Button
@@ -112,7 +148,7 @@ export default function ConsentDetails({ consentData, setConsentData, consenterI
                     </SimpleGrid>
                 </>
             )}
-            <Button my="2em" onClick={handleSignOut}>Sign Out</Button>
+            <Button my="16" onClick={handleSignOut}>Sign Out</Button>
 
             <EditConsentDetailsModal 
                 isOpen={isOpen}
@@ -126,12 +162,13 @@ export default function ConsentDetails({ consentData, setConsentData, consenterI
 
 ConsentDetails.propTypes = {
     consentData: PropTypes.shape({
-        consenter: PropTypes.shape({
-            consented_timestamp: PropTypes.string,
-            renewed_timestamp: PropTypes.arrayOf(PropTypes.string),
-        }).isRequired,
         fullName: PropTypes.string.isRequired,
         consentStatus: PropTypes.string.isRequired,
+        consenter: PropTypes.shape({
+            phone_number: PropTypes.string,
+            consented_timestamp: PropTypes.arrayOf(PropTypes.string),
+            renewed_timestamp: PropTypes.arrayOf(PropTypes.string),
+        }).isRequired,
     }).isRequired,
     setConsentData: PropTypes.func.isRequired,
     consenterInfo: PropTypes.shape({

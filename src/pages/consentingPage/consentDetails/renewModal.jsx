@@ -1,6 +1,7 @@
 import { useState, useContext } from 'react';
 import Cookies from 'js-cookie';
 import { useDisclosure, Button, Modal, ModalOverlay, ModalHeader, ModalContent, ModalCloseButton, ModalBody, ModalFooter, Spinner, Text } from '@chakra-ui/react';
+import PropTypes from 'prop-types';
 
 import { ConfigContext } from "../../../lib/configContext";
 
@@ -11,6 +12,18 @@ export default function RenewModal({setConsentData, consentData}) {
     const { appConfig } = useContext( ConfigContext );
 
     const [apiState, setApiState] = useState('idle');
+
+    // Helper function for extracting and formatting the last date in an array
+    function getLastDateString(arr) {
+        // Check if the array is valid and has at least one element.
+        if (!Array.isArray(arr) || arr.length === 0) return '';
+        // Get the last element of the array.
+        const date = arr.at(-1);
+        // Check if the last element is a valid date string.
+        if (!date) return '';
+        // Convert the date string to a Date object and format it.
+        return new Date(date).toLocaleString();
+    }
 
     // Handles renewing the consent expiration date.
     function handleRenew() {
@@ -64,7 +77,7 @@ export default function RenewModal({setConsentData, consentData}) {
                         }
                         {apiState == 'success' && 
                             <Text>
-                                Consent renewed successfully with timestamp: {consentData.consenter.renewed_timestamp.reverse()[0]}
+                                Consent renewed successfully with timestamp: {getLastDateString(consentData.consenter.renewed_timestamp)}
                             </Text>
                         }
                         {apiState == 'error' && 
@@ -91,3 +104,12 @@ export default function RenewModal({setConsentData, consentData}) {
         </>
     );
 }
+
+RenewModal.propTypes = {
+    setConsentData: PropTypes.func.isRequired,
+    consentData: PropTypes.shape({
+        consenter: PropTypes.shape({
+            renewed_timestamp: PropTypes.arrayOf(PropTypes.string)
+        }).isRequired
+    }).isRequired
+};
