@@ -31,6 +31,22 @@ export default function ConsentDetails({ consentData, setConsentData, consenterI
         return new Date(date).toLocaleString();
     }
 
+    // Only show renewal if it is after the last consent grant.
+    // This is to deal with the case were consent is granted and renewed, then rescinded, and then granted again; the back end doesn't remove the renewed timestamp.
+    // In this case, the consented timestamp more recent than the renewed timestamp, so we don't want to show the renewal date.
+    function shouldShowRenewal(consentedArr, renewedArr) {
+        // Check if the arrays are valid and have at least one element
+        if (!Array.isArray(consentedArr) || !Array.isArray(renewedArr)) return false;
+        if (renewedArr.length === 0 || consentedArr.length === 0) return false;
+
+        // Convert the last elements of both arrays to Date objects and compare them
+        const lastConsent = new Date(consentedArr.at(-1));
+        const lastRenewal = new Date(renewedArr.at(-1));
+
+        // Check if the last renewal date is greater than the last consent date
+        return lastRenewal > lastConsent;
+    }
+
     function handleSignOut() {
         const { cognitoDomain, consentingPerson: { cognitoID } } = appConfig;
         signOut(cognitoDomain, cognitoID);
@@ -80,7 +96,7 @@ export default function ConsentDetails({ consentData, setConsentData, consenterI
                                         : "Consent not active"
                                     }
                                 </Text>
-                                {activeConsent && consenter?.renewed_timestamp?.length > 0 && (
+                                {activeConsent && shouldShowRenewal(consenter.consented_timestamp, consenter.renewed_timestamp) && (
                                     <Text>Renewed on {getLastDateString(consenter.renewed_timestamp)}</Text>
                                 )}
                             </Box>
