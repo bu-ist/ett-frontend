@@ -56,6 +56,7 @@ function parseAppConfig(data) {
         },
         registerEntityApiHost: `https://${entityRegistrationApiHost}`,
         registerConsenterHost: `https://${consentingRegistrationApiHost}`,
+        publicBlankFormURIs: data.PUBLIC_FORM_DOWNLOAD_URIS,
     };
 
     return parsedData;
