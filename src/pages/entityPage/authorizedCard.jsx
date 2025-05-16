@@ -67,7 +67,19 @@ export default function AuthorizedCard({ entity, updatePendingInvitations }) {
                         Both Authorized Individuals have been registered successfully. They will receive notification emails when new disclosure forms are submitted.
                     </Text>
                 )}
-                
+
+                <Heading as="h4" size="sm" mt="4" mb="2">Registrations</Heading>
+                {entity.users.length === 0 ? (
+                    <Stack mt="4" direction="row">
+                        <Icon as={HiMinusCircle} color="gray.400" boxSize="6" />
+                        <Text>No Authorized Individuals currently registered</Text>
+                    </Stack>
+                ) : (
+                    <>
+                        {authIndsList}
+                    </>
+                )}
+
                 {/* Only show Invitations section if we don't have full registration */}
                 {entity.users.length < 2 && (
                     <>
@@ -82,18 +94,6 @@ export default function AuthorizedCard({ entity, updatePendingInvitations }) {
                                 {pendingInvitationsList}
                             </Box>
                         )}
-                    </>
-                )}
-
-                <Heading as="h4" size="sm" mt="4" mb="2">Registrations</Heading>
-                {entity.users.length === 0 ? (
-                    <Stack mt="4" direction="row">
-                        <Icon as={HiMinusCircle} color="gray.400" boxSize="6" />
-                        <Text>No Authorized Individuals currently registered</Text>
-                    </Stack>
-                ) : (
-                    <>
-                        {authIndsList}
                     </>
                 )}
             </CardBody>
