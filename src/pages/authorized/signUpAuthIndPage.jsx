@@ -57,7 +57,7 @@ export default function SignUpAuthIndPage() {
             const code = searchParams.get('code');
             const entityId = searchParams.get('entity_id');
     
-            // Call the lookupInvitationAPI function with the code and entity ID.
+            // Call the lookupEntityAPI function with the code and entity ID.
             try {
                 const lookupResult = await lookupEntityAPI(appConfig, code);
                 console.log('lookupResult: ', lookupResult);
