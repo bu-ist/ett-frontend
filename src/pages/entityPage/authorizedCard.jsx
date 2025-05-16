@@ -56,7 +56,7 @@ export default function AuthorizedCard({ entity, updatePendingInvitations }) {
             </CardHeader>
             <CardBody>
                 {(entity.users.length < 2) && (
-                    <Text>
+                    <Text fontSize="lg" fontWeight="semibold">
                         {entity.users.length === 0
                             ? "Full Entity registration requires two Authorized Individuals."
                             : "A second Authorized Individual is required to complete Entity registration."}

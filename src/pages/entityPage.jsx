@@ -253,7 +253,9 @@ export default function EntityPage() {
                                     {userInfo.user.entity.users.length < 2 &&
                                         <Stack mt="2" direction="row">
                                             <Icon as={HiMinusCircle} color="gray.300" boxSize={6} />
-                                            <Text>Not fully registered, two Authorized Individuals required</Text>
+                                            <Text>
+                                                Not fully registered, <Text as="span" fontWeight="semibold">two Authorized Individuals required</Text>
+                                            </Text>
                                         </Stack>
                                     }
                                     {userInfo.user.entity.users.length === 2 &&
