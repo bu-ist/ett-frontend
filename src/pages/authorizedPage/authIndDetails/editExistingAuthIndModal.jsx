@@ -199,7 +199,7 @@ export default function EditExistingAuthIndModal({ isOpen, onClose, userInfo, on
                 <ModalOverlay />
                 <ModalContent>
                     <form onSubmit={handleSubmit(onSubmit)}>
-                        <ModalHeader>Edit Contact Information</ModalHeader>
+                        <ModalHeader>Edit Personal Details</ModalHeader>
                         <ModalCloseButton />
                         <ModalBody>
                             <Box mb="6">
@@ -329,7 +329,7 @@ export default function EditExistingAuthIndModal({ isOpen, onClose, userInfo, on
                                             <Text>Changes saved successfully. Because you changed your email:</Text>
                                             <Text mt="2">1. Your current account will be logged out</Text>
                                             <Text>2. Check your new email for temporary password</Text>
-                                            <Text>3. You'll need to login with your new credentials</Text>
+                                            <Text>3. You&apos;ll need to login with your new credentials</Text>
                                         </Box>
                                     </Alert>
                                 </VStack>
