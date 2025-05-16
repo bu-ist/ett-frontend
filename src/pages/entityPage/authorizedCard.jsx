@@ -8,9 +8,7 @@ import InviteUsersModal from "./inviteUsersModal";
 import { formatTimestamp } from '../../lib/formatting/formatTimestamp';
 
 export default function AuthorizedCard({ entity, updatePendingInvitations }) {
-
     const authInds = entity.users.filter(user => user.role === 'RE_AUTH_IND');
-    const authIndsNames = authInds.map(member => member.fullname);
 
     const pendingInvitationsList = entity.pendingInvitations.map((invitation, index) => {
         const sentDate = formatTimestamp( invitation.sent_timestamp );
