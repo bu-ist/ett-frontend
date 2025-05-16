@@ -19,13 +19,14 @@ import { RiMailLine } from "react-icons/ri";
 import { ConfigContext } from '../../lib/configContext';
 import { inviteAuthIndFromEntityAPI } from '../../lib/entity/inviteAuthIndFromEntityAPI';
 
-export default function InviteReplacementAuthIndModal({ entity, fetchData, isSecondInvite = false }) {
+export default function InviteReplacementAuthIndModal({ entity, fetchData, updatePendingInvitations, isSecondInvite = false }) {
     const { appConfig } = useContext(ConfigContext);
 
     // UI State
     const { isOpen, onOpen, onClose } = useDisclosure();
     const [apiState, setApiState] = useState('idle');
     const [apiError, setApiError] = useState(null);
+    const [emailToInvite, setEmailToInvite] = useState('');
 
     // Set the initial state of the form data using react-hook-form
     const {
@@ -58,6 +59,8 @@ export default function InviteReplacementAuthIndModal({ entity, fetchData, isSec
 
         if (inviteResult.payload?.ok) {
             console.log('Replacement invitation successful');
+            // Store the invited email for updating the UI
+            setEmailToInvite(email);
             setApiState('success');
         } else {
             setApiState('error');
@@ -68,11 +71,16 @@ export default function InviteReplacementAuthIndModal({ entity, fetchData, isSec
     function handleClose() {
         onClose();
         
-        // To reflect the changes in the UI, trigger a re-fetch of the entity data
-        if (apiState === 'success' || apiState === 'error') {
-            fetchData();
+        // If successful, update the pending invitations in the UI
+        if (apiState === 'success') {
+            // Update with just the single email (no email2)
+            updatePendingInvitations(emailToInvite);
         }
+        
+        // Reset all state
+        setEmailToInvite('');
         setApiState('idle');
+        setApiError(null);
     }
 
     return (
@@ -169,6 +177,7 @@ InviteReplacementAuthIndModal.propTypes = {
     entity: PropTypes.shape({
         entity_id: PropTypes.string.isRequired
     }).isRequired,
-    fetchData: PropTypes.func.isRequired,
+    updatePendingInvitations: PropTypes.func.isRequired,
+    fetchData: PropTypes.func.isRequired, // Kept for backward compatibility
     isSecondInvite: PropTypes.bool
 };

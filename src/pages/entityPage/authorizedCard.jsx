@@ -113,7 +113,8 @@ export default function AuthorizedCard({ entity, updatePendingInvitations }) {
                   (entity.users.length === 0 && entity.pendingInvitations.length === 1)) &&
                     <InviteReplacementAuthIndModal 
                         entity={entity}
-                        fetchData={() => updatePendingInvitations(null, null)}
+                        updatePendingInvitations={updatePendingInvitations}
+                        fetchData={() => {}} // Kept for backward compatibility
                         isSecondInvite={entity.users.length === 0}
                     />
                 }
