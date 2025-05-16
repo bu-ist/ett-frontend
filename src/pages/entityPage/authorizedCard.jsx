@@ -1,4 +1,5 @@
 import { Fragment } from 'react';
+import PropTypes from 'prop-types';
 import { Card, CardHeader, Heading, CardBody, CardFooter, Text, Icon, Stack, Badge, Box, Divider } from "@chakra-ui/react";
 import { HiMinusCircle, HiCheckCircle, HiArrowSmRight } from "react-icons/hi";
 
@@ -93,3 +94,25 @@ export default function AuthorizedCard({ entity, updatePendingInvitations }) {
         </Card>
     );
 }
+
+AuthorizedCard.propTypes = {
+    entity: PropTypes.shape({
+        users: PropTypes.arrayOf(PropTypes.shape({
+            role: PropTypes.string.isRequired,
+            fullname: PropTypes.string.isRequired,
+            email: PropTypes.string.isRequired,
+            title: PropTypes.string,
+            delegate: PropTypes.shape({
+                fullname: PropTypes.string.isRequired,
+                email: PropTypes.string.isRequired
+            })
+        })).isRequired,
+        pendingInvitations: PropTypes.arrayOf(PropTypes.shape({
+            status: PropTypes.string,
+            email: PropTypes.string,
+            code: PropTypes.string,
+            sent_timestamp: PropTypes.string
+        })).isRequired
+    }).isRequired,
+    updatePendingInvitations: PropTypes.func.isRequired
+};
