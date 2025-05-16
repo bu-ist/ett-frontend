@@ -19,7 +19,7 @@ import { RiMailLine } from "react-icons/ri";
 import { ConfigContext } from '../../lib/configContext';
 import { inviteAuthIndFromEntityAPI } from '../../lib/entity/inviteAuthIndFromEntityAPI';
 
-export default function InviteReplacementAuthIndModal({ entity, fetchData, updatePendingInvitations, isSecondInvite = false }) {
+export default function InviteReplacementAuthIndModal({ entity, updatePendingInvitations, isSecondInvite = false }) {
     const { appConfig } = useContext(ConfigContext);
 
     // UI State
@@ -178,6 +178,5 @@ InviteReplacementAuthIndModal.propTypes = {
         entity_id: PropTypes.string.isRequired
     }).isRequired,
     updatePendingInvitations: PropTypes.func.isRequired,
-    fetchData: PropTypes.func.isRequired, // Kept for backward compatibility
     isSecondInvite: PropTypes.bool
 };
