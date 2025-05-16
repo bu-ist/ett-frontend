@@ -224,6 +224,7 @@ export default function EntityPage() {
                                             <Heading as="h3" size="lg">{userInfo.user.fullname}</Heading>
                                             {userInfo.user.title && <Text>{userInfo.user.title}</Text>}
                                             {entityAdminInfo.email && <Text>{entityAdminInfo.email}</Text>}
+                                            {userInfo.user.phone_number && <Text>{userInfo.user.phone_number}</Text>}
                                         </Box>
                                         <Button
                                             leftIcon={<HiPencil />}
