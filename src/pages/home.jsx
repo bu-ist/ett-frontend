@@ -89,7 +89,7 @@ export default function Home() {
                         <CardBody>
                             <Heading size="md">Administrative Support Professional</Heading>
                             <Text py={"2"} mb="15rem">
-                                A person who assists a Registered Entity's Authorized Individuals in the use of ETT.
+                                A person who assists a Registered Entity&apos;s Authorized Individuals in the use of ETT.
                                 A Registered Entity is a Society or IHE or other organization that has voluntarily joined the ETT by registering at this website.
                             </Text>
                         </CardBody>
