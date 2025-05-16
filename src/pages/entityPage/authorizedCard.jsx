@@ -4,6 +4,7 @@ import { Card, CardHeader, Heading, CardBody, CardFooter, Text, Icon, Stack, Bad
 import { HiMinusCircle, HiCheckCircle, HiArrowSmRight } from "react-icons/hi";
 
 import InviteUsersModal from "./inviteUsersModal";
+import InviteReplacementAuthIndModal from "../../components/amendment/inviteReplacementAuthIndModal";
 
 import { formatTimestamp } from '../../lib/formatting/formatTimestamp';
 
