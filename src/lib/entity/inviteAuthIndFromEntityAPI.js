@@ -14,19 +14,26 @@ async function inviteAuthIndFromEntityAPI( appConfig, accessToken, fromEmail, en
     // Construct the registration URI for the email invitation, which cognito will redirect to.
     const registrationUri = `${window.location.origin}/auth-ind/sign-up`;
 
+    // Construct the invitations object based on whether we have one or two emails
+    const invitations = {
+        inviter: {
+            email: fromEmail,
+            role: 'RE_ADMIN'
+        },
+        invitee1: { email: emailsToInvite.email1, role: 'RE_AUTH_IND' }
+    };
+
+    // Only add second invitee if email2 is provided
+    if (emailsToInvite.email2) {
+        invitations.invitee2 = { email: emailsToInvite.email2, role: 'RE_AUTH_IND' };
+    }
+
     const outgoingPayload = {
         task: 'invite-users',
         parameters: {
             entity: entity,
             registrationUri: registrationUri,
-            invitations: {
-                inviter: {
-                    email: fromEmail,
-                    role: 'RE_ADMIN'
-                },
-                invitee1: { email: emailsToInvite.email1, role:'RE_AUTH_IND' },
-                invitee2: { email: emailsToInvite.email2, role:'RE_AUTH_IND' }
-            }
+            invitations
         }
     }
 
