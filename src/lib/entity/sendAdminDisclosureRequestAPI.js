@@ -1,5 +1,5 @@
 /**
- * Sends a disclosure request as an Authorized Individual
+ * Sends a disclosure request as an Administrative Support Professional
  * 
  * @param {Object} appConfig - The application configuration object
  * @param {string} accessToken - JWT access token
@@ -7,21 +7,21 @@
  * @param {string} entityId - ID of the entity
  * @returns {Promise<Object>} - API response
  */
-async function sendDisclosureRequestAPI(appConfig, accessToken, consenterEmail, entityId) {
+async function sendAdminDisclosureRequestAPI(appConfig, accessToken, consenterEmail, entityId) {
     // Look up if we are in local development mode.
     const { MODE } = import.meta.env;
 
     // Get the API URL from appConfig.
-    const { apiStage, authorizedIndividual: { apiHost } } = appConfig;
+    const { apiStage, entityAdmin: { apiHost } } = appConfig;
 
     // Set the API URL based on the environment, local dev needs a proxy to avoid CORS issues.
     const apiUrlBase = MODE === 'development'
-    ? `/authorizedApi/${apiStage}`
+    ? `/entityApi/${apiStage}`
     : `${apiHost}/${apiStage}`;
 
-    const requestUri = `${apiUrlBase}/RE_AUTH_IND`;
+    const requestUri = `${apiUrlBase}/RE_ADMIN`;
 
-    // Send a request to the API to send exhibit request.
+    // Send a request to the API to send disclosure request.
     const response = await fetch(requestUri, {
         method: 'GET',
         mode: 'cors',
@@ -41,4 +41,4 @@ async function sendDisclosureRequestAPI(appConfig, accessToken, consenterEmail, 
     return data;
 }
 
-export { sendDisclosureRequestAPI };
+export { sendAdminDisclosureRequestAPI };

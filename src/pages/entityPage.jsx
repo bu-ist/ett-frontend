@@ -1,7 +1,8 @@
 import { useEffect, useState, useContext } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import Cookies from 'js-cookie';
-import { Heading, Button, Text, Spinner, Box, Card, CardHeader, CardBody, Flex, Icon, CardFooter, VStack, Stack, HStack, useDisclosure } from '@chakra-ui/react';
+import { Heading, Button, Text, Spinner, Box, Card, CardHeader, CardBody, Flex, Icon, CardFooter, VStack, Stack, HStack, useDisclosure, Accordion, AccordionItem, AccordionButton, AccordionIcon, AccordionPanel } from '@chakra-ui/react';
+
 import { BsFileEarmarkLock2, BsExclamationTriangle } from 'react-icons/bs';
 import { HiMinusCircle, HiCheckCircle, HiPencil } from "react-icons/hi";
 
@@ -15,6 +16,7 @@ import { UserContext } from '../lib/userContext';
 
 import AuthorizedCard from './entityPage/authorizedCard';
 import EditAdminDetailsModal from './entityPage/editAdminDetailsModal';
+import DisclosureRequestForm from './authorizedPage/disclosureRequestForm';
 
 import { formatTimestamp } from '../lib/formatting/formatTimestamp';
 
@@ -245,7 +247,38 @@ export default function EntityPage() {
                         </Flex>
                         <AuthorizedCard entity={userInfo.user.entity} updatePendingInvitations={updatePendingInvitations}  />
                     </Box>
-
+                    <Box my="4em">
+                        <Accordion allowToggle>
+                            <AccordionItem p="4" border="1px" borderColor="gray.200" borderRadius="md">
+                                <h2>
+                                    <AccordionButton>
+                                        <Box as="span" flex='1' textAlign='left'>
+                                            <Heading size="md">Optional Disclosure Request Form</Heading>
+                                        </Box>
+                                        <AccordionIcon />
+                                    </AccordionButton>
+                                </h2>
+                                <AccordionPanel pb={4}>
+                                    <Text my="4" fontSize="lg" fontWeight="semibold" >
+                                        As an Administrative Support Professional, you can request disclosures for consenting individuals when directed by an Authorized Individual.
+                                    </Text>
+                                    <Text py="2" mb="4">
+                                        An entity that made findings (which is the most reliable source) makes disclosures directly to an ETT-Registered Entity 
+                                        when it initiates an ETT-automated request. ETT provides an efficient “check the box” Disclosure Form Template, which 
+                                        minimizes labor for a disclosing entity to make disclosures and for a receiving entity to review disclosures. 
+                                        When completed, the Disclosure Form discloses the existence and year of a finding and the type of misconduct — or that there 
+                                        is no finding of the types covered by ETT. A person’s input and these facts can be sufficient to inform an ETT-Registered Entity’s 
+                                        independent decision-making in many situations. A disclosing entity retains sole custody of its records. ETT never receives 
+                                        disclosures or conduct records and cannot create a central repository of them.
+                                    </Text>
+                                    <DisclosureRequestForm 
+                                        entityId={userInfo.user.entity.entity_id}
+                                        role="RE_ADMIN"
+                                    />
+                                </AccordionPanel>
+                            </AccordionItem>
+                        </Accordion>
+                    </Box>
                     <EditAdminDetailsModal 
                         isOpen={isOpen}
                         onClose={onClose}

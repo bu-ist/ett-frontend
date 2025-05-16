@@ -198,7 +198,10 @@ export default function AuthorizedPage() {
                                         independent decision-making in many situations. A disclosing entity retains sole custody of its records. ETT never receives 
                                         disclosures or conduct records and cannot create a central repository of them.
                                     </Text>
-                                    <DisclosureRequestForm entityId={userData.entity.entity_id} />
+                                    <DisclosureRequestForm 
+                                        entityId={userData.entity.entity_id}
+                                        role="RE_AUTH_IND"
+                                    />
                                 </CardBody>
                             </Stack>
                         </Card>
