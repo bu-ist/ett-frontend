@@ -125,7 +125,7 @@ export default function EditConsentDetailsModal({ isOpen, onClose, consenter, on
                 <ModalOverlay />
                 <ModalContent>
                     <form onSubmit={handleSubmit(onSubmit)}>
-                        <ModalHeader>Edit Personal details</ModalHeader>
+                        <ModalHeader>Edit Personal Details</ModalHeader>
                         <ModalCloseButton />
                         <ModalBody>
                             <Box mb="6">
