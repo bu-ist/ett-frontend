@@ -255,7 +255,7 @@ export default function EntityPage() {
                                         <Stack mt="2" direction="row">
                                             <Icon as={HiMinusCircle} color="gray.300" boxSize={6} />
                                             <Text>
-                                                Not fully registered, <Text as="span" fontWeight="semibold">two Authorized Individuals required</Text>
+                                                Not fully registered, <Box as="span" fontWeight="semibold">two Authorized Individuals required</Box>
                                             </Text>
                                         </Stack>
                                     }
