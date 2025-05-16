@@ -3,8 +3,6 @@ import { useSearchParams } from 'react-router-dom';
 import Cookies from 'js-cookie';
 import { Heading, Button, Text, Spinner, Box, Card, CardHeader, CardBody, Flex, Icon, CardFooter, VStack, Stack, HStack, useDisclosure, Accordion, AccordionItem, AccordionButton, AccordionIcon, AccordionPanel } from '@chakra-ui/react';
 
-import { sendAdminDisclosureRequestAPI } from '../lib/entity/sendAdminDisclosureRequestAPI';
-import DisclosureRequestForm from './authorizedPage/disclosureRequestForm';
 import { BsFileEarmarkLock2, BsExclamationTriangle } from 'react-icons/bs';
 import { HiMinusCircle, HiCheckCircle, HiPencil } from "react-icons/hi";
 
@@ -18,6 +16,7 @@ import { UserContext } from '../lib/userContext';
 
 import AuthorizedCard from './entityPage/authorizedCard';
 import EditAdminDetailsModal from './entityPage/editAdminDetailsModal';
+import DisclosureRequestForm from './authorizedPage/disclosureRequestForm';
 
 import { formatTimestamp } from '../lib/formatting/formatTimestamp';
 
@@ -264,8 +263,7 @@ export default function EntityPage() {
                                         As an Administrative Support Professional, you can request disclosures for consenting individuals when directed by an Authorized Individual.
                                     </Text>
                                     <DisclosureRequestForm 
-                                        entityId={userInfo.user.entity.entity_id} 
-                                        apiFunction={sendAdminDisclosureRequestAPI}
+                                        entityId={userInfo.user.entity.entity_id}
                                         role="RE_ADMIN"
                                     />
                                 </AccordionPanel>

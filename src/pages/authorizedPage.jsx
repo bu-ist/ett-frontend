@@ -18,7 +18,6 @@ import ExhibitFormRequest from './authorizedPage/exhibitFormRequest';
 import AuthIndDetails from './authorizedPage/authIndDetails';
 import EntityInfoCard from './authorizedPage/entityInfoCard';
 import DisclosureRequestForm from './authorizedPage/disclosureRequestForm';
-import { sendDisclosureRequestAPI } from '../lib/auth-ind/sendDisclosureRequestAPI';
 
 export default function AuthorizedPage() {
     let [searchParams, setSearchParams] = useSearchParams();
@@ -200,8 +199,7 @@ export default function AuthorizedPage() {
                                         disclosures or conduct records and cannot create a central repository of them.
                                     </Text>
                                     <DisclosureRequestForm 
-                                        entityId={userData.entity.entity_id} 
-                                        apiFunction={sendDisclosureRequestAPI}
+                                        entityId={userData.entity.entity_id}
                                         role="RE_AUTH_IND"
                                     />
                                 </CardBody>
