@@ -1,4 +1,16 @@
-// This function sends a POST request to the Entity API to invite two 'Authorized Individual' users to an entity.
+/**
+ * Sends a POST request to the Entity API to invite Authorized Individual(s) to an entity.
+ * Can be used to invite either one or two Authorized Individuals.
+ * 
+ * @param {Object} appConfig - The application configuration
+ * @param {string} accessToken - The access token for authentication
+ * @param {string} fromEmail - The email of the RE_ADMIN sending the invitation
+ * @param {Object} entity - The entity object
+ * @param {Object} emailsToInvite - Object containing email(s) to invite
+ * @param {string} emailsToInvite.email1 - First email to invite (required)
+ * @param {string} [emailsToInvite.email2] - Second email to invite (optional)
+ * @returns {Promise<Object>} The API response
+ */
 async function inviteAuthIndFromEntityAPI( appConfig, accessToken, fromEmail, entity, emailsToInvite ) {
     // Look up if we are in local development mode.
      const { MODE } = import.meta.env;
