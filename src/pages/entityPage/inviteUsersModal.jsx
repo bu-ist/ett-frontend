@@ -79,7 +79,7 @@ export default function InviteUsersModal({ numUsers, entity, updatePendingInvita
 
     return (
         <>
-            <Button isDisabled={numUsers > 0} onClick={onOpen}>Invite Authorized Individuals</Button>
+            <Button isDisabled={numUsers > 0} colorScheme="blue" size="lg" onClick={onOpen}>Invite Authorized Individuals</Button>
             <Modal size="2xl" isOpen={isOpen} onClose={handleClose}>
                 <ModalOverlay />
                 <ModalContent>

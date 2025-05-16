@@ -77,7 +77,7 @@ export default function InviteReplacementAuthIndModal({ entity, fetchData, isSec
 
     return (
         <>
-            <Button leftIcon={<RiMailLine />} onClick={onOpen}>
+            <Button leftIcon={<RiMailLine />} colorScheme="blue" size="lg" onClick={onOpen}>
                 Invite Replacement Authorized Individual
             </Button>
             <Modal size="xl" isOpen={isOpen} onClose={handleClose}>
