@@ -12,17 +12,13 @@ import { sendAdminDisclosureRequestAPI } from '../../lib/entity/sendAdminDisclos
 import { ConfigContext } from '../../lib/configContext';
 
 // Configuration for different roles. The disclosure request can be performed by either an authorized individual (RE_AUTH_IND) or an entity admin (RE_ADMIN).
-// Each role has its own API function and configuration key.
+// Each role has its own API function.
 const ROLE_CONFIG = {
     RE_AUTH_IND: {
-        configKey: 'authorizedIndividual',
-        apiFunction: sendDisclosureRequestAPI,
-        proxyPrefix: '/authorizedApi'
+        apiFunction: sendDisclosureRequestAPI
     },
     RE_ADMIN: {
-        configKey: 'entityAdmin',
-        apiFunction: sendAdminDisclosureRequestAPI,
-        proxyPrefix: '/entityApi'
+        apiFunction: sendAdminDisclosureRequestAPI
     }
 };
 
@@ -51,8 +47,6 @@ export default function DisclosureRequestForm({ entityId, role }) {
         const { consenterEmail } = values;
         setApiState('loading');
         setSubmittedEmail(consenterEmail);
-
-        const { apiStage } = appConfig;
         
         // Get the correct role configuration
         const roleConfig = ROLE_CONFIG[role];
@@ -63,10 +57,10 @@ export default function DisclosureRequestForm({ entityId, role }) {
             return;
         }
 
-        const apiHost = appConfig[roleConfig.configKey].apiHost;
         const accessToken = Cookies.get('EttAccessJwt');
         
-        const sendResult = await roleConfig.apiFunction(apiHost, apiStage, accessToken, consenterEmail, entityId);
+        // Send the disclosure request using the appropriate API function for the given role.
+        const sendResult = await roleConfig.apiFunction(appConfig, accessToken, consenterEmail, entityId);
         
         if (sendResult.payload?.ok) {
             setApiState('success');
