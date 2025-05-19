@@ -134,13 +134,33 @@ export default function EntityPage() {
     }, [appConfig, searchParams, setSearchParams, setUser]);
 
     // Function to update the pending invitations in the userInfo object, passed down to the AuthorizedCard component.
-    function updatePendingInvitations(email1, email2) {
-        // Make a copy of the userInfo object, and update the pending invitations with the new emails.
+    function updatePendingInvitations(email1, email2 = null) {
+        // Make a copy of the userInfo object
         const updatedUserInfo = {...userInfo};
-        updatedUserInfo.user.entity.pendingInvitations = [
-            {email: email1, status: 'invited-in-page'},
-            {email: email2, status: 'invited-in-page'},
-        ];
+        const currentInvites = updatedUserInfo.user.entity.pendingInvitations || [];
+        
+        if (email1 === null) {
+            // If called with null, it's a refresh request - do nothing to the invites
+            // This is used by InviteReplacementAuthIndModal to trigger a parent refresh
+            return;
+        }
+
+        // For backwards compatibility and dual invites
+        if (email2 !== null) {
+            // Replace all pending invitations with two new ones
+            updatedUserInfo.user.entity.pendingInvitations = [
+                {email: email1, status: 'invited-in-page'},
+                {email: email2, status: 'invited-in-page'},
+            ];
+        } else {
+            // Single invite case - add one new invitation while preserving other existing ones
+            // Filter out any existing invitation with the same email to avoid duplicates
+            const filteredInvites = currentInvites.filter(invite => invite.email !== email1);
+            updatedUserInfo.user.entity.pendingInvitations = [
+                ...filteredInvites,
+                {email: email1, status: 'invited-in-page'},
+            ];
+        }
 
         // Set the userInfo state to the updated object.
         setUserInfo(updatedUserInfo);
@@ -204,6 +224,7 @@ export default function EntityPage() {
                                             <Heading as="h3" size="lg">{userInfo.user.fullname}</Heading>
                                             {userInfo.user.title && <Text>{userInfo.user.title}</Text>}
                                             {entityAdminInfo.email && <Text>{entityAdminInfo.email}</Text>}
+                                            {userInfo.user.phone_number && <Text>{userInfo.user.phone_number}</Text>}
                                         </Box>
                                         <Button
                                             leftIcon={<HiPencil />}
@@ -233,7 +254,9 @@ export default function EntityPage() {
                                     {userInfo.user.entity.users.length < 2 &&
                                         <Stack mt="2" direction="row">
                                             <Icon as={HiMinusCircle} color="gray.300" boxSize={6} />
-                                            <Text>Not fully registered, two Authorized Individuals required</Text>
+                                            <Text>
+                                                Not fully registered, <Box as="span" fontWeight="semibold">two Authorized Individuals required</Box>
+                                            </Text>
                                         </Stack>
                                     }
                                     {userInfo.user.entity.users.length === 2 &&

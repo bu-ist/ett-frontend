@@ -1,15 +1,15 @@
 import { Fragment } from 'react';
+import PropTypes from 'prop-types';
 import { Card, CardHeader, Heading, CardBody, CardFooter, Text, Icon, Stack, Badge, Box, Divider } from "@chakra-ui/react";
 import { HiMinusCircle, HiCheckCircle, HiArrowSmRight } from "react-icons/hi";
 
 import InviteUsersModal from "./inviteUsersModal";
+import InviteReplacementAuthIndModal from "../../components/amendment/inviteReplacementAuthIndModal";
 
 import { formatTimestamp } from '../../lib/formatting/formatTimestamp';
 
 export default function AuthorizedCard({ entity, updatePendingInvitations }) {
-
     const authInds = entity.users.filter(user => user.role === 'RE_AUTH_IND');
-    const authIndsNames = authInds.map(member => member.fullname);
 
     const pendingInvitationsList = entity.pendingInvitations.map((invitation, index) => {
         const sentDate = formatTimestamp( invitation.sent_timestamp );
@@ -55,41 +55,91 @@ export default function AuthorizedCard({ entity, updatePendingInvitations }) {
                 <Heading as="h3" size="lg" color="gray.600">Authorized Individuals</Heading>
             </CardHeader>
             <CardBody>
-                {(entity.users.length < 2 ) &&
-                    <Text>
-                        Full Entity registration requires two Authorized Individuals.
+                {(entity.users.length < 2) && (
+                    <Text fontSize="lg" fontWeight="semibold">
+                        {entity.users.length === 0
+                            ? "Full Entity registration requires two Authorized Individuals."
+                            : "A second Authorized Individual is required to complete Entity registration."}
                     </Text>
-                }
-                {(entity.users.length === 2 ) &&
+                )}
+                {(entity.users.length === 2) && (
                     <Text>
-                        Lorem ipsum minim anim id do nisi aliqua. Consequat cillum sint qui ad aliqua proident nostrud. Cillum ullamco consectetur mollit eu labore amet ullamco mollit dolor veniam adipisicing veniam nulla ex. Quis irure minim id commodo dolore anim nulla aliqua reprehenderit pariatur. 
+                        Both Authorized Individuals have been registered successfully. They will receive notification emails when new disclosure forms are submitted.
                     </Text>
-                }
-                {entity.users.length <= 1 && <Heading as="h4" size="sm" mt="4">Invitations</Heading>}
-                {(entity.pendingInvitations.length == 0 && entity.users.length == 0 ) &&
-                    <Stack mt="4" direction="row"><Icon as={HiMinusCircle} color="gray.400" boxSize="6" /><Text>No pending invitations</Text></Stack>
-                }
-                {entity.pendingInvitations.length > 0 &&
-                    <Box mt="2">
-                        {pendingInvitationsList}
-                    </Box>
-                }
+                )}
+
                 <Heading as="h4" size="sm" mt="4" mb="2">Registrations</Heading>
-                {entity.users.length == 0 && 
-                    <Stack mt="4" direction="row"><Icon as={HiMinusCircle} color="gray.400" boxSize="6" /><Text>No Authorized Individuals currently registered</Text></Stack>
-                }
-                {entity.users.length > 0 && 
+                {entity.users.length === 0 ? (
+                    <Stack mt="4" direction="row">
+                        <Icon as={HiMinusCircle} color="gray.400" boxSize="6" />
+                        <Text>No Authorized Individuals currently registered</Text>
+                    </Stack>
+                ) : (
                     <>
                         {authIndsList}
                     </>
-                }
+                )}
 
+                {/* Only show Invitations section if we don't have full registration */}
+                {entity.users.length < 2 && (
+                    <>
+                        <Heading as="h4" size="sm" mt="4">Invitations</Heading>
+                        {entity.pendingInvitations.length === 0 ? (
+                            <Stack mt="4" direction="row">
+                                <Icon as={HiMinusCircle} color="gray.400" boxSize="6" />
+                                <Text>No pending invitations</Text>
+                            </Stack>
+                        ) : (
+                            <Box mt="2">
+                                {pendingInvitationsList}
+                            </Box>
+                        )}
+                    </>
+                )}
             </CardBody>
             <CardFooter>
-            {(entity.users.length == 0 && entity.pendingInvitations.length != 2 ) && 
-                <InviteUsersModal numUsers={entity.users.length} entity={entity} updatePendingInvitations={updatePendingInvitations} />
-            }
+                {/* Show initial dual-invite modal only when starting completely fresh */}
+                {(entity.users.length === 0 && entity.pendingInvitations.length === 0) && 
+                    <InviteUsersModal 
+                        numUsers={entity.users.length} 
+                        entity={entity} 
+                        updatePendingInvitations={updatePendingInvitations} 
+                    />
+                }
+                {/* Show replacement modal either:
+                    1. When we have one user and no pending invites (replacement needed) OR
+                    2. When we have no users but one pending invite (second invite needed) */}
+                {((entity.users.length === 1 && entity.pendingInvitations.length === 0) ||
+                  (entity.users.length === 0 && entity.pendingInvitations.length === 1)) &&
+                    <InviteReplacementAuthIndModal 
+                        entity={entity}
+                        updatePendingInvitations={updatePendingInvitations}
+                        isSecondInvite={entity.users.length === 0}
+                    />
+                }
             </CardFooter>
         </Card>
     );
 }
+
+AuthorizedCard.propTypes = {
+    entity: PropTypes.shape({
+        users: PropTypes.arrayOf(PropTypes.shape({
+            role: PropTypes.string.isRequired,
+            fullname: PropTypes.string.isRequired,
+            email: PropTypes.string.isRequired,
+            title: PropTypes.string,
+            delegate: PropTypes.shape({
+                fullname: PropTypes.string.isRequired,
+                email: PropTypes.string.isRequired
+            })
+        })).isRequired,
+        pendingInvitations: PropTypes.arrayOf(PropTypes.shape({
+            status: PropTypes.string,
+            email: PropTypes.string,
+            code: PropTypes.string,
+            sent_timestamp: PropTypes.string
+        })).isRequired
+    }).isRequired,
+    updatePendingInvitations: PropTypes.func.isRequired
+};
