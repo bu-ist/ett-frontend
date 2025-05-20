@@ -87,6 +87,11 @@ export default function AuthorizedCard({ entity, updatePendingInvitations }) {
                 {(entity.pendingInvitations.length > 0 || entity.users.length < 2) && (
                     <>
                         <Heading as="h4" size="sm" mt="4">Invitations</Heading>
+                        {isEntityRegistered && entity.users.length < 2 && entity.pendingInvitations.length === 0 && (
+                            <Text color="red.600" fontWeight="medium" mt="2" mb="4">
+                                Warning: Entity registration will expire in 30 days if two Authorized Individuals are not maintained. Please send an invitation to maintain entity registration.
+                            </Text>
+                        )}
                         {entity.pendingInvitations.length === 0 ? (
                             <Stack mt="4" direction="row">
                                 <Icon as={HiMinusCircle} color="gray.400" boxSize="6" />
