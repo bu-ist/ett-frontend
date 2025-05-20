@@ -9,6 +9,9 @@ import InviteReplacementAuthIndModal from "../../components/amendment/inviteRepl
 import { formatTimestamp } from '../../lib/formatting/formatTimestamp';
 
 export default function AuthorizedCard({ entity, updatePendingInvitations }) {
+    // Check if the entity is registered by checking if the entity has a defined property named registered_timestamp.
+    const isEntityRegistered = entity && Object.prototype.hasOwnProperty.call(entity, 'registered_timestamp');
+    
     const authInds = entity.users.filter(user => user.role === 'RE_AUTH_IND');
 
     const pendingInvitationsList = entity.pendingInvitations.map((invitation, index) => {
@@ -55,16 +58,16 @@ export default function AuthorizedCard({ entity, updatePendingInvitations }) {
                 <Heading as="h3" size="lg" color="gray.600">Authorized Individuals</Heading>
             </CardHeader>
             <CardBody>
-                {(entity.users.length < 2) && (
+                {!isEntityRegistered && (
                     <Text fontSize="lg" fontWeight="semibold">
                         {entity.users.length === 0
                             ? "Full Entity registration requires two Authorized Individuals."
                             : "A second Authorized Individual is required to complete Entity registration."}
                     </Text>
                 )}
-                {(entity.users.length === 2) && (
+                {isEntityRegistered && (
                     <Text>
-                        Both Authorized Individuals have been registered successfully. They will receive notification emails when new disclosure forms are submitted.
+                        The entity is fully registered. Authorized Individuals will receive notification emails when new disclosure forms are submitted.
                     </Text>
                 )}
 
@@ -80,8 +83,8 @@ export default function AuthorizedCard({ entity, updatePendingInvitations }) {
                     </>
                 )}
 
-                {/* Only show Invitations section if we don't have full registration */}
-                {entity.users.length < 2 && (
+                {/* Show Invitations section if there are pending invitations or if authorized individuals are needed */}
+                {(entity.pendingInvitations.length > 0 || entity.users.length < 2) && (
                     <>
                         <Heading as="h4" size="sm" mt="4">Invitations</Heading>
                         {entity.pendingInvitations.length === 0 ? (
@@ -98,17 +101,17 @@ export default function AuthorizedCard({ entity, updatePendingInvitations }) {
                 )}
             </CardBody>
             <CardFooter>
-                {/* Show initial dual-invite modal only when starting completely fresh */}
-                {(entity.users.length === 0 && entity.pendingInvitations.length === 0) && 
+                {/* Show initial dual-invite modal when there are no users and no pending invitations */}
+                {entity.users.length === 0 && entity.pendingInvitations.length === 0 && 
                     <InviteUsersModal 
                         numUsers={entity.users.length} 
                         entity={entity} 
                         updatePendingInvitations={updatePendingInvitations} 
                     />
                 }
-                {/* Show replacement modal either:
-                    1. When we have one user and no pending invites (replacement needed) OR
-                    2. When we have no users but one pending invite (second invite needed) */}
+                {/* Show replacement modal when either:
+                    1. One user and no pending invites (replacement needed) OR
+                    2. No users but one pending invite (second invite needed) */}
                 {((entity.users.length === 1 && entity.pendingInvitations.length === 0) ||
                   (entity.users.length === 0 && entity.pendingInvitations.length === 1)) &&
                     <InviteReplacementAuthIndModal 
@@ -139,7 +142,8 @@ AuthorizedCard.propTypes = {
             email: PropTypes.string,
             code: PropTypes.string,
             sent_timestamp: PropTypes.string
-        })).isRequired
+        })).isRequired,
+        registered_timestamp: PropTypes.string
     }).isRequired,
     updatePendingInvitations: PropTypes.func.isRequired
 };
