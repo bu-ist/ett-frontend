@@ -1,6 +1,6 @@
 import { useEffect, useState, useContext, useRef } from 'react';
 import { useSearchParams } from 'react-router-dom';
-import { Heading, Text, Spinner, Button, Card, CardBody, Alert, AlertIcon, HStack, Icon, Box } from '@chakra-ui/react';
+import { Heading, Text, Spinner, Button, Card, CardBody, Alert, AlertIcon, HStack, Icon, Box, VStack } from '@chakra-ui/react';
 import { HiOutlineArrowCircleDown } from "react-icons/hi";
 
 import { lookupEntityAPI } from '../../lib/entity/lookupEntityAPI';
@@ -25,6 +25,26 @@ export default function SupportProRegisterPage() {
     // Create a ref so we can scroll back to the header when the privacy policy is accepted.
     const headerRef = useRef(null);
 
+    const isUserAlreadyRegistered = (invitation, users) => {
+        if (!invitation || !users) return false;
+        return users.some(user => user.email === invitation.email);
+    };
+
+    // Helper function to update invitation-related state
+    const updateInvitationState = (state, payload, step = null) => {
+        setApiState(state);
+        setEntityInfo(payload);
+        if (step !== null) {
+            setStepIndex(step);
+        }
+    };
+
+    // Helper function to handle API errors
+    const handleApiError = (error, message) => {
+        console.error(message, error);
+        setApiState('error');
+    };
+
     useEffect(() => {
         // Check if appConfig is loaded.
         if (!appConfig) {
@@ -33,27 +53,38 @@ export default function SupportProRegisterPage() {
         }
 
         async function lookupInvitation() {
-            // This is where the API call to acknowledge the entity would go.
             const code = searchParams.get('code');
-            const entityId = searchParams.get('entity_id'); // If there is an entity_id, we are registering an ASP for an existing entity.
+            const entityId = searchParams.get('entity_id');
 
-            const lookupResult = await lookupEntityAPI(appConfig, code);
+            try {
+                const lookupResult = await lookupEntityAPI(appConfig, code);
+                console.log('lookupResult: ', lookupResult);
 
-            if (lookupResult.payload.ok) {
-                setApiState('validated');
-                setEntityInfo(lookupResult.payload);
-                setStepIndex(1);
-            } else if (lookupResult.payload.unauthorized) {
-                setApiState('unauthorized');
-                //console.error(lookupResult);
-            } else {
-                setApiState('error');
-                console.error(lookupResult);
+                // Handle unauthorized case first
+                if (lookupResult.payload.unauthorized) {
+                    handleApiError(lookupResult, 'Unauthorized access');
+                    updateInvitationState('unauthorized', lookupResult.payload);
+                    return;
+                }
+
+                // Handle unsuccessful responses
+                if (!lookupResult.payload.ok) {
+                    handleApiError(lookupResult, 'Error during lookup');
+                    return;
+                }
+
+                // Handle successful lookup
+                if (isUserAlreadyRegistered(lookupResult.payload.invitation, lookupResult.payload.users)) {
+                    updateInvitationState('already-registered', lookupResult.payload);
+                } else {
+                    updateInvitationState('validated', lookupResult.payload, 1);
+                }
+            } catch (error) {
+                handleApiError(error, 'Error during API call');
             }
-
         }
 
-        if (searchParams.has('code') )  {
+        if (searchParams.has('code'))  {
             // If there is a code, set a loading state and look up the invitation.
             setApiState('loading');
             lookupInvitation();
@@ -112,6 +143,35 @@ export default function SupportProRegisterPage() {
                         color='blue.500'
                         size='xl'
                     />
+                </>
+            }
+            {apiState == 'already-registered' &&
+                <>
+                    <Alert mb="4" status="info">
+                        <AlertIcon />
+                        Already Registered
+                    </Alert>
+                    <Card mt="4">
+                        <CardBody>
+                            <VStack align="start" spacing={4}>
+                                <Text>
+                                    You have already registered as an Administrative Support Professional for <b>{entityInfo.entity.entity_name}</b> using this email address: <b>{entityInfo.invitation.email}</b>
+                                </Text>
+                                <Text>
+                                    Please go to the dashboard to sign in to your existing account. 
+                                    If you&apos;re having trouble signing in, you can use the password reset feature on the login page.
+                                </Text>
+                                <Button
+                                    as="a"
+                                    href="/entity"
+                                    colorScheme="blue"
+                                    size="lg"
+                                >
+                                    Go to Dashboard
+                                </Button>
+                            </VStack>
+                        </CardBody>
+                    </Card>
                 </>
             }
             {apiState == 'validated' &&
