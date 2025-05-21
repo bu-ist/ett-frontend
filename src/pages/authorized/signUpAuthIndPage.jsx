@@ -29,6 +29,7 @@ export default function SignUpAuthIndPage() {
     const [inviteInfo, setInviteInfo] = useState({});
 
     const [apiState, setApiState] = useState('');
+    const [errorMessage, setErrorMessage] = useState('');
     const [privacyPolicyAccepted, setPrivacyPolicyAccepted] = useState(false);
 
     // Create a ref so we can scroll back to the header when the privacy policy is accepted.
@@ -57,9 +58,12 @@ export default function SignUpAuthIndPage() {
     };
 
     // Helper function to handle API errors
-    const handleApiError = (error, message) => {
-        console.error(message, error);
+    function handleApiError(result, message) {
+        console.error(message, result);
         setApiState('error');
+        // Extract error message from the API response or use the default message
+        const apiErrorMessage = result?.payload?.message || result?.message || message || 'An unexpected error occurred';
+        setErrorMessage(apiErrorMessage);
     };
 
     useEffect(() => {
@@ -83,7 +87,7 @@ export default function SignUpAuthIndPage() {
     
                 // Handle unauthorized case first
                 if (lookupResult.payload.unauthorized) {
-                    handleApiError(lookupResult, 'Unauthorized access');
+                    // If the user is unauthorized, set the state to 'unauthorized' and return early.
                     updateInvitationState('unauthorized', lookupResult.payload);
                     return;
                 }
@@ -175,7 +179,17 @@ export default function SignUpAuthIndPage() {
                 </Box>
             }
             {apiState == 'error' &&
-                <Text>Error: There was an error validating the invitation code. Please try again.</Text>
+                <>
+                    <Alert mb="4" status="error">
+                        <AlertIcon />
+                        Error
+                    </Alert>
+                    <Card mt="4">
+                        <CardBody>
+                            <Text>{errorMessage || 'There was an error validating the invitation code. Please try again.'}</Text>
+                        </CardBody>
+                    </Card>
+                </>
             }
             {apiState == 'already-registered' &&
                 <>
