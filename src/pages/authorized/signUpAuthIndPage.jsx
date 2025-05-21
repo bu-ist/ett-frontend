@@ -42,6 +42,10 @@ export default function SignUpAuthIndPage() {
     // Actually store all the form data in a state variable here so that the sign up component can use it.
     const [ registrationData, setRegistrationData ] = useState({});
 
+    const isUserAlreadyRegistered = (invitation, users) => {
+        if (!invitation || !users) return false;
+        return users.some(user => user.email === invitation.email);
+    };
 
     useEffect(() => {
         // Check if appConfig is loaded.
@@ -63,9 +67,15 @@ export default function SignUpAuthIndPage() {
                 console.log('lookupResult: ', lookupResult);
     
                 if (lookupResult.payload.ok) {
-                    setApiState('validated');
-                    setInviteInfo(lookupResult.payload);
-                    setStepIndex(1);
+                    // Check if the user is already registered
+                    if (isUserAlreadyRegistered(lookupResult.payload.invitation, lookupResult.payload.users)) {
+                        setApiState('already-registered');
+                        setInviteInfo(lookupResult.payload);
+                    } else {
+                        setApiState('validated');
+                        setInviteInfo(lookupResult.payload);
+                        setStepIndex(1);
+                    }
                 } else if (lookupResult.payload.unauthorized) {
                     setApiState('unauthorized');
                     console.error('Unauthorized access: ', lookupResult);
@@ -150,6 +160,35 @@ export default function SignUpAuthIndPage() {
             }
             {apiState == 'error' &&
                 <Text>Error: There was an error validating the invitation code. Please try again.</Text>
+            }
+            {apiState == 'already-registered' &&
+                <>
+                    <Alert mb="4" status="info">
+                        <AlertIcon />
+                        Already Registered
+                    </Alert>
+                    <Card mt="4">
+                        <CardBody>
+                            <VStack align="start" spacing={4}>
+                                <Text>
+                                    You have already registered as an Authorized Individual for <b>{inviteInfo.entity.entity_name}</b> using this email address: <b>{inviteInfo.invitation.email}</b>
+                                </Text>
+                                <Text>
+                                    Please use go to the dashboard to sign in to your existing account. 
+                                    If you&apos;re having trouble signing in, you can use the password reset feature on the login page.
+                                </Text>
+                                <Button
+                                    as="a"
+                                    href="/auth-ind"
+                                    colorScheme="blue"
+                                    size="lg"
+                                >
+                                    Go to Dashboard
+                                </Button>
+                            </VStack>
+                        </CardBody>
+                    </Card>
+                </>
             }
             {apiState == 'unauthorized' &&
                 <>
