@@ -35,6 +35,9 @@ export default function EntityPage() {
     const [apiState, setApiState] = useState('idle');
     const [firstLogin, setFirstLogin] = useState(false);
 
+    // Check if the entity is registered by checking if the entity has a defined property named registered_timestamp.
+    const isEntityRegistered = userInfo?.user?.entity && Object.prototype.hasOwnProperty.call(userInfo.user.entity, 'registered_timestamp');
+
     const { isOpen, onOpen, onClose } = useDisclosure();
 
     const handleSaveSuccess = (updatedData) => {
@@ -251,7 +254,7 @@ export default function EntityPage() {
                                         {userInfo.user.entity.active == 'Y' ? 'Active' : 'Inactive' } {'>'} Last updated {formatTimestamp(userInfo.user.entity.update_timestamp)}
                                     </Text>
     
-                                    {userInfo.user.entity.users.length < 2 &&
+                                    {!isEntityRegistered &&
                                         <Stack mt="2" direction="row">
                                             <Icon as={HiMinusCircle} color="gray.300" boxSize={6} />
                                             <Text>
@@ -259,7 +262,7 @@ export default function EntityPage() {
                                             </Text>
                                         </Stack>
                                     }
-                                    {userInfo.user.entity.users.length === 2 &&
+                                    {isEntityRegistered &&
                                         <Stack mt="2" direction="row">
                                             <Icon as={HiCheckCircle} color="green.300" boxSize={6} />
                                             <Text>Fully registered</Text>
@@ -270,7 +273,7 @@ export default function EntityPage() {
                         </Flex>
                         <AuthorizedCard entity={userInfo.user.entity} updatePendingInvitations={updatePendingInvitations}  />
                     </Box>
-                    {userInfo.user.entity.users.length === 2 && (
+                    {isEntityRegistered && (
                         <Box my="4em">
                             <Accordion allowToggle>
                                 <AccordionItem p="4" border="1px" borderColor="gray.200" borderRadius="md">
