@@ -204,7 +204,7 @@ export default function SignUpAuthIndPage() {
                                     You have already registered as an Authorized Individual for <b>{inviteInfo.entity.entity_name}</b> using this email address: <b>{inviteInfo.invitation.email}</b>
                                 </Text>
                                 <Text>
-                                    Please use go to the dashboard to sign in to your existing account. 
+                                    Please go to the dashboard to sign in to your existing account. 
                                     If you&apos;re having trouble signing in, you can use the password reset feature on the login page.
                                 </Text>
                                 <Button
