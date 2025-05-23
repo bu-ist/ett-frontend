@@ -29,6 +29,7 @@ export default function SignUpAuthIndPage() {
     const [inviteInfo, setInviteInfo] = useState({});
 
     const [apiState, setApiState] = useState('');
+    const [errorMessage, setErrorMessage] = useState('');
     const [privacyPolicyAccepted, setPrivacyPolicyAccepted] = useState(false);
 
     // Create a ref so we can scroll back to the header when the privacy policy is accepted.
@@ -42,6 +43,28 @@ export default function SignUpAuthIndPage() {
     // Actually store all the form data in a state variable here so that the sign up component can use it.
     const [ registrationData, setRegistrationData ] = useState({});
 
+    const isUserAlreadyRegistered = (invitation, users) => {
+        if (!invitation || !users) return false;
+        return users.some(user => user.email === invitation.email);
+    };
+
+    // Helper function to update invitation-related state
+    const updateInvitationState = (state, payload, step = null) => {
+        setApiState(state);
+        setInviteInfo(payload);
+        if (step !== null) {
+            setStepIndex(step);
+        }
+    };
+
+    // Helper function to handle API errors
+    function handleApiError(result, message) {
+        console.error(message, result);
+        setApiState('error');
+        // Extract error message from the API response or use the default message
+        const apiErrorMessage = result?.payload?.message || result?.message || message || 'An unexpected error occurred';
+        setErrorMessage(apiErrorMessage);
+    };
 
     useEffect(() => {
         // Check if appConfig is loaded.
@@ -62,20 +85,27 @@ export default function SignUpAuthIndPage() {
                 const lookupResult = await lookupEntityAPI(appConfig, code);
                 console.log('lookupResult: ', lookupResult);
     
-                if (lookupResult.payload.ok) {
-                    setApiState('validated');
-                    setInviteInfo(lookupResult.payload);
-                    setStepIndex(1);
-                } else if (lookupResult.payload.unauthorized) {
-                    setApiState('unauthorized');
-                    console.error('Unauthorized access: ', lookupResult);
+                // Handle unauthorized case first
+                if (lookupResult.payload.unauthorized) {
+                    // If the user is unauthorized, set the state to 'unauthorized' and return early.
+                    updateInvitationState('unauthorized', lookupResult.payload);
+                    return;
+                }
+
+                // Handle unsuccessful responses
+                if (!lookupResult.payload.ok) {
+                    handleApiError(lookupResult, 'Error during lookup');
+                    return;
+                }
+
+                // Handle successful lookup
+                if (isUserAlreadyRegistered(lookupResult.payload.invitation, lookupResult.payload.users)) {
+                    updateInvitationState('already-registered', lookupResult.payload);
                 } else {
-                    setApiState('error');
-                    console.error('Error during lookup: ', lookupResult);
+                    updateInvitationState('validated', lookupResult.payload, 1);
                 }
             } catch (error) {
-                setApiState('error');
-                console.error('Error during API call: ', error);
+                handleApiError(error, 'Error during API call');
             }
         }
     
@@ -149,7 +179,46 @@ export default function SignUpAuthIndPage() {
                 </Box>
             }
             {apiState == 'error' &&
-                <Text>Error: There was an error validating the invitation code. Please try again.</Text>
+                <>
+                    <Alert mb="4" status="error">
+                        <AlertIcon />
+                        Error
+                    </Alert>
+                    <Card mt="4">
+                        <CardBody>
+                            <Text>{errorMessage || 'There was an error validating the invitation code. Please try again.'}</Text>
+                        </CardBody>
+                    </Card>
+                </>
+            }
+            {apiState == 'already-registered' &&
+                <>
+                    <Alert mb="4" status="info">
+                        <AlertIcon />
+                        Already Registered
+                    </Alert>
+                    <Card mt="4">
+                        <CardBody>
+                            <VStack align="start" spacing={4}>
+                                <Text>
+                                    You have already registered as an Authorized Individual for <b>{inviteInfo.entity.entity_name}</b> using this email address: <b>{inviteInfo.invitation.email}</b>
+                                </Text>
+                                <Text>
+                                    Please go to the dashboard to sign in to your existing account. 
+                                    If you&apos;re having trouble signing in, you can use the password reset feature on the login page.
+                                </Text>
+                                <Button
+                                    as="a"
+                                    href="/auth-ind"
+                                    colorScheme="blue"
+                                    size="lg"
+                                >
+                                    Go to Dashboard
+                                </Button>
+                            </VStack>
+                        </CardBody>
+                    </Card>
+                </>
             }
             {apiState == 'unauthorized' &&
                 <>
