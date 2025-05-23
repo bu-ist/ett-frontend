@@ -79,11 +79,14 @@ export default function ContactList({ consentData, formConstraint, entityId }) {
     // State for the single entity modal
     const { isOpen: isSingleEntityModalOpen, onOpen: onSingleEntityModalOpen, onClose: onSingleEntityModalClose } = useDisclosure();
 
-    function handleNext() {
+    function handleNext(values) {
         // Validate the signature form
         if (errors.signature) {
             return; // Don't proceed if there are signature errors
         }
+        
+        // Store the signature value
+        setFormSignature(values.signature);
         
         // If signature is valid, open the single entity modal
         onSingleEntityModalOpen();
@@ -91,6 +94,9 @@ export default function ContactList({ consentData, formConstraint, entityId }) {
 
     // State for whether or not the user has signed the single entity forms.
     const [singleEntityFormsSigned, setSingleEntityFormsSigned] = useState(false);
+
+    // State to store the signature once collected
+    const [formSignature, setFormSignature] = useState('');
 
     // Get then name of the matching entity from the consent data.
     const entityName = consentData.entities.find((entity) => entity.entity_id === entityId)?.entity_name;
@@ -169,9 +175,15 @@ export default function ContactList({ consentData, formConstraint, entityId }) {
             );
         }
 
+        // Create the submission data with the main form signature
+        const submissionData = {
+            contacts: contactsToSubmit,
+            signature: formSignature  // This will be placed in exhibit_data.signature by the API
+        };
+
         // Send the contact list to the API.
         setSubmitResult('loading');
-        const response = await sendExhibitFormAPI(appConfig, accessToken, contactsToSubmit, entityId, email, formConstraint);
+        const response = await sendExhibitFormAPI(appConfig, accessToken, submissionData, entityId, email, formConstraint);
 
         console.log('send exhibit form response', response);
         
