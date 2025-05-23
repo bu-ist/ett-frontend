@@ -15,17 +15,17 @@ export default function SignUpCognitoButton({ signUpRedirect, signUpRedirectWith
         }
     });
 
-    async function handleSignUpClick() {
+    async function handleSignUpClick(values) {
         // Get the special reference value of the button that was clicked.
         // This is so we can have two buttons for the same form that do different things, without disturbing the form validation.
         const actionType = actionTypeRef.current;
 
         if (actionType === 'createAccount') {
             setApiState('redirect-create');
-            signUpRedirect();
+            signUpRedirect(values.signature);
         } else if (actionType === 'createAndAmend') {
             setApiState('redirect-amend');
-            await signUpRedirectWithAmend();
+            await signUpRedirectWithAmend(values.signature);
         }
     }
 

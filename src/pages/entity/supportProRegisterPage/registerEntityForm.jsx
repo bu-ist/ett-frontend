@@ -56,12 +56,14 @@ export default function RegisterEntityForm({ code, setStepIndex, entityInfo }) {
 
         setApiState('loading');
 
-        // The signature field is not used in the API call, so create a new object without the signature property
-        const { signature, ...valuesWithoutSignature } = values;
-
-        // If this is an ASP signing up for an existing entity, add the entity_id to a new object.
-        const finalValues = entity_id ? { ...valuesWithoutSignature, entity_id } : valuesWithoutSignature;
-
+        // Destructure signature and create final values object with renamed signature
+        const { signature, ...otherValues } = values;
+        const finalValues = {
+            ...otherValues,
+            registration_signature: signature,
+            ...(entity_id && { entity_id })  // If this is an ASP signing up for an existing entity, add the entity_id to a new object.
+        };
+        
         const registerResult = await registerEntityAPI(appConfig, code, finalValues);
         console.log(registerResult);
 

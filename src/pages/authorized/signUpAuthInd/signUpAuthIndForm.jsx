@@ -44,7 +44,6 @@ export default function SignUpAuthIndForm({inviteInfo, setRegistered, setSignUpE
             fullname: '',
             title: '',
             email: invitationEmail ? invitationEmail : '',
-            signature: '',
         }
     });
 
