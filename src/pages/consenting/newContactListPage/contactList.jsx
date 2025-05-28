@@ -3,8 +3,8 @@ import { nanoid } from 'nanoid';
 import { useForm } from 'react-hook-form';
 import { Link as ReactRouterLink } from 'react-router-dom';
 import Cookies from 'js-cookie';
-
-import { Box, Text, Heading, Divider, Button, Spinner, useDisclosure, ButtonGroup, FormControl, FormLabel, Input, FormHelperText, FormErrorMessage, UnorderedList, ListItem, Alert, AlertIcon, Flex, Card, CardBody, CardFooter, Spacer } from '@chakra-ui/react';
+import PropTypes from 'prop-types';
+import { Alert, AlertIcon, Box, Button, ButtonGroup, Card, CardBody, CardFooter, Divider, Flex, FormControl, FormErrorMessage, FormLabel, FormHelperText, Heading, Input, Spacer, Spinner, Stack, Text, UnorderedList, ListItem, useDisclosure } from "@chakra-ui/react";
 import { HiOutlinePlusSm } from "react-icons/hi";
 
 import { ConfigContext } from '../../../lib/configContext';
@@ -57,16 +57,22 @@ export default function ContactList({ consentData, formConstraint, entityId }) {
         contactName: affiliate.fullname || '',
         contactTitle: affiliate.title || '',
         contactEmail: affiliate.email || '',
-        contactPhone: affiliate.phone_number || ''
+        contactPhone: affiliate.phone_number || '',
+        consenter_signature: affiliate.consenter_signature || ''  // Include any saved signatures
     }));
 
     // State for the contact list form data.
     const [contacts, setContacts] = useState(initialContacts);
 
-    // State for the contact modal.
+    
+    // Current contact being edited
     const [currentContact, setCurrentContact] = useState(null);
+    
+    // Edit or Add mode for the modal
     const [isEditOrAdd, setIsEditOrAdd] = useState('add');
-
+    
+    // Modal state
+    // Should rename to be more specific to the contact edit modal
     const { isOpen, onOpen, onClose } = useDisclosure();
 
     // Setup the digital signature form
@@ -125,7 +131,8 @@ export default function ContactList({ consentData, formConstraint, entityId }) {
             contactName: '',
             contactTitle: '',
             contactEmail: '',
-            contactPhone: ''
+            contactPhone: '',
+            consenter_signature: ''  // Field for individual contact signature
         };
 
         // Add the new blank contact to the form state.
@@ -405,6 +412,7 @@ export default function ContactList({ consentData, formConstraint, entityId }) {
                         isOpen={isSingleEntityModalOpen}
                         onOpen={onSingleEntityModalOpen}
                         onClose={onSingleEntityModalClose}
+                        handleContactChange={handleContactUpdate}
                     />
                 {singleEntityFormsSigned && (
                     <>
@@ -451,3 +459,22 @@ export default function ContactList({ consentData, formConstraint, entityId }) {
         </Box>
     );
 }
+
+ContactList.propTypes = {
+    consentData: PropTypes.shape({
+        consenter: PropTypes.shape({
+            exhibit_forms: PropTypes.arrayOf(PropTypes.shape({
+                entity_id: PropTypes.string,
+                constraint: PropTypes.string,
+                affiliates: PropTypes.array,
+            })),
+        }),
+        entities: PropTypes.arrayOf(PropTypes.shape({
+            entity_id: PropTypes.string.isRequired,
+            entity_name: PropTypes.string.isRequired,
+        })),
+        fullName: PropTypes.string,
+    }).isRequired,
+    formConstraint: PropTypes.string.isRequired,
+    entityId: PropTypes.string.isRequired,
+};

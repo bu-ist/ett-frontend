@@ -18,6 +18,7 @@ async function sendExhibitFormAPI(appConfig, accessToken, submissionData, entity
             fullname: contact.contactName,
             title: contact.contactTitle,
             phone_number: contact.contactPhone,
+            consenter_signature: contact.consenter_signature // Include individual signature
         }
     });
 

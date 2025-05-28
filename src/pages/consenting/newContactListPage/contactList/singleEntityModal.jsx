@@ -2,13 +2,14 @@ import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { Button, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Text, useDisclosure, ButtonGroup, FormControl, FormErrorMessage, FormHelperText, FormLabel, Input, Link } from "@chakra-ui/react";
 import { Link as ReactRouterLink } from 'react-router-dom';
+import PropTypes from 'prop-types';
 
 import { HiOutlineChevronLeft } from "react-icons/hi";
 import { AiOutlineClose } from 'react-icons/ai';
 
 import ContactSummaryCard from './singleEntityModal/contactSummaryCard'
 
-export default function SingleEntityModal({ contacts, setSingleEntityFormsSigned, isOpen, onOpen, onClose }) {
+export default function SingleEntityModal({ contacts, setSingleEntityFormsSigned, isOpen, onOpen, onClose, handleContactChange }) {
     // Navigation state
     const [currentIndex, setCurrentIndex] = useState(0);
 
@@ -21,6 +22,12 @@ export default function SingleEntityModal({ contacts, setSingleEntityFormsSigned
 
     // Navigation handlers
     function handleNext(values) {
+        // Store the signature for the current contact
+        handleContactChange(currentContact.id, {
+            ...currentContact,
+            consenter_signature: values.signature
+        });
+
         if (currentIndex < contacts.length - 1) {
             setCurrentIndex(currentIndex + 1);
             reset(); // Reset the form for the next contact
@@ -76,7 +83,7 @@ export default function SingleEntityModal({ contacts, setSingleEntityFormsSigned
                                     this Single Entity Exhibit Form.</b>
                                 </Text>
                                 <form onSubmit={handleSubmit(handleNext)}>
-                                    <FormControl mt="8">
+                                    <FormControl mt="8" isInvalid={errors.signature}>
                                         <FormLabel>Please type your full name (First Middle Last) to digitally sign this full Exhibit Form: </FormLabel>
                                         <Input
                                             id="signature"
@@ -86,6 +93,7 @@ export default function SingleEntityModal({ contacts, setSingleEntityFormsSigned
                                                 required: 'Signature is required',
                                             })}
                                             type="text"
+                                            defaultValue={currentContact.consenter_signature || ''}
                                         />
                                         {!errors.signature ? (
                                             <FormHelperText>&nbsp;</FormHelperText>
@@ -123,7 +131,7 @@ export default function SingleEntityModal({ contacts, setSingleEntityFormsSigned
                                 onClick={handleSubmit(handleNext)}
                                 isDisabled={currentIndex === contacts.length - 1 && Object.keys(errors).length > 0}
                             >
-                                {currentIndex === contacts.length - 1 ? 'Next' : 'Next'}
+                                {currentIndex === contacts.length - 1 ? 'Submit' : 'Next'}
                             </Button>
                         </ButtonGroup>
                     </ModalFooter>
@@ -132,3 +140,21 @@ export default function SingleEntityModal({ contacts, setSingleEntityFormsSigned
         </>
     );
 }
+
+SingleEntityModal.propTypes = {
+    contacts: PropTypes.arrayOf(PropTypes.shape({
+        id: PropTypes.string.isRequired,
+        organizationName: PropTypes.string.isRequired,
+        organizationType: PropTypes.string.isRequired,
+        contactName: PropTypes.string.isRequired,
+        contactTitle: PropTypes.string,
+        contactEmail: PropTypes.string.isRequired,
+        contactPhone: PropTypes.string.isRequired,
+        consenter_signature: PropTypes.string,
+    })).isRequired,
+    setSingleEntityFormsSigned: PropTypes.func.isRequired,
+    isOpen: PropTypes.bool.isRequired,
+    onOpen: PropTypes.func.isRequired,
+    onClose: PropTypes.func.isRequired,
+    handleContactChange: PropTypes.func.isRequired,
+};
