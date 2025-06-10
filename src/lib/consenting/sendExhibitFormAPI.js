@@ -1,5 +1,5 @@
 // Formats the payload and sends the exhibit form to the API.
-async function sendExhibitFormAPI(appConfig, accessToken, contactList, entityId, email, formConstraint) {
+async function sendExhibitFormAPI(appConfig, accessToken, submissionData, entityId, email, formConstraint) {
     // Look up if we are in local development mode.
     const { MODE } = import.meta.env;
 
@@ -10,7 +10,7 @@ async function sendExhibitFormAPI(appConfig, accessToken, contactList, entityId,
         ? `/consentingApi/${apiStage}/CONSENTING_PERSON`
         : `${apiHost}/${apiStage}/CONSENTING_PERSON`;
 
-    const mappedContactList = contactList.map(contact => {
+    const mappedContactList = submissionData.contacts.map(contact => {
         return {
             org: contact.organizationName,
             affiliateType: contact.organizationType,
@@ -18,6 +18,7 @@ async function sendExhibitFormAPI(appConfig, accessToken, contactList, entityId,
             fullname: contact.contactName,
             title: contact.contactTitle,
             phone_number: contact.contactPhone,
+            consenter_signature: contact.consenter_signature // Include individual signature
         }
     });
 
@@ -28,7 +29,8 @@ async function sendExhibitFormAPI(appConfig, accessToken, contactList, entityId,
             entity_id: entityId,
             constraint: formConstraint,
             formType: 'full',
-            affiliates: mappedContactList
+            affiliates: mappedContactList,
+            signature: submissionData.signature
         }
     };
 

@@ -32,7 +32,12 @@ export default function GrantConsentButton({ consentData }) {
         if (accessToken) {
             const { fullName: fullname, consenter } = consentData;
             const { email, phone_number } = consenter;
-            const grantRequestPayload = { signature, fullname, email, phone_number };
+            const grantRequestPayload = { 
+                consent_signature: signature,  // Rename signature field for backend API
+                fullname, 
+                email, 
+                phone_number 
+            };
             
             const grantResult = await grantConsentAPI(appConfig, accessToken, grantRequestPayload);
 

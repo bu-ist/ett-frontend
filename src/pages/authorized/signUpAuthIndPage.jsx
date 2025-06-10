@@ -136,17 +136,38 @@ export default function SignUpAuthIndPage() {
         headerRef.current.scrollIntoView();
     }
 
-    function signUpRedirect() {
+    async function signUpRedirect(signature) {
+        // We are registering a second time with the signature field added to the registration data.
+        // This is not great but deals with how the form is setup and the API is expecting the data.
+        // We may need to modify this pattern if the backend emails PDFs as a result or something.
+        // Create a new registration data object with the signature field added
+        const completeData = {
+            ...registrationData,
+            registration_signature: signature  // Use the backend-expected field name
+        };
+
+        // Re-submit the registration with complete data including signature
+        console.log('Submitting registration with signature', completeData);
+        const registerResult = await registerEntityAPI(appConfig, searchParams.get('code'), completeData);
+        
+        // In theory this just worked or would not have gotten this far, so it should work again.
+        // Maybe we should check the result and handle errors here.
+        console.log('registerResult: ', registerResult);
+
+        // Continue with Cognito signup regardless of the result to maintain backwards compatibility
         const { cognitoDomain, authorizedIndividual: { cognitoID } } = appConfig;
         signUp( cognitoDomain, signUpEmail.toLowerCase(), cognitoID, 'auth-ind?action=post-signup');
     }
 
-    async function signUpRedirectWithAmend() {
+    async function signUpRedirectWithAmend(signature) {
         // If we are making an amendment, we need to register a second time with an extra 'signup_parameter=amend' in the registration URL data.
         // This is to signal the backend that the registration is not complete, and it should not send a completed registration email.
-        // Also the signature field is not used in the API call, so create a new object without the signature property
-        const { signature, ...valuesWithoutSignature } = registrationData;
-        const newRegistrationData = { ...valuesWithoutSignature , signup_parameter: 'amend' };
+        // Create a new registration data object with the signature field and amendment parameter
+        const newRegistrationData = {
+            ...registrationData,
+            registration_signature: signature,
+            signup_parameter: 'amend'
+        };
 
         // send the registration data to the backend. should add error checking here.
         const registerResult = await registerEntityAPI(appConfig, searchParams.get('code'), newRegistrationData);

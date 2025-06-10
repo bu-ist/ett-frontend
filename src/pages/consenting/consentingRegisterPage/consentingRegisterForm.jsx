@@ -34,10 +34,14 @@ export default function ConsentingRegisterForm({ setStepIndex }) {
 
         setApiState('loading');
 
-        // The signature field is not used in the API call, so create a new object without the signature property
-        const { signature, ...valuesWithoutSignature } = values;
+        // Rename the signature field to registration_signature as expected by the backend
+        const { signature, ...otherValues } = values;
+        const finalValues = {
+            ...otherValues,
+            registration_signature: signature
+        };
 
-        const response = await registerConsenterAPI( appConfig, valuesWithoutSignature );
+        const response = await registerConsenterAPI( appConfig, finalValues );
         console.log('register Response', response);
 
         // Set the stepper to the next step if the response is ok.
