@@ -10,8 +10,10 @@ import { UserContext } from '../../lib/userContext';
 import { signIn } from '../../lib/signIn';
 import { exchangeAuthorizationCode } from '../../lib/exchangeAuthorizationCode';
 import { getConsentData } from '../../lib/consenting/getConsentData';
+import { getCorrectableAffiliatesAPI } from '../../lib/consenting/getCorrectableAffiliatesAPI';
 
 import ContactList from "./newContactListPage/contactList";
+import CorrectAffiliates from './newContactListPage/correctAffiliates';
 
 export default function NewContactListPage() {
     const { appConfig } = useContext(ConfigContext);
@@ -20,6 +22,7 @@ export default function NewContactListPage() {
 
     const [apiState, setApiState] = useState('');
     const [consentData, setConsentData] = useState({});
+    const [correctableAffiliates, setCorrectableAffiliates] = useState([]);
 
     const [entityId, setEntityId] = useState('');
 
@@ -85,6 +88,20 @@ export default function NewContactListPage() {
                 const consentResponse = await getConsentData(appConfig, accessToken, decodedIdToken.email);
                 setConsentData(consentResponse);
 
+                // Fetch correctable affiliates after consent data is loaded
+                const correctableResult = await getCorrectableAffiliatesAPI(
+                    appConfig,
+                    accessToken,
+                    decodedIdToken.email,
+                    entityId || window.localStorage.getItem('exhibitFormEntityId')
+                );
+
+                const { affiliateEmails: affiliates } = correctableResult;
+                
+                // If there are correctable affiliates, that means this exhibit form has already been submitted set them in state.
+                // Set the correctable affiliates in state, so if they exist we can show the correction form.
+                setCorrectableAffiliates(affiliates);
+
                 // Set the user context for the site header avatar.
                 setUser({email: consentResponse.consenter.email, fullname: consentResponse.fullName});
 
@@ -124,8 +141,16 @@ export default function NewContactListPage() {
             }
             {apiState === 'loading' && <Spinner />}
             {apiState === 'error' && <Text>There was an error loading the new contact list page.</Text>}
-            {apiState === 'success' && 
+            {apiState === 'success' && correctableAffiliates.length === 0 &&  // This is a new form if there are no correctable affiliates.
                 <ContactList consentData={consentData} formConstraint={formConstraint} entityId={entityId} />
+            }
+            {apiState === 'success' && correctableAffiliates.length > 0 &&  // This is a correctable form if there are correctable affiliates.
+                <CorrectAffiliates 
+                    consentData={consentData} 
+                    formConstraint={formConstraint} 
+                    entityId={entityId} 
+                    correctableAffiliates={correctableAffiliates} 
+                />
             }
         </Box>
     );
