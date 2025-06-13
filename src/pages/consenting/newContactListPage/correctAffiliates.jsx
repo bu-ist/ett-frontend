@@ -1,5 +1,7 @@
 import PropTypes from 'prop-types';
 import { useState } from 'react';
+import { nanoid } from 'nanoid';
+import ContactEditModal from './contactEditModal';
 
 import {
     Text,
@@ -23,9 +25,11 @@ export default function CorrectAffiliates({correctableAffiliates, consentData, f
         deletes: []
     });
     
+    // For the ContactEditModal
     const { isOpen, onOpen, onClose } = useDisclosure();
     const [selectedEmail, setSelectedEmail] = useState(null);
-    const [editMode, setEditMode] = useState('edit'); // 'edit' or 'add'
+    const [editMode, setEditMode] = useState('edit');
+    const [currentContact, setCurrentContact] = useState({});
 
     // If there are no correctable affiliates, return null to render nothing.
     if (!correctableAffiliates || correctableAffiliates.length === 0) {
@@ -33,6 +37,12 @@ export default function CorrectAffiliates({correctableAffiliates, consentData, f
     }
 
     const handleEdit = (email) => {
+        // Find existing contact in updates, or create new one with ID
+        const existingUpdate = pendingChanges.updates.find(update => update.contactEmail === email);
+        setCurrentContact(existingUpdate || { 
+            id: nanoid(),
+            contactEmail: email 
+        });
         setSelectedEmail(email);
         setEditMode('edit');
         onOpen();
@@ -46,9 +56,49 @@ export default function CorrectAffiliates({correctableAffiliates, consentData, f
     };
 
     const handleAdd = () => {
+        setCurrentContact({
+            id: nanoid()
+        });
         setSelectedEmail(null);
         setEditMode('add');
         onOpen();
+    };
+
+    const handleContactChange = (id, contact) => {
+        if (editMode === 'edit') {
+            setPendingChanges(prev => ({
+                ...prev,
+                updates: [
+                    ...prev.updates.filter(u => u.contactEmail !== selectedEmail),
+                    {
+                        id,
+                        affiliateType: contact.organizationType,
+                        org: contact.organizationName,
+                        email: contact.contactEmail,
+                        fullname: contact.contactName,
+                        title: contact.contactTitle,
+                        phone_number: contact.contactPhone
+                    }
+                ]
+            }));
+        } else {
+            setPendingChanges(prev => ({
+                ...prev,
+                appends: [
+                    ...prev.appends,
+                    {
+                        id,
+                        affiliateType: contact.organizationType,
+                        org: contact.organizationName,
+                        email: contact.contactEmail,
+                        fullname: contact.contactName,
+                        title: contact.contactTitle,
+                        phone_number: contact.contactPhone
+                    }
+                ]
+            }));
+        }
+        onClose();
     };
 
     return (
@@ -104,6 +154,19 @@ export default function CorrectAffiliates({correctableAffiliates, consentData, f
                     </VStack>
                 </CardBody>
             </Card>
+
+            <ContactEditModal 
+                isOpen={isOpen}
+                onClose={onClose}
+                isEditOrAdd={editMode}
+                formConstraint={formConstraint}
+                contact={currentContact}
+                handleContactChange={(id, updatedContact) => handleContactChange(id, updatedContact)}
+                removeContact={() => {
+                    handleDelete(selectedEmail);
+                    onClose();
+                }}
+            />
         </VStack>
     );
 }
