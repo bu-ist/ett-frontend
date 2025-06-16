@@ -130,7 +130,7 @@ export default function CorrectAffiliates({
 
         setSubmitState('submitting');
         try {
-            await correctExhibitForm(
+            const response = await correctExhibitForm(
                 appConfig,
                 accessToken,
                 consentData.consenter.email,
@@ -139,6 +139,18 @@ export default function CorrectAffiliates({
                     ...pendingChanges
                 }
             );
+            
+            // Check for API-level errors in the response
+            if (response?.payload?.error) {
+                setSubmitState('error');
+                toast({
+                    title: "Error submitting changes",
+                    description: response.message || "An error occurred while submitting changes",
+                    status: "error",
+                    duration: 5000,
+                });
+                return;
+            }
             
             setSubmitState('success');
             toast({
