@@ -1,7 +1,10 @@
 import PropTypes from 'prop-types';
-import { useState } from 'react';
+import { useState, useContext } from 'react';
 import { nanoid } from 'nanoid';
+import Cookies from 'js-cookie';
 import ContactEditModal from './contactEditModal';
+import { ConfigContext } from '../../../lib/configContext';
+import { correctExhibitForm } from '../../../lib/consenting/correctExhibitFormAPI';
 
 import {
     Text,
@@ -11,14 +14,24 @@ import {
     CardBody,
     Button,
     Heading,
-    useDisclosure
+    useDisclosure,
+    useToast
 } from '@chakra-ui/react';
 
 import { HiOutlinePencil, HiOutlinePlusSm } from 'react-icons/hi';
 import { AiOutlineClose } from 'react-icons/ai';
 
 
-export default function CorrectAffiliates({correctableAffiliates, consentData, formConstraint, entityId}) {
+export default function CorrectAffiliates({
+    correctableAffiliates, 
+    consentData, 
+    formConstraint, 
+    entityId
+}) {
+    const { appConfig } = useContext(ConfigContext);
+    const toast = useToast();
+    const [submitState, setSubmitState] = useState('idle'); // idle, submitting, success, error
+
     const [pendingChanges, setPendingChanges] = useState({
         updates: [],
         appends: [],
@@ -101,6 +114,55 @@ export default function CorrectAffiliates({correctableAffiliates, consentData, f
         onClose();
     };
 
+    const handleSubmit = async () => {
+        const accessToken = Cookies.get('EttAccessJwt');
+        if (!accessToken) {
+            toast({
+                title: "Not signed in",
+                description: "You must be signed in to submit corrections",
+                status: "error",
+                duration: 5000,
+            });
+            return;
+        }
+
+        setSubmitState('submitting');
+        try {
+            await correctExhibitForm(
+                appConfig,
+                accessToken,
+                consentData.consenter.email,
+                {
+                    entity_id: entityId,
+                    ...pendingChanges
+                }
+            );
+            
+            setSubmitState('success');
+            toast({
+                title: "Changes submitted successfully",
+                status: "success",
+                duration: 5000,
+            });
+            
+            // Reset the pending changes
+            setPendingChanges({
+                updates: [],
+                appends: [],
+                deletes: []
+            });
+
+        } catch (error) {
+            setSubmitState('error');
+            toast({
+                title: "Error submitting changes",
+                description: error.message,
+                status: "error",
+                duration: 5000,
+            });
+        }
+    };
+
     return (
         <VStack spacing={4} align="stretch" w="100%">
             <Card>
@@ -151,6 +213,23 @@ export default function CorrectAffiliates({correctableAffiliates, consentData, f
                         >
                             Add New Contact
                         </Button>
+
+                        <HStack spacing={4} justify="flex-end">
+                            <Button
+                                colorScheme="blue"
+                                onClick={handleSubmit}
+                                isLoading={submitState === 'submitting'}
+                                loadingText="Submitting..."
+                                isDisabled={
+                                    submitState === 'submitting' || 
+                                    (pendingChanges.updates.length === 0 && 
+                                     pendingChanges.appends.length === 0 && 
+                                     pendingChanges.deletes.length === 0)
+                                }
+                            >
+                                Submit Changes
+                            </Button>
+                        </HStack>
                     </VStack>
                 </CardBody>
             </Card>
@@ -175,7 +254,15 @@ CorrectAffiliates.propTypes = {
     correctableAffiliates: PropTypes.arrayOf(
         PropTypes.string
     ).isRequired,
-    consentData: PropTypes.object.isRequired,
+    consentData: PropTypes.shape({
+        consenter: PropTypes.shape({
+            email: PropTypes.string.isRequired
+        }).isRequired,
+        entities: PropTypes.arrayOf(PropTypes.shape({
+            entity_id: PropTypes.string.isRequired,
+            entity_name: PropTypes.string.isRequired,
+        }))
+    }).isRequired,
     formConstraint: PropTypes.string.isRequired,
-    entityId: PropTypes.string.isRequired
+    entityId: PropTypes.string.isRequired,
 };
