@@ -1,10 +1,12 @@
 import PropTypes from 'prop-types';
+import Cookies from 'js-cookie';
 import { useState, useContext } from 'react';
 import { nanoid } from 'nanoid';
-import Cookies from 'js-cookie';
-import ContactEditModal from './contactEditModal';
+
 import { ConfigContext } from '../../../lib/configContext';
 import { correctExhibitForm } from '../../../lib/consenting/correctExhibitFormAPI';
+
+import ContactEditModal from './contactEditModal';
 
 import {
     Text,
