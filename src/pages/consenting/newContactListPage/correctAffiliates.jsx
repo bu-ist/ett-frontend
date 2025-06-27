@@ -20,8 +20,11 @@ import {
     useToast
 } from '@chakra-ui/react';
 
+import PendingChangesSummary from './correctAffiliates/pendingChangesSummary';
+
 import { HiOutlinePencil, HiOutlinePlusSm } from 'react-icons/hi';
 import { AiOutlineClose } from 'react-icons/ai';
+
 
 
 export default function CorrectAffiliates({
@@ -227,6 +230,8 @@ export default function CorrectAffiliates({
                         >
                             Add New Contact
                         </Button>
+
+                        <PendingChangesSummary changes={pendingChanges} />
 
                         <HStack spacing={4} justify="flex-end">
                             <Button
