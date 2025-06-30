@@ -1,16 +1,18 @@
-import { Modal, ModalOverlay, ModalContent, ModalHeader, ModalCloseButton, ModalBody, ModalFooter, Button, Stack, FormControl, FormLabel, FormErrorMessage, FormHelperText, Input, RadioGroup, Radio } from "@chakra-ui/react";
+import { Modal, ModalOverlay, ModalContent, ModalHeader, ModalCloseButton, ModalBody, ModalFooter, Button, Stack, FormControl, FormLabel, FormErrorMessage, FormHelperText, Input, RadioGroup, Radio, Select } from "@chakra-ui/react";
 import { useForm } from "react-hook-form";
+import PropTypes from 'prop-types';
 
-export default function ContactEditModal({ isOpen, onClose, isEditOrAdd, formConstraint, contact, removeContact, handleContactChange }) {
+export default function ContactEditModal({ isOpen, onClose, isEditOrAdd, formConstraint, contact, removeContact, handleContactChange, allowOrgTypeSelection = false }) {
     // Initialize form with contact data
     const {
         handleSubmit,
         register,
         formState: { errors },
+        watch
     } = useForm({
         defaultValues: {
             organizationName: contact.organizationName || "",
-            organizationType: contact.organizationType, // organizationType should be set by the parent, and immutable.
+            organizationType: contact.organizationType || "",
             contactName: contact.contactName || "",
             contactTitle: contact.contactTitle || "",
             contactEmail: contact.contactEmail || "",
@@ -18,14 +20,19 @@ export default function ContactEditModal({ isOpen, onClose, isEditOrAdd, formCon
         }
     });
 
+    const selectedOrgType = watch('organizationType');
+
     // Define label for organization type
     const orgTypeLabel = {
-        EMPLOYER: 'Employer',
+        EMPLOYER: 'Current Employer',
+        EMPLOYER_PRIOR: 'Prior Employer',
         ACADEMIC: 'Academic / Professional Organization',
         OTHER: 'Other Organization',
     };
 
+
     // Add a mapping for the employer constraint messages.
+    // This got unreferenced and may need some additional attention.
     const constraintTypeLabel = {
         'current': 'Current Employer',
         'other': 'Prior Employer',
@@ -50,7 +57,6 @@ export default function ContactEditModal({ isOpen, onClose, isEditOrAdd, formCon
 
     // This function will update the parent state when form is submitted
     function onSubmit(data) {
-        
         // Just pass the complete form data to the parent - no need for synthetic events
         handleContactChange(contact.id, data);
         onClose();
@@ -66,14 +72,39 @@ export default function ContactEditModal({ isOpen, onClose, isEditOrAdd, formCon
             <ModalContent>
                 <ModalHeader>
                     {isEditOrAdd === 'add' && 'Add'} {isEditOrAdd === 'edit' && 'Edit'} {' '}
-                    {contact.organizationType === 'EMPLOYER' 
-                        ? constraintTypeLabel[formConstraint]
-                        : orgTypeLabel[contact.organizationType]
-                    } Contact
+                    {selectedOrgType 
+                        ? orgTypeLabel[selectedOrgType] 
+                        : 'Contact'
+                    }
                 </ModalHeader>
                 <ModalCloseButton />
                 <ModalBody>
                     <form id="contact-form" onSubmit={handleSubmit(onSubmit)}>
+                        {allowOrgTypeSelection && (
+                            <FormControl mb="4" isInvalid={errors.organizationType}>
+                                <FormLabel>Organization Type</FormLabel>
+                                <Select
+                                    id="organizationType"
+                                    placeholder="Select organization type"
+                                    {...register('organizationType', {
+                                        required: 'Organization type is required',
+                                    })}
+                                >
+                                    {(!formConstraint || formConstraint === 'both' || formConstraint === 'current') && (
+                                        <option value="EMPLOYER">Current Employer</option>
+                                    )}
+                                    {(!formConstraint || formConstraint === 'both' || formConstraint === 'other') && (
+                                        <option value="EMPLOYER_PRIOR">Prior Employer</option>
+                                    )}
+                                    <option value="ACADEMIC">Academic / Professional Organization</option>
+                                    <option value="OTHER">Other Organization</option>
+                                </Select>
+                                {errors.organizationType && (
+                                    <FormErrorMessage>{errors.organizationType.message}</FormErrorMessage>
+                                )}
+                            </FormControl>
+                        )}
+                        
                         <FormControl mb="4" isInvalid={errors.organizationName}>
                             <FormLabel>Organization Name (No Acronyms)</FormLabel>
                             <Input
@@ -164,7 +195,7 @@ export default function ContactEditModal({ isOpen, onClose, isEditOrAdd, formCon
                     <Button mr="4" onClick={handleModalClose}>
                         Cancel
                     </Button>
-                    <Button type="submit" form="contact-form">
+                    <Button type="submit" form="contact-form" colorScheme="blue">
                         Done
                     </Button>
                 </ModalFooter>
@@ -172,3 +203,22 @@ export default function ContactEditModal({ isOpen, onClose, isEditOrAdd, formCon
         </Modal>
     );
 }
+
+ContactEditModal.propTypes = {
+    isOpen: PropTypes.bool.isRequired,
+    onClose: PropTypes.func.isRequired,
+    isEditOrAdd: PropTypes.oneOf(['edit', 'add']).isRequired,
+    formConstraint: PropTypes.oneOf(['current', 'other', 'both']),
+    contact: PropTypes.shape({
+        id: PropTypes.string.isRequired,
+        organizationName: PropTypes.string,
+        organizationType: PropTypes.string,
+        contactName: PropTypes.string,
+        contactTitle: PropTypes.string,
+        contactEmail: PropTypes.string,
+        contactPhone: PropTypes.string,
+    }).isRequired,
+    removeContact: PropTypes.func.isRequired,
+    handleContactChange: PropTypes.func.isRequired,
+    allowOrgTypeSelection: PropTypes.bool
+};
