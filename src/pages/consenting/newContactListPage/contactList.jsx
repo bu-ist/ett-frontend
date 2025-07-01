@@ -378,6 +378,8 @@ export default function ContactList({ consentData, formConstraint, entityId }) {
                             <CardFooter>
                                 <Button
                                     type='submit'
+                                    size="lg"
+                                    colorScheme='blue'
                                     isDisabled={submitResult !== 'idle' || singleEntityFormsSigned || contacts.length === 0}
                                 >
                                     Next
@@ -436,7 +438,9 @@ export default function ContactList({ consentData, formConstraint, entityId }) {
                             </ListItem>
                         </UnorderedList>
                         <Button mt="4" 
-                            isDisabled={submitResult !== 'idle' || !singleEntityFormsSigned || contacts.length === 0} 
+                            isDisabled={submitResult !== 'idle' || !singleEntityFormsSigned || contacts.length === 0}
+                            size="lg"
+                            colorScheme="blue"
                             onClick={handleFinalSubmit}
                         >
                             {submitResult === 'idle' && 'Submit'}

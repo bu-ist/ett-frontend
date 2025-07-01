@@ -135,7 +135,7 @@ export default function SingleEntityModal({ contacts, setSingleEntityFormsSigned
                                         {errors.signature && <Text color="red.500" mt="2">{errors.signature.message}</Text>}
                                     </FormControl>
                                 </form>
-                                <Text mb="4">
+                                <Text my="4">
                                     Click the Next button to create, review, date, and digitally sign a Single-Entity Exhibit Form for each of your listed Consent Recipients. 
                                     You will not be able to submit any of your Exhibit Forms until you digitally sign all of them. 
                                 </Text>

@@ -67,6 +67,7 @@ export default function SaveButton({ contacts, formConstraint, entityId, singleE
                 isLoading={apiState === 'loading'}
                 backgroundColor="#f2e7d3"
                 _hover={{ bg: "orange.100" }}
+                size="lg"
                 isDisabled={apiState === 'loading' || singleEntityFormsSigned || contacts.length === 0}
             >
                 Save
