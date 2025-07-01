@@ -19,6 +19,7 @@ import {
     useDisclosure,
     useToast,
     Badge,
+    Divider,
 } from '@chakra-ui/react';
 
 import PendingChangesSummary from './correctAffiliates/pendingChangesSummary';
@@ -249,6 +250,8 @@ export default function CorrectAffiliates({
                         >
                             Add New Contact
                         </Button>
+
+                        <Divider my="4" />
 
                         <PendingChangesSummary changes={pendingChanges} />
 
