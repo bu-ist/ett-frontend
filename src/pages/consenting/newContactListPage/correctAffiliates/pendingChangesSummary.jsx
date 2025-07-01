@@ -22,86 +22,91 @@ export default function PendingChangesSummary({ changes }) {
     if (!hasChanges) return null;
 
     return (
-        <Card variant="outline" bg="gray.50">
-            <CardBody>
-                <VStack align="stretch" spacing={2}>
-                    <HStack justify="space-between">
-                        <Text fontWeight="medium">Pending Changes Summary</Text>
-                        <HStack spacing={2}>
+        <>
+            <Text fontWeight="semibold" color="gray.600">
+                You have made the following changes to the contacts:
+            </Text>
+            <Card variant="outline" bg="gray.50">
+                <CardBody>
+                    <VStack align="stretch" spacing={2}>
+                        <HStack justify="space-between">
+                            <Text fontWeight="medium">Pending Changes Summary</Text>
+                            <HStack spacing={2}>
+                                {changes.updates.length > 0 && (
+                                    <Badge colorScheme="blue">
+                                        {changes.updates.length} Updates
+                                    </Badge>
+                                )}
+                                {changes.appends.length > 0 && (
+                                    <Badge colorScheme="green">
+                                        {changes.appends.length} New
+                                    </Badge>
+                                )}
+                                {changes.deletes.length > 0 && (
+                                    <Badge colorScheme="red">
+                                        {changes.deletes.length} Removals
+                                    </Badge>
+                                )}
+                            </HStack>
+                        </HStack>
+
+                        <Accordion allowMultiple size="sm">
                             {changes.updates.length > 0 && (
-                                <Badge colorScheme="blue">
-                                    {changes.updates.length} Updates
-                                </Badge>
+                                <AccordionItem>
+                                    <AccordionButton>
+                                        <Box flex="1" textAlign="left">
+                                            Updates
+                                        </Box>
+                                        <AccordionIcon />
+                                    </AccordionButton>
+                                    <AccordionPanel>
+                                        {changes.updates.map((update, index) => (
+                                            <Text key={index} fontSize="sm">
+                                                {update.email} - {update.org}
+                                            </Text>
+                                        ))}
+                                    </AccordionPanel>
+                                </AccordionItem>
                             )}
                             {changes.appends.length > 0 && (
-                                <Badge colorScheme="green">
-                                    {changes.appends.length} New
-                                </Badge>
+                                <AccordionItem>
+                                    <AccordionButton>
+                                        <Box flex="1" textAlign="left">
+                                            New Contacts
+                                        </Box>
+                                        <AccordionIcon />
+                                    </AccordionButton>
+                                    <AccordionPanel>
+                                        {changes.appends.map((append, index) => (
+                                            <Text key={index} fontSize="sm">
+                                                {append.email} - {append.org}
+                                            </Text>
+                                        ))}
+                                    </AccordionPanel>
+                                </AccordionItem>
                             )}
                             {changes.deletes.length > 0 && (
-                                <Badge colorScheme="red">
-                                    {changes.deletes.length} Removals
-                                </Badge>
+                                <AccordionItem>
+                                    <AccordionButton>
+                                        <Box flex="1" textAlign="left">
+                                            Removals
+                                        </Box>
+                                        <AccordionIcon />
+                                    </AccordionButton>
+                                    <AccordionPanel>
+                                        {changes.deletes.map((email, index) => (
+                                            <Text key={index} fontSize="sm">
+                                                {email}
+                                            </Text>
+                                        ))}
+                                    </AccordionPanel>
+                                </AccordionItem>
                             )}
-                        </HStack>
-                    </HStack>
-
-                    <Accordion allowMultiple size="sm">
-                        {changes.updates.length > 0 && (
-                            <AccordionItem>
-                                <AccordionButton>
-                                    <Box flex="1" textAlign="left">
-                                        Updates
-                                    </Box>
-                                    <AccordionIcon />
-                                </AccordionButton>
-                                <AccordionPanel>
-                                    {changes.updates.map((update, index) => (
-                                        <Text key={index} fontSize="sm">
-                                            {update.email} - {update.org}
-                                        </Text>
-                                    ))}
-                                </AccordionPanel>
-                            </AccordionItem>
-                        )}
-                        {changes.appends.length > 0 && (
-                            <AccordionItem>
-                                <AccordionButton>
-                                    <Box flex="1" textAlign="left">
-                                        New Contacts
-                                    </Box>
-                                    <AccordionIcon />
-                                </AccordionButton>
-                                <AccordionPanel>
-                                    {changes.appends.map((append, index) => (
-                                        <Text key={index} fontSize="sm">
-                                            {append.email} - {append.org}
-                                        </Text>
-                                    ))}
-                                </AccordionPanel>
-                            </AccordionItem>
-                        )}
-                        {changes.deletes.length > 0 && (
-                            <AccordionItem>
-                                <AccordionButton>
-                                    <Box flex="1" textAlign="left">
-                                        Removals
-                                    </Box>
-                                    <AccordionIcon />
-                                </AccordionButton>
-                                <AccordionPanel>
-                                    {changes.deletes.map((email, index) => (
-                                        <Text key={index} fontSize="sm">
-                                            {email}
-                                        </Text>
-                                    ))}
-                                </AccordionPanel>
-                            </AccordionItem>
-                        )}
-                    </Accordion>
-                </VStack>
-            </CardBody>
-        </Card>
+                        </Accordion>
+                    </VStack>
+                </CardBody>
+            </Card>
+        </>
     );
 }
 
