@@ -162,12 +162,6 @@ export default function CorrectAffiliates({
             if (response?.payload?.error) {
                 setSubmitState('error');
                 setErrorMessage(response.message || "An error occurred while submitting changes");
-                toast({
-                    title: "Error submitting changes",
-                    description: response.message || "An error occurred while submitting changes",
-                    status: "error",
-                    duration: 5000,
-                });
                 return;
             }
             
@@ -175,11 +169,6 @@ export default function CorrectAffiliates({
             setSubmittedChanges({ ...pendingChanges });
             
             setSubmitState('success');
-            toast({
-                title: "Changes submitted successfully",
-                status: "success",
-                duration: 5000,
-            });
             
             // Reset the pending changes
             setPendingChanges({
@@ -191,12 +180,6 @@ export default function CorrectAffiliates({
         } catch (error) {
             setSubmitState('error');
             setErrorMessage(error.message || "An unexpected error occurred");
-            toast({
-                title: "Error submitting changes",
-                description: error.message,
-                status: "error",
-                duration: 5000,
-            });
         }
     };
 
