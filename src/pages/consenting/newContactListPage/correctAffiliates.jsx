@@ -55,11 +55,12 @@ export default function CorrectAffiliates({
 
     const handleEdit = (email) => {
         // Find existing contact in updates, or create new one with ID
-        const existingUpdate = pendingChanges.updates.find(update => update.contactEmail === email);
-        setCurrentContact(existingUpdate || { 
+        const existingUpdate = pendingChanges.updates.find(update => update.email === email);
+        const newContact = existingUpdate || { 
             id: nanoid(),
-            contactEmail: email 
-        });
+            contactEmail: email  // This matches the field name expected in the form
+        };
+        setCurrentContact(newContact);
         setSelectedEmail(email);
         setEditMode('edit');
         onOpen();
@@ -86,7 +87,7 @@ export default function CorrectAffiliates({
             setPendingChanges(prev => ({
                 ...prev,
                 updates: [
-                    ...prev.updates.filter(u => u.contactEmail !== selectedEmail),
+                    ...prev.updates.filter(u => u.email !== selectedEmail),
                     {
                         id,
                         affiliateType: contact.organizationType,
@@ -282,7 +283,7 @@ export default function CorrectAffiliates({
                     handleDelete(selectedEmail);
                     onClose();
                 }}
-                allowOrgTypeSelection={true}
+                correctionsMode={true}
             />
         </VStack>
     );

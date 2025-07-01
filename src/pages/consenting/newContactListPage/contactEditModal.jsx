@@ -1,14 +1,25 @@
 import { Modal, ModalOverlay, ModalContent, ModalHeader, ModalCloseButton, ModalBody, ModalFooter, Button, Stack, FormControl, FormLabel, FormErrorMessage, FormHelperText, Input, RadioGroup, Radio, Select } from "@chakra-ui/react";
 import { useForm } from "react-hook-form";
 import PropTypes from 'prop-types';
+import { useEffect } from 'react';
 
-export default function ContactEditModal({ isOpen, onClose, isEditOrAdd, formConstraint, contact, removeContact, handleContactChange, allowOrgTypeSelection = false }) {
+export default function ContactEditModal({ 
+    isOpen, 
+    onClose, 
+    isEditOrAdd, 
+    formConstraint, 
+    contact, 
+    removeContact, 
+    handleContactChange, 
+    correctionsMode = false 
+}) {
     // Initialize form with contact data
     const {
         handleSubmit,
         register,
         formState: { errors },
-        watch
+        watch,
+        reset
     } = useForm({
         defaultValues: {
             organizationName: contact.organizationName || "",
@@ -19,6 +30,18 @@ export default function ContactEditModal({ isOpen, onClose, isEditOrAdd, formCon
             contactPhone: contact.contactPhone || "",
         }
     });
+
+    // Reset form when contact changes to ensure form values are updated
+    useEffect(() => {
+        reset({
+            organizationName: contact.organizationName || "",
+            organizationType: contact.organizationType || "",
+            contactName: contact.contactName || "",
+            contactTitle: contact.contactTitle || "",
+            contactEmail: contact.contactEmail || "",
+            contactPhone: contact.contactPhone || "",
+        });
+    }, [contact, reset]);
 
     const selectedOrgType = watch('organizationType');
 
@@ -80,7 +103,7 @@ export default function ContactEditModal({ isOpen, onClose, isEditOrAdd, formCon
                 <ModalCloseButton />
                 <ModalBody>
                     <form id="contact-form" onSubmit={handleSubmit(onSubmit)}>
-                        {allowOrgTypeSelection && (
+                        {correctionsMode && (
                             <FormControl mb="4" isInvalid={errors.organizationType}>
                                 <FormLabel>Organization Type</FormLabel>
                                 <Select
@@ -157,6 +180,7 @@ export default function ContactEditModal({ isOpen, onClose, isEditOrAdd, formCon
                                 name="contactEmail"
                                 type="email"
                                 placeholder="Email"
+                                isReadOnly={correctionsMode && isEditOrAdd === 'edit'}
                                 {...register('contactEmail', {
                                     required: 'Email is required',
                                     pattern: {
@@ -166,7 +190,12 @@ export default function ContactEditModal({ isOpen, onClose, isEditOrAdd, formCon
                                 })}
                             />
                             {!errors.contactEmail ? (
-                                <FormHelperText>&nbsp;</FormHelperText>
+                                <FormHelperText>
+                                    {correctionsMode && isEditOrAdd === 'edit'
+                                        ? 'Email cannot be changed. Delete this contact and add a new one if needed.'
+                                        : '\u00A0'
+                                    }
+                                </FormHelperText>
                             ) : (
                                 <FormErrorMessage>{errors.contactEmail.message}</FormErrorMessage>
                             )}
@@ -220,5 +249,5 @@ ContactEditModal.propTypes = {
     }).isRequired,
     removeContact: PropTypes.func.isRequired,
     handleContactChange: PropTypes.func.isRequired,
-    allowOrgTypeSelection: PropTypes.bool
+    correctionsMode: PropTypes.bool,
 };
