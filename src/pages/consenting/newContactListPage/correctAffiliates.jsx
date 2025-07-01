@@ -99,10 +99,13 @@ export default function CorrectAffiliates({
     };
 
     const handleDelete = (email) => {
-        setPendingChanges(prev => ({
-            ...prev,
-            deletes: [...prev.deletes, email]
-        }));
+        // Only add to deletes if email is valid
+        if (email) {
+            setPendingChanges(prev => ({
+                ...prev,
+                deletes: [...prev.deletes, email]
+            }));
+        }
     };
 
     const handleAdd = () => {
@@ -379,7 +382,10 @@ export default function CorrectAffiliates({
                 contact={currentContact}
                 handleContactChange={(id, updatedContact) => handleContactChange(id, updatedContact)}
                 removeContact={() => {
-                    handleDelete(selectedEmail);
+                    // Only call handleDelete if we're editing an existing contact (not adding a new one)
+                    if (editMode === 'edit' && selectedEmail) {
+                        handleDelete(selectedEmail);
+                    }
                     onClose();
                 }}
                 correctionsMode={true}
