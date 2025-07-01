@@ -207,7 +207,7 @@ export default function CorrectAffiliates({
                 <Card>
                     <CardBody>
                         <VStack spacing={6} align="stretch">
-                            <Alert status="success" variant="subtle" flexDirection="column" alignItems="center" justifyContent="center" textAlign="center" borderRadius="md" py={6}>
+                            <Alert status="success" variant="left-accent" flexDirection="column" alignItems="center" justifyContent="center" textAlign="center" borderRadius="md" py={6}>
                                 <AlertIcon boxSize="40px" mr={0} />
                                 <AlertTitle mt={4} mb={1} fontSize="lg">
                                     Exhibit Form Corrections Submitted
@@ -219,7 +219,10 @@ export default function CorrectAffiliates({
                             
                             <Box>
                                 <Heading size="sm" mb={2}>Summary of Changes</Heading>
-                                <PendingChangesSummary changes={submittedChanges} />
+                                <PendingChangesSummary 
+                                    changes={submittedChanges} 
+                                    title="The following changes have been submitted:"
+                                />
                             </Box>
                             
                             <Divider />

@@ -5,32 +5,32 @@ import {
     HStack,
     Card,
     CardBody,
-    Accordion,
-    AccordionItem,
-    AccordionButton,
-    AccordionPanel,
-    AccordionIcon,
     Box,
-    Badge
+    Badge,
+    Stack
 } from '@chakra-ui/react';
+import { HiPencil, HiPlus, HiX } from 'react-icons/hi';
 
-export default function PendingChangesSummary({ changes }) {
+export default function PendingChangesSummary({ changes, title }) {
     const hasChanges = changes.updates.length > 0 || 
                       changes.appends.length > 0 || 
                       changes.deletes.length > 0;
 
     if (!hasChanges) return null;
 
+    // Default title can be overridden by props
+    const displayTitle = title || "You have made the following changes to the contacts:";
+
     return (
         <>
             <Text fontWeight="semibold" color="gray.600">
-                You have made the following changes to the contacts:
+                {displayTitle}
             </Text>
             <Card variant="outline" bg="gray.50">
                 <CardBody>
-                    <VStack align="stretch" spacing={2}>
+                    <VStack align="stretch" spacing={3}>
                         <HStack justify="space-between">
-                            <Text fontWeight="medium">Pending Changes Summary</Text>
+                            <Text fontWeight="medium">Changes Summary</Text>
                             <HStack spacing={2}>
                                 {changes.updates.length > 0 && (
                                     <Badge colorScheme="blue">
@@ -50,59 +50,57 @@ export default function PendingChangesSummary({ changes }) {
                             </HStack>
                         </HStack>
 
-                        <Accordion allowMultiple size="sm">
-                            {changes.updates.length > 0 && (
-                                <AccordionItem>
-                                    <AccordionButton>
-                                        <Box flex="1" textAlign="left">
-                                            Updates
-                                        </Box>
-                                        <AccordionIcon />
-                                    </AccordionButton>
-                                    <AccordionPanel>
-                                        {changes.updates.map((update) => (
-                                            <Text key={update.email} fontSize="sm">
-                                                {update.email} - {update.org}
-                                            </Text>
-                                        ))}
-                                    </AccordionPanel>
-                                </AccordionItem>
-                            )}
-                            {changes.appends.length > 0 && (
-                                <AccordionItem>
-                                    <AccordionButton>
-                                        <Box flex="1" textAlign="left">
-                                            New Contacts
-                                        </Box>
-                                        <AccordionIcon />
-                                    </AccordionButton>
-                                    <AccordionPanel>
-                                        {changes.appends.map((append, index) => (
-                                            <Text key={index} fontSize="sm">
-                                                {append.email} - {append.org}
-                                            </Text>
-                                        ))}
-                                    </AccordionPanel>
-                                </AccordionItem>
-                            )}
-                            {changes.deletes.length > 0 && (
-                                <AccordionItem>
-                                    <AccordionButton>
-                                        <Box flex="1" textAlign="left">
-                                            Removals
-                                        </Box>
-                                        <AccordionIcon />
-                                    </AccordionButton>
-                                    <AccordionPanel>
-                                        {changes.deletes.map((email, index) => (
-                                            <Text key={index} fontSize="sm">
-                                                {email}
-                                            </Text>
-                                        ))}
-                                    </AccordionPanel>
-                                </AccordionItem>
-                            )}
-                        </Accordion>
+                        {changes.updates.length > 0 && (
+                            <Box>
+                                <HStack color="blue.600" mb={2}>
+                                    <HiPencil />
+                                    <Text fontWeight="medium">Updated Contacts</Text>
+                                </HStack>
+                                <Stack spacing={1} pl={6}>
+                                    {changes.updates.map((update) => (
+                                        <HStack key={update.email} fontSize="sm" spacing={1}>
+                                            <Text fontWeight="medium">{update.email}</Text>
+                                            <Text color="gray.500">-</Text>
+                                            <Text>{update.org}</Text>
+                                        </HStack>
+                                    ))}
+                                </Stack>
+                            </Box>
+                        )}
+
+                        {changes.appends.length > 0 && (
+                            <Box>
+                                <HStack color="green.600" mb={2}>
+                                    <HiPlus />
+                                    <Text fontWeight="medium">New Contacts</Text>
+                                </HStack>
+                                <Stack spacing={1} pl={6}>
+                                    {changes.appends.map((append, index) => (
+                                        <HStack key={index} fontSize="sm" spacing={1}>
+                                            <Text fontWeight="medium">{append.email}</Text>
+                                            <Text color="gray.500">-</Text>
+                                            <Text>{append.org}</Text>
+                                        </HStack>
+                                    ))}
+                                </Stack>
+                            </Box>
+                        )}
+
+                        {changes.deletes.length > 0 && (
+                            <Box>
+                                <HStack color="red.600" mb={2}>
+                                    <HiX />
+                                    <Text fontWeight="medium">Removed Contacts</Text>
+                                </HStack>
+                                <Stack spacing={1} pl={6}>
+                                    {changes.deletes.map((email, index) => (
+                                        <Text key={index} fontSize="sm">
+                                            {email}
+                                        </Text>
+                                    ))}
+                                </Stack>
+                            </Box>
+                        )}
                     </VStack>
                 </CardBody>
             </Card>
@@ -121,5 +119,6 @@ PendingChangesSummary.propTypes = {
             org: PropTypes.string.isRequired
         })).isRequired,
         deletes: PropTypes.arrayOf(PropTypes.string).isRequired
-    }).isRequired
+    }).isRequired,
+    title: PropTypes.string
 };
