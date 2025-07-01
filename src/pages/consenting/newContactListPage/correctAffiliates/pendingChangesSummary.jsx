@@ -60,8 +60,8 @@ export default function PendingChangesSummary({ changes }) {
                                         <AccordionIcon />
                                     </AccordionButton>
                                     <AccordionPanel>
-                                        {changes.updates.map((update, index) => (
-                                            <Text key={index} fontSize="sm">
+                                        {changes.updates.map((update) => (
+                                            <Text key={update.email} fontSize="sm">
                                                 {update.email} - {update.org}
                                             </Text>
                                         ))}
