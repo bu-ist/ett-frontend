@@ -17,15 +17,14 @@ import {
     Button,
     Heading,
     useDisclosure,
-    useToast
+    useToast,
+    Badge,
 } from '@chakra-ui/react';
 
 import PendingChangesSummary from './correctAffiliates/pendingChangesSummary';
 
 import { HiOutlinePencil, HiOutlinePlusSm } from 'react-icons/hi';
 import { AiOutlineClose } from 'react-icons/ai';
-
-
 
 export default function CorrectAffiliates({
     correctableAffiliates, 
@@ -56,11 +55,12 @@ export default function CorrectAffiliates({
 
     const handleEdit = (email) => {
         // Find existing contact in updates, or create new one with ID
-        const existingUpdate = pendingChanges.updates.find(update => update.contactEmail === email);
-        setCurrentContact(existingUpdate || { 
+        const existingUpdate = pendingChanges.updates.find(update => update.email === email);
+        const newContact = existingUpdate || { 
             id: nanoid(),
-            contactEmail: email 
-        });
+            contactEmail: email  // This matches the field name expected in the form
+        };
+        setCurrentContact(newContact);
         setSelectedEmail(email);
         setEditMode('edit');
         onOpen();
@@ -87,7 +87,7 @@ export default function CorrectAffiliates({
             setPendingChanges(prev => ({
                 ...prev,
                 updates: [
-                    ...prev.updates.filter(u => u.contactEmail !== selectedEmail),
+                    ...prev.updates.filter(u => u.email !== selectedEmail),
                     {
                         id,
                         affiliateType: contact.organizationType,
@@ -180,6 +180,8 @@ export default function CorrectAffiliates({
         }
     };
 
+
+
     return (
         <VStack spacing={4} align="stretch" w="100%">
             <Card>
@@ -192,36 +194,53 @@ export default function CorrectAffiliates({
                             There is an existing exhibit form for this entity. You can correct the contacts below.
                         </Text>
                         
-                        {correctableAffiliates.map((email, index) => (
-                            <Card key={index} variant="outline" bg={pendingChanges.deletes.includes(email) ? "gray.100" : "white"}>
-                                <CardBody>
-                                    <HStack justify="space-between">
-                                        <Text>{email}</Text>
-                                        <HStack>
-                                            <Button
-                                                leftIcon={<HiOutlinePencil />}
-                                                aria-label="Edit contact"
-                                                size="sm"
-                                                onClick={() => handleEdit(email)}
-                                                isDisabled={pendingChanges.deletes.includes(email)}
-                                            >
-                                                Edit
-                                            </Button>
-                                            <Button
-                                                leftIcon={<AiOutlineClose />}
-                                                aria-label="Remove contact"
-                                                size="sm"
-                                                colorScheme={pendingChanges.deletes.includes(email) ? "gray" : "red"}
-                                                onClick={() => handleDelete(email)}
-                                                isDisabled={pendingChanges.deletes.includes(email)}
-                                            >
-                                                Remove
-                                            </Button>
+                        {correctableAffiliates.map((email, index) => {
+                            const isDeleted = pendingChanges.deletes.includes(email);
+                            const isUpdated = pendingChanges.updates.some(u => u.email === email);
+                            
+                            return (
+                                <Card key={index} variant="outline" bg={isDeleted ? "gray.100" : "white"}>
+                                    <CardBody>
+                                        <HStack justify="space-between" align="center">
+                                            <VStack align="start" spacing={1}>
+                                                <Text>{email}</Text>
+                                                {isUpdated && (
+                                                    <Badge colorScheme="blue" fontSize="xs">
+                                                        Updated
+                                                    </Badge>
+                                                )}
+                                                {isDeleted && (
+                                                    <Badge colorScheme="red" fontSize="xs">
+                                                        Marked for Removal
+                                                    </Badge>
+                                                )}
+                                            </VStack>
+                                            <HStack>
+                                                <Button
+                                                    leftIcon={<HiOutlinePencil />}
+                                                    aria-label="Edit contact"
+                                                    size="sm"
+                                                    onClick={() => handleEdit(email)}
+                                                    isDisabled={isDeleted}
+                                                >
+                                                    Edit
+                                                </Button>
+                                                <Button
+                                                    leftIcon={<AiOutlineClose />}
+                                                    aria-label="Remove contact"
+                                                    size="sm"
+                                                    colorScheme={isDeleted ? "gray" : "red"}
+                                                    onClick={() => handleDelete(email)}
+                                                    isDisabled={isDeleted}
+                                                >
+                                                    Remove
+                                                </Button>
+                                            </HStack>
                                         </HStack>
-                                    </HStack>
-                                </CardBody>
-                            </Card>
-                        ))}
+                                    </CardBody>
+                                </Card>
+                            );
+                        })}
                         
                         <Button
                             leftIcon={<HiOutlinePlusSm />}
@@ -264,6 +283,7 @@ export default function CorrectAffiliates({
                     handleDelete(selectedEmail);
                     onClose();
                 }}
+                correctionsMode={true}
             />
         </VStack>
     );
