@@ -69,12 +69,29 @@ export default function CorrectAffiliates({
     }
 
     const handleEdit = (email) => {
-        // Find existing contact in updates, or create new one with ID
+        // Find existing contact in updates
         const existingUpdate = pendingChanges.updates.find(update => update.email === email);
-        const newContact = existingUpdate || { 
-            id: nanoid(),
-            contactEmail: email  // This matches the field name expected in the form
-        };
+        
+        let newContact;
+        if (existingUpdate) {
+            // If the contact has already been edited, map the field names from update format to form format
+            newContact = {
+                id: existingUpdate.id,
+                contactEmail: existingUpdate.email,
+                organizationType: existingUpdate.affiliateType,
+                organizationName: existingUpdate.org,
+                contactName: existingUpdate.fullname,
+                contactTitle: existingUpdate.title,
+                contactPhone: existingUpdate.phone_number
+            };
+        } else {
+            // If this is the first edit, just set the email
+            newContact = { 
+                id: nanoid(),
+                contactEmail: email
+            };
+        }
+        
         setCurrentContact(newContact);
         setSelectedEmail(email);
         setEditMode('edit');
