@@ -2,6 +2,7 @@ import PropTypes from 'prop-types';
 import Cookies from 'js-cookie';
 import { useState, useContext } from 'react';
 import { nanoid } from 'nanoid';
+import { Link as RouterLink } from 'react-router-dom';
 
 import { ConfigContext } from '../../../lib/configContext';
 import { correctExhibitForm } from '../../../lib/consenting/correctExhibitFormAPI';
@@ -20,6 +21,13 @@ import {
     useToast,
     Badge,
     Divider,
+    Alert,
+    AlertIcon,
+    AlertTitle,
+    AlertDescription,
+    Box,
+    Link,
+    Center,
 } from '@chakra-ui/react';
 
 import PendingChangesSummary from './correctAffiliates/pendingChangesSummary';
@@ -36,6 +44,12 @@ export default function CorrectAffiliates({
     const { appConfig } = useContext(ConfigContext);
     const toast = useToast();
     const [submitState, setSubmitState] = useState('idle'); // idle, submitting, success, error
+    const [errorMessage, setErrorMessage] = useState('');
+    const [submittedChanges, setSubmittedChanges] = useState({
+        updates: [],
+        appends: [],
+        deletes: []
+    });
 
     const [pendingChanges, setPendingChanges] = useState({
         updates: [],
@@ -147,6 +161,7 @@ export default function CorrectAffiliates({
             // Check for API-level errors in the response
             if (response?.payload?.error) {
                 setSubmitState('error');
+                setErrorMessage(response.message || "An error occurred while submitting changes");
                 toast({
                     title: "Error submitting changes",
                     description: response.message || "An error occurred while submitting changes",
@@ -155,6 +170,9 @@ export default function CorrectAffiliates({
                 });
                 return;
             }
+            
+            // Save a copy of changes before clearing them
+            setSubmittedChanges({ ...pendingChanges });
             
             setSubmitState('success');
             toast({
@@ -172,6 +190,7 @@ export default function CorrectAffiliates({
 
         } catch (error) {
             setSubmitState('error');
+            setErrorMessage(error.message || "An unexpected error occurred");
             toast({
                 title: "Error submitting changes",
                 description: error.message,
@@ -181,7 +200,81 @@ export default function CorrectAffiliates({
         }
     };
 
+    // Render based on submit state
+    if (submitState === 'success') {
+        return (
+            <VStack spacing={4} align="stretch" w="100%">
+                <Card>
+                    <CardBody>
+                        <VStack spacing={6} align="stretch">
+                            <Alert status="success" variant="subtle" flexDirection="column" alignItems="center" justifyContent="center" textAlign="center" borderRadius="md" py={6}>
+                                <AlertIcon boxSize="40px" mr={0} />
+                                <AlertTitle mt={4} mb={1} fontSize="lg">
+                                    Exhibit Form Corrections Submitted
+                                </AlertTitle>
+                                <AlertDescription maxWidth="sm">
+                                    Your corrections to the exhibit form have been submitted successfully. The changes will be processed and applied to the exhibit form.
+                                </AlertDescription>
+                            </Alert>
+                            
+                            <Box>
+                                <Heading size="sm" mb={2}>Summary of Changes</Heading>
+                                <PendingChangesSummary changes={submittedChanges} />
+                            </Box>
+                            
+                            <Divider />
+                            
+                            <Center>
+                                <Link as={RouterLink} to="/consenting">
+                                    <Button colorScheme="blue" size="lg">
+                                        Return to Dashboard
+                                    </Button>
+                                </Link>
+                            </Center>
+                        </VStack>
+                    </CardBody>
+                </Card>
+            </VStack>
+        );
+    }
 
+    if (submitState === 'error') {
+        return (
+            <VStack spacing={4} align="stretch" w="100%">
+                <Card>
+                    <CardBody>
+                        <VStack spacing={6} align="stretch">
+                            <Alert status="error" variant="subtle" flexDirection="column" alignItems="center" justifyContent="center" textAlign="center" borderRadius="md" py={6}>
+                                <AlertIcon boxSize="40px" mr={0} />
+                                <AlertTitle mt={4} mb={1} fontSize="lg">
+                                    Error Submitting Corrections
+                                </AlertTitle>
+                                <AlertDescription maxWidth="sm">
+                                    {errorMessage || "There was an error submitting your corrections. Please try again or contact support if the issue persists."}
+                                </AlertDescription>
+                            </Alert>
+                            
+                            <Divider />
+                            
+                            <HStack spacing={4} justify="center">
+                                <Button 
+                                    onClick={() => setSubmitState('idle')} 
+                                    colorScheme="blue"
+                                >
+                                    Try Again
+                                </Button>
+                                <Link as={RouterLink} to="/consenting">
+                                    <Button variant="outline">
+                                        Return to Dashboard
+                                    </Button>
+                                </Link>
+                            </HStack>
+                        </VStack>
+                    </CardBody>
+                </Card>
+            </VStack>
+        );
+    }
 
     return (
         <VStack spacing={4} align="stretch" w="100%">
