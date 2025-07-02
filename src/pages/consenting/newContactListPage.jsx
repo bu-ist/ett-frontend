@@ -124,6 +124,13 @@ export default function NewContactListPage() {
         fetchData();
     }, [appConfig]);
 
+    // Return early if there is no entityId, the entityId is required to display the form.
+    if (apiState === 'success' && !entityId) {
+        return (
+            <Text>No entity ID found. Please try the invitation link again</Text>
+        );
+    }
+
     return (
         <Box>
             {apiState === 'notSignedIn' &&
