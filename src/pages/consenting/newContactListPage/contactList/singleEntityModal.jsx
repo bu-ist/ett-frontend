@@ -131,8 +131,6 @@ export default function SingleEntityModal({ contacts, setSingleEntityFormsSigned
                                         ) : (
                                             <FormErrorMessage>{errors.signature.message}</FormErrorMessage>
                                         )}
-                                        {/* This extra error message shouldn't be necessary, but for some reason the one above is not rendering */}
-                                        {errors.signature && <Text color="red.500" mt="2">{errors.signature.message}</Text>}
                                     </FormControl>
                                 </form>
                                 <Text my="4">
