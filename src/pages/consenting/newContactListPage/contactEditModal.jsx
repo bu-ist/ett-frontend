@@ -168,9 +168,15 @@ export default function ContactEditModal({
                                 id="contactTitle"
                                 name="contactTitle"
                                 placeholder="Contact Title"
-                                {...register('contactTitle')}
+                                {...register('contactTitle', {
+                                    required: 'Contact title is required',
+                                })}
                             />
-                            <FormHelperText>&nbsp;</FormHelperText>
+                            {!errors.contactTitle ? (
+                                <FormHelperText>&nbsp;</FormHelperText>
+                            ) : (
+                                <FormErrorMessage>{errors.contactTitle.message}</FormErrorMessage>
+                            )}
                         </FormControl>
                         
                         <FormControl mb="4" isInvalid={errors.contactEmail}>
