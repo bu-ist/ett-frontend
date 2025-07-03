@@ -1,6 +1,6 @@
 import { useState, useEffect, useContext } from 'react';
 import Cookies from 'js-cookie';
-import { Box, Heading, Spinner, Text } from "@chakra-ui/react";
+import { Box, Heading, Spinner, Text, Alert, AlertIcon, AlertTitle, AlertDescription } from "@chakra-ui/react";
 
 import { ConfigContext } from '../../lib/configContext';
 import { UserContext } from '../../lib/userContext';
@@ -34,29 +34,51 @@ export default function ConsentFormPage() {
             const accessToken = Cookies.get('EttAccessJwt');
             const idToken = Cookies.get('EttIdJwt');
 
-            if (accessToken && idToken) {
-                const decodedIdToken = JSON.parse(atob(idToken.split('.')[1]));
-
-                const consentResponse = await getConsentData( appConfig, accessToken, decodedIdToken.email);
-                setConsentData(consentResponse);
-
-                // Set the fullname and email in the user context for the header avatar.
-                setUser( {fullname: consentResponse.fullName, email: consentResponse.consenter.email } );
-
-                setApiState('success');
-            } else {
-                setApiState('error');
+            // Check if user is not signed in
+            if (!accessToken || !idToken) {
+                setApiState('notSignedIn');
+                return;
             }
+
+            // User is signed in, proceed with getting consent data
+            const decodedIdToken = JSON.parse(atob(idToken.split('.')[1]));
+
+            const consentResponse = await getConsentData(appConfig, accessToken, decodedIdToken.email);
+            setConsentData(consentResponse);
+
+            // Set the fullname and email in the user context for the header avatar.
+            setUser({fullname: consentResponse.fullName, email: consentResponse.consenter.email});
+
+            setApiState('success');
         }
 
         fetchData();
-    }, []);
+    }, [appConfig, setUser]);
 
     // Should require valid session token to access this page.
     return (
         <Box>
-            <Heading as={"h2"} size={"lg"}>Consent Form {(consentData?.fullName) && `for ${consentData.fullName}` }</Heading>
+            <Heading as={"h2"} size={"lg"}>Consent Form {(consentData?.fullName) && `for ${consentData.fullName}`}</Heading>
             {apiState === 'loading' && <Spinner />}
+            {apiState === 'notSignedIn' && 
+                <Alert 
+                    status="warning" 
+                    variant="subtle" 
+                    flexDirection="column" 
+                    alignItems="center" 
+                    justifyContent="center" 
+                    textAlign="center" 
+                    my={6}
+                >
+                    <AlertIcon boxSize="40px" mr={0} />
+                    <AlertTitle mt={4} mb={1} fontSize="lg">
+                        Not Signed In
+                    </AlertTitle>
+                    <AlertDescription maxWidth="sm">
+                        You need to be signed in to view the consent form. Please sign in through your dashboard.
+                    </AlertDescription>
+                </Alert>
+            }
             {apiState === 'error' && <Text>There was an error loading the consent form.</Text>}
             {apiState === 'success' &&
                 <Box>
@@ -65,7 +87,6 @@ export default function ConsentFormPage() {
                     <GrantConsentButton consentData={consentData} />
                 </Box>
             }
-            
         </Box>
     );
 
