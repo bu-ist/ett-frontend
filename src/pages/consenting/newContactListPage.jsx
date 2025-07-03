@@ -20,7 +20,7 @@ export default function NewContactListPage() {
     const { setUser } = useContext(UserContext);
     const navigate = useNavigate();
 
-    const [apiState, setApiState] = useState('');
+    const [apiState, setApiState] = useState('loading');
     const [consentData, setConsentData] = useState({});
     const [correctableAffiliates, setCorrectableAffiliates] = useState([]);
 
@@ -122,7 +122,7 @@ export default function NewContactListPage() {
         }
 
         fetchData();
-    }, [appConfig]);
+    }, [appConfig, currentPath, entityId, entityIdFromHash, navigate, searchParams, setSearchParams, setUser]);
 
     // Return early if there is no entityId, the entityId is required to display the form.
     if (apiState === 'success' && !entityId) {
@@ -147,7 +147,7 @@ export default function NewContactListPage() {
                 </Card>
             }
             {apiState === 'loading' && <Spinner />}
-            {apiState === 'error' && <Text>There was an error loading the new contact list page.</Text>}
+            {apiState === 'error' && <Text>Loading the exhibit form page is not yet complete.</Text>}
             {apiState === 'success' && correctableAffiliates.length === 0 &&  // This is a new form if there are no correctable affiliates.
                 <ContactList consentData={consentData} formConstraint={formConstraint} entityId={entityId} />
             }
