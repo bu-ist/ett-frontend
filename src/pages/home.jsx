@@ -16,13 +16,13 @@ export default function Home() {
     const formLabelMap = {
         "registration-form-entity": "Entity Registration Form",
         "registration-form-individual": "Individual Registration Form",
-        "consent-form": "Consent Form",
-        "exhibit-form-current-full": "Exhibit Form (Current, Full)",
-        "exhibit-form-current-single": "Exhibit Form (Current, Single)",
-        "exhibit-form-other-full": "Exhibit Form (Other, Full)",
-        "exhibit-form-other-single": "Exhibit Form (Other, Single)",
-        "exhibit-form-both-full": "Exhibit Form (Both, Full)",
-        "exhibit-form-both-single": "Exhibit Form (Both, Single)",
+        "consent-form": "Individual Consent Form",
+        "exhibit-form-current-full": "Exhibit Form (All Affiliates - Full)",
+        "exhibit-form-current-single": "Exhibit Form (All Affiliates, Single Entity for Each Affiliate)",
+        "exhibit-form-other-full": "Exhibit Form (All Affiliates Other Than Current Employer(s) and Appointing Entit(ies) — Full)",
+        "exhibit-form-other-single": "Exhibit Form (All Affiliates Other Than Current Employer(s) and Appointing Entit(ies), Single Entity for Each Affiliate)",
+        "exhibit-form-both-full": "Exhibit Form (Current Employer(s) and Appointing Entit(ies) - Full)",
+        "exhibit-form-both-single": "Exhibit Form (Current Employer(s) and Appointing Entit(ies) - Single Entity for Each Affiliate)",
         "disclosure-form": "Disclosure Form"
     };
 
