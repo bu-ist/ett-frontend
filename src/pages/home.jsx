@@ -203,17 +203,40 @@ export default function Home() {
                   <Box my="8">
                       <Heading size="md" mb="2">Download Blank Example Forms</Heading>
                       <UnorderedList>
-                          {appConfig.publicBlankFormURIs.map((uri) => {
+                          {appConfig.publicBlankFormURIs.reduce((items, uri) => {
                               const key = uri.split('/').pop();
                               const label = formLabelMap[key] || key.replace(/-/g, ' ').replace('.pdf', '');
-                              return (
+                              
+                              // If this is a "single" variant, skip it as we'll handle it with its parent
+                              if (key.includes('-single')) {
+                                  return items;
+                              }
+
+                              // Only look for single variants for exhibit forms with -full suffix
+                              const singleVariantUri = key.includes('exhibit-form-') && key.includes('-full')
+                                  ? appConfig.publicBlankFormURIs.find(u => 
+                                      u.split('/').pop() === key.replace('-full', '-single')
+                                    )
+                                  : null;
+
+                              items.push(
                                   <ListItem key={uri}>
                                       <a href={uri} target="_blank" rel="noopener noreferrer">
                                           {label}
                                       </a>
+                                      {singleVariantUri && (
+                                          <UnorderedList ml={4} mt={1}>
+                                              <ListItem key={singleVariantUri}>
+                                                  <a href={singleVariantUri} target="_blank" rel="noopener noreferrer">
+                                                      {formLabelMap[singleVariantUri.split('/').pop()]}
+                                                  </a>
+                                              </ListItem>
+                                          </UnorderedList>
+                                      )}
                                   </ListItem>
                               );
-                          })}
+                              return items;
+                          }, [])}
                       </UnorderedList>
                   </Box>
                 )}
