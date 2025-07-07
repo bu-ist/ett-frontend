@@ -16,13 +16,13 @@ export default function Home() {
     const formLabelMap = {
         "registration-form-entity": "Entity Registration Form",
         "registration-form-individual": "Individual Registration Form",
-        "consent-form": "Consent Form",
-        "exhibit-form-current-full": "Exhibit Form (Current, Full)",
-        "exhibit-form-current-single": "Exhibit Form (Current, Single)",
-        "exhibit-form-other-full": "Exhibit Form (Other, Full)",
-        "exhibit-form-other-single": "Exhibit Form (Other, Single)",
-        "exhibit-form-both-full": "Exhibit Form (Both, Full)",
-        "exhibit-form-both-single": "Exhibit Form (Both, Single)",
+        "consent-form": "Individual Consent Form",
+        "exhibit-form-current-full": "Exhibit Form (All Affiliates - Full)",
+        "exhibit-form-current-single": "Exhibit Form (All Affiliates, Single Entity for Each Affiliate)",
+        "exhibit-form-other-full": "Exhibit Form (All Affiliates Other Than Current Employer(s) and Appointing Entit(ies) — Full)",
+        "exhibit-form-other-single": "Exhibit Form (All Affiliates Other Than Current Employer(s) and Appointing Entit(ies), Single Entity for Each Affiliate)",
+        "exhibit-form-both-full": "Exhibit Form (Current Employer(s) and Appointing Entit(ies) - Full)",
+        "exhibit-form-both-single": "Exhibit Form (Current Employer(s) and Appointing Entit(ies) - Single Entity for Each Affiliate)",
         "disclosure-form": "Disclosure Form"
     };
 
@@ -73,7 +73,7 @@ export default function Home() {
                 <Heading size="md">Welcome to the Ethical Transparency Tool (ETT)</Heading>
                 <Text>
                     ETT is an ethical and efficient communication tool for societies, colleges, and universities to lead by helping to create a norm of 
-                    transparency about findings (not allegations) of misconduct about individuals (sexual/gender and race/ethnicity, as well as financial, 
+                    transparency about findings (not allegations) of individuals’ misconduct (sexual/gender and race/ethnicity, as well as financial, 
                     scientific/research, and licensure), wherever it occurs.  ETT is designed to implement AAU’s harassment prevention principles and the 
                     recommendations of NASEM’s June 2018 report on sexual harassment of women in academia and to support inclusive learning and research for all talent.   
                 </Text>
@@ -88,7 +88,7 @@ export default function Home() {
                     <Stack>
                         <CardBody>
                             <Heading size="md">Administrative Support Professional</Heading>
-                            <Text py={"2"} mb="15rem">
+                            <Text py={"2"} mb="3rem">
                                 A person who assists a Registered Entity&apos;s Authorized Individuals in the use of ETT.
                                 A Registered Entity is a Society or IHE or other organization that has voluntarily joined the ETT by registering at this website.
                             </Text>
@@ -113,8 +113,8 @@ export default function Home() {
                     <Stack>
                         <CardBody>
                             <Heading size="md">Authorized Individual</Heading>
-                            <Text py="2" mb="12rem">
-                                A person in a senior role(s) within a Registered Entity that deals with sensitive information, 
+                            <Text py="2">
+                                A person in a senior role within a Registered Entity who deals with sensitive information, 
                                 and who will directly receive completed Disclosure Form on behalf of the Registered Entity and 
                                 decide (or contact another official with authority to decide) who at the Entity needs to receive 
                                 the information. Each registered entity has two Authorized Individuals.
@@ -141,9 +141,10 @@ export default function Home() {
                         <CardBody>
                             <Heading size="md">Consenting Individual</Heading>
                             <Text py={"2"}>
-                                A person (e.g., a candidate for employment, post-doc, volunteer, board member, etc.) who is being considered 
-                                (or may be considered in the future) by a Registered Entity.  Consenting Individuals also provide consent via 
-                                ETT for certain disclosures (findings but <b>not</b> allegations)  to be made about the person’s conduct.  Disclosures 
+                                A person who is (or may be in the future) a candidate for a privilege or honor (e.g., elected fellow, elected or life membership; 
+                                honor or award recipient, emeritus or endowed role; elected or appointed governance committee, officer or leadership role) or employment 
+                                or role (e.g., faculty or  staff employee, post-doc, mentor, supervisor, volunteer, etc.) who is being considered (or may be considered in the future) 
+                                by a Registered Entity. Consenting Individuals provide consent via ETT for certain disclosures (findings  <b>not</b> allegations)  to be made about the person’s conduct.  Disclosures 
                                 are made by the person’s professional affiliated entities (employers, societies and membership organizations, 
                                 appointing and honoring organizations) <b>directly</b> to any Registered Entity(ies) that make a <b>disclosure request</b> via ETT.  
                                 But ETT <b>never</b> receives any disclosures.
@@ -188,30 +189,54 @@ export default function Home() {
                 </UnorderedList>
                 <Heading my="4" size="md">How does the Ethical Transparency Tool work?</Heading>
                 <Box display="flex" justifyContent="center" mt="4">
-                    <Image src="/ett-diagram.png" alt="ETT Diagram" />
+                    <Image src="/ett-explanation-diagram.png" alt="ETT Diagram" />
                 </Box>
                 <Heading my="4" size="md">What information is retained in the ETT?</Heading>
                 <Text>
                     Organizations’ and individuals’ registration to use ETT and individuals’ consent forms are stored in ETT.  Candidate professional affiliations 
-                    (their employers, appointing and honoring organizations, and societies) and organization requests for disclosures are deleted as soon as ETT sends 
-                    them and two reminders. (A limited archival record of the transmission is kept behind a firewall.)  ETT is a conduit, not a records repository. 
+                    (their employers, appointing and honoring organizations, and societies with contact information) and organization requests for disclosures are deleted 
+                    as soon as ETT sends the requests
+                    and two reminders. (A limited archival record of the transmission is kept behind a firewall.)  ETT is a conduit, not a records repository. 
                 </Text>
                 {/* Conditionally render the blank forms section only if appConfig and publicBlankFormURIs are available */}
                 {appConfig?.publicBlankFormURIs && (
                   <Box my="8">
                       <Heading size="md" mb="2">Download Blank Example Forms</Heading>
                       <UnorderedList>
-                          {appConfig.publicBlankFormURIs.map((uri) => {
+                          {appConfig.publicBlankFormURIs.reduce((items, uri) => {
                               const key = uri.split('/').pop();
                               const label = formLabelMap[key] || key.replace(/-/g, ' ').replace('.pdf', '');
-                              return (
+                              
+                              // If this is a "single" variant, skip it as we'll handle it with its parent
+                              if (key.includes('-single')) {
+                                  return items;
+                              }
+
+                              // Only look for single variants for exhibit forms with -full suffix
+                              const singleVariantUri = key.includes('exhibit-form-') && key.includes('-full')
+                                  ? appConfig.publicBlankFormURIs.find(u => 
+                                      u.split('/').pop() === key.replace('-full', '-single')
+                                    )
+                                  : null;
+
+                              items.push(
                                   <ListItem key={uri}>
                                       <a href={uri} target="_blank" rel="noopener noreferrer">
                                           {label}
                                       </a>
+                                      {singleVariantUri && (
+                                          <UnorderedList ml={4} mt={1}>
+                                              <ListItem key={singleVariantUri}>
+                                                  <a href={singleVariantUri} target="_blank" rel="noopener noreferrer">
+                                                      {formLabelMap[singleVariantUri.split('/').pop()]}
+                                                  </a>
+                                              </ListItem>
+                                          </UnorderedList>
+                                      )}
                                   </ListItem>
                               );
-                          })}
+                              return items;
+                          }, [])}
                       </UnorderedList>
                   </Box>
                 )}

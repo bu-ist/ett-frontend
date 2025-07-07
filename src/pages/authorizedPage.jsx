@@ -135,8 +135,10 @@ export default function AuthorizedPage() {
                 </Card>
             )}
             <Text>
-                Authorized Individuals (AIs) should be in senior institutional roles, accustomed to managing sensitive
-                and confidential information, and knowledgeable about the ETT-Registered Entity.
+                A person in a senior role within a Registered Entity who deals with sensitive information, 
+                and who will directly receive completed Disclosure Form on behalf of the Registered Entity and 
+                decide (or contact another official with authority to decide) who at the Entity needs to receive 
+                the information. Each registered entity has two Authorized Individuals.
             </Text>
             {apiState === 'loading' && <Spinner />}
             {apiState === 'not-logged-in' &&
