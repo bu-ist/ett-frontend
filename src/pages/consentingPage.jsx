@@ -87,9 +87,10 @@ export default function ConsentingPage() {
         <div>
             <Heading as="h2" size={"lg"} >Consenting Person</Heading>
             <Text mt="4" mb="8">
-                A person (e.g., a candidate for employment, post-doc, volunteer, board member, etc.) who is being considered 
-                (or may be considered in the future) by a Registered Entity.  Consenting Individuals also provide consent via 
-                ETT for certain disclosures (findings but <b>not</b> allegations)  to be made about the person’s conduct.  Disclosures 
+                A person who is (or may be in the future) a candidate for a privilege or honor (e.g., elected fellow, elected or life membership; 
+                honor or award recipient, emeritus or endowed role; elected or appointed governance committee, officer or leadership role) or employment 
+                or role (e.g., faculty or  staff employee, post-doc, mentor, supervisor, volunteer, etc.) who is being considered (or may be considered in the future) 
+                by a Registered Entity. Consenting Individuals provides consent via ETT for certain disclosures (findings  <b>not</b> allegations)  to be made about the person’s conduct.  Disclosures 
                 are made by the person’s professional affiliated entities (employers, societies and membership organizations, 
                 appointing and honoring organizations) <b>directly</b> to any Registered Entity(ies) that make a <b>disclosure request</b> via ETT.  
                 But ETT <b>never</b> receives any disclosures.
