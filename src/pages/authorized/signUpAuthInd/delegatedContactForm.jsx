@@ -69,13 +69,18 @@ export default function DelegatedContactForm({ register, errors }) {
                 <Input
                     id="delegate_phone"
                     name="delegate_phone"
-                    placeholder="Phone"
+                    type="tel"
+                    placeholder="Phone Number (e.g., +1 (555) 123-4567)"
                     {...register('delegate_phone', {
                         required: 'Phone is required',
+                        pattern: {
+                            value: /^\+?\s*1?\s*(?:\([0-9]{3}\)|[0-9]{3})[-.\s]*[0-9]{3}[-.\s]*[0-9]{4}$/,
+                            message: 'Please enter a valid phone number. Allowed formats: +1 (555) 123-4567, 555-123-4567, 555.123.4567'
+                        }
                     })}
                 />
                 {!errors.delegate_phone ? (
-                    <FormHelperText>The phone number of the person who will be the delegated contact.</FormHelperText>
+                    <FormHelperText>Enter a phone number with optional country code, area code, and separators (e.g., +1 (555) 123-4567)</FormHelperText>
                 ) : (
                     <FormErrorMessage>{errors.delegate_phone && errors.delegate_phone.message}</FormErrorMessage>
                 )}

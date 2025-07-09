@@ -2,7 +2,7 @@ import {
     Modal, ModalOverlay, ModalContent, ModalHeader, 
     ModalFooter, ModalBody, Button, FormControl,
     FormLabel, Input, Box, Alert, AlertIcon,
-    FormErrorMessage, Text, VStack,
+    FormErrorMessage, FormHelperText, Text, VStack,
     AlertDialog, AlertDialogBody, AlertDialogContent,
     AlertDialogHeader, AlertDialogFooter, AlertDialogOverlay,
     useDisclosure, UnorderedList, ListItem,
@@ -173,12 +173,22 @@ export default function EditAdminDetailsModal({ isOpen, onClose, adminInfo, onSa
                                 <FormControl mb="4" isInvalid={errors.phone_number}>
                                     <FormLabel>Phone Number</FormLabel>
                                     <Input
+                                        type="tel"
+                                        placeholder="+16175551212"
                                         {...register('phone_number', {
-                                            required: 'Phone number is required'
+                                            required: 'Phone number is required',
+                                            pattern: {
+                                                value: /^\+1\d{10}$/,
+                                                message: 'Phone number must be in format: +1 followed by 10 digits (e.g., +16175551212)'
+                                            }
                                         })}
                                         isDisabled={apiState === 'success'}
                                     />
-                                    <FormErrorMessage>{errors.phone_number?.message}</FormErrorMessage>
+                                    {!errors.phone_number ? (
+                                        <FormHelperText>Enter phone number in format: +1 followed by 10 digits (e.g., +16175551212)</FormHelperText>
+                                    ) : (
+                                        <FormErrorMessage>{errors.phone_number?.message}</FormErrorMessage>
+                                    )}
                                 </FormControl>
                             </Box>
 
