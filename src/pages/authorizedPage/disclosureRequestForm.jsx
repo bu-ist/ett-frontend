@@ -3,7 +3,7 @@ import { useForm } from 'react-hook-form';
 import PropTypes from 'prop-types';
 import Cookies from 'js-cookie';
 
-import { Box, FormControl, Button, FormLabel, Input, Spinner, useDisclosure, Modal, ModalOverlay, ModalContent, ModalHeader, ModalCloseButton, ModalBody, FormErrorMessage, FormHelperText, Alert, AlertIcon, Stack, Text, ModalFooter } from "@chakra-ui/react";
+import { Box, FormControl, Button, FormLabel, Input, Spinner, useDisclosure, Modal, ModalOverlay, ModalContent, ModalHeader, ModalCloseButton, ModalBody, FormErrorMessage, FormHelperText, Alert, AlertIcon, Stack, Text, ModalFooter, AlertTitle, AlertDescription } from "@chakra-ui/react";
 
 import { emailRegex } from '../../lib/formatting/emailRegex';
 import { sendDisclosureRequestAPI } from '../../lib/auth-ind/sendDisclosureRequestAPI';
@@ -23,13 +23,14 @@ const ROLE_CONFIG = {
 };
 
 export default function DisclosureRequestForm({ entityId, role }) {
+    // UI State
     const { isOpen, onOpen, onClose } = useDisclosure();
+    const [apiState, setApiState] = useState('idle');
+    const [apiError, setApiError] = useState(null);
+    const [submittedEmail, setSubmittedEmail] = useState('');
 
     // Get the appConfig from the ConfigContext.
     const { appConfig } = useContext( ConfigContext );
-
-    const [apiState, setApiState] = useState('idle');
-    const [submittedEmail, setSubmittedEmail] = useState(null);
 
     const {
         handleSubmit,
@@ -53,6 +54,7 @@ export default function DisclosureRequestForm({ entityId, role }) {
         if (!roleConfig) {
             console.error(`Invalid role: ${role}`);
             setApiState('error');
+            setApiError('Invalid role configuration');
             onOpen();
             return;
         }
@@ -66,6 +68,7 @@ export default function DisclosureRequestForm({ entityId, role }) {
             setApiState('success');
         } else {
             setApiState('error');
+            setApiError(sendResult.message || 'An error occurred while sending the disclosure request');
         }
 
         onOpen();
@@ -76,9 +79,10 @@ export default function DisclosureRequestForm({ entityId, role }) {
         // Reset form and state when modal is closed
         if (apiState === 'success') {
             reset();
-            setSubmittedEmail(null);
+            setSubmittedEmail('');
         }
         setApiState('idle');
+        setApiError(null);
         onClose();
     }
 
@@ -138,9 +142,14 @@ export default function DisclosureRequestForm({ entityId, role }) {
                             )}
                             {apiState === 'error' && (
                                 <>
-                                    <Alert status='error'>
+                                    <Alert status="error">
                                         <AlertIcon />
-                                        There was an error sending the request. Please try again or contact support if the problem persists.
+                                        <Box>
+                                            <AlertTitle>Error</AlertTitle>
+                                            <AlertDescription>
+                                                {apiError || 'There was an error sending the request. Please try again.'}
+                                            </AlertDescription>
+                                        </Box>
                                     </Alert>
                                     <Text my="8">
                                         Please check the email address you provided and ensure it is valid. If the problem persists, please contact support.
