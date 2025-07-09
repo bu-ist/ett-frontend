@@ -213,13 +213,17 @@ export default function ContactEditModal({
                                 id="contactPhone"
                                 name="contactPhone"
                                 type="tel"
-                                placeholder="Phone Number"
+                                placeholder="Phone Number (e.g., +1 (555) 123-4567)"
                                 {...register('contactPhone', {
                                     required: 'Phone number is required',
+                                    pattern: {
+                                        value: /^\+?\s*1?\s*(?:\([0-9]{3}\)|[0-9]{3})[-.\s]*[0-9]{3}[-.\s]*[0-9]{4}$/,
+                                        message: 'Please enter a valid phone number. Allowed formats: +1 (555) 123-4567, 555-123-4567, 555.123.4567'
+                                    }
                                 })}
                             />
                             {!errors.contactPhone ? (
-                                <FormHelperText>&nbsp;</FormHelperText>
+                                <FormHelperText>Enter phone number with optional country code, area code, and separators</FormHelperText>
                             ) : (
                                 <FormErrorMessage>{errors.contactPhone.message}</FormErrorMessage>
                             )}  
