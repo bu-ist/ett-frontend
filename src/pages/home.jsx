@@ -17,12 +17,12 @@ export default function Home() {
         "registration-form-entity": "Entity Registration Form",
         "registration-form-individual": "Individual Registration Form",
         "consent-form": "Individual Consent Form",
-        "exhibit-form-current-full": "Exhibit Form (All Affiliates - Full)",
-        "exhibit-form-current-single": "Exhibit Form (All Affiliates, Single Entity for Each Affiliate)",
+        "exhibit-form-current-full": "Exhibit Form (Current Employer(s) and Appointing Entit(ies) - Full)",
+        "exhibit-form-current-single": "Exhibit Form (Current Employer(s) and Appointing Entit(ies), Single Entity for Each Affiliate)",
         "exhibit-form-other-full": "Exhibit Form (All Affiliates Other Than Current Employer(s) and Appointing Entit(ies) — Full)",
         "exhibit-form-other-single": "Exhibit Form (All Affiliates Other Than Current Employer(s) and Appointing Entit(ies), Single Entity for Each Affiliate)",
-        "exhibit-form-both-full": "Exhibit Form (Current Employer(s) and Appointing Entit(ies) - Full)",
-        "exhibit-form-both-single": "Exhibit Form (Current Employer(s) and Appointing Entit(ies) - Single Entity for Each Affiliate)",
+        "exhibit-form-both-full": "Exhibit Form (All Affiliates - Full)",
+        "exhibit-form-both-single": "Exhibit Form (All Affiliates - Single Entity for Each Affiliate)",
         "disclosure-form": "Disclosure Form"
     };
 
