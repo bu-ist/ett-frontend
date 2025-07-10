@@ -19,7 +19,7 @@ import {
     Modal, ModalOverlay, ModalContent, ModalHeader, 
     ModalFooter, ModalBody, Button, FormControl,
     FormLabel, Input, Box, Heading, Alert, AlertIcon,
-    Divider, HStack, FormErrorMessage, Text, VStack, 
+    Divider, HStack, FormErrorMessage, FormHelperText, Text, VStack, 
     UnorderedList, ListItem, AlertDialog, AlertDialogBody, 
     AlertDialogContent, AlertDialogHeader, AlertDialogFooter, 
     AlertDialogOverlay, useDisclosure,
@@ -247,12 +247,22 @@ export default function EditExistingAuthIndModal({ isOpen, onClose, userInfo, on
                                 <FormControl mb="4" isInvalid={errors.phone_number}>
                                     <FormLabel>Phone Number</FormLabel>
                                     <Input
+                                        type="tel"
+                                        placeholder="+16175551212"
                                         {...register('phone_number', {
-                                            required: 'Phone number is required'
+                                            required: 'Phone number is required',
+                                            pattern: {
+                                                value: /^\+1\d{10}$/,
+                                                message: 'Phone number must be in format: +1 followed by 10 digits (e.g., +16175551212)'
+                                            }
                                         })}
                                         isDisabled={apiState === 'success'}
                                     />
-                                    <FormErrorMessage>{errors.phone_number?.message}</FormErrorMessage>
+                                    {!errors.phone_number ? (
+                                        <FormHelperText>Enter phone number in format: +1 followed by 10 digits (e.g., +16175551212)</FormHelperText>
+                                    ) : (
+                                        <FormErrorMessage>{errors.phone_number?.message}</FormErrorMessage>
+                                    )}
                                 </FormControl>
                             </Box>
 
@@ -310,12 +320,22 @@ export default function EditExistingAuthIndModal({ isOpen, onClose, userInfo, on
                                         <FormControl mb="4" isInvalid={errors.delegate_phone}>
                                             <FormLabel>Phone Number</FormLabel>
                                             <Input
+                                                type="tel"
+                                                placeholder="Phone Number (e.g., +1 (555) 123-4567)"
                                                 {...register('delegate_phone', {
-                                                    required: showDelegateFields ? 'Delegate phone number is required' : false
+                                                    required: showDelegateFields ? 'Delegate phone number is required' : false,
+                                                    pattern: {
+                                                        value: /^\+?\s*1?\s*(?:\([0-9]{3}\)|[0-9]{3})[-.\s]*[0-9]{3}[-.\s]*[0-9]{4}$/,
+                                                        message: 'Please enter a valid phone number. Allowed formats: +1 (555) 123-4567, 555-123-4567, 555.123.4567'
+                                                    }
                                                 })}
                                                 isDisabled={apiState === 'success'}
                                             />
-                                            <FormErrorMessage>{errors.delegate_phone?.message}</FormErrorMessage>
+                                            {!errors.delegate_phone ? (
+                                                <FormHelperText>Enter phone number with optional country code, area code, and separators</FormHelperText>
+                                            ) : (
+                                                <FormErrorMessage>{errors.delegate_phone?.message}</FormErrorMessage>
+                                            )}
                                         </FormControl>
                                     </>
                                 )}
