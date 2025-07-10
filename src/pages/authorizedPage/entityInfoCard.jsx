@@ -17,7 +17,7 @@ export default function EntityInfoCard({ entityInfo }) {
     // If there is already another Authorized Individual, get the email of the user whose role is 'RE_AUTHORIZED'.
     const authUser = entityInfo?.users?.find(user => user.role === 'RE_AUTH_IND') || '';
 
-    // Get any pending invitation to administative support professionals ( where role is 'RE_ADMIN' )
+    // Get any pending invitation to administrative support professionals ( where role is 'RE_ADMIN' )
     const pendingAdminInvitation = entityInfo?.pendingInvitations?.find(invitation => invitation.role === 'RE_ADMIN') || '';
 
     // Get any pending invitation to authorized individuals ( where role is 'RE_AUTH_IND' )
