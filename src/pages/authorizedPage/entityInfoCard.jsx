@@ -3,6 +3,7 @@
 
 import { Card, CardHeader, Heading, CardBody, Text, HStack, Box, StackDivider, ButtonGroup } from "@chakra-ui/react";
 import { formatTimestamp } from '../../lib/formatting/formatTimestamp';
+import PropTypes from 'prop-types';
 
 import AmendModalButton from './entityInfoCard/amendButtonModal';
 import TerminateButtonModal from './entityInfoCard/terminateButtonModal';
@@ -81,3 +82,21 @@ export default function EntityInfoCard({ entityInfo }) {
         </Card>
     )
 }
+
+EntityInfoCard.propTypes = {
+    entityInfo: PropTypes.shape({
+        entity_name: PropTypes.string.isRequired,
+        users: PropTypes.arrayOf(PropTypes.shape({
+            role: PropTypes.string.isRequired,
+            fullname: PropTypes.string.isRequired,
+            title: PropTypes.string,
+            email: PropTypes.string.isRequired,
+            phone_number: PropTypes.string
+        })).isRequired,
+        pendingInvitations: PropTypes.arrayOf(PropTypes.shape({
+            role: PropTypes.string.isRequired,
+            sent_timestamp: PropTypes.string.isRequired,
+            code: PropTypes.string
+        })).isRequired
+    }).isRequired
+};
