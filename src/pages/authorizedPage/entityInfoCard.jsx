@@ -2,6 +2,8 @@
 /* Ideally this would be a shared component, look to refactor this in the future. */
 
 import { Card, CardHeader, Heading, CardBody, Text, HStack, Box, StackDivider, ButtonGroup } from "@chakra-ui/react";
+import { formatTimestamp } from '../../lib/formatting/formatTimestamp';
+import PropTypes from 'prop-types';
 
 import AmendModalButton from './entityInfoCard/amendButtonModal';
 import TerminateButtonModal from './entityInfoCard/terminateButtonModal';
@@ -14,6 +16,13 @@ export default function EntityInfoCard({ entityInfo }) {
     
     // If there is already another Authorized Individual, get the email of the user whose role is 'RE_AUTHORIZED'.
     const authUser = entityInfo?.users?.find(user => user.role === 'RE_AUTH_IND') || '';
+
+    // Get any pending invitation to administrative support professionals ( where role is 'RE_ADMIN' )
+    const pendingAdminInvitation = entityInfo?.pendingInvitations?.find(invitation => invitation.role === 'RE_ADMIN') || '';
+
+    // Get any pending invitation to authorized individuals ( where role is 'RE_AUTH_IND' )
+    const pendingAuthInvitation = entityInfo?.pendingInvitations?.find(invitation => invitation.role === 'RE_AUTH_IND') || '';
+
 
     const { entity_name } = entityInfo;
 
@@ -33,19 +42,23 @@ export default function EntityInfoCard({ entityInfo }) {
                                 <Text>{adminUser.email}</Text>
                                 <Text>{adminUser.phone_number}</Text>
                             </>
+                        ) : pendingAdminInvitation !== '' ? (
+                            <Text>Invitation pending (sent {formatTimestamp(pendingAdminInvitation.sent_timestamp)})</Text>
                         ) : (
                             <Text>Currently vacant, click &quot;Amend&quot; to send new invitation.</Text>
                         )}
                     </Box>
                     <Box>
                         <Heading as="h4" mb="2" size="sm">Authorized Individuals</Heading>
-                        {authUser ?  (
+                        {authUser ? (
                             <>
                                 <Text>{authUser.fullname}</Text>
                                 <Text>{authUser.title}</Text>
                                 <Text>{authUser.email}</Text>
                                 <Text>{authUser.phone_number}</Text>
                             </>
+                        ) : pendingAuthInvitation !== '' ? (
+                            <Text>Invitation pending (sent {formatTimestamp(pendingAuthInvitation.sent_timestamp)})</Text>
                         ) : (
                             <Text>Second Authorized Individual has not yet registered.</Text>
                         )}
@@ -69,3 +82,21 @@ export default function EntityInfoCard({ entityInfo }) {
         </Card>
     )
 }
+
+EntityInfoCard.propTypes = {
+    entityInfo: PropTypes.shape({
+        entity_name: PropTypes.string.isRequired,
+        users: PropTypes.arrayOf(PropTypes.shape({
+            role: PropTypes.string.isRequired,
+            fullname: PropTypes.string.isRequired,
+            title: PropTypes.string,
+            email: PropTypes.string.isRequired,
+            phone_number: PropTypes.string
+        })).isRequired,
+        pendingInvitations: PropTypes.arrayOf(PropTypes.shape({
+            role: PropTypes.string.isRequired,
+            sent_timestamp: PropTypes.string.isRequired,
+            code: PropTypes.string
+        })).isRequired
+    }).isRequired
+};
