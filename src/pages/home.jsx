@@ -74,8 +74,8 @@ export default function Home() {
                 <Text>
                     ETT is an ethical and efficient communication tool for societies, colleges, and universities to lead by helping to create a norm of 
                     transparency about findings (not allegations) of individuals’ misconduct (sexual/gender and race/ethnicity, as well as financial, 
-                    scientific/research, and licensure), wherever it occurs.  ETT is designed to implement AAU’s harassment prevention principles and the 
-                    recommendations of NASEM’s June 2018 report on sexual harassment of women in academia and to support inclusive learning and research for all talent.   
+                    scientific/research, and licensure), wherever it occurs.  ETT is designed to implement <a href="https://www.aau.edu/key-issues/campus-climate-and-safety/aau-principles-preventing-sexual-harassment-academia">AAU’s harassment prevention principles</a> and the 
+                    recommendations of <a href="https://nap.nationalacademies.org/catalog/24994/sexual-harassment-of-women-climate-culture-and-consequences-in-academic">NASEM’s June 2018 report</a> on sexual harassment of women in academia and to support inclusive learning and research for all talent.   
                 </Text>
             </Box>
             <Heading mb="4" size="md">Access ETT</Heading>
@@ -168,8 +168,8 @@ export default function Home() {
                 <Heading my="4" size="md">What are the benefits of ETT?</Heading>
                 <UnorderedList>
                     <ListItem>
-                        Creating a healthy climate for all - reducing awards and appointments for harassers, while recognizing that a person 
-                        may learn and correct past behaviors, benefiting everyone.  
+                        Creating a healthy climate for all - avoiding awards and appointments for harassers, while recognizing that a person 
+                        may learn and correct past behaviors, and regain trust, benefiting everyone.  
                     </ListItem>
                     <ListItem>
                         Ethically treating everyone - making it easier for an entity that made a misconduct finding (the most reliable source) 
@@ -180,8 +180,8 @@ export default function Home() {
                         consent for disclosures; and disclosures are limited to useful but hard to dispute facts—the kind and date of a misconduct finding.
                     </ListItem>
                     <ListItem>
-                        Enhancing efficiency in consenting to and requesting disclosures – a consent has a 10-year life and can be used to request and provide disclosures 
-                        throughout (unless rescinded early) and ETT automates requests for disclosures and reminders.
+                        Enhancing efficiency in consenting to and requesting disclosures – a person’s single consent has a 10-year life. It can be used to request and provide 
+                        disclosures throughout (by any ETT-Registered Entities and a consenting person’s professionally affiliated entities), unless a person rescinds their consent early. ETT automates requests for disclosures and reminders.
                     </ListItem>
                     <ListItem>
                         ETT never receives disclosures–only the organizations that request them using ETT do - there is no centralized shame list or conduct record. 
@@ -194,9 +194,9 @@ export default function Home() {
                 <Heading my="4" size="md">What information is retained in the ETT?</Heading>
                 <Text>
                     Organizations’ and individuals’ registration to use ETT and individuals’ consent forms are stored in ETT.  Candidate professional affiliations 
-                    (their employers, appointing and honoring organizations, and societies with contact information) and organization requests for disclosures are deleted 
+                    (their employers, appointing and honoring organizations, and societies - with contact information) and organization requests for disclosures are deleted 
                     as soon as ETT sends the requests
-                    and two reminders. (A limited archival record of the transmission is kept behind a firewall.)  ETT is a conduit, not a records repository. 
+                    and two reminders. (A limited archival record of making the transmission is kept behind a firewall.)  ETT is a conduit, not a records repository. 
                 </Text>
                 {/* Conditionally render the blank forms section only if appConfig and publicBlankFormURIs are available */}
                 {appConfig?.publicBlankFormURIs && (
