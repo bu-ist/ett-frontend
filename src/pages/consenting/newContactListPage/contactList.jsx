@@ -423,7 +423,7 @@ export default function ContactList({ consentData, formConstraint, entityId }) {
                             You have digitally signed your Full Exhibit Form and each of your Single-Entity Exhibit Forms. Next, submit the form.
                         </Alert>
                         <Text>
-                            When you click &quot;Submit&quot;:
+                            NOTE: When you click &quot;Submit&quot;:
                         </Text>
                         <UnorderedList fontSize="xl" fontWeight="semibold" my="4" spacing="2">
                             <ListItem>
@@ -431,7 +431,7 @@ export default function ContactList({ consentData, formConstraint, entityId }) {
                                 your Full or Single Entity Exhibit Forms in connection with the Privilege or Honor, Employment or Role 
                                 for which the listed Registered Entity is considering you at this time.  Your Consent Recipients will be 
                                 relying on these forms to make disclosures to the Registered Entity.  Contact the Registered Entity directly 
-                                if you want to withdraw from their consideration.  
+                                if you want to withdraw from their consideration.
                             </ListItem>
                             <ListItem>
                                 You may still rescind your ETT Registration Form and Consent Form to prevent their other use in the future
