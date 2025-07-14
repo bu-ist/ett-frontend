@@ -345,7 +345,7 @@ export default function ContactList({ consentData, formConstraint, entityId }) {
                     />
                 )}
                 <Divider my="8" />
-                <FormInstructionsText entityName={entityName} />
+                <FormInstructionsText entityName={entityName} formConstraint={formConstraint} />
                 <Divider my="8" />
                 <form onSubmit={handleSubmit(handleNext)}>
                     <FormControl mt="8">
