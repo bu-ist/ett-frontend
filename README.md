@@ -49,10 +49,27 @@ The [backend application stack](https://github.com/bu-ist/ett) contains a bucket
 
 The application has a standard [Vite](https://vite.dev/guide/) based local runtime including hot-reloading.  
 
-### Proxy
 
-In order to access the backend
-application end through the local development server at `http://localhost:5173`, you will need to set up the proxy settings to get around CORS issues with `localhost`.  This is done by creating a `.env` file in the root of the project. There is a sample `.env.example` file in the root of the project that you can copy and rename to `.env`.  The `.env` file must be filled in with the values from the `/parameters` endpoint of the specific backend application instance being used.  This `.env` file will be read in by the Vite development server configuration at `/vite.config.js` and will be used to set up the proxy server.  The proxy server will forward requests from the local development server to the backend application instance, allowing you to test the application locally without running into CORS issues.
+### Local Development Proxy
+
+To avoid CORS issues when accessing backend APIs during local development, this project uses Vite’s proxy feature. The proxy forwards API requests from the Vite dev server (e.g., `http://localhost:5173`) to the appropriate backend endpoints, allowing your frontend code to interact with the backend as if it were available locally.
+
+**How it works:**
+- Proxy rules are defined in `vite.config.js` for each backend API (e.g., `/authorizedApi`, `/consentingApi`, etc.).
+- These rules use environment variables from your `.env` file to determine the backend targets.
+- When running the dev server, requests to these paths are transparently forwarded to the real backend, bypassing CORS restrictions.
+- In production, the app uses the actual API URLs and does not rely on the proxy.
+
+**Setup instructions for contributors:**
+1. Copy `.env.example` to `.env` in the project root.
+2. Fill in the values in `.env` using the `/parameters` endpoint from your backend instance.
+3. Start the dev server with `npm run dev`. The proxy will be active automatically.
+
+**Example:**
+- A frontend request to `/authorizedApi/dev/RE_AUTH_IND` will be proxied to the real backend API host defined in your `.env` file.
+
+**Note:**  
+The proxy is only active in development mode. Production builds use the real API endpoints directly and do not require this setup.
 
 ### Starting the Development Server
 
