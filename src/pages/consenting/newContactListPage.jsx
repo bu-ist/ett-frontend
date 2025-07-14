@@ -96,7 +96,8 @@ export default function NewContactListPage() {
                     entityId || window.localStorage.getItem('exhibitFormEntityId')
                 );
 
-                const { affiliateEmails: affiliates } = correctableResult;
+                // If the response is invalid or doesn't have affiliateEmails, use an empty array
+                const { affiliateEmails: affiliates = [] } = correctableResult;
                 
                 // If there are correctable affiliates, that means this exhibit form has already been submitted set them in state.
                 // Set the correctable affiliates in state, so if they exist we can show the correction form.
