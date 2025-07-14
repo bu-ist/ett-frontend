@@ -19,23 +19,23 @@ export default function FormInstructionsText({ entityName }) {
                     <Text>
                         <b><u>Within the next 60 days</u>—if the Registered Entity initiates transmittals via ETT to my listed Consent Recipients/Affiliates, 
                         asking them to complete Disclosure Forms about me (“Disclosure Requests”), transmit the Disclosure Requests.</b> Each Disclosure Request 
-                        will include the relevant Single-Entity Exhibit Form (so one Consent Recipient is not notified of the others), my Consent Form, and a 
-                        blank Disclosure Form.  Copy the Registered Entity and me on the Disclosure Requests.  
+                        will include my Consent Form, the relevant Single-Entity Exhibit Form (listing only the Consent Recipient/Affiliate that is receiving 
+                        it—so one Consent Recipient is not notified of the others), and a blank Disclosure Form. Copy the Registered Entity and me on the 
+                        Disclosure Requests.  
                     </Text>
                     <Text mt="4">
-                        <b><u>Within the 21 days after sending these initial Disclosure Request(s)</u>—resend the Registered Entity’s Disclosure Request(s) twice (as reminders) 
-                        to my Consent Recipients (Affiliates) listed in this Exhibit Form, copying the Registered Entity and me. Then promptly delete the Disclosure Requests, 
+                        <b><u>Within the 21 days after sending these initial Disclosure Request(s) (2 weeks after, and 1 week after that)</u>—resend the Registered Entity’s Disclosure Request(s) twice (as reminders) 
+                        separately to each of my Consent Recipients (Affiliates) listed in this Exhibit Form, copying the Registered Entity and me. Then promptly delete the Disclosure Requests, 
                         my Full Exhibit Form and all related Single Entity Exhibit Forms from ETT (as ETT will have completed its transmittal role).</b>
                     </Text>
                 </ListItem>
                 <ListItem>
                     <b><u>I agree that my ETT Registration Form and Consent Form will remain in effect for use with these particular Disclosure Requests and 
-                    completed Disclosure Forms that my Consent Recipient(s) provide in response (even if my ETT Registration and Consent otherwise 
-                    expire or are rescinded)</u></b>
+                    my Consent Recipient(s)’ disclosures in response (even if my ETT Registration and Consent otherwise expire or are rescinded).</u></b>
                 </ListItem>
                 <ListItem>
                     <b><u>I agree that ETT has the right to identify me as the person who provided and authorized use of the name, title, email and phone number 
-                    of the contacts I’ve listed for my Affiliates.</u></b>
+                    of the contacts I’ve listed for my Consent Recipients (Affiliates).</u></b>
                 </ListItem>
                 <ListItem>
                     <b>If the Registered Entity does not initiate Disclosure Requests within the 60-day period provided, delete all of these Exhibit Forms from ETT.</b>
