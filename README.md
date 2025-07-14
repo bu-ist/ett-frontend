@@ -42,7 +42,8 @@ The `pages` directory contains the main page components, which are the entry poi
 
 The application is built as a statically compiled JS bundle and can be deployed on any static host that 
 supports React Router.  This includes S3 buckets if they have some React Router specific rules attached, 
-[details available from this stack overflow.](https://stackoverflow.com/questions/51218979/react-router-doesnt-work-in-aws-s3-bucket/71591815#71591815).  The [backend application stack](https://github.com/bu-ist/ett) contains a bucket that is configured to host the front end application as built, including handling for the special `/parameters` endpoint.
+[details available from this stack overflow.](https://stackoverflow.com/questions/51218979/react-router-doesnt-work-in-aws-s3-bucket/71591815#71591815).  
+The [backend application stack](https://github.com/bu-ist/ett) contains a bucket that is configured to host the front end application as built, including handling for the special `/parameters` endpoint. No additional configuration is required to deploy the front end application to this bucket.
 
 ## Development
 
