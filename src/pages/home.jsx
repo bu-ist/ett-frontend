@@ -72,7 +72,7 @@ export default function Home() {
             <Box my={"2em"}>
                 <Heading size="md">Welcome to the Ethical Transparency Tool (ETT)</Heading>
                 <Text>
-                    ETT is an ethical and efficient communication tool for societies, colleges, and universities to lead by helping to create a norm of 
+                    ETT is an ethical and efficient communication tool for societies, universities, and individuals to lead by helping to create a norm of 
                     transparency about findings (not allegations) of individuals’ misconduct (sexual/gender and race/ethnicity, as well as financial, 
                     scientific/research, and licensure), wherever it occurs.  ETT is designed to implement <a href="https://www.aau.edu/key-issues/campus-climate-and-safety/aau-principles-preventing-sexual-harassment-academia" style={{ textDecoration: 'underline' }}>AAU’s harassment prevention principles</a> and the 
                     recommendations of <a style={{ textDecoration: 'underline' }} href="https://nap.nationalacademies.org/catalog/24994/sexual-harassment-of-women-climate-culture-and-consequences-in-academic">NASEM’s June 2018 report</a> on sexual harassment of women in academia and to support inclusive learning and research for all talent.   
@@ -177,7 +177,7 @@ export default function Home() {
                     </ListItem>
                     <ListItem>
                         Minimizing legal and enterprise risk for all involved: organizations maintain independence in all policy- and decision making; candidates provide 
-                        consent for disclosures; and disclosures are limited to useful but hard to dispute facts—the kind and date of a misconduct finding.
+                        consent for disclosures; and disclosures are limited to useful but hard to dispute facts—the kind and year of a misconduct finding.
                     </ListItem>
                     <ListItem>
                         Enhancing efficiency in consenting to and requesting disclosures – a person’s single consent has a 10-year life. It can be used to request and provide 
