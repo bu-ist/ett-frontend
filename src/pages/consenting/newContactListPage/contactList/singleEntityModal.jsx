@@ -101,11 +101,13 @@ export default function SingleEntityModal({ contacts, setSingleEntityFormsSigned
                                 </Text>
                                 <Text mb="4" fontWeight="semibold">
                                     This <u>&quot;Single-Entity Exhibit Form&quot;</u> is incorporated into my Consent Form, <Link as={ReactRouterLink} to="/consenting" textDecoration="underline">at link</Link>.  
-                                    <u>I agree that my ETT Registration Form and Consent Form will remain in effect to 
-                                    authorize the Disclosure Form that the following entity completes and provides in response 
-                                    to the Disclosure Request sent with this Form. </u> The definitions in the Consent Form also apply 
-                                    to this Single Entity Exhibit Form.  The following entity is one of my Consent Recipients (Affiliates) 
-                                    referenced in and covered by my Consent Form:
+                                    <u>I agree that my ETT Registration Form and Consent Form authorizes (and will remain in effect to 
+                                    authorize) the following entity to complete the Disclosure Form about me and provide it in 
+                                    response to the Disclosure Request sent with this Form. The following entity is also authorized 
+                                    to disclose the information called for in the Disclosure Form about me in response to the 
+                                    Disclosure Request, if preferred.</u> The definitions in the Consent Form also apply to this 
+                                    Single Entity Exhibit Form. The following entity is one of my <u>Consent Recipients</u> 
+                                    (Affiliates) referenced in and covered by my Consent Form:
                                 </Text>
                                 <ContactSummaryCard contact={currentContact} />
                                 <Text mb="4">
