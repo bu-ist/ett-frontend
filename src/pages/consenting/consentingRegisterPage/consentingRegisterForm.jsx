@@ -72,10 +72,17 @@ export default function ConsentingRegisterForm({ setStepIndex }) {
         <form onSubmit={handleSubmit(processRegistration)}>
             <Heading as="h3" size="lg" mt="6" mb="4">Register</Heading>
             <Text mb="6">
-                Registering on ETT means that you consent to inclusion of your name and contacts on the ETT database 
-                and in ETT-related communications made in the ETT process. Once registered you will be able to grant consent
-                for disclosures, and provide Exhibit Forms. You will also be able to rescind consent at any time. Once your consent
-                is rescinded (or expires after 10 years), your registration will also end.
+                Thank you for registering on ETT.  When you register, you consent to inclusion of your name and 
+                contacts on the ETT database and in ETT-related communications made in the ETT process. Once 
+                registered, you will be able to grant consent to disclosures about you by completing an ETT 
+                Consent Form.  Also, whenever requested by any of the colleges, universities, societies or other 
+                organizations that are ETT Registered Entities considering you for a privilege or honor, 
+                employment or other role, you will be able to complete Exhibit Forms listing your professionally 
+                affiliated entities (past and present) at the time and affirming your consent to their receiving 
+                disclosure requests and making disclosures in the ETT process. You will also be able to rescind 
+                your consent at any time (except in connection with any disclosure requests that have been made at 
+                the time). Once your consent is rescinded (or expires after 10 years), your registration will 
+                also end.
             </Text>
             <FormControl isInvalid={errors.firstname}>
                 <FormLabel htmlFor="firstname">First Name</FormLabel>
