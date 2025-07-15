@@ -25,7 +25,7 @@ export function AcademicText() {
     return (
         <Text mb="6">
             List your <b>current and former</b> academic, professional, and field-related honorary and membership societies and organizations, 
-            as well as organizations from which you have received an honor or award (same look-back period as for employers).  
+            as well as organizations from which you have received an honor or award (same look-back period for former societies and organizations as 1 above).  
             Contact should be the Executive Director/CEO.
         </Text>
     );
