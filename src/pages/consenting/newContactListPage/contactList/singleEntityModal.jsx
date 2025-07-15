@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useContext } from 'react';
 import { useForm } from 'react-hook-form';
 import { Button, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Text, useDisclosure, ButtonGroup, FormControl, FormErrorMessage, FormHelperText, FormLabel, Input, Link } from "@chakra-ui/react";
 import { Link as ReactRouterLink } from 'react-router-dom';
@@ -7,11 +7,16 @@ import PropTypes from 'prop-types';
 import { HiOutlineChevronLeft } from "react-icons/hi";
 import { AiOutlineClose } from 'react-icons/ai';
 
-import ContactSummaryCard from './singleEntityModal/contactSummaryCard'
+import { UserContext } from '../../../../lib/userContext';
+
+import ContactSummaryCard from './singleEntityModal/contactSummaryCard';
+import EmailConsentModal from '../../../consentingPage/consentDetails/emailConsentModal';
 
 export default function SingleEntityModal({ contacts, setSingleEntityFormsSigned, isOpen, onOpen, onClose, handleContactChange }) {
     // Navigation state
     const [currentIndex, setCurrentIndex] = useState(0);
+
+    const { user } = useContext(UserContext);
 
     // Setup the digital signature form
     const { handleSubmit, register, formState: { errors }, reset, setValue, getValues } = useForm({
@@ -100,14 +105,14 @@ export default function SingleEntityModal({ contacts, setSingleEntityFormsSigned
                                     Form {currentIndex + 1} of {contacts.length}
                                 </Text>
                                 <Text mb="4" fontWeight="semibold">
-                                    This <u>&quot;Single-Entity Exhibit Form&quot;</u> is incorporated into my Consent Form, <Link as={ReactRouterLink} to="/consenting" textDecoration="underline">at link</Link>.  
-                                    <u>I agree that my ETT Registration Form and Consent Form authorizes (and will remain in effect to 
+                                    This <u>&quot;Single-Entity Exhibit Form&quot;</u> is incorporated into my 
+                                    Consent Form, <EmailConsentModal email={user.email} variant="link" />. <u>I agree that my ETT Registration Form 
+                                    and Consent Form authorizes (and will remain in effect to 
                                     authorize) the following entity to complete the Disclosure Form about me and provide it in 
                                     response to the Disclosure Request sent with this Form. The following entity is also authorized 
                                     to disclose the information called for in the Disclosure Form about me in response to the 
                                     Disclosure Request, if preferred.</u> The definitions in the Consent Form also apply to this 
-                                    Single Entity Exhibit Form. The following entity is one of my <u>Consent Recipients</u> 
-                                    (Affiliates) referenced in and covered by my Consent Form:
+                                    Single Entity Exhibit Form. The following entity is one of my <u>Consent Recipients</u> (Affiliates) referenced in and covered by my Consent Form:
                                 </Text>
                                 <ContactSummaryCard contact={currentContact} />
                                 <Text mb="4">
