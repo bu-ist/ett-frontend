@@ -415,12 +415,13 @@ export default function ContactList({ consentData, formConstraint, entityId }) {
                         onOpen={onSingleEntityModalOpen}
                         onClose={onSingleEntityModalClose}
                         handleContactChange={handleContactUpdate}
+                        formConstraint={formConstraint}
                     />
                 {singleEntityFormsSigned && (
                     <>
                         <Alert mb="6" status="success">
                             <AlertIcon />
-                            You have digitally signed your Full Exhibit Form and each of your Single-Entity Exhibit Forms. Next, submit the form.
+                            You have digitally signed your { formConstraint === 'current' ? 'Current Employer(s)' : 'Full' } Exhibit Form and each of your Single-Entity Exhibit Forms. Next, submit the form.
                         </Alert>
                         <Text>
                             NOTE: When you click &quot;Submit&quot;:
