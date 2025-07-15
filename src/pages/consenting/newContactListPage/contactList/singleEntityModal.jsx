@@ -1,13 +1,15 @@
 import { useState, useEffect, useContext } from 'react';
 import { useForm } from 'react-hook-form';
-import { Button, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Text, useDisclosure, ButtonGroup, FormControl, FormErrorMessage, FormHelperText, FormLabel, Input, Link } from "@chakra-ui/react";
-import { Link as ReactRouterLink } from 'react-router-dom';
+import { Button, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Text, useDisclosure, ButtonGroup, FormControl, FormErrorMessage, FormHelperText, FormLabel, Input } from "@chakra-ui/react";
 import PropTypes from 'prop-types';
 
 import { HiOutlineChevronLeft } from "react-icons/hi";
 import { AiOutlineClose } from 'react-icons/ai';
 
 import { UserContext } from '../../../../lib/userContext';
+
+import ContactSummaryCard from './singleEntityModal/contactSummaryCard';
+import EmailConsentModal from '../../../consentingPage/consentDetails/emailConsentModal';
 
 export default function SingleEntityModal({ contacts, setSingleEntityFormsSigned, isOpen, onOpen, onClose, handleContactChange, formConstraint }) {
     // Navigation state
@@ -102,7 +104,7 @@ export default function SingleEntityModal({ contacts, setSingleEntityFormsSigned
                                     Form {currentIndex + 1} of {contacts.length}
                                 </Text>
                                 <Text mb="4" fontWeight="semibold">
-                                    This {formConstraint === 'current' && 'Current Employer '}<u>&quot;Single-Entity Exhibit Form&quot;</u> is incorporated into my Consent Form, <Link as={ReactRouterLink} to="/consenting" textDecoration="underline">at link</Link>.  
+                                    This {formConstraint === 'current' && 'Current Employer '}<u>&quot;Single-Entity Exhibit Form&quot;</u> is incorporated into my Consent Form,  <EmailConsentModal email={user.email} variant="link" />.  
                                     <u>I agree that my ETT Registration Form and Consent Form authorizes (and will remain in effect to 
                                     authorize) the following entity to complete the Disclosure Form about me and provide it in 
                                     response to the Disclosure Request sent with this Form. The following entity is also authorized 
