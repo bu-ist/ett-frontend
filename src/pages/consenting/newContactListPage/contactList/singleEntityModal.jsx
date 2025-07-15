@@ -9,10 +9,7 @@ import { AiOutlineClose } from 'react-icons/ai';
 
 import { UserContext } from '../../../../lib/userContext';
 
-import ContactSummaryCard from './singleEntityModal/contactSummaryCard';
-import EmailConsentModal from '../../../consentingPage/consentDetails/emailConsentModal';
-
-export default function SingleEntityModal({ contacts, setSingleEntityFormsSigned, isOpen, onOpen, onClose, handleContactChange }) {
+export default function SingleEntityModal({ contacts, setSingleEntityFormsSigned, isOpen, onOpen, onClose, handleContactChange, formConstraint }) {
     // Navigation state
     const [currentIndex, setCurrentIndex] = useState(0);
 
@@ -96,7 +93,7 @@ export default function SingleEntityModal({ contacts, setSingleEntityFormsSigned
             <Modal size="4xl" isOpen={isOpen} onClose={handleClose}>
                 <ModalOverlay />
                 <ModalContent>
-                    <ModalHeader>Single-Entity Exhibit Form</ModalHeader>
+                    <ModalHeader>Single-Entity Exhibit Form{formConstraint === 'current' && ' — Current Employer or Appointing Organization'}</ModalHeader>
                     <ModalCloseButton />
                     <ModalBody>
                         {currentContact && (
@@ -105,14 +102,17 @@ export default function SingleEntityModal({ contacts, setSingleEntityFormsSigned
                                     Form {currentIndex + 1} of {contacts.length}
                                 </Text>
                                 <Text mb="4" fontWeight="semibold">
-                                    This <u>&quot;Single-Entity Exhibit Form&quot;</u> is incorporated into my 
-                                    Consent Form, <EmailConsentModal email={user.email} variant="link" />. <u>I agree that my ETT Registration Form 
-                                    and Consent Form authorizes (and will remain in effect to 
+                                    This {formConstraint === 'current' && 'Current Employer '}<u>&quot;Single-Entity Exhibit Form&quot;</u> is incorporated into my Consent Form, <Link as={ReactRouterLink} to="/consenting" textDecoration="underline">at link</Link>.  
+                                    <u>I agree that my ETT Registration Form and Consent Form authorizes (and will remain in effect to 
                                     authorize) the following entity to complete the Disclosure Form about me and provide it in 
                                     response to the Disclosure Request sent with this Form. The following entity is also authorized 
                                     to disclose the information called for in the Disclosure Form about me in response to the 
                                     Disclosure Request, if preferred.</u> The definitions in the Consent Form also apply to this 
-                                    Single Entity Exhibit Form. The following entity is one of my <u>Consent Recipients</u> (Affiliates) referenced in and covered by my Consent Form:
+                                    Single Entity Exhibit Form. The following entity is one of my <u>Consent Recipients</u> 
+                                    (Affiliates) { formConstraint === 'current' ?
+                                        'that is my current employer or appointing organization and is referenced in and covered by my Consent Form:' :
+                                        'referenced in and covered by my Consent Form:'
+                                    }
                                 </Text>
                                 <ContactSummaryCard contact={currentContact} />
                                 <Text mb="4">
