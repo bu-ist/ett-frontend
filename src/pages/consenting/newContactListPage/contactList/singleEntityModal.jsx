@@ -111,10 +111,7 @@ export default function SingleEntityModal({ contacts, setSingleEntityFormsSigned
                                     to disclose the information called for in the Disclosure Form about me in response to the 
                                     Disclosure Request, if preferred.</u> The definitions in the Consent Form also apply to this 
                                     Single Entity Exhibit Form. The following entity is one of my <u>Consent Recipients</u> 
-                                    (Affiliates) { formConstraint === 'current' ?
-                                        'that is my current employer or appointing organization and is referenced in and covered by my Consent Form:' :
-                                        'referenced in and covered by my Consent Form:'
-                                    }
+                                    (Affiliates) referenced in and covered by my Consent Form:
                                 </Text>
                                 <ContactSummaryCard contact={currentContact} />
                                 <Text mb="4">
