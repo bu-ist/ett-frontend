@@ -56,7 +56,7 @@ export default function ConsentFormText() {
                     .
                 </Text>
                 <Text mb="4">
-                    As a condition to being considered for 
+                    As a condition to being considered for certain
                     {' '}
                     <DefinitionPopover termName="Privileges or Honors">
                         <PrivilegesDefinition />
@@ -67,7 +67,7 @@ export default function ConsentFormText() {
                         <EmploymentRolesDefinition />
                     </DefinitionPopover>
                     , 
-                    by an 
+                    by any 
                     {' '}
                     <DefinitionPopover termName="ETT-Registered Entity">
                         <RegisteredEntityDefinition />
