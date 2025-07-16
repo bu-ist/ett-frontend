@@ -1,4 +1,5 @@
 import { Heading, Text } from "@chakra-ui/react";
+import PropTypes from 'prop-types';
 
 export function EttDefinition() {
     return (
@@ -61,21 +62,25 @@ export function ConsentRecipientDefinition() {
     );
 }
 
-export function DisclosureFormDefinition() {
+export function DisclosureFormDefinition({ disclosureFormUrl }) {
     return (
         <>
             <Heading as="h3" size="sm">The Disclosure Form</Heading>
             <Text mb="6">
-                means the form at this link. <b>Finding of Responsibility</b> is a finding of any one or more of the generic types of 
+                means the form at <a style={{ textDecoration: 'underline' }} target="_blank" rel="noopener noreferrer" href={disclosureFormUrl}>this link</a>. <b>Finding of Responsibility</b> is a finding of any one or more of the generic types of 
                 misconduct listed or referenced on the Disclosure Form; it is defined by the Consent Recipient (Affiliate) that made 
                 or adopted the finding under its own policy (see the Disclosure Form for details).  A Disclosure Form is completed when 
                 a Consent Recipient checks the Finding(s) of Responsibility it has made or adopted against a person (with the year(s)) 
-                or checks “No Finding of Responsibility” or “Will Not Be Responding”—and gives the completed Disclosure Form or its 
+                or checks &ldquo;No Finding of Responsibility&rdquo; or &ldquo;Will Not Be Responding&rdquo;—and gives the completed Disclosure Form or its 
                 information to a Registered Entity.  
             </Text>
         </>
     );
 }
+
+DisclosureFormDefinition.propTypes = {
+    disclosureFormUrl: PropTypes.string.isRequired
+};
 
 export function RegisteredEntityDefinition() {
     return (

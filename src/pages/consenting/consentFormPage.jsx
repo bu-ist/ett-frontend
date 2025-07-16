@@ -82,7 +82,7 @@ export default function ConsentFormPage() {
             {apiState === 'error' && <Text>There was an error loading the consent form.</Text>}
             {apiState === 'success' &&
                 <Box>
-                    <ConsentFormText />
+                    <ConsentFormText disclosureFormUrl={appConfig.publicBlankFormURIs.filter((url) => url.includes('disclosure'))} />
                     <ConsenterCard consentData={consentData} />
                     <GrantConsentButton consentData={consentData} />
                 </Box>

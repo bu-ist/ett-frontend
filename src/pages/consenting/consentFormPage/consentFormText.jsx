@@ -1,5 +1,6 @@
 import { Link as ReactRouterLink } from 'react-router-dom';
 import { Text, Box, Divider, Heading, OrderedList, ListItem, UnorderedList, Link as ChakraLink, useDisclosure, Drawer, DrawerOverlay, DrawerHeader, DrawerBody, DrawerFooter, Button, DrawerContent, DrawerCloseButton } from "@chakra-ui/react";
+import PropTypes from 'prop-types';
 
 import DefinitionPopover from "../../../components/sharedTexts/definitions/definitonPopover";
 
@@ -15,7 +16,7 @@ import {
 } from '../../../components/sharedTexts/definitions/definitions';
 
 
-export default function ConsentFormText() {
+export default function ConsentFormText({ disclosureFormUrl }) {
     const { isOpen, onOpen, onClose } = useDisclosure();
 
     return (
@@ -82,7 +83,7 @@ export default function ConsentFormText() {
                     to complete a 
                     {' '}
                     <DefinitionPopover termName="Disclosure Form">
-                        <DisclosureFormDefinition />
+                        <DisclosureFormDefinition disclosureFormUrl={disclosureFormUrl} />
                     </DefinitionPopover>
                     {' '}
                     about me and to provide it or its information to any 
@@ -157,7 +158,7 @@ export default function ConsentFormText() {
                     and any completed 
                     {' '}
                     <DefinitionPopover termName="Disclosure Form">
-                        <DisclosureFormDefinition />
+                        <DisclosureFormDefinition disclosureFormUrl={disclosureFormUrl} />
                     </DefinitionPopover>
                     {' '}
                     about me may only be used in connection with 
@@ -317,3 +318,7 @@ export default function ConsentFormText() {
         </>
     );
 }
+
+ConsentFormText.propTypes = {
+    disclosureFormUrl: PropTypes.string.isRequired
+};
