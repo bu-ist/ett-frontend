@@ -82,16 +82,20 @@ DisclosureFormDefinition.propTypes = {
     disclosureFormUrl: PropTypes.string.isRequired
 };
 
-export function RegisteredEntityDefinition() {
+export function RegisteredEntityDefinition({ registrationFormEntityUrl }) {
     return (
         <>
             <Heading as="h3" size="sm">ETT-Registered Entit(ies) or “RE”</Heading>
             <Text mb="6">
-                mean the entities and organizations now or in the future registered to use the Ethical Transparency Tool by completing an “ETT Registration Form”. See this link for a list that will be updated over time. RE(s) are the only entities that may use ETT to make a Disclosure Request to Consent Recipients (Affiliates).  ETT sends a separate Disclosure Request on behalf of a RE to each Affiliate of a person, including the person’s Consent Form, a Single Entity Exhibit Form naming that Affiliate as a Consent Recipient, a blank Disclosure Form and instructions to respond directly to the RE. 
+                mean the entities and organizations now or in the future registered to use the Ethical Transparency Tool by completing an <a style={{ textDecoration: 'underline' }} target="_blank" rel="noopener noreferrer" href={registrationFormEntityUrl}>“ETT Registration Form” at this link</a>. See this link for a list that will be updated over time. ETT-Registered Entities are the only entities that may request completed Disclosure Forms from Consent Recipients (Affiliates).  
             </Text>
         </>
     );
 }
+
+RegisteredEntityDefinition.propTypes = {
+    registrationFormEntityUrl: PropTypes.string.isRequired
+};
 
 export function SponsorsDefinition() {
     return (
