@@ -1,7 +1,7 @@
 import { useContext } from "react";
 import { Link as ReactRouterLink, useNavigate } from 'react-router-dom';
 import Cookies from 'js-cookie';
-import { Box, Button, Card, CardBody, CardFooter, Heading, Image, ListItem, SimpleGrid, Stack, Text, UnorderedList } from "@chakra-ui/react";
+import { Box, Button, Card, CardBody, CardFooter, Heading, SimpleGrid, Stack, Text } from "@chakra-ui/react";
 
 import { ConfigContext } from "../lib/configContext";
 
