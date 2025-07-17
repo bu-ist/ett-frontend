@@ -72,7 +72,7 @@ export default function ConsentFormText({ disclosureFormUrl, registrationFormEnt
                     by any 
                     {' '}
                     <DefinitionPopover termName="ETT-Registered Entity">
-                        <RegisteredEntityDefinition />
+                        <RegisteredEntityDefinition registrationFormEntityUrl={registrationFormEntityUrl} />
                     </DefinitionPopover>
                     {' '}
                     now or in the future, and by submitting this Consent Form, I give my consent to any 
@@ -115,7 +115,7 @@ export default function ConsentFormText({ disclosureFormUrl, registrationFormEnt
                             each 
                             {' '}
                             <DefinitionPopover termName="ETT-Registered Entity">
-                                <RegisteredEntityDefinition />
+                                <RegisteredEntityDefinition registrationFormEntityUrl={registrationFormEntityUrl} />
                             </DefinitionPopover>
                             {' '}
                             at the time it uses this Consent Form to request a disclosure)
@@ -144,7 +144,7 @@ export default function ConsentFormText({ disclosureFormUrl, registrationFormEnt
                     Consent Recipients each time any 
                     {' '}
                     <DefinitionPopover termName="ETT-Registered Entity">
-                        <RegisteredEntityDefinition />
+                        <RegisteredEntityDefinition registrationFormEntityUrl={registrationFormEntityUrl} />
                     </DefinitionPopover>
                     {' '}
                     makes a request for disclosures.  
@@ -224,7 +224,7 @@ export default function ConsentFormText({ disclosureFormUrl, registrationFormEnt
                         ,
                         {' '}
                         <DefinitionPopover termName="ETT-Registered Entit(ies)">
-                            <RegisteredEntityDefinition />
+                            <RegisteredEntityDefinition registrationFormEntityUrl={registrationFormEntityUrl} />
                         </DefinitionPopover> 
                         , and/or the 
                         {' '}
@@ -289,7 +289,7 @@ export default function ConsentFormText({ disclosureFormUrl, registrationFormEnt
                     and 
                     {' '}
                     <DefinitionPopover termName="ETT-Registered Entit(ies)">
-                        <RegisteredEntityDefinition />
+                        <RegisteredEntityDefinition registrationFormEntityUrl={registrationFormEntityUrl} />
                     </DefinitionPopover>
                     . 
                     I agree that this electronic Consent Form, my electronic (digital) signature, and any copy will have the same effect as originals for all purposes. 
@@ -336,5 +336,6 @@ export default function ConsentFormText({ disclosureFormUrl, registrationFormEnt
 }
 
 ConsentFormText.propTypes = {
-    disclosureFormUrl: PropTypes.string.isRequired
+    disclosureFormUrl: PropTypes.string.isRequired,
+    registrationFormEntityUrl: PropTypes.string.isRequired,
 };
