@@ -111,7 +111,8 @@ export default function SingleEntityModal({ contacts, setSingleEntityFormsSigned
                                     to disclose the information called for in the Disclosure Form about me in response to the 
                                     Disclosure Request, if preferred.</u> The definitions in the Consent Form also apply to this 
                                     Single Entity Exhibit Form. The following entity is one of my <u>Consent Recipients</u> 
-                                    (Affiliates) referenced in and covered by my Consent Form:
+                                    (Affiliates) {formConstraint === 'current' && 'that is my current employer or appointing organization and is '}
+                                    referenced in and covered by my Consent Form:
                                 </Text>
                                 <ContactSummaryCard contact={currentContact} />
                                 <Text mb="4">
@@ -139,10 +140,22 @@ export default function SingleEntityModal({ contacts, setSingleEntityFormsSigned
                                         )}
                                     </FormControl>
                                 </form>
-                                <Text my="4">
-                                    Click the Next button to create, review, date, and digitally sign a Single-Entity Exhibit Form for each of your listed Consent Recipients. 
-                                    You will not be able to submit any of your Exhibit Forms until you digitally sign all of them. 
-                                </Text>
+                                {formConstraint === 'current' ? (
+                                    <Text my="4">
+                                        Click the Next Button to create, review, date, and digitally sign a 
+                                        Single-Entity Exhibit Form for each of your listed Consent Recipients 
+                                        (Affiliate(s)—your current employer(s) and any other current appointing 
+                                        organization(s)). You will not be able to submit any of your Current 
+                                        Employer(s) Exhibit Forms until you digitally sign all of them.
+                                    </Text>
+                                ) : (
+                                    <Text my="4">
+                                        Click the Next button to create, review, date, and digitally sign a 
+                                        Single-Entity Exhibit Form for each of your listed Consent Recipients 
+                                        (Affiliates). You will not be able to submit any of your Exhibit Forms 
+                                        until you digitally sign all of them.
+                                    </Text>
+                                )}
                             </>
                         )}
                     </ModalBody>

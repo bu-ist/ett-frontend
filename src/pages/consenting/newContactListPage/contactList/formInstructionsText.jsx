@@ -11,8 +11,6 @@ export default function FormInstructionsText({ entityName, formConstraint }) {
             </Text>
             <OrderedList spacing="4" styleType="lower-alpha">
                 <ListItem>
-                    <b>Transmit this &ldquo;Full Exhibit Form&rdquo; and my accompanying  &ldquo;Single-Entity Exhibit Forms&rdquo; on my behalf to my private page on ETT.</b>
-
                     {currentEmployer ? (
                         <b>Transmit this &ldquo;Current Employer(s) Exhibit Form&rdquo; and my <u>&ldquo;Single-Entity Exhibit Form&rdquo;</u> for each of my Current Employer(s) and Appointing Organization(s) on my behalf to my private page on ETT.</b>
                     ) : (
@@ -35,11 +33,11 @@ export default function FormInstructionsText({ entityName, formConstraint }) {
                         {currentEmployer ? (
                             <b><u>Within the 21 days after sending the initial Disclosure Request(s) (2 weeks after, and 1 week after that)</u>—resend the Registered Entity’s 
                             Disclosure Request(s) twice (as reminders) separately to each of my Consent Recipients (current employer(s) and appointing organization(s)) listed 
-                            in this Exhibit Form, copying the Registered Entity and me. Then promptly delete the Disclosure Requests, my Full Exhibit Form and all related Single 
+                            in this Exhibit Form, copying the Registered Entity and me. Then promptly delete the Disclosure Requests, my Current Employer(s) Exhibit Form and all related Single 
                             Entity Exhibit Forms from ETT (as ETT will have completed its transmittal role).</b>
                         ) : (
                             <b><u>Within the 21 days after sending the initial Disclosure Request(s) (2 weeks after, and 1 week after that)</u>—resend the Registered Entity’s 
-                            Disclosure Request(s) twice (as reminders) to my Consent Recipients (Affiliates) listed in this Exhibit Form, copying the Registered Entity and me. 
+                            Disclosure Request(s) twice (as reminders) separately to my Consent Recipients (Affiliates) listed in this Exhibit Form, copying the Registered Entity and me. 
                             Then promptly delete the Disclosure Requests, my Full Exhibit Form and all related Single Entity Exhibit Forms from ETT (as ETT will have completed its 
                             transmittal role).</b>
                         )}

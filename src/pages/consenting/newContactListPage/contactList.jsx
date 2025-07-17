@@ -371,9 +371,22 @@ export default function ContactList({ consentData, formConstraint, entityId }) {
                     <Flex mt="4">
                         <Card width="40%">
                             <CardBody>
-                                <Text>Click the Next button to create, review, date, and sign a Full Exhibit Form.
-                                    You will not be able to submit your Full Exhibit Form until you digitally sign it.
-                                </Text>
+                                {formConstraint === 'current' ? (
+                                    <Text>
+                                        Click the Next Button to create, review, date, and digitally sign a 
+                                        Single-Entity Exhibit Form for each of your listed Consent Recipients 
+                                        (Affiliate(s)—your current employer(s) and any other current appointing 
+                                        organization(s)). You will not be able to submit any of your Current 
+                                        Employer(s) Exhibit Forms until you digitally sign all of them.
+                                    </Text>
+                                ) : (
+                                    <Text>
+                                        Click the Next button to create, review, date, and digitally sign a 
+                                        Single-Entity Exhibit Form for each of your listed Consent Recipients 
+                                        (Affiliates). You will not be able to submit any of your Exhibit Forms 
+                                        until you digitally sign all of them.
+                                    </Text>
+                                )}
                             </CardBody>
                             <CardFooter>
                                 <Button
