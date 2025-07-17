@@ -16,7 +16,7 @@ import {
 } from '../../../components/sharedTexts/definitions/definitions';
 
 
-export default function ConsentFormText({ disclosureFormUrl }) {
+export default function ConsentFormText({ disclosureFormUrl, registrationFormEntityUrl }) {
     const { isOpen, onOpen, onClose } = useDisclosure();
 
     return (
@@ -89,7 +89,7 @@ export default function ConsentFormText({ disclosureFormUrl }) {
                     about me and to provide it or its information to any 
                     {' '}
                     <DefinitionPopover termName="ETT-Registered Entit(ies)">
-                        <RegisteredEntityDefinition />
+                        <RegisteredEntityDefinition registrationFormEntityUrl={registrationFormEntityUrl} />
                     </DefinitionPopover>
                     {' '}
                     that make(s) a request for disclosures during the life of this Consent Form.
@@ -300,8 +300,8 @@ export default function ConsentFormText({ disclosureFormUrl }) {
                     <PrivilegesDefinition />
                     <EmploymentRolesDefinition />
                     <ConsentRecipientDefinition />
-                    <DisclosureFormDefinition />
-                    <RegisteredEntityDefinition />
+                    <DisclosureFormDefinition disclosureFormUrl={disclosureFormUrl} />
+                    <RegisteredEntityDefinition registrationFormEntityUrl={registrationFormEntityUrl} />
                     <SponsorsDefinition />
                     <Text mb="6">
                         (ETT-related Forms may be amended for amplification, clarity, or operations over time and re-posted.) 
