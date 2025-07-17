@@ -2,7 +2,7 @@ import { useContext } from 'react';
 import { Link as ReactRouterLink } from 'react-router-dom';
 import PropTypes from 'prop-types';
 
-import { Icon, Text, Button, Card, CardBody, SimpleGrid, CardFooter, Heading, Divider, Stack, HStack, Box, useDisclosure } from '@chakra-ui/react';
+import { Icon, Text, Button, Card, CardBody, SimpleGrid, CardFooter, Heading, Divider, Stack, HStack, Box, useDisclosure, Accordion, AccordionItem, AccordionButton, AccordionIcon, AccordionPanel } from '@chakra-ui/react';
 import { HiCheckCircle, HiMinusCircle, HiPencil } from 'react-icons/hi';
 
 import { ConfigContext } from '../../lib/configContext';
@@ -14,6 +14,7 @@ import RenewModal from './consentDetails/renewModal';
 import EmailConsentModal from './consentDetails/emailConsentModal';
 import EditConsentDetailsModal from './consentDetails/editConsentDetailsModal';
 
+import ConsentExpirationExceptionsText from '../../components/sharedTexts/consentExpirationExceptionsText';
 export default function ConsentDetails({ consentData, setConsentData, consenterInfo }) {
     const { appConfig } = useContext(ConfigContext);
     const { isOpen, onOpen, onClose } = useDisclosure();
@@ -148,6 +149,21 @@ export default function ConsentDetails({ consentData, setConsentData, consenterI
                     </SimpleGrid>
                 </>
             )}
+            <Accordion mt="12" allowToggle>
+                <AccordionItem p="2" border="1px" borderColor="gray.400" borderRadius="md" backgroundColor="gray.50">
+                    <h2>
+                        <AccordionButton>
+                            <Box as="span" flex='1' textAlign='left'>
+                                <Heading size="sm">Click here for information on Consent expiration exception</Heading>
+                            </Box>
+                            <AccordionIcon />
+                        </AccordionButton>
+                    </h2>
+                    <AccordionPanel pb={4}>
+                        <ConsentExpirationExceptionsText link={false} />
+                    </AccordionPanel>
+                </AccordionItem>
+            </Accordion>
             <Button my="16" onClick={handleSignOut}>Sign Out</Button>
 
             <EditConsentDetailsModal 
