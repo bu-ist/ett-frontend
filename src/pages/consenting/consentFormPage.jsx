@@ -83,8 +83,8 @@ export default function ConsentFormPage() {
             {apiState === 'success' &&
                 <Box>
                     <ConsentFormText
-                        disclosureFormUrl={appConfig.publicBlankFormURIs.filter((url) => url.includes('disclosure'))} 
-                        registrationFormEntityUrl={appConfig.publicBlankFormURIs.filter((url) => url.includes('registration-form-entity'))}
+                        disclosureFormUrl={appConfig.publicBlankFormURIs.find((url) => url.includes('disclosure')) || ""}
+                        registrationFormEntityUrl={appConfig.publicBlankFormURIs.find((url) => url.includes('registration-form-entity')) || ""}
                     />
                     <ConsenterCard consentData={consentData} />
                     <GrantConsentButton consentData={consentData} />
