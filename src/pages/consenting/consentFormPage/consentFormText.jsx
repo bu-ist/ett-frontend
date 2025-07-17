@@ -38,7 +38,7 @@ export default function ConsentFormText({ disclosureFormUrl, registrationFormEnt
                     are committed to providing a climate and culture where all are welcome and able to thrive, for the sake of our 
                     community members and to advance our integrity, excellence, and earned public trust. While people found responsible for 
                     misconduct may learn lessons, change conduct, and regain trust, transparency is important.  Not knowing about findings 
-                    of sexual, gender, and racial/ethnic misconduct, along with certain other ethical misconduct, prevents us from achieving 
+                    of sexual, gender, and racial/ethnic misconduct, along with certain other types of misconduct, prevents us from achieving 
                     the climate and culture we value. 
                 </Text>
                 <Divider my="8" />
@@ -125,7 +125,7 @@ export default function ConsentFormText({ disclosureFormUrl, registrationFormEnt
                         </ListItem>
                         <ListItem>
                             Current and former entities and organizations where I have or had emeritus/emerita, visiting, or other teaching, 
-                            research, or administrative appointments or that have given me an honor or award (same look-back period as in #1)
+                            research, or administrative appointments or that have given me an honor or award (same look-back period as in #1);
                         </ListItem>
                         <ListItem>
                             The entities and organizations where I have any of the above-listed kinds of affiliations in the future.
@@ -204,7 +204,7 @@ export default function ConsentFormText({ disclosureFormUrl, registrationFormEnt
                                     <DisclosureFormDefinition />
                                 </DefinitionPopover>
                                 {' '}
-                                or its information is provided;
+                                or its information is provided; and
                             </ListItem>
                         </UnorderedList>
                     </ListItem>
