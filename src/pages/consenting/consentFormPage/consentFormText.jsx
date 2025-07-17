@@ -1,5 +1,6 @@
 import { Link as ReactRouterLink } from 'react-router-dom';
-import { Text, Box, Divider, Heading, OrderedList, ListItem, UnorderedList, Link as ChakraLink, useDisclosure, Drawer, DrawerOverlay, DrawerHeader, DrawerBody, DrawerFooter, Button, DrawerContent, DrawerCloseButton } from "@chakra-ui/react";
+import { Text, Box, Divider, Heading, OrderedList, ListItem, UnorderedList, Link as ChakraLink, useDisclosure, Drawer, DrawerOverlay, DrawerHeader, DrawerBody, DrawerFooter, Button, DrawerContent, DrawerCloseButton, Accordion, AccordionItem, AccordionButton, AccordionIcon, AccordionPanel } from "@chakra-ui/react";
+import PropTypes from 'prop-types';
 
 import DefinitionPopover from "../../../components/sharedTexts/definitions/definitonPopover";
 
@@ -14,8 +15,9 @@ import {
     SponsorsDefinition,
 } from '../../../components/sharedTexts/definitions/definitions';
 
+import ConsentExpirationExceptionsText from '../../../components/sharedTexts/consentExpirationExceptionsText';
 
-export default function ConsentFormText() {
+export default function ConsentFormText({ disclosureFormUrl, registrationFormEntityUrl }) {
     const { isOpen, onOpen, onClose } = useDisclosure();
 
     return (
@@ -37,7 +39,7 @@ export default function ConsentFormText() {
                     are committed to providing a climate and culture where all are welcome and able to thrive, for the sake of our 
                     community members and to advance our integrity, excellence, and earned public trust. While people found responsible for 
                     misconduct may learn lessons, change conduct, and regain trust, transparency is important.  Not knowing about findings 
-                    of sexual, gender, and racial/ethnic misconduct, along with certain other ethical misconduct, prevents us from achieving 
+                    of sexual, gender, and racial/ethnic misconduct, along with certain other types of misconduct, prevents us from achieving 
                     the climate and culture we value. 
                 </Text>
                 <Divider my="8" />
@@ -56,7 +58,7 @@ export default function ConsentFormText() {
                     .
                 </Text>
                 <Text mb="4">
-                    As a condition to being considered for 
+                    As a condition to being considered for certain
                     {' '}
                     <DefinitionPopover termName="Privileges or Honors">
                         <PrivilegesDefinition />
@@ -67,7 +69,7 @@ export default function ConsentFormText() {
                         <EmploymentRolesDefinition />
                     </DefinitionPopover>
                     , 
-                    by an 
+                    by any 
                     {' '}
                     <DefinitionPopover termName="ETT-Registered Entity">
                         <RegisteredEntityDefinition />
@@ -82,13 +84,13 @@ export default function ConsentFormText() {
                     to complete a 
                     {' '}
                     <DefinitionPopover termName="Disclosure Form">
-                        <DisclosureFormDefinition />
+                        <DisclosureFormDefinition disclosureFormUrl={disclosureFormUrl} />
                     </DefinitionPopover>
                     {' '}
                     about me and to provide it or its information to any 
                     {' '}
                     <DefinitionPopover termName="ETT-Registered Entit(ies)">
-                        <RegisteredEntityDefinition />
+                        <RegisteredEntityDefinition registrationFormEntityUrl={registrationFormEntityUrl} />
                     </DefinitionPopover>
                     {' '}
                     that make(s) a request for disclosures during the life of this Consent Form.
@@ -124,7 +126,7 @@ export default function ConsentFormText() {
                         </ListItem>
                         <ListItem>
                             Current and former entities and organizations where I have or had emeritus/emerita, visiting, or other teaching, 
-                            research, or administrative appointments or that have given me an honor or award (same look-back period as in #1)
+                            research, or administrative appointments or that have given me an honor or award (same look-back period as in #1);
                         </ListItem>
                         <ListItem>
                             The entities and organizations where I have any of the above-listed kinds of affiliations in the future.
@@ -157,7 +159,7 @@ export default function ConsentFormText() {
                     and any completed 
                     {' '}
                     <DefinitionPopover termName="Disclosure Form">
-                        <DisclosureFormDefinition />
+                        <DisclosureFormDefinition disclosureFormUrl={disclosureFormUrl} />
                     </DefinitionPopover>
                     {' '}
                     about me may only be used in connection with 
@@ -203,7 +205,7 @@ export default function ConsentFormText() {
                                     <DisclosureFormDefinition />
                                 </DefinitionPopover>
                                 {' '}
-                                or its information is provided;
+                                or its information is provided; and
                             </ListItem>
                         </UnorderedList>
                     </ListItem>
@@ -257,10 +259,25 @@ export default function ConsentFormText() {
                     borderColor="blue.700"
                     bg="gray.200"
                 >
-                    <Text fontWeight={500}>
+                    <Text fontWeight={500} mb="4">
                         This Consent Form will expire in 10 years (after the date I submit it) unless I renew it.  I may rescind this 
-                        Consent Form from my ETT dashboard. The link explains one exception to the expiration or rescission of my Consent Form.
+                        Consent Form from my ETT dashboard. The link below explains one exception to the expiration or rescission of my Consent Form.
                     </Text>
+                    <Accordion allowToggle>
+                        <AccordionItem p="2" border="1px" borderColor="gray.400" borderRadius="md" backgroundColor="gray.100">
+                            <h2>
+                                <AccordionButton>
+                                    <Box as="span" flex='1' textAlign='left'>
+                                        <Heading size="sm">Click here for information on Consent expiration exception</Heading>
+                                    </Box>
+                                    <AccordionIcon />
+                                </AccordionButton>
+                            </h2>
+                            <AccordionPanel pb={4}>
+                                <ConsentExpirationExceptionsText link={true} />
+                            </AccordionPanel>
+                        </AccordionItem>
+                    </Accordion>
                 </Box>
                 <Text>
                     I agree that a copy of this Consent Form may be given at any time to any 
@@ -299,8 +316,8 @@ export default function ConsentFormText() {
                     <PrivilegesDefinition />
                     <EmploymentRolesDefinition />
                     <ConsentRecipientDefinition />
-                    <DisclosureFormDefinition />
-                    <RegisteredEntityDefinition />
+                    <DisclosureFormDefinition disclosureFormUrl={disclosureFormUrl} />
+                    <RegisteredEntityDefinition registrationFormEntityUrl={registrationFormEntityUrl} />
                     <SponsorsDefinition />
                     <Text mb="6">
                         (ETT-related Forms may be amended for amplification, clarity, or operations over time and re-posted.) 
@@ -317,3 +334,7 @@ export default function ConsentFormText() {
         </>
     );
 }
+
+ConsentFormText.propTypes = {
+    disclosureFormUrl: PropTypes.string.isRequired
+};
