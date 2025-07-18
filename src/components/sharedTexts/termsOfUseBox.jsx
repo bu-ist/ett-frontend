@@ -76,7 +76,8 @@ export default function TermsOfUseBox() {
                     <b>No warranties of any kind are made concerning ETT</b>. Each ETT-Registered Entity determines the uses of
                     ETT that are operationally and legally appropriate for it and waives and releases all claims and liabilities of every kind
                     (except intentional harm) that are associated with ETT, against the Societies Consortium to End Harassment in STEMM,
-                    EducationCounsel LLC, the American Association for the Advancement of Science (AAAS), and each owner, designer,
+                    EducationCounsel LLC, the American Association for the Advancement of Science (AAAS), any members of the Societies Consortium Executive Committee and their societies,
+                    and each owner, designer,
                     developer, host, sponsor, advisor, agent, contractor, administrator and/or operator of ETT, their respective predecessors,
                     successors, and assigns (and their respective current, former, and future directors/trustees/managers, officers,
                     members/stockholders/partners, personnel, agents, contractors, and representatives). <b>ETT&rsquo;s owner (AAAS) or its
