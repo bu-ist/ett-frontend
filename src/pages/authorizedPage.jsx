@@ -1,8 +1,8 @@
 import { useEffect, useState, useContext } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import Cookies from 'js-cookie';
-import { Box, Button, Card, CardBody, CardFooter, CardHeader, Heading, Icon, SimpleGrid, Spinner, Stack, Text } from '@chakra-ui/react';
-import { Bs1CircleFill, Bs2CircleFill, BsFileEarmarkLock2 } from "react-icons/bs";
+import { Box, Button, Card, CardBody, CardFooter, CardHeader, Heading, Icon, SimpleGrid, Spinner, Stack, Text, Link } from '@chakra-ui/react';
+import { Bs1CircleFill, Bs2CircleFill, Bs3CircleFill, BsFileEarmarkLock2 } from "react-icons/bs";
 import { HiCheckCircle } from 'react-icons/hi';
 
 import { ConfigContext } from "../lib/configContext";
@@ -161,12 +161,32 @@ export default function AuthorizedPage() {
                     <SimpleGrid mt="10" spacing={4} columns={2}>
                         <Card
                             overflow={"hidden"}
+                            variant={"outline"} 
+                            gridColumn="1 / span 2" 
+                        >
+                            <CardBody>
+                                <Stack direction="row" >
+                                    <Bs1CircleFill size="1.6rem" color="gray" />
+                                    <Heading size="md">Send form for Requesting a New Individual Registration and Consent</Heading>
+                                </Stack>
+                                <Text py={"2"} mb={"1em"}>
+                                    An Authorized Individual or Administrative Support Professional of an ETT-Registered 
+                                    Entity that is considering a person for a privilege or honor, employment or role may 
+                                    print out or download <Link textDecoration="underline" fontWeight="bold" color="blue.500" href="/consenter-invite-copy.pdf" target="_blank" 
+                                    rel="noopener noreferrer">this email template</Link> and use it (and their own computer) 
+                                    to ask the person to register on ETT and complete a Consent Form if the person has 
+                                    not already done so.
+                                </Text>
+                            </CardBody>
+                        </Card>
+                        <Card
+                            overflow={"hidden"}
                             variant={"outline"}
                         >
                             <Stack>
                                 <CardBody>
                                     <Stack direction="row">
-                                        <Bs1CircleFill size="1.6rem" color="gray" />
+                                        <Bs2CircleFill size="1.6rem" color="gray" />
                                         <Heading size="md">Make an Exhibit Form request</Heading>
                                     </Stack>
                                     <Text py={"2"} mb={"1em"}>
@@ -188,7 +208,7 @@ export default function AuthorizedPage() {
                             <Stack>
                                 <CardBody>
                                     <Stack direction="row">
-                                        <Bs2CircleFill size="1.6rem" color="gray" />
+                                        <Bs3CircleFill size="1.6rem" color="gray" />
                                         <Heading size="md">Make a disclosure request</Heading>
                                     </Stack>
                                     <Text py={"2"} mb={"1em"}>
