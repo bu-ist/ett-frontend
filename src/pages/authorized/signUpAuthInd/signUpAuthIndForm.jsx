@@ -167,7 +167,7 @@ export default function SignUpAuthIndForm({inviteInfo, setRegistered, setSignUpE
                         </Button>
                     </Flex>
                 </Box>
-                <Button my="1em" type="submit" isDisabled={apiState !== 'idle'}>
+                <Button my="1em" size="lg" colorScheme="blue" type="submit" isDisabled={apiState !== 'idle'}>
                     { apiState === 'loading' && <Spinner /> }
                     { apiState === 'idle' && 'Register' }
                     { apiState === 'success' && 'Registered' }
