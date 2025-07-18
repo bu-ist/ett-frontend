@@ -19,7 +19,7 @@ export default function TermsOfUseBox() {
         >
             <Heading as="h3" size="lg" mb="2">Terms of Use</Heading>
             <Text>
-                <i>Important Terms of Use for entities registering to use ETT</i> - always available at this location: {termsPageURI}
+                <i>Important Terms of Use for entities registering to use ETT</i> - always available at this location: <b>{termsPageURI}</b>
             </Text>
             <Divider my="4" />
             <Text>
