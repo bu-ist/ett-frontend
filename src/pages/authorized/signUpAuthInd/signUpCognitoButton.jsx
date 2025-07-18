@@ -32,7 +32,7 @@ export default function SignUpCognitoButton({ signUpRedirect, signUpRedirectWith
     return (
         <form onSubmit={handleSubmit(handleSignUpClick)}>
             <FormControl mb="4" isInvalid={errors.signature}>
-                <FormLabel>Your Signature on behalf of the Registered Entity</FormLabel>
+                <FormLabel>Your Signature agrees to the ETT Terms of Use on behalf of the Registered Entity and affirms your authority to do so</FormLabel>
                 <Input
                     id="signature"
                     name="signature"
@@ -42,7 +42,7 @@ export default function SignUpCognitoButton({ signUpRedirect, signUpRedirectWith
                     })}
                 />
                 {!errors.signature ? (
-                    <FormHelperText>Type your name here as your digital signature, agreeing to the terms and affirming your authority to do so.</FormHelperText>
+                    <FormHelperText>Type your name here as your digital signature</FormHelperText>
                 ) : (
                     <FormErrorMessage>{errors.signature.message}</FormErrorMessage>
                 )}
@@ -50,13 +50,17 @@ export default function SignUpCognitoButton({ signUpRedirect, signUpRedirectWith
             <Flex>
                 <Card width="40%">
                     <CardBody>
-                        <Text>Click <i>Accept & Create Account</i> to accept the terms of use on behalf of the Registered Entity, and create an account with a password.</Text>
+                        <Text>
+                            Click <i>Accept & Create Account</i> to accept the terms of use on behalf of the Registered Entity, 
+                            affirm your authority, and create an account with a password.
+                        </Text>
                     </CardBody>
                     <CardFooter>
                         <Button
                             my="1em"
                             type="submit"
                             onClick={() => actionTypeRef.current = 'createAccount'}
+                            colorScheme='blue'
                         >
                             {apiState === 'redirect-create' && <>Redirecting <Spinner ml="2" /></>}
                             {apiState !== 'redirect-create' && 'Accept & Create Account'}
@@ -67,8 +71,10 @@ export default function SignUpCognitoButton({ signUpRedirect, signUpRedirectWith
                 <Card width="40%">
                     <CardBody>
                         <Text color="gray.600">
-                            <b>Optionally</b>, click <i>Accept & Amend</i> to accept the terms of use on behalf of the Registered Entity, 
-                            create an account, and then <Text as="span" color="orange.800">amend the entity to change one or more of the participants</Text>.
+                            <b>Optionally</b>, click <i>Accept & Amend</i> to accept the terms of use on behalf of the Registered Entity, affirm your authority,
+                            create an account, and then <Text as="span" color="orange.800">amend the Entity Registration to correct the proper entity name
+                            or to change one or more of the Entity&apos;s representatives (ASP or AI).
+                        </Text>
                         </Text>
                     </CardBody>
                     <CardFooter>
