@@ -60,7 +60,7 @@ export default function DownloadBlankForms() {
                             )}
                         </ListItem>
                     );
-                    return items; // Return the accumulated items array
+                    return items;
                 }, [])}
             </UnorderedList>
         </Box>
