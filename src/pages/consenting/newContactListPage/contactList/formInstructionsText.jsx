@@ -37,7 +37,7 @@ export default function FormInstructionsText({ entityName, formConstraint }) {
                             Entity Exhibit Forms from ETT (as ETT will have completed its transmittal role).</b>
                         ) : (
                             <b><u>Within the 21 days after sending the initial Disclosure Request(s) (2 weeks after, and 1 week after that)</u>—resend the Registered Entity’s 
-                            Disclosure Request(s) twice (as reminders) separately to my Consent Recipients (Affiliates) listed in this Exhibit Form, copying the Registered Entity and me. 
+                            Disclosure Request(s) twice (as reminders) separately to each of my Consent Recipients (Affiliates) listed in this Exhibit Form, copying the Registered Entity and me. 
                             Then promptly delete the Disclosure Requests, my Full Exhibit Form and all related Single Entity Exhibit Forms from ETT (as ETT will have completed its 
                             transmittal role).</b>
                         )}
