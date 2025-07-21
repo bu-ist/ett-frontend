@@ -87,7 +87,13 @@ export function RegisteredEntityDefinition({ registrationFormEntityUrl }) {
         <>
             <Heading as="h3" size="sm">ETT-Registered Entit(ies) or “RE”</Heading>
             <Text mb="6">
-                mean the entities and organizations now or in the future registered to use the Ethical Transparency Tool by completing an <a style={{ textDecoration: 'underline' }} target="_blank" rel="noopener noreferrer" href={registrationFormEntityUrl}>“ETT Registration Form” at this link</a>. See this link for a list that will be updated over time. ETT-Registered Entities are the only entities that may request completed Disclosure Forms from Consent Recipients (Affiliates).  
+                mean the entities and organizations now or in the future registered to use the Ethical Transparency Tool by 
+                completing an <a style={{ textDecoration: 'underline' }} target="_blank" rel="noopener noreferrer" href={registrationFormEntityUrl}>“ETT Registration Form” at this link</a>. See this link for a list that will be updated over time. 
+                ETT-Registered Entities are the only entities that may request completed Disclosure Forms from Consent Recipients (Affiliates).  
+                When directed by both a person who has completed a Consent Form and Exhibit Forms and a Registered Entity (RE), ETT sends a separate Disclosure Request 
+                on behalf of the RE to each Affiliate of a person, which includes PDFs of the person’s Consent Form, a Single Entity Exhibit Form naming that Affiliate 
+                as a Consent Recipient, a blank Disclosure Form, and instructions to respond directly to the RE. ETT does NOT receive completed Disclosure Forms or any 
+                conduct information.
             </Text>
         </>
     );
