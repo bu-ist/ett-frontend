@@ -136,7 +136,7 @@ export default function AuthorizedPage() {
             )}
             <Text>
                 A person in a senior role within a Registered Entity who deals with sensitive information, 
-                and who will directly receive completed Disclosure Form on behalf of the Registered Entity and 
+                and who will request disclosures and directly receive completed Disclosure Form on behalf of the Registered Entity and 
                 decide (or contact another official with authority to decide) who at the Entity needs to receive 
                 the information. Each registered entity has two Authorized Individuals.
             </Text>
