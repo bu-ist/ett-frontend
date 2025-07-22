@@ -37,7 +37,7 @@ export default function DescriptionDetails() {
                 and two reminders. (A limited archival record of making the transmission is kept behind a firewall.)  ETT is a conduit, not a records repository. 
             </Text>
             <Text>
-                For more information, please see the Ethical Transparency Tool <a href="/privacy" style={{ textDecoration: 'underline' }}>Privacy Policy</a>, or
+                For more information, please see the Ethical Transparency Tool <a href="/privacy" style={{ textDecoration: 'underline' }}>Privacy Policy</a> or
                 visit the <a href="https://societiesconsortium.com/" style={{ textDecoration: 'underline' }}>Societies Consortium to End Harassment in STEMM website</a>.
             </Text>
         </>
