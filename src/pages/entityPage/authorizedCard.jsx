@@ -67,7 +67,10 @@ export default function AuthorizedCard({ entity, updatePendingInvitations }) {
                 )}
                 {isEntityRegistered && (
                     <Text>
-                        The entity is fully registered. Authorized Individuals will receive notification emails when new disclosure forms are submitted.
+                        {authInds.length === 0 
+                            ? "The entity is registered, but there are currently no Authorized Individuals."
+                            : "The entity is fully registered. Authorized Individuals will receive notification emails when new disclosure forms are submitted."
+                        }
                     </Text>
                 )}
 
