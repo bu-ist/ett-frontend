@@ -30,11 +30,15 @@ export default function DescriptionDetails() {
                 <Image src="/ett-explanation-diagram.png" alt="ETT Diagram" />
             </Box>
             <Heading my="4" size="md">What information is retained in the ETT?</Heading>
-            <Text>
+            <Text mb="4">
                 Organizations’ and individuals’ registration to use ETT and individuals’ consent forms are stored in ETT.  Candidate professional affiliations 
                 (their employers, appointing and honoring organizations, and societies - with contact information) and organization requests for disclosures are deleted 
                 as soon as ETT sends the requests
                 and two reminders. (A limited archival record of making the transmission is kept behind a firewall.)  ETT is a conduit, not a records repository. 
+            </Text>
+            <Text>
+                For more information, please see the Ethical Transparency Tool <a href="/privacy" style={{ textDecoration: 'underline' }}>Privacy Policy</a> or
+                visit the <a href="https://societiesconsortium.com/" style={{ textDecoration: 'underline' }}>Societies Consortium to End Harassment in STEMM website</a>.
             </Text>
         </>
     );
