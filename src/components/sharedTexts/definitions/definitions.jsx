@@ -111,6 +111,7 @@ export function SponsorsDefinition() {
                 mean the owner(s), designer(s), developer(s), host(s), administrator(s), operator(s), governing bod(ies), sponsor(s), funder(s), and/or advisor(s) for the Ethical Transparency Tool.     
             </Text>
             <Text mb="6">
+                {/* this text probably does't belong here */}
                 (ETT-related Forms may be amended for amplification, clarity, or operations over time and re-posted.)
             </Text>
         </>
