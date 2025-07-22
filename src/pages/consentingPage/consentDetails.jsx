@@ -149,21 +149,23 @@ export default function ConsentDetails({ consentData, setConsentData, consenterI
                     </SimpleGrid>
                 </>
             )}
-            <Accordion mt="12" allowToggle>
-                <AccordionItem p="2" border="1px" borderColor="gray.400" borderRadius="md" backgroundColor="gray.50">
-                    <h2>
-                        <AccordionButton>
-                            <Box as="span" flex='1' textAlign='left'>
-                                <Heading size="sm">Click here for information on Consent expiration exception</Heading>
-                            </Box>
-                            <AccordionIcon />
-                        </AccordionButton>
-                    </h2>
-                    <AccordionPanel pb={4}>
-                        <ConsentExpirationExceptionsText link={false} />
-                    </AccordionPanel>
-                </AccordionItem>
-            </Accordion>
+            {activeConsent && (
+                <Accordion mt="12" allowToggle>
+                    <AccordionItem p="2" border="1px" borderColor="gray.400" borderRadius="md" backgroundColor="gray.50">
+                        <h2>
+                            <AccordionButton>
+                                <Box as="span" flex='1' textAlign='left'>
+                                    <Heading size="sm">Click here for information on Consent expiration exception</Heading>
+                                </Box>
+                                <AccordionIcon />
+                            </AccordionButton>
+                        </h2>
+                        <AccordionPanel pb={4}>
+                            <ConsentExpirationExceptionsText link={false} />
+                        </AccordionPanel>
+                    </AccordionItem>
+                </Accordion>
+            )}
             <Button my="16" onClick={handleSignOut}>Sign Out</Button>
 
             <EditConsentDetailsModal 
