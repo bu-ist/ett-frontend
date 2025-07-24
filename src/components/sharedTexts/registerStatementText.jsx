@@ -14,8 +14,8 @@ export default function RegisterStatementText() {
                 Registering your organization to use ETT means that it can participate in ETT. 
                 It also means that in your official and personal capacities you have read and agree to the ETT Privacy Notice and Privacy Policy 
                 (available at <b>{privacyPageURI}</b> ), and consent on your own and your organization’s behalf to them and to inclusion of your organization’s name, 
-                with or without its representative(s) names and contact information (as reflected 
-                above) on the ETT database and in ETT-related communications, factually stating that your organization is or was registered to 
+                with or without its representative(s) names and contact information (as reflected in the registration 
+                form) on the ETT database and in ETT-related communications, factually stating that your organization is or was registered to 
                 use ETT or is or was an ETT-Registered Entity. 
             </Text>
             <Text my="6">
