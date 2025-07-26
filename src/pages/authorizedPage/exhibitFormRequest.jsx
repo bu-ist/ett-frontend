@@ -18,37 +18,38 @@ import { sendExhibitRequestAPI } from '../../lib/auth-ind/sendExhibitRequestAPI'
 import { searchConsentersAPI } from '../../lib/auth-ind/searchConsentersAPI';
 import ExhibitSuccessModalBody from "./exhibitFormRequest/exhibitSuccessModalBody";
 
+
 // Position options for different organization types
 const EMPLOYER_POSITIONS = [
     { value: 'hr', label: 'HR Professional' },
-    { value: 'mg', label: 'Manager / Direct Report' },
-    { value: 'co', label: 'Colleague / Co-worker' },
+    { value: 'du', label: 'Department / Unit Head' },
+    { value: 'ds', label: 'Direct Supervisor' },
+    { value: 'co', label: 'Colleague / Coworker' },
     { value: 'other', label: 'Other' }
 ];
 
 const ACADEMIC_POSITIONS = [
-    { value: 'ao', label: 'Academic Officer' },
-    { value: 'vp', label: 'Vice Provost / Associate Provost for Academic Affairs' },
-    { value: 'df', label: 'Dean of Faculty / Associate Dean' },
-    { value: 'dc', label: 'Department Chair / Head' },
-    { value: 'fc', label: 'Faculty Affairs Coordinator' },
-    { value: 'ro', label: 'Institutional Research Officer' },
-    { value: 'gs', label: 'Graduate Studies Coordinator' },
-    { value: 'at', label: 'Affiliations or Titles Administrator' },
-    { value: 'other', label: 'Other' }
+    { value: 'pr', label: 'President' },
+    { value: 'pv', label: 'Provost' },
+    { value: 'vp', label: 'Vice President or Vice Provost' },
 ];
 
 const OTHER_ORG_POSITIONS = [
-    { value: 'pr', label: 'President / Vice President' },
-    { value: 'ed', label: 'Executive Director' },
-    { value: 'bm', label: 'Board Member / Chair' },
-    { value: 'sb', label: 'Secretary of the Board' },
-    { value: 'sc', label: 'Steering Committee Member' },
-    { value: 'mc', label: 'Membership Chair / Officer' },
-    { value: 'nc', label: 'Nominations Committee Member / Chair' },
-    { value: 'cc', label: 'Fellowship Committee Chair' },
-    { value: 'ac', label: 'Advisory Council Member' },
+    { value: 'ed', label: 'Executive Director / CEO' },
+    { value: 'bc', label: 'Board Chair / Vice Chair' },
+    { value: 'bm', label: 'Board Member' },
+    { value: 'bs', label: 'Board Secretary' },
+    { value: 'mc', label: 'Membership Committee Chair / Officer' },
+    { value: 'ec', label: 'Executive Committee Chair / Vice Chair' },
+    { value: 'em', label: 'Executive Committee Member' },
+    { value: 'hn', label: 'Honors / Awards Nominations Committee Chair' },
+    { value: 'hm', label: 'Honors / Awards Nominations Committee Member' },
+    { value: 'fc', label: 'Fellowship Committee Chair' },
+    { value: 'fm', label: 'Fellowship Committee Member' },
+    { value: 'ac', label: 'Advisory Council Chair' },
+    { value: 'am', label: 'Advisory Council Member' },
     { value: 'other', label: 'Other' }
+
 ];
 
 /**
