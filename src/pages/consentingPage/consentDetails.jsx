@@ -126,7 +126,7 @@ export default function ConsentDetails({ consentData, setConsentData, consenterI
                                     <Text>Renewed on {getLastDateString(consenter.renewed_timestamp)}</Text>
                                 )}
                                 {consentStatus === ConsentStatus.EXPIRED && (
-                                    <Text>Consent expired has expired</Text>
+                                    <Text>Consent has expired</Text>
                                 )}
                             </Box>
                             <Box>
