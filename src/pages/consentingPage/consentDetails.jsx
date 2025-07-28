@@ -22,7 +22,14 @@ export default function ConsentDetails({ consentData, setConsentData, consenterI
     const { consenter, fullName, consentStatus } = consentData;
     const { email } = consenterInfo;
 
-    const activeConsent = consentStatus === 'active';
+    const ConsentStatus = {
+        ACTIVE: 'active',
+        FORTHCOMING: 'forthcoming',
+        RESCINDED: 'rescinded',
+        EXPIRED: 'expired',
+    }
+    const activeConsent = consentStatus === ConsentStatus.ACTIVE;
+
 
     // Helper function for extracting and formatting the last date in an array
     function getLastDateString(arr) {
@@ -51,6 +58,20 @@ export default function ConsentDetails({ consentData, setConsentData, consenterI
         // Check if the last renewal date is greater than the last consent date
         return lastRenewal > lastConsent;
     }
+
+    const shouldShowConsent = () => 
+        consentStatus === ConsentStatus.FORTHCOMING || 
+        consentStatus === ConsentStatus.RESCINDED;
+
+    const shouldShowRescind = () => 
+        consentStatus === ConsentStatus.ACTIVE;
+
+    const shouldShowRenew = () => 
+        consentStatus === ConsentStatus.ACTIVE || 
+        consentStatus === ConsentStatus.EXPIRED;
+
+    const shouldShowEmailConsent = () => 
+        consentStatus === ConsentStatus.ACTIVE;
 
     function handleSignOut() {
         const { cognitoDomain, consentingPerson: { cognitoID } } = appConfig;
@@ -104,6 +125,9 @@ export default function ConsentDetails({ consentData, setConsentData, consenterI
                                 {activeConsent && shouldShowRenewal(consenter.consented_timestamp, consenter.renewed_timestamp) && (
                                     <Text>Renewed on {getLastDateString(consenter.renewed_timestamp)}</Text>
                                 )}
+                                {consentStatus === ConsentStatus.EXPIRED && (
+                                    <Text>Consent has expired</Text>
+                                )}
                             </Box>
                             <Box>
                                 <Button
@@ -116,7 +140,7 @@ export default function ConsentDetails({ consentData, setConsentData, consenterI
                             </Box>
                         </HStack>
                     </CardBody>
-                    {!activeConsent && (
+                    {shouldShowConsent() && (
                         <CardFooter>
                             <Button as={ReactRouterLink} to="/consenting/consent-form" >Grant Consent</Button>
                         </CardFooter>
@@ -128,26 +152,40 @@ export default function ConsentDetails({ consentData, setConsentData, consenterI
                 <>
                     <Heading as="h3" size="md">Consent Actions</Heading>
                     <SimpleGrid spacing={4} mt="2em" templateColumns='repeat(auto-fill, minmax(200px, 1fr))'>
-                        <Card>
-                            <CardBody>Renew this Consent Form for 10 years</CardBody>
-                            <CardFooter>
-                                <RenewModal setConsentData={setConsentData} consentData={consentData} />
-                            </CardFooter>
-                        </Card>
-                        <Card>
-                            <CardBody>Email a copy of this Consent form to {email}</CardBody>
-                            <CardFooter>
-                                <EmailConsentModal email={email} variant="button" />
-                            </CardFooter>
-                        </Card>
-                        <Card>
-                            <CardBody>Rescind this Consent Form</CardBody>
-                            <CardFooter>
-                                <RescindModal email={email} />
-                            </CardFooter>
-                        </Card>
+                        {shouldShowRenew() && (
+                            <Card>
+                                <CardBody>Renew this Consent Form for 10 years</CardBody>
+                                <CardFooter>
+                                    <RenewModal setConsentData={setConsentData} consentData={consentData} />
+                                </CardFooter>
+                            </Card>
+                        )}
+                        {shouldShowEmailConsent() && (
+                            <Card>
+                                <CardBody>Email a copy of this Consent form to {email}</CardBody>
+                                <CardFooter>
+                                    <EmailConsentModal email={email} variant="button" />
+                                </CardFooter>
+                            </Card>
+                        )}
+                        {shouldShowRescind() && (                            
+                            <Card>
+                                <CardBody>Rescind this Consent Form</CardBody>
+                                <CardFooter>
+                                    <RescindModal email={email} />
+                                </CardFooter>
+                            </Card>
+                        )}
                     </SimpleGrid>
                 </>
+            )}
+            {!activeConsent && shouldShowRenew() && (
+                <Card>
+                    <CardBody>Renew this Consent Form for 10 years</CardBody>
+                    <CardFooter>
+                        <RenewModal setConsentData={setConsentData} consentData={consentData} />
+                    </CardFooter>
+                </Card>
             )}
             {activeConsent && (
                 <Accordion mt="12" allowToggle>
