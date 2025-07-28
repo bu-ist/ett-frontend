@@ -32,6 +32,7 @@ const ACADEMIC_POSITIONS = [
     { value: 'pr', label: 'President' },
     { value: 'pv', label: 'Provost' },
     { value: 'vp', label: 'Vice President or Vice Provost' },
+    { value: 'other', label: 'Other' }
 ];
 
 const OTHER_ORG_POSITIONS = [
