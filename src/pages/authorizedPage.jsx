@@ -172,9 +172,8 @@ export default function AuthorizedPage() {
                                 <Text py={"2"} mb={"1em"}>
                                     An Authorized Individual or Administrative Support Professional of an ETT-Registered 
                                     Entity that is considering a person for a privilege or honor, employment or role may 
-                                    print out or download <Link textDecoration="underline" fontWeight="bold" color="blue.500" href="/consenter-invite-copy.pdf" target="_blank" 
-                                    rel="noopener noreferrer">this email template</Link> and use it (and their own computer) 
-                                    to ask the person to register on ETT and complete a Consent Form if the person has 
+                                    print out or download <Link textDecoration="underline" fontWeight="bold" color="blue.500" href="/consenter-invite-copy.pdf" target="_blank" rel="noopener noreferrer">this email template</Link> and 
+                                    use it (and their own computer) to ask the person to register on ETT and complete a Consent Form if the person has 
                                     not already done so.
                                 </Text>
                             </CardBody>
