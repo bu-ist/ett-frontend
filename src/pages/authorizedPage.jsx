@@ -162,7 +162,7 @@ export default function AuthorizedPage() {
                         <Card
                             overflow={"hidden"}
                             variant={"outline"} 
-                            gridColumn="1 / span 2" 
+                            gridColumn={{ base: "1 / span 2" }}  
                         >
                             <CardBody>
                                 <Stack direction="row" >
