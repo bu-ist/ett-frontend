@@ -17,6 +17,7 @@ export default function SendInvitationPage() {
 
     const { isOpen, onOpen, onClose } = useDisclosure();
     const [apiState, setApiState] = useState('idle');
+    const [apiError, setApiError] = useState(null);
 
     async function sendInvitation(event) {
         event.preventDefault();
@@ -41,6 +42,7 @@ export default function SendInvitationPage() {
                 setApiState('error');
                 onOpen();
                 // Should add more robust error handling here.
+                setApiError(inviteResult.message);
                 console.error(inviteResult);
             }
         } catch (error) {
@@ -97,7 +99,7 @@ export default function SendInvitationPage() {
                             }
                             {apiState == 'error' &&
                                 <Text>
-                                    There was an error sending the invitation. Please try again.
+                                    {apiError ? apiError : 'There was an error sending the invitation. Please try again.'}                                    
                                 </Text>
                             }
                         </Stack>

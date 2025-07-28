@@ -34,6 +34,7 @@ export default function InviteUsersModal({ numUsers, entity, updatePendingInvita
     // UI State
     const { isOpen, onOpen, onClose } = useDisclosure();
     const [apiState, setApiState] = useState('idle');
+    const [apiError, setApiError] = useState(null);
 
     // Handle form submission
     async function processInvitations(values) {
@@ -59,6 +60,8 @@ export default function InviteUsersModal({ numUsers, entity, updatePendingInvita
             setApiState('success');
         } else {
             setApiState('error');
+            setApiError(inviteResult.message);
+            console.error(inviteResult);
         }
     }
 
@@ -148,7 +151,7 @@ export default function InviteUsersModal({ numUsers, entity, updatePendingInvita
                                 <Button my="1em" type="submit">
                                     {apiState === 'loading' && <Spinner />}
                                     {apiState === 'idle' && <><RiMailLine style={{ marginRight: '0.5em' }} /> Send Invitations </>}
-                                    {apiState === 'error' && 'Error please try again'}
+                                    {apiState === 'error' && (apiError ? apiError : 'Error please try again')}
                                 </Button>
                             }
                         </form>
