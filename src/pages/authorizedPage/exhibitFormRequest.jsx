@@ -49,7 +49,6 @@ const OTHER_ORG_POSITIONS = [
     { value: 'ac', label: 'Advisory Council Chair' },
     { value: 'am', label: 'Advisory Council Member' },
     { value: 'other', label: 'Other' }
-
 ];
 
 /**
