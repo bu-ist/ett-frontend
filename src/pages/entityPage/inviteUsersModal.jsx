@@ -49,6 +49,7 @@ export default function InviteUsersModal({ numUsers, entity, updatePendingInvita
 
         // Send the invitation to the API.
         const inviteResult = await inviteAuthIndFromEntityAPI( appConfig, accessToken, email, entity, values );
+
         console.log(JSON.stringify(inviteResult));
 
         if (inviteResult.payload.ok) {
@@ -60,7 +61,8 @@ export default function InviteUsersModal({ numUsers, entity, updatePendingInvita
             setApiState('success');
         } else {
             setApiState('error');
-            setApiError(inviteResult.message);
+            setApiError(inviteResult.payload.message);
+            
             console.error(inviteResult);
         }
     }
@@ -151,9 +153,17 @@ export default function InviteUsersModal({ numUsers, entity, updatePendingInvita
                                 <Button my="1em" type="submit">
                                     {apiState === 'loading' && <Spinner />}
                                     {apiState === 'idle' && <><RiMailLine style={{ marginRight: '0.5em' }} /> Send Invitations </>}
-                                    {apiState === 'error' && (apiError ? apiError : 'Error please try again')}
+                                    {apiState === 'error' && 'Error please try again'}
                                 </Button>
                             }
+                            {apiState !== 'success' && apiError &&
+                                <VStack mb="4">
+                                    <Alert status='error'>
+                                        <AlertIcon />
+                                        <Text whiteSpace="pre-line">{apiError}</Text>
+                                    </Alert>
+                                </VStack>
+                            }                            
                         </form>
                         {apiState === 'success' &&
                             <VStack mb="4">

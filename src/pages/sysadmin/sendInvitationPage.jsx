@@ -41,7 +41,6 @@ export default function SendInvitationPage() {
             } else {
                 setApiState('error');
                 onOpen();
-                // Should add more robust error handling here.
                 setApiError(inviteResult.message);
                 console.error(inviteResult);
             }

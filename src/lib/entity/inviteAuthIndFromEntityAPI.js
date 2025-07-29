@@ -61,13 +61,30 @@ async function inviteAuthIndFromEntityAPI( appConfig, accessToken, fromEmail, en
         }
     });
 
+    let data;
+
     // Extract and return the payload from the response.
     if ( !response.ok ) {
-        // Don't try to parse error responses to json (it hard crashes), just early return a payload with a false 'ok' result.
+        try {
+            data = await response.json();
+            if(data instanceof Array) {
+                // The backend calls the single inviteUser api endpoint twice and has "bundled" the responses together.
+                const badItems = data.filter((item) => {
+                    const { payload:{ invalid=false } = {}, message=''} = item;
+                    return invalid && message;
+                })
+                if(badItems.length > 0) {
+                    return { payload: { ok: false, message: badItems.map(item => item.message).join("\n\n") } };
+                }
+            }
+        }
+        catch(e) {
+            console.error('Error parsing response:', e);
+        }
         return { payload: { ok: false } }
     }
 
-    const data = await response.json();
+    data = await response.json();
     return data;
 }
 
