@@ -298,9 +298,9 @@ export default function ExhibitFormRequest({ entityId }) {
     return (
         <Box>
             <form onSubmit={handleSubmit(onSubmit)}>
-                <Heading as="h3" my="4" size="sm">Select the consenting person</Heading>
+                <Heading as="h3" my="4" size="sm">Select the Consenting Individual</Heading>
                 <FormControl isInvalid={errors.consenter}>
-                    <FormLabel>Search for a consenter</FormLabel>
+                    <FormLabel>Search for an individual who has an ETT registration and Consent Form in effect</FormLabel>
                     <Controller
                         name="consenter"
                         control={control}
@@ -343,7 +343,7 @@ export default function ExhibitFormRequest({ entityId }) {
                                             onChange={onChange}
                                             value={value}
                                             ref={ref}
-                                            placeholder="Search for a consenter"
+                                            placeholder="Type Consenting Individual name..."
                                             loadingIcon={<Spinner />}
                                             autoComplete="off"
                                             aria-autocomplete="list"
@@ -369,7 +369,7 @@ export default function ExhibitFormRequest({ entityId }) {
                     />
                     <FormErrorMessage>{errors.consenter?.message}</FormErrorMessage>
                 </FormControl>
-                <Heading as="h3" my="4" size="sm">Select type of contact information</Heading>
+                <Heading as="h3" my="4" size="sm">Select the type of Exhibit Form</Heading>
                 <FormControl isInvalid={errors.constraint}>
                     <Controller
                         name="constraint"
@@ -378,9 +378,9 @@ export default function ExhibitFormRequest({ entityId }) {
                         render={({ field }) => (
                             <RadioGroup {...field}>
                                 <Stack mb="8">
-                                    <Radio value="current">Current Employer(s) only</Radio>
-                                    <Radio value="other">Prior Employer(s) and other Affiliates</Radio>
-                                    <Radio value="both">All</Radio>
+                                    <Radio value="both">All Affiliates <b>(Prior and Current)</b></Radio>
+                                    <Radio value="other"><b>Prior</b> Employer(s), <b>Prior</b> Appointing Organizations, and <b>Current and Prior</b> Affiliates of all other types only</Radio>
+                                    <Radio value="current"><b>Current</b> Employer(s) and <b>Current</b> Appointing Organizations only</Radio>
                                 </Stack>
                             </RadioGroup>
                         )}
@@ -388,8 +388,8 @@ export default function ExhibitFormRequest({ entityId }) {
                     <FormErrorMessage>{errors.constraint?.message}</FormErrorMessage>
                 </FormControl>
 
-                <Heading as="h3" my="4" size="sm">Specify lookback period</Heading>
-                <Text mb="2" fontSize="sm" fontStyle="italic">How many years back should the consenting person limit affiliates to?</Text>
+                <Heading as="h3" my="4" size="sm">Specify lookback period for listing Affiliates</Heading>
+                <Text mb="2" fontSize="sm" fontStyle="italic">For how many years back should the Consenting Individual list their Affiliates?</Text>
                 <FormControl>
                     <Controller
                         name="lookbackType"
@@ -399,7 +399,7 @@ export default function ExhibitFormRequest({ entityId }) {
                             <RadioGroup {...field}>
                                 <Stack mb="4">
                                     <Radio value="unlimited">Unlimited lookback period</Radio>
-                                    <Radio value="specific">Specific number of years</Radio>
+                                    <Radio value="specific">Specify number of years</Radio>
                                 </Stack>
                             </RadioGroup>
                         )}
@@ -441,9 +441,9 @@ export default function ExhibitFormRequest({ entityId }) {
                         <FormErrorMessage>{errors.lookbackYears?.message}</FormErrorMessage>
                     </FormControl>
                 )}
-                <Heading as="h3" mt="8" mb="4" size="sm">Specify Positions of Affiliates</Heading>
+                <Heading as="h3" mt="8" mb="4" size="sm">Specify the type of contact requested at each Affiliate</Heading>
                 <Text mb="2" fontSize="sm" fontStyle="italic">
-                    What are the positions of the affiliates that you are requesting?
+                    What  type of position do you want the Consenting Individual to list for each Affiliate?
                 </Text>
                 
                 {/* Employer Positions - always shown regardless of constraint */}

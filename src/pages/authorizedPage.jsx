@@ -189,12 +189,21 @@ export default function AuthorizedPage() {
                                         <Heading size="md">Make an Exhibit Form request</Heading>
                                     </Stack>
                                     <Text py={"2"} mb={"1em"}>
-                                        Make an request via email to a Consenting Person. Upon receiving the request, the Consenting Person enters 
-                                        their private ETT page to complete Exhibit Forms (a Full Form listing all of the Consenting Person's Affiliates, 
-                                        prior or current at the time—and Single Entity Forms, one for each Affiliate listing only it), with a contact for each. 
-                                        Exhibit Forms pair with Consent Forms to confirm individual’s Consent Recipients for authorized disclosures. A Consenting Person 
-                                        completes new Exhibit Forms, with up-to-date Affiliate listings and contacts, each time the Consenting Person is considered by any 
-                                        registered entity.
+                                        Make a request via email to a Consenting Individual  whom your 
+                                        ETT-Registered Entity is considering for a Privilege or Honor, Employment 
+                                        or Role at the time. To do so, complete the information below and click on 
+                                        “Send.” Upon receiving the Disclosure Request, the Consenting Individual 
+                                        enters their private ETT page to complete Exhibit Forms (a Full Form 
+                                        listing all of the Consenting Person’s professionally affiliated entities 
+                                        (called “Affiliates,” also called “Disclosing Entities” and “Consent 
+                                        Recipients”), prior or current at the time—and Single Entity Forms, one 
+                                        for each Affiliate listing only it), with contact information for each. 
+                                        Exhibit Forms pair with Consent Forms to confirm the Individual’s Consent 
+                                        Recipients for authorized disclosures.  A Consenting Individual completes 
+                                        new Exhibit Forms, with up-to-date Affiliate listings and contacts, each 
+                                        time the person is considered by any ETT-Registered Entity.  ETT is a 
+                                        conduit for making Disclosure Requests, not a record repository for 
+                                        Exhibit Forms.
                                     </Text>
                                     <ExhibitFormRequest entityId={userData.entity.entity_id} />
                                 </CardBody>
