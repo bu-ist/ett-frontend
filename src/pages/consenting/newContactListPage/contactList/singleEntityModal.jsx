@@ -12,6 +12,9 @@ import ContactSummaryCard from './singleEntityModal/contactSummaryCard';
 import EmailConsentModal from '../../../consentingPage/consentDetails/emailConsentModal';
 
 export default function SingleEntityModal({ contacts, setSingleEntityFormsSigned, isOpen, onOpen, onClose, handleContactChange, formConstraint }) {
+     // Allow for case insensitivity in formConstraint.
+    formConstraint = `${formConstraint}`.toLowerCase();
+    
     // Navigation state
     const [currentIndex, setCurrentIndex] = useState(0);
 

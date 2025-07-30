@@ -32,6 +32,9 @@ import SaveButton from './contactList/saveButton';
 
 // Contains the full contact list form and form state.
 export default function ContactList({ consentData, formConstraint, entityId }) {
+     // Allow for case insensitivity in formConstraint.
+    formConstraint = `${formConstraint}`.toLowerCase();
+
     const { appConfig } = useContext(ConfigContext);
 
     // State for the form submission result.
