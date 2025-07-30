@@ -192,7 +192,7 @@ export default function AuthorizedPage() {
                                         Make a request via email to a Consenting Individual  whom your 
                                         ETT-Registered Entity is considering for a Privilege or Honor, Employment 
                                         or Role at the time. To do so, complete the information below and click on 
-                                        “Send.” Upon receiving the Disclosure Request, the Consenting Individual 
+                                        “Send.” Upon receiving the Exhibit Form Request, the Consenting Individual 
                                         enters their private ETT page to complete Exhibit Forms (a Full Form 
                                         listing all of the Consenting Person’s professionally affiliated entities 
                                         (called “Affiliates,” also called “Disclosing Entities” and “Consent 
