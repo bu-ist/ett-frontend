@@ -44,7 +44,7 @@ export function EmploymentRolesDefinition() {
             <Heading as="h3" size="sm">Employment or Role(s)</Heading>
             <Text mb="6">
                 Examples include but are not limited to: employment; employee appointment or assignment to a supervisory, evaluative, 
-                committee, or mentoring role. May include other employment roles and decisions that an ETT-Registered Entity identifies 
+                or mentoring role. May include other employment-related roles and decisions that an ETT-Registered Entity identifies 
                 as affecting climate, culture, or enterprise risk.
             </Text>
         </>
@@ -54,9 +54,9 @@ export function EmploymentRolesDefinition() {
 export function ConsentRecipientDefinition() {
     return (
         <>
-            <Heading as="h3" size="sm">Consent Recipient(s)</Heading>
+            <Heading as="h3" size="sm">Consent Recipient(s) (also called Affiliate(s))</Heading>
             <Text mb="6">
-                (also called Affiliate(s)) mean the entities referenced in Part B. 1, 2, 3, 4 of the Consent Form.  A Consent Recipient (Affiliate) is the <b>“Disclosing Entity”</b> that completes a Disclosure Form when requested.  For up-to-date information, the person who submits a Consent Form also provides a list of the names of their Consent Recipients (Affiliates), with contacts, using <b>“Exhibit Forms”</b> at this link each time any ETT-Registered Entity is considering the person for a Privilege or Honor, Employment or Role and is anticipating using ETT to make a Disclosure Request about a person who has completed a Consent Form. 
+                Mean the entities referenced in Part B. 1, 2, 3, 4 of the Consent Form.  A Consent Recipient (Affiliate) is the <b>“Disclosing Entity”</b> that completes a Disclosure Form when requested.  For up-to-date information, the person who submits a Consent Form also provides a list of the names of their Consent Recipients (Affiliates), with contacts, using <b>“Exhibit Forms”</b> at this link each time any ETT-Registered Entity is considering the person for a Privilege or Honor, Employment or Role and is anticipating using ETT to make a Disclosure Request about a person who has completed a Consent Form. 
             </Text>
         </>
     );

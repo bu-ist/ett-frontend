@@ -142,7 +142,7 @@ export default function ConsentDetails({ consentData, setConsentData, consenterI
                     </CardBody>
                     {shouldShowConsent() && (
                         <CardFooter>
-                            <Button as={ReactRouterLink} to="/consenting/consent-form" >Grant Consent</Button>
+                            <Button as={ReactRouterLink} to="/consenting/consent-form" >Complete Consent Form</Button>
                         </CardFooter>
                     )}
                 </Stack>

@@ -85,15 +85,22 @@ export default function ConsentingPage() {
 
     return (
         <div>
-            <Heading as="h2" size={"lg"} >Consenting Person</Heading>
+            <Heading as="h2" size={"lg"} >Consenting Individual</Heading>
             <Text mt="4" mb="8">
-                A person who is (or may be in the future) a candidate for a privilege or honor (e.g., elected fellow, elected or life membership; 
-                honor or award recipient, emeritus or endowed role; elected or appointed governance committee, officer or leadership role) or employment 
-                or role (e.g., faculty or  staff employee, post-doc, mentor, supervisor, volunteer, etc.) who is being considered (or may be considered in the future) 
-                by a Registered Entity. Consenting Individuals provide consent via ETT for certain disclosures (findings  <b>not</b> allegations)  to be made about the person’s conduct.  Disclosures 
-                are made by the person’s professional affiliated entities (employers, societies and membership organizations, 
-                appointing and honoring organizations) <b>directly</b> to any Registered Entity(ies) that make a <b>disclosure request</b> via ETT.  
-                But ETT <b>never</b> receives any disclosures.
+                A person who is  (or may be in the future) a candidate under consideration by an ETT-Registered Entity for a
+                <ul style={{ marginLeft: '2em' }}>
+                    <li style={{ marginBottom: '3px', marginTop: '8px' }}>
+                        <b>Privilege or Honor</b> (e.g. elected fellow, elected or life membership; recipient of an honor or award, emeritus or endowed role; elected or appointed governance, committee, officer, or leadership role; other Privilege(s) or Honor(s) that an ETT Registered Entity identifies as affecting climate, culture or enterprise risk, e.g. volunteer roles) or 
+                    </li>
+                    <li style={{ marginBottom: '8px', marginTop: '3px' }}>
+                        <b>Employment or Role</b> (e.g., employment; employee appointment or assignment to a supervisory, evaluative, or mentoring role; other employment-related roles and decisions that an ETT Registered Entity identifies as affecting climate, culture or enterprise risk.
+                    </li>
+                </ul>
+                Consenting Individuals provide consent via ETT for certain disclosures (findings not allegations) 
+                to be made about the person’s conduct.  Disclosures are made by the person’s professionally 
+                affiliated entities (employers, societies and membership organizations, appointing and honoring 
+                organizations) directly to any ETT Registered Entit(ies) that make a disclosure request via ETT. 
+                But ETT never receives any disclosures or conduct records.
             </Text>
             {consenterInfo.login === false &&
                 <Card align="center">
