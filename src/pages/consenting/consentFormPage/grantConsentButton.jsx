@@ -96,8 +96,8 @@ export default function GrantConsentButton({ consentData }) {
                     </CardBody>
                     <CardFooter>
                         <Text>
-                            For Information on Renewing, Rescinding or Getting a Copy Of Your Consent Form click on:<br />
-                            <Button as={ReactRouterLink} to="/consenting" my="2px"> Return to Dashboard</Button>
+                            For Information on Renewing, Rescinding or Getting a Copy Of Your Consent Form click &quot;Return to Dashboard&quot;:<br />
+                            <Button as={ReactRouterLink} to="/consenting" my="4"> Return to Dashboard</Button>
                        </Text>
                      </CardFooter>
                 </Card>
