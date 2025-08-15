@@ -58,6 +58,10 @@ export default function ConsentFormPage() {
     // Should require valid session token to access this page.
     return (
         <Box>
+            <Text style={{ marginBottom: '1em' }}>
+                If you complete, digitally sign and submit this Consent Form you will be granting the consent 
+                that it describes.
+            </Text>
             <Heading as={"h2"} size={"lg"}>Consent Form {(consentData?.fullName) && `for ${consentData.fullName}`}</Heading>
             {apiState === 'loading' && <Spinner />}
             {apiState === 'notSignedIn' && 
