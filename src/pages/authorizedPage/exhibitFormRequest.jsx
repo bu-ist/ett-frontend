@@ -343,7 +343,7 @@ export default function ExhibitFormRequest({ entityId }) {
                                             onChange={onChange}
                                             value={value}
                                             ref={ref}
-                                            placeholder="Search for a consenter"
+                                            placeholder="Type consenter name here..."
                                             loadingIcon={<Spinner />}
                                             autoComplete="off"
                                             aria-autocomplete="list"
