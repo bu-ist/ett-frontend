@@ -1,7 +1,8 @@
 import { useContext } from "react";
 import { Link as ReactRouterLink, useNavigate } from 'react-router-dom';
 import Cookies from 'js-cookie';
-import { Box, Button, Card, CardBody, CardFooter, Heading, SimpleGrid, Stack, Text } from "@chakra-ui/react";
+import { Box, Button, Card, CardBody, CardFooter, Heading, SimpleGrid, Stack, Text, Link, Tooltip } from "@chakra-ui/react";
+import { HiOutlineExternalLink } from "react-icons/hi";
 
 import { ConfigContext } from "../lib/configContext";
 
@@ -60,20 +61,23 @@ export default function Home() {
     return (
         <>
             <Box my={"2em"}>
-                <style>{`
-                    #ett-link { text-decoration: underline; }
-                    #ett-link:hover { color: blue; }
-                    .tooltip { position: relative; display: inline-block; }
-                    .tooltip .tooltipText { visibility: hidden; font-style: italic; color: black; font-weight: normal; text-align: right; position: absolute; z-index: 1; left: 50px;opacity: 0; transition: opacity 0.3s; }
-                    .tooltip:hover .tooltipText { visibility: visible; opacity: 1; }
-                `}</style>
-                <Heading size="md" mb="2">Welcome to the Ethical Transparency Tool 
-                (<a id="ett-link" 
-                    href="https://societiesconsortium.com/ett/" 
-                    target="_blank" 
-                    rel="noopener noreferrer"
-                    className="tooltip"
-                ><span className="tooltipText">https://societiesconsortium.com/ett/</span>ETT</a>)</Heading>
+                <Heading size="md" mb="2">Welcome to the Ethical Transparency Tool (<Tooltip 
+                        label="https://societiesconsortium.com/ett/"
+                        placement="top"
+                        hasArrow
+                        offset={[0, 8]}
+                    >
+                        <Link
+                            href="https://societiesconsortium.com/ett/"
+                            isExternal
+                            textDecoration="underline"
+                            _hover={{ color: 'blue.500' }}
+                            display="inline-flex"
+                            alignItems="center"
+                        >
+                            ETT<HiOutlineExternalLink style={{ marginLeft: '2px', marginRight: '2px' }} />
+                        </Link>
+                    </Tooltip>)</Heading>
                 
                 <DescriptionParagraph />
             </Box>
