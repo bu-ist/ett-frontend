@@ -1,7 +1,7 @@
 import { useEffect, useState, useContext } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import Cookies from 'js-cookie';
-import { Button, Card, CardBody, CardFooter, CardHeader, Heading, Icon, Spinner, Text } from '@chakra-ui/react';
+import { Button, Card, CardBody, CardFooter, CardHeader, Heading, Icon, List, ListItem, Spinner, Text } from '@chakra-ui/react';
 import { BsFileEarmarkLock2 } from "react-icons/bs";
 
 import { ConfigContext } from '../lib/configContext';
@@ -88,14 +88,14 @@ export default function ConsentingPage() {
             <Heading as="h2" size={"lg"} >Consenting Individual</Heading>
             <Text mt="4" mb="8">
                 A person who is  (or may be in the future) a candidate under consideration by an ETT-Registered Entity for a
-                <ul style={{ marginLeft: '2em' }}>
-                    <li style={{ marginBottom: '3px', marginTop: '8px' }}>
-                        <b>Privilege or Honor</b> (e.g. elected fellow, elected or life membership; recipient of an honor or award, emeritus or endowed role; elected or appointed governance, committee, officer, or leadership role; other Privilege(s) or Honor(s) that an ETT Registered Entity identifies as affecting climate, culture or enterprise risk, e.g. volunteer roles) or 
-                    </li>
-                    <li style={{ marginBottom: '8px', marginTop: '3px' }}>
-                        <b>Employment or Role</b> (e.g., employment; employee appointment or assignment to a supervisory, evaluative, or mentoring role; other employment-related roles and decisions that an ETT Registered Entity identifies as affecting climate, culture or enterprise risk.
-                    </li>
-                </ul>
+                <List spacing={2} ml={8} my={2}>
+                    <ListItem>
+                        <Text><b>Privilege or Honor</b> (e.g. elected fellow, elected or life membership; recipient of an honor or award, emeritus or endowed role; elected or appointed governance, committee, officer, or leadership role; other Privilege(s) or Honor(s) that an ETT Registered Entity identifies as affecting climate, culture or enterprise risk, e.g. volunteer roles) or</Text>
+                    </ListItem>
+                    <ListItem>
+                        <Text><b>Employment or Role</b> (e.g., employment; employee appointment or assignment to a supervisory, evaluative, or mentoring role; other employment-related roles and decisions that an ETT Registered Entity identifies as affecting climate, culture or enterprise risk.</Text>
+                    </ListItem>
+                </List>
                 Consenting Individuals provide consent via ETT for certain disclosures (findings not allegations) 
                 to be made about the person’s conduct.  Disclosures are made by the person’s professionally 
                 affiliated entities (employers, societies and membership organizations, appointing and honoring 
