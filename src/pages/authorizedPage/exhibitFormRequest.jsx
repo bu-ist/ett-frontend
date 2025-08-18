@@ -443,7 +443,7 @@ export default function ExhibitFormRequest({ entityId }) {
                 )}
                 <Heading as="h3" mt="8" mb="4" size="sm">Specify the type of contact requested at each Affiliate</Heading>
                 <Text mb="2" fontSize="sm" fontStyle="italic">
-                    What  type of position do you want the Consenting Individual to list for each Affiliate?
+                    What type of position do you want the Consenting Individual to list for each Affiliate?
                 </Text>
                 
                 {/* Employer Positions - always shown regardless of constraint */}
