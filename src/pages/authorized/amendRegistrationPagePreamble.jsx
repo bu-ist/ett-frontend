@@ -6,7 +6,6 @@ export default function AmendRegistrationPagePreamble({ entityName }) {
           <li style={{ marginBottom: '8px' }}>
               <Text>
                   You can amend the registration for <b>{entityName}</b> by changing its
-                  representative(s), modifying a name or the contact information for any of its
                   representative(s), or modifying the entity name.
               </Text>
           </li>
@@ -18,14 +17,6 @@ export default function AmendRegistrationPagePreamble({ entityName }) {
                           correcting or updating their entity’s name (as long as the change is <b>not</b> a 
                           substitution of a different entity for an already Registered Entity or for an 
                           entity that has been invited to register to use ETT); 
-                      </Text></li>
-                      <li style={{ marginBottom: '3px' }}><Text>
-                          correcting or updating an Administrative Support Professional’s name or 
-                          contact information;
-                      </Text></li>
-                      <li style={{ marginBottom: '3px' }}><Text>
-                          correcting or updating an Authorized Individual’s  name or contact information 
-                          (including your own)
                       </Text></li>
                   </ul>
               </Text>
