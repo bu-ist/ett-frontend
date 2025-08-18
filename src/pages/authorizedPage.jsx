@@ -210,14 +210,29 @@ export default function AuthorizedPage() {
                                         <Bs3CircleFill size="1.6rem" color="gray" />
                                         <Heading size="md">Make a disclosure request</Heading>
                                     </Stack>
+                                    <Text py={"1"} mb={"1em"}>
+                                        A Registered Entity’s Authorized Individual (or, if directed by an Authorized Individual, the Administrative 
+                                        Support Professional) may initiate Disclosure Requests about a Consenting Individual (who has registered and 
+                                        completed a Consent Form on ETT that is in effect at the time) to the person’s professionally affiliated 
+                                        entities.  Disclosure Requests are only authorized when a Registered Entity is considering the Consenting 
+                                        Individual for a Privilege or Honor, Employment or Role.
+                                    </Text>
+                                    <Text py={"1"} mb={"1em"} fontWeight={"bold"}>
+                                        To initiate a Disclosure Request, insert the email address of the Consenting Individual below and click “Send”.
+                                    </Text>   
                                     <Text py={"2"} mb={"1em"}>
-                                        An entity that made findings (which is the most reliable source) makes disclosures directly to an ETT-Registered Entity 
-                                        when it initiates an ETT-automated request. ETT provides an efficient “check the box” Disclosure Form Template, which 
-                                        minimizes labor for a disclosing entity to make disclosures and for a receiving entity to review disclosures. 
-                                        When completed, the Disclosure Form discloses the existence and year of a finding and the type of misconduct — or that there 
-                                        is no finding of the types covered by ETT. A person’s input and these facts can be sufficient to inform an ETT-Registered Entity’s 
-                                        independent decision-making in many situations. A disclosing entity retains sole custody of its records. ETT never receives 
-                                        disclosures or conduct records and cannot create a central repository of them.
+                                        An entity that made findings of misconduct about a Consenting Individual (which is the most reliable source) 
+                                        and is or was a professionally affiliated entity  of the person (Disclosing Entity) makes disclosures 
+                                        directly to an ETT-Registered Entity that initiated an ETT-automated Disclosure Request.  ETT provides 
+                                        an efficient, mostly “check the box” Disclosure Form Template, which minimizes labor for a Disclosing 
+                                        Entity to make disclosures and for a receiving ETT-Registered Entity to review disclosures.  When the 
+                                        Disclosing Entity completes the Disclosure Form and provides it (or the information it calls for) to 
+                                        the ETT-Registered Entity, the Disclosing Entity discloses the existence and year of a finding and the 
+                                        type of misconduct—or that there is no finding of the types covered by ETT.  A Disclosing Entity retains 
+                                        sole custody of its records.  ETT never receives disclosures or conduct records and cannot create a 
+                                        central repository of them.  ETT is just an automation tool.  It does not dictate policies about the 
+                                        effect of disclosures or who is qualified or should be selected; those decisions are for the independent 
+                                        judgment, policies, and processes of each ETT-Registered Entity.
                                     </Text>
                                     <DisclosureRequestForm 
                                         entityId={userData.entity.entity_id}
