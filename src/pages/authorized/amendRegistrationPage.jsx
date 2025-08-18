@@ -21,6 +21,7 @@ import RemoveUserModal from '../../components/amendment/removeUserModal';
 import RemoveAndInviteReplacementModal from '../../components/amendment/removeAndInviteReplacementModal';
 
 import { lookupAuthIndAPI } from '../../lib/auth-ind/lookupAuthIndAPI';
+import AmendRegistrationPagePreamble from './amendRegistrationPagePreamble';
 
 export default function AmendRegistrationPage() {
     let [searchParams, setSearchParams] = useSearchParams();
@@ -235,13 +236,9 @@ export default function AmendRegistrationPage() {
                     </Box>
                 </Card>
             )}
-            <Text>
-                You can amend the entity registration by modifying its name, or removing any of its representatives, including yourself. 
-                If you remove a representative, you can continue normal operation for 30 days with the vacancy, 
-                but will be terminated in the ETT system if no replacement registers by then. 
-                Optionally, you can also invite an individual you intend as a replacement, and that 
-                person will be issued an email that invites them to register with with a special link. The same 30 day deadline applies.
-            </Text>
+            {apiState === 'success' && appConfig && (
+                <AmendRegistrationPagePreamble entityName={userData.entity.entity_name} />
+            )}
             {apiState === 'loading' && <Spinner />}
             {apiState === 'not-logged-in' &&
                 <Card my={6} align="center">
