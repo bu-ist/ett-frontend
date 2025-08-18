@@ -1,6 +1,6 @@
 import { Text } from "@chakra-ui/react";
 
-export default function AmendRegistrationPage({ entityName }) {
+export default function AmendRegistrationPagePreamble({ entityName }) {
   return (
       <ul style={{ marginLeft: '2em' }}>
           <li style={{ marginBottom: '8px' }}>
