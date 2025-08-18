@@ -1,7 +1,8 @@
 import { useContext } from "react";
 import { Link as ReactRouterLink, useNavigate } from 'react-router-dom';
 import Cookies from 'js-cookie';
-import { Box, Button, Card, CardBody, CardFooter, Heading, SimpleGrid, Stack, Text } from "@chakra-ui/react";
+import { Box, Button, Card, CardBody, CardFooter, Heading, SimpleGrid, Stack, Text, Link, Tooltip } from "@chakra-ui/react";
+import { HiOutlineExternalLink } from "react-icons/hi";
 
 import { ConfigContext } from "../lib/configContext";
 
@@ -60,7 +61,24 @@ export default function Home() {
     return (
         <>
             <Box my={"2em"}>
-                <Heading size="md" mb="2">Welcome to the Ethical Transparency Tool (ETT)</Heading>
+                <Heading size="md" mb="2">Welcome to the Ethical Transparency Tool (<Tooltip 
+                        label="https://societiesconsortium.com/ett/"
+                        placement="top"
+                        hasArrow
+                        offset={[0, 8]}
+                    >
+                        <Link
+                            href="https://societiesconsortium.com/ett/"
+                            isExternal
+                            textDecoration="underline"
+                            _hover={{ color: 'blue.500' }}
+                            display="inline-flex"
+                            alignItems="center"
+                        >
+                            ETT<HiOutlineExternalLink style={{ marginLeft: '2px', marginRight: '2px' }} />
+                        </Link>
+                    </Tooltip>)</Heading>
+                
                 <DescriptionParagraph />
             </Box>
             <Heading mb="4" size="md">Access ETT</Heading>

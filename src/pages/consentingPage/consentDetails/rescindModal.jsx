@@ -60,8 +60,10 @@ export default function RescindModal( { email }) {
                     <ModalCloseButton />
                     <ModalBody>
                         <Text mb="4">
-                            Click &quot;Rescind&quot; to remove consent for <Code>{email}</Code> and be removed from the system.
-                            You will be logged out.
+                            Click &quot;Rescind&quot; to terminate the consent of <Code>{email}</Code> on a going forward basis, 
+                            subject to the applicable exception. Access to your Consent Form will no longer be available for use 
+                            by ETT Registered Entities to request disclosures not already made at the time of your rescission. 
+                            You will be logged out. 
                         </Text>
                         {apiState === 'success' &&
                             <VStack mb="4">

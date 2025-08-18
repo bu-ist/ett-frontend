@@ -70,7 +70,7 @@ export default function GrantConsentButton({ consentData }) {
                         type="text"
                     />
                     {!errors.signature ? (
-                        <FormHelperText>Type your name here as your digital signature.</FormHelperText>
+                        <FormHelperText>Type your full name (first, any middle, and last) here as your digital signature</FormHelperText>
                     ) : (
                         <FormErrorMessage>{errors.signature.message}</FormErrorMessage>
                     )}
@@ -78,7 +78,7 @@ export default function GrantConsentButton({ consentData }) {
                     {errors.signature && <Text color="red.500" mt="2">{errors.signature.message}</Text>}
                 </FormControl>
                 <Button type="submit" my="2em" isDisabled={apiState !== 'idle'}>
-                    {apiState === 'idle' && 'Grant Consent'}
+                    {apiState === 'idle' && 'Complete Consent Form'}
                     {apiState === 'loading' && <Spinner />}
                     {apiState === 'error' && 'Error'}
                     {apiState === 'success' && 'Consent Granted'}
@@ -90,11 +90,16 @@ export default function GrantConsentButton({ consentData }) {
                         <Heading as="h4" size={"sm"}>Consent Granted</Heading>
                     </CardHeader>
                     <CardBody>
-                        You have successfully granted consent. You will receive an email confirmation shortly.
+                       <Text>
+                            You have successfully granted consent. You will receive an email confirmation shortly.
+                        </Text>
                     </CardBody>
                     <CardFooter>
-                        <Button as={ReactRouterLink} to="/consenting" my="2em"> Return to Dashboard</Button>
-                    </CardFooter>
+                        <Text>
+                            For Information on Renewing, Rescinding or Getting a Copy Of Your Consent Form click &quot;Return to Dashboard&quot;:<br />
+                            <Button as={ReactRouterLink} to="/consenting" my="4"> Return to Dashboard</Button>
+                       </Text>
+                     </CardFooter>
                 </Card>
             }
             <Box ref={scrollBoxRef}></Box> {/* Invisible element for scrolling */}

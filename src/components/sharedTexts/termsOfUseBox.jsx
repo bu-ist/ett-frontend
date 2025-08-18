@@ -32,7 +32,7 @@ export default function TermsOfUseBox() {
                 </ListItem>
                 <Divider my="4" />
                 <ListItem>
-                    Authorized Individuals (AIs) should be in senior institutional roles, accustomed to managing sensitive
+                    Authorized Individuals (AIs) and any Contacts for Disclosure Request Responses should be in senior institutional roles, accustomed to managing sensitive
                     and confidential information, and knowledgeable about the ETT-Registered Entity. Administrative Support Professionals
                     (ASPs) should also be accustomed to managing sensitive and confidential information. An ETT-Registered Entity
                     determines these roles/people.
@@ -67,7 +67,8 @@ export default function TermsOfUseBox() {
                 </ListItem>
                 <Divider my="4" />
                 <ListItem>
-                    ETT-Registered Entities must not share <b>completed</b> Registration, Consent, Exhibit, or Disclosure Forms that
+                    ETT-Registered Entities must not share <b>completed</b> Registration, Consent, Exhibit, or Disclosure Forms 
+                    (or the information called for under the Disclosure Form) that
                     they <b>receive or access</b> with other entities (third parties). ETT-Registered Entities may access Consent Forms on ETT, while
                     a Consent is in effect.
                 </ListItem>
@@ -76,7 +77,7 @@ export default function TermsOfUseBox() {
                     <b>No warranties of any kind are made concerning ETT</b>. Each ETT-Registered Entity determines the uses of
                     ETT that are operationally and legally appropriate for it and waives and releases all claims and liabilities of every kind
                     (except intentional harm) that are associated with ETT, against the Societies Consortium to End Harassment in STEMM,
-                    EducationCounsel LLC, the American Association for the Advancement of Science (AAAS), any members of the Societies Consortium Executive Committee and their societies,
+                    EducationCounsel LLC, the American Association for the Advancement of Science (AAAS),
                     and each owner, designer,
                     developer, host, sponsor, advisor, agent, contractor, administrator and/or operator of ETT, their respective predecessors,
                     successors, and assigns (and their respective current, former, and future directors/trustees/managers, officers,

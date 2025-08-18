@@ -235,7 +235,7 @@ export default function ConsentFormText({ disclosureFormUrl, registrationFormEnt
                         (and their respective prior, 
                         current, and future directors/trustees/managers, officers, partners/members/ stockholders, personnel, 
                         agents, contractors, and representatives), which are the released parties.  This waiver and release as applied to 
-                        any one of the released parties also covers the misuse of this Consent Form, any 
+                        any one of the released parties also covers the misuse of this Consent Form, any
                         {' '}
                         <DefinitionPopover termName="Exhibit Forms">
                             <ConsentRecipientDefinition />
@@ -247,7 +247,7 @@ export default function ConsentFormText({ disclosureFormUrl, registrationFormEnt
                             <DisclosureFormDefinition />
                         </DefinitionPopover>
                         {' '}
-                        by any other released part(ies).
+                        (or its information, i.e. the information it calls for) by any other released part(ies).
                     </ListItem>
                 </OrderedList>
                 
