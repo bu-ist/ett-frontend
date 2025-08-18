@@ -107,12 +107,15 @@ export default function DisclosureRequestForm({ entityId, role }) {
                     {!errors.consenterEmail ? (
                         <FormHelperText>
                             Enter the email address of the Consenting Individual for whom disclosures are being 
-                            requested. <b>Use the email address in that person’s Exhibit Form (which will be the 
-                            same address as is in the person’s ETT Registration and Consent Forms).</b>
+                            requested.
                         </FormHelperText>
                     ) : (
                         <FormErrorMessage>{errors.consenterEmail.message}</FormErrorMessage>
                     )}
+                    <Text mt="2" fontWeight="semibold">
+                        Use the email address in that person’s Exhibit Form (which will be the 
+                        same address as is in the person’s ETT Registration and Consent Forms).
+                    </Text>
                 </FormControl>
 
                 <Button colorScheme='blue' my="2em" type="submit" isDisabled={apiState !== 'idle'}>
