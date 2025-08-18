@@ -76,7 +76,7 @@ export default function SignUpCognitoButton({ signUpRedirect, signUpRedirectWith
                         <Text color="gray.600">
                             <b>Optionally</b>. Click <i>Accept & Amend</i> to accept the terms of use on behalf of the Registered Entity 
                             and on your own behalf, create an account, and then <Text as="span" color="orange.800">amend the Entity 
-                            Registration Form to change on one or more of the entity’s representatives or correct the entity’s or any 
+                            Registration Form to change one or more of the entity’s representatives or correct the entity’s or any 
                             representative’s name or contact information.</Text>
                         </Text>
                     </CardBody>
