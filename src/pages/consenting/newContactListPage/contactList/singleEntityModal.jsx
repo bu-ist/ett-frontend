@@ -223,4 +223,5 @@ SingleEntityModal.propTypes = {
     onOpen: PropTypes.func.isRequired,
     onClose: PropTypes.func.isRequired,
     handleContactChange: PropTypes.func.isRequired,
+    formConstraint: PropTypes.oneOf(['current', 'other', 'both']).isRequired,
 };
