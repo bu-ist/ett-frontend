@@ -18,7 +18,7 @@ export default function SingleEntityModal({ contacts, setSingleEntityFormsSigned
     const { user } = useContext(UserContext);
 
     // Setup the digital signature form
-    const { handleSubmit, register, formState: { errors }, reset, setValue, getValues } = useForm({
+    const { handleSubmit, register, formState: { errors }, reset, setValue, getValues, clearErrors } = useForm({
         defaultValues: {
             signature: '',
         }
@@ -73,6 +73,8 @@ export default function SingleEntityModal({ contacts, setSingleEntityFormsSigned
             
             // Navigate to previous contact
             setCurrentIndex(currentIndex - 1);
+            // Clear any validation errors but keep form values
+            clearErrors();
             // Do not reset when going back - the useEffect will set the correct signature
         }
     }
