@@ -13,9 +13,6 @@ export default function ContactEditModal({
     handleContactChange, 
     correctionsMode = false 
 }) {
-    // Allow for case insensitivity in formConstraint.
-    formConstraint = `${formConstraint}`.toLowerCase();
-
     // Initialize form with contact data
     const {
         handleSubmit,

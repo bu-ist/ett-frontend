@@ -2,9 +2,6 @@ import { Box, ListItem, OrderedList, Text } from "@chakra-ui/react";
 
 export default function FormInstructionsText({ entityName, formConstraint }) {
 
-    // Allow for case insensitivity in formConstraint.
-    formConstraint = `${formConstraint}`.toLowerCase();
-    
     const currentEmployer = formConstraint === 'current';
 
     return (

@@ -32,7 +32,13 @@ export default function NewContactListPage() {
     const currentPath = location.pathname.substring(1); // Remove the leading slash
 
     // The form type is given by the last segment of the path, which is either 'other', 'current', or 'both'.
-    const formConstraint = currentPath.split('/').pop();
+    // Since this is coming from the browser, add robust validation and normalization for formConstraint
+    const allowedConstraints = ['current', 'other', 'both'];
+    const rawConstraint = currentPath.split('/').pop();
+    const normalizedConstraint = rawConstraint ? rawConstraint.trim().toLowerCase() : '';
+    const formConstraint = allowedConstraints.includes(normalizedConstraint)
+        ? normalizedConstraint
+        : 'invalid'; // Reject invalid values
 
     // Get the entity ID from the url hash; this should be a query parameter but somehow it is a hash.
     // So need to remove "#entity_id=" from the hash to get the entity ID.

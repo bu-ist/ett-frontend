@@ -8,9 +8,6 @@ import { useContext } from 'react';
 import Cookies from 'js-cookie';
 
 export default function SaveButton({ contacts, formConstraint, entityId, singleEntityFormsSigned }) {
-    // Allow for case insensitivity in formConstraint.
-    formConstraint = `${formConstraint}`.toLowerCase();
-
     const { appConfig } = useContext(ConfigContext);
     const { isOpen, onOpen, onClose } = useDisclosure();
     const [apiState, setApiState] = useState('idle');
