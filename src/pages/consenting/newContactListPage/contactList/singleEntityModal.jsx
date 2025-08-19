@@ -195,7 +195,7 @@ export default function SingleEntityModal({ contacts, setSingleEntityFormsSigned
                             </Button>
                             <Button 
                                 onClick={handleSubmit(handleNext)}
-                                isDisabled={!hasNext && Object.keys(errors).length > 0}
+                                isDisabled={Object.keys(errors).length > 0}
                             >
                                 {hasNext ? 'Next' : 'Submit'}
                             </Button>
