@@ -18,7 +18,7 @@ export default function SingleEntityModal({ contacts, setSingleEntityFormsSigned
     const { user } = useContext(UserContext);
 
     // Setup the digital signature form
-    const { handleSubmit, register, formState: { errors }, reset, setValue, getValues } = useForm({
+    const { handleSubmit, register, formState: { errors }, reset, setValue, getValues, clearErrors } = useForm({
         defaultValues: {
             signature: '',
         }
@@ -73,6 +73,8 @@ export default function SingleEntityModal({ contacts, setSingleEntityFormsSigned
             
             // Navigate to previous contact
             setCurrentIndex(currentIndex - 1);
+            // Clear any validation errors but keep form values
+            clearErrors();
             // Do not reset when going back - the useEffect will set the correct signature
         }
     }
@@ -89,6 +91,7 @@ export default function SingleEntityModal({ contacts, setSingleEntityFormsSigned
     }
 
     const currentContact = contacts[currentIndex];
+    const hasNext = currentIndex < contacts.length - 1;
 
     return (
         <>
@@ -142,18 +145,33 @@ export default function SingleEntityModal({ contacts, setSingleEntityFormsSigned
                                 </form>
                                 {formConstraint === 'current' ? (
                                     <Text my="4">
-                                        Click the Next Button to create, review, date, and digitally sign a 
-                                        Single-Entity Exhibit Form for each of your listed Consent Recipients 
-                                        (Affiliate(s)—your current employer(s) and any other current appointing 
-                                        organization(s)). You will not be able to submit any of your Current 
-                                        Employer(s) Exhibit Forms until you digitally sign all of them.
+                                        { hasNext ?
+                                            `Click the Next Button to create, review, date, and digitally sign this 
+                                            Single-Entity Exhibit Form and move on to the next of your listed Consent Recipients 
+                                            (Affiliate(s)—your current employer(s) and any other current appointing 
+                                            organization(s)). You will not be able to submit any of your Current 
+                                            Employer(s) Exhibit Forms until you digitally sign all of them.` :
+
+                                            `Click the Submit Button to create, review, date, and digitally sign this last 
+                                            Single-Entity Exhibit Form for your listed Consent Recipients (Affiliate(s)—your 
+                                            current employer(s) and any other current appointing 
+                                            organization(s)). You will not be able to submit any of your Current 
+                                            Employer(s) Exhibit Forms until you digitally sign all of them.`
+                                        }
                                     </Text>
                                 ) : (
                                     <Text my="4">
-                                        Click the Next button to create, review, date, and digitally sign a 
-                                        Single-Entity Exhibit Form for each of your listed Consent Recipients 
-                                        (Affiliates). You will not be able to submit any of your Exhibit Forms 
-                                        until you digitally sign all of them.
+                                        { hasNext ? 
+                                            `Click the Next button to create, review, date, and digitally sign this  
+                                            Single-Entity Exhibit Form and move on to the next of your listed Consent Recipients 
+                                            (Affiliates). You will not be able to submit any of your Exhibit Forms 
+                                            until you digitally sign all of them.` : 
+                                            
+                                            `Click the Submit button to create, review, date, and digitally sign this last 
+                                            Single-Entity Exhibit Form for your listed Consent Recipients 
+                                            (Affiliates). You will not be able to submit any of your Exhibit Forms 
+                                            until you digitally sign all of them.` 
+                                        }
                                     </Text>
                                 )}
                             </>
@@ -177,9 +195,9 @@ export default function SingleEntityModal({ contacts, setSingleEntityFormsSigned
                             </Button>
                             <Button 
                                 onClick={handleSubmit(handleNext)}
-                                isDisabled={currentIndex === contacts.length - 1 && Object.keys(errors).length > 0}
+                                isDisabled={Object.keys(errors).length > 0}
                             >
-                                {currentIndex === contacts.length - 1 ? 'Submit' : 'Next'}
+                                {hasNext ? 'Next' : 'Submit'}
                             </Button>
                         </ButtonGroup>
                     </ModalFooter>
@@ -205,4 +223,5 @@ SingleEntityModal.propTypes = {
     onOpen: PropTypes.func.isRequired,
     onClose: PropTypes.func.isRequired,
     handleContactChange: PropTypes.func.isRequired,
+    formConstraint: PropTypes.oneOf(['current', 'other', 'both']).isRequired,
 };

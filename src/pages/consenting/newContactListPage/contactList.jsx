@@ -493,6 +493,6 @@ ContactList.propTypes = {
         })),
         fullName: PropTypes.string,
     }).isRequired,
-    formConstraint: PropTypes.string.isRequired,
+    formConstraint: PropTypes.oneOf(['current', 'other', 'both']).isRequired,
     entityId: PropTypes.string.isRequired,
 };

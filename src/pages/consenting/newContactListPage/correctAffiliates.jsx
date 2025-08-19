@@ -407,6 +407,6 @@ CorrectAffiliates.propTypes = {
             entity_name: PropTypes.string.isRequired,
         }))
     }).isRequired,
-    formConstraint: PropTypes.string.isRequired,
+    formConstraint: PropTypes.oneOf(['current', 'other', 'both']).isRequired,
     entityId: PropTypes.string.isRequired,
 };
