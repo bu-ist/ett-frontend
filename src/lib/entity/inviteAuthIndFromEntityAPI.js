@@ -73,7 +73,7 @@ async function inviteAuthIndFromEntityAPI( appConfig, accessToken, fromEmail, en
                 const failedItems = errorData.filter(item => item?.payload?.error === true);
 
                 // Extract messages from failed items
-                const errorMessages = failedItems.map(item => item.message);
+                const errorMessages = failedItems.map(item => item?.message);
 
                 // Return the error messages, if any, as a single consolidated message
                 return errorMessages.length > 0
