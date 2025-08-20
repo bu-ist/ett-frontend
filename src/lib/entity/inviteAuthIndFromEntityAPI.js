@@ -61,31 +61,41 @@ async function inviteAuthIndFromEntityAPI( appConfig, accessToken, fromEmail, en
         }
     });
 
-    let data;
-
-    // Extract and return the payload from the response.
-    if ( !response.ok ) {
+    // Handle error responses from the API
+    if (!response.ok) {
         try {
-            data = await response.json();
-            if(data instanceof Array) {
-                // The backend calls the single inviteUser api endpoint twice and has "bundled" the responses together.
-                const badItems = data.filter((item) => {
-                    const { payload:{ invalid=false } = {}, message=''} = item;
-                    return invalid && message;
-                })
-                if(badItems.length > 0) {
-                    return { payload: { ok: false, message: badItems.map(item => item.message).join("\n\n") } };
-                }
+            // The API may return either a single error or an array of responses
+            const errorData = await response.json();
+
+            // If there are multiple errors in an array, handle bundled responses from multiple API calls
+            if (Array.isArray(errorData)) {
+                // Find items that represent errors (either by payload.error or message content)
+                // We are filtering out any successful responses here, maybe an even more robust UI would show these as well
+                const failedItems = errorData.filter(item => {
+                    const hasErrorPayload = item.payload && item.payload.error === true;
+                    const hasFailureMessage = item.message && item.message.includes('failure');
+                    return hasErrorPayload || hasFailureMessage;
+                });
+
+                // Extract messages from failed items
+                const errorMessages = failedItems.map(item => item.message);
+
+                // Return the error messages, if any, as a single consolidated message
+                return errorMessages.length > 0
+                    ? { payload: { ok: false, message: errorMessages.join('\n\n') } }
+                    : { payload: { ok: false } };
             }
+
+            // Otherwise if it's not an array, return the error data as-is
+            return { payload: { ok: false, message: errorData?.message || 'Unknown error' } };
+        } catch (error) {
+            console.error('Error parsing response:', error);
+            return { payload: { ok: false } };
         }
-        catch(e) {
-            console.error('Error parsing response:', e);
-        }
-        return { payload: { ok: false } }
     }
 
-    data = await response.json();
-    return data;
+    // Handle successful response
+    return response.json();
 }
 
 export { inviteAuthIndFromEntityAPI };
