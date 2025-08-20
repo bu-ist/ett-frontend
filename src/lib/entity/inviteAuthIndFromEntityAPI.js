@@ -69,13 +69,8 @@ async function inviteAuthIndFromEntityAPI( appConfig, accessToken, fromEmail, en
 
             // If there are multiple errors in an array, handle bundled responses from multiple API calls
             if (Array.isArray(errorData)) {
-                // Find items that represent errors (either by payload.error or message content)
-                // We are filtering out any successful responses here, maybe an even more robust UI would show these as well
-                const failedItems = errorData.filter(item => {
-                    const hasErrorPayload = item.payload && item.payload.error === true;
-                    const hasFailureMessage = item.message && item.message.includes('failure');
-                    return hasErrorPayload || hasFailureMessage;
-                });
+                // Find items that represent errors (identified by payload.error === true)
+                const failedItems = errorData.filter(item => item?.payload?.error === true);
 
                 // Extract messages from failed items
                 const errorMessages = failedItems.map(item => item.message);
