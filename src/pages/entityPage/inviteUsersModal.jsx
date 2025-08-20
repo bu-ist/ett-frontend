@@ -149,13 +149,6 @@ export default function InviteUsersModal({ numUsers, entity, updatePendingInvita
                                     <FormErrorMessage>{errors.email2.message}</FormErrorMessage>
                                 )}
                             </FormControl>
-                            {apiState !== 'success' &&
-                                <Button my="1em" type="submit">
-                                    {apiState === 'loading' && <Spinner />}
-                                    {apiState === 'idle' && <><RiMailLine style={{ marginRight: '0.5em' }} /> Send Invitations </>}
-                                    {apiState === 'error' && 'Error please try again'}
-                                </Button>
-                            }
                             {apiState !== 'success' && apiError &&
                                 <VStack mb="4">
                                     <Alert status='error'>
@@ -163,7 +156,14 @@ export default function InviteUsersModal({ numUsers, entity, updatePendingInvita
                                         <Text whiteSpace="pre-line">{apiError}</Text>
                                     </Alert>
                                 </VStack>
-                            }                            
+                            }
+                            {apiState !== 'success' &&
+                                <Button my="1em" type="submit">
+                                    {apiState === 'loading' && <Spinner />}
+                                    {apiState === 'idle' && <><RiMailLine style={{ marginRight: '0.5em' }} /> Send Invitations </>}
+                                    {apiState === 'error' && 'Error please try again'}
+                                </Button>
+                            }
                         </form>
                         {apiState === 'success' &&
                             <VStack mb="4">
