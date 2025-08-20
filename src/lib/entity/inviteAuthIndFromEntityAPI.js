@@ -61,14 +61,36 @@ async function inviteAuthIndFromEntityAPI( appConfig, accessToken, fromEmail, en
         }
     });
 
-    // Extract and return the payload from the response.
-    if ( !response.ok ) {
-        // Don't try to parse error responses to json (it hard crashes), just early return a payload with a false 'ok' result.
-        return { payload: { ok: false } }
+    // Handle error responses from the API
+    if (!response.ok) {
+        try {
+            // The API may return either a single error or an array of responses
+            const errorData = await response.json();
+
+            // If there are multiple errors in an array, handle bundled responses from multiple API calls
+            if (Array.isArray(errorData)) {
+                // Find items that represent errors (identified by payload.error === true)
+                const failedItems = errorData.filter(item => item?.payload?.error === true);
+
+                // Extract messages from failed items
+                const errorMessages = failedItems.map(item => item?.message);
+
+                // Return the error messages, if any, as a single consolidated message
+                return errorMessages.length > 0
+                    ? { payload: { ok: false, message: errorMessages.join('\n\n') } }
+                    : { payload: { ok: false } };
+            }
+
+            // Otherwise if it's not an array, return the error data as-is
+            return { payload: { ok: false, message: errorData?.message || 'Unknown error' } };
+        } catch (error) {
+            console.error('Error parsing response:', error);
+            return { payload: { ok: false } };
+        }
     }
 
-    const data = await response.json();
-    return data;
+    // Handle successful response
+    return response.json();
 }
 
 export { inviteAuthIndFromEntityAPI };
