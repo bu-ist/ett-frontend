@@ -52,7 +52,7 @@ export default function InviteUsersModal({ numUsers, entity, updatePendingInvita
 
         console.log(JSON.stringify(inviteResult));
 
-        if (inviteResult.payload.ok) {
+        if (inviteResult?.payload?.ok) {
             console.log('Invitation successful');
 
             // Set the email addresses that were invited so we can update the UI.
@@ -61,8 +61,10 @@ export default function InviteUsersModal({ numUsers, entity, updatePendingInvita
             setApiState('success');
         } else {
             setApiState('error');
-            setApiError(inviteResult.payload.message);
-            
+
+            const errorMessage = inviteResult?.payload?.message || 'Unknown error';
+            setApiError(errorMessage);
+
             console.error(inviteResult);
         }
     }
