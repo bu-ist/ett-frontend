@@ -52,7 +52,7 @@ export default function InviteUsersModal({ numUsers, entity, updatePendingInvita
 
         console.log(JSON.stringify(inviteResult));
 
-        if (inviteResult.payload.ok) {
+        if (inviteResult?.payload?.ok) {
             console.log('Invitation successful');
 
             // Set the email addresses that were invited so we can update the UI.
@@ -61,8 +61,10 @@ export default function InviteUsersModal({ numUsers, entity, updatePendingInvita
             setApiState('success');
         } else {
             setApiState('error');
-            setApiError(inviteResult.payload.message);
-            
+
+            const errorMessage = inviteResult?.payload?.message || 'Unknown error';
+            setApiError(errorMessage);
+
             console.error(inviteResult);
         }
     }
@@ -149,13 +151,6 @@ export default function InviteUsersModal({ numUsers, entity, updatePendingInvita
                                     <FormErrorMessage>{errors.email2.message}</FormErrorMessage>
                                 )}
                             </FormControl>
-                            {apiState !== 'success' &&
-                                <Button my="1em" type="submit">
-                                    {apiState === 'loading' && <Spinner />}
-                                    {apiState === 'idle' && <><RiMailLine style={{ marginRight: '0.5em' }} /> Send Invitations </>}
-                                    {apiState === 'error' && 'Error please try again'}
-                                </Button>
-                            }
                             {apiState !== 'success' && apiError &&
                                 <VStack mb="4">
                                     <Alert status='error'>
@@ -163,7 +158,14 @@ export default function InviteUsersModal({ numUsers, entity, updatePendingInvita
                                         <Text whiteSpace="pre-line">{apiError}</Text>
                                     </Alert>
                                 </VStack>
-                            }                            
+                            }
+                            {apiState !== 'success' &&
+                                <Button my="1em" type="submit">
+                                    {apiState === 'loading' && <Spinner />}
+                                    {apiState === 'idle' && <><RiMailLine style={{ marginRight: '0.5em' }} /> Send Invitations </>}
+                                    {apiState === 'error' && 'Error please try again'}
+                                </Button>
+                            }
                         </form>
                         {apiState === 'success' &&
                             <VStack mb="4">
