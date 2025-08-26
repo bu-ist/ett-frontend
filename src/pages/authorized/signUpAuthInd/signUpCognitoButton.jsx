@@ -74,7 +74,7 @@ export default function SignUpCognitoButton({ signUpRedirect, signUpRedirectWith
                 <Card width="40%">
                     <CardBody>
                         <Text color="gray.600">
-                            <b>Optionally</b>. Click <i>Accept & Amend</i> to accept the terms of use on behalf of the Registered Entity 
+                            <b>Optionally</b>. Click <i>Accept, Create Account & Amend</i> to accept the terms of use on behalf of the Registered Entity 
                             and on your own behalf, create an account, and then <Text as="span" color="orange.800">amend the Entity 
                             Registration Form to change one or more of the entity’s representatives or correct the entity’s or any 
                             representative’s name or contact information.</Text>
@@ -89,7 +89,7 @@ export default function SignUpCognitoButton({ signUpRedirect, signUpRedirectWith
                             _hover={{ bg: "orange.100" }}
                         >
                             {apiState === 'redirect-amend' && <>Redirecting <Spinner ml="2" /></>}
-                            {apiState !== 'redirect-amend' && 'Accept, Create Account, & Amend'}
+                            {apiState !== 'redirect-amend' && 'Accept, Create Account & Amend'}
                         </Button>
                     </CardFooter>
                 </Card>
