@@ -1,5 +1,4 @@
 import { Text } from "@chakra-ui/react";
-import { HiOutlineExternalLink } from "react-icons/hi";
 
 export default function DescriptionParagraph() {
     return (
