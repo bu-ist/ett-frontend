@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Button, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Text, useDisclosure, Spinner, Alert, AlertIcon } from "@chakra-ui/react";
+import { Button, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Text, useDisclosure, Spinner, Alert, AlertIcon, AlertTitle, AlertDescription } from "@chakra-ui/react";
 import { HiOutlineSave } from "react-icons/hi";
 
 import { saveExhibitFormAPI } from '../../../../lib/consenting/saveExhibitFormAPI';
@@ -12,6 +12,7 @@ export default function SaveButton({ contacts, formConstraint, entityId, singleE
     const { isOpen, onOpen, onClose } = useDisclosure();
     const [apiState, setApiState] = useState('idle');
     const [saveResult, setSaveResult] = useState(null);
+    const [apiError, setApiError] = useState(null);
 
     const matchingSavedForm = saveResult?.consenter?.exhibit_forms.find( (form) => (
         form.entity_id === entityId && form.constraint === formConstraint
@@ -19,6 +20,7 @@ export default function SaveButton({ contacts, formConstraint, entityId, singleE
 
     async function handleSave() {
         setApiState('loading');
+        setApiError(null);
         
         try {
             const accessToken = Cookies.get('EttAccessJwt');
@@ -39,15 +41,17 @@ export default function SaveButton({ contacts, formConstraint, entityId, singleE
 
             const response = await saveExhibitFormAPI(appConfig, accessToken, contactsToSave, entityId, email, formConstraint);
             
-            if (response.message === 'Ok') {
+            if (response.payload?.ok) {
                 setSaveResult(response.payload);
                 setApiState('success');
             } else {
                 setApiState('error');
+                setApiError(response.message || 'Unknown Error, API not responsive');
             }
         } catch (error) {
             console.error('Error saving form:', error);
             setApiState('error');
+            setApiError('An unexpected error occurred while trying to save your form');
         }
         
         onOpen();
@@ -80,12 +84,12 @@ export default function SaveButton({ contacts, formConstraint, entityId, singleE
                     <ModalBody>
                         {apiState === 'success' && (
                             <>
-                               <Alert status='success'>
+                                <Alert status='success'>
                                     <AlertIcon />
                                     Form data saved successfully.
                                 </Alert>
                                 <Text mt="4">
-                                    Your work will be retained until {new Date(new Date(matchingSavedForm.create_timestamp).getTime() + 7 * 24 * 60 * 60 * 1000).toLocaleDateString()} (7 days after the initial save). You can return to complete your form at any time during this period.
+                                    Your work will be retained until {new Date(new Date(matchingSavedForm?.create_timestamp).getTime() + 7 * 24 * 60 * 60 * 1000).toLocaleDateString()} (7 days after the initial save). You can return to complete your form at any time during this period.
                                 </Text>
                                 {saveResult?.savedAt && (
                                     <Text mt="2" fontSize="sm" color="gray.500">
@@ -95,15 +99,23 @@ export default function SaveButton({ contacts, formConstraint, entityId, singleE
                             </>
                         )}
                         {apiState === 'error' && (
-                            <Text color="red.500">
-                                There was an error saving your form. Please try again.
-                            </Text>
+                            <Alert status="error">
+                                <AlertIcon />
+                                <AlertTitle>Save Error</AlertTitle>
+                                <AlertDescription>{apiError || 'Unknown Error, API not responsive'}</AlertDescription>
+                            </Alert>
                         )}
                     </ModalBody>
                     <ModalFooter>
-                        <Button onClick={handleClose}>
-                            Close
-                        </Button>
+                        {apiState !== 'success' && apiState !== 'error' &&
+                            <Button onClick={handleClose}>Cancel</Button>
+                        }
+                        {apiState === 'success' &&
+                            <Button onClick={handleClose}>Done</Button>
+                        }
+                        {apiState === 'error' &&
+                            <Button onClick={handleClose}>Sorry, try reloading</Button>
+                        }
                     </ModalFooter>
                 </ModalContent>
             </Modal>
