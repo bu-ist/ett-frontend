@@ -114,7 +114,7 @@ export default function SaveButton({ contacts, formConstraint, entityId, singleE
                             <Button onClick={handleClose}>Done</Button>
                         }
                         {apiState === 'error' &&
-                            <Button onClick={handleClose}>Sorry, try reloading</Button>
+                            <Button onClick={handleClose}>Close</Button>
                         }
                     </ModalFooter>
                 </ModalContent>
