@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Button, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Text, useDisclosure, Spinner, Alert, AlertIcon, AlertTitle, AlertDescription, } from "@chakra-ui/react";
+import { Button, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Text, useDisclosure, Spinner, Alert, AlertIcon, AlertTitle, AlertDescription } from "@chakra-ui/react";
 import { HiOutlineSave } from "react-icons/hi";
 
 import { saveExhibitFormAPI } from '../../../../lib/consenting/saveExhibitFormAPI';
